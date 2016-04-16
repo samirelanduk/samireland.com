@@ -49,7 +49,7 @@ class BlogContentTest(unittest.TestCase):
         )
         welcome = main.find_element_by_id("welcome")
         self.assertIn("welcome", welcome.text.lower())
-        self.assertGreaterEqual(welcome.find_elements_by_tag_name("p"), 3)
+        self.assertGreaterEqual(len(welcome.find_elements_by_tag_name("p")), 3)
 
         # The main content also has a blog post
         latest_news = main.find_element_by_id("latest_news")
@@ -61,7 +61,7 @@ class BlogContentTest(unittest.TestCase):
         more_posts = latest_news.find_element_by_id("more_posts")
         self.assertEqual(more_posts.text, "More posts")
         self.assertEqual(
-         more_posts.find_element_by_id("a").get_attribute("href"),
+         more_posts.find_element_by_tag_name("a").get_attribute("href"),
          "http://localhost:8000/blog/"
         )
 
