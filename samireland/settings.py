@@ -58,7 +58,7 @@ ROOT_URLCONF = 'samireland.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['samireland/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
