@@ -29,14 +29,14 @@ class BlogContentTest(unittest.TestCase):
          nav_links[0].get_attribute("href"),
          "http://localhost:8000/"
         )
-        self.assertEqual(nav_links[0].text, "Blog")
+        self.assertEqual(nav_links[1].text, "Blog")
         self.assertEqual(
-         nav_links[0].get_attribute("href"),
+         nav_links[1].get_attribute("href"),
          "http://localhost:8000/blog/"
         )
-        self.assertEqual(nav_links[0].text, "About")
+        self.assertEqual(nav_links[2].text, "About")
         self.assertEqual(
-         nav_links[0].get_attribute("href"),
+         nav_links[2].get_attribute("href"),
          "http://localhost:8000/about/"
         )
 
