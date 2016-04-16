@@ -66,10 +66,10 @@ class BlogContentTest(unittest.TestCase):
         )
 
         # The footer contains image links to social profiles
-        footer = self.browser.find_elements_by_tag_name("footer")
+        footer = self.browser.find_element_by_tag_name("footer")
         external_links = footer.find_element_by_id("external_links")
         external_links = external_links.find_elements_by_class_name("external_link")
-        self.assertEqual(len(external_link), 7)
+        self.assertEqual(len(external_links), 7)
         required_links = [
          "http://facebok.com/samirelanduk/",
          "http://twitter.com/sam_m_ireland/",
