@@ -133,11 +133,12 @@ class BlogPostingTest(TestCase):
         if not live_box.is_selected():
             live_box.click()
         self.assertTrue(live_box.is_selected())
-        time.sleep(5)
+        time.sleep(2)
         submit_button.click()
+        time.sleep(2)
         self.assertEqual(
          self.browser.current_url,
-         "http://localhost:8000"
+         "http://localhost:8000/"
         )
 
         # Sam goes away, another mighty victory achieved

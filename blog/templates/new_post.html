@@ -5,7 +5,7 @@
 {% block main %}
 <h1>New Blog Post</h1>
 
-<form>
+<form method="POST">
   <div>
     <label for="title_entry">Post Title</label>
     <input type="text" id="title_entry" name="title">
@@ -21,6 +21,9 @@
   <div>
     <label for="is_visible">Visible</label>
     <input type="checkbox" id="is_visible" name="visible" value="yes">
+  </div>
+  <div>
+    {% csrf_token %}
   </div>
   <div>
     <input type="submit">

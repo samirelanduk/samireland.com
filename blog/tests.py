@@ -4,6 +4,7 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from blog.models import BlogPost
+import datetime
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -52,7 +53,7 @@ class NewBlogPostTest(TestCase):
 
     def test_new_post_view_can_save_blog_post(self):
         self.client.post(
-         "/blog/new",
+         "/blog/new/",
          data={
           "title": "Title",
           "date": "1962-10-10",
@@ -63,3 +64,17 @@ class NewBlogPostTest(TestCase):
         self.assertEqual(BlogPost.objects.count(), 1)
         blog_post = BlogPost.objects.first()
         self.assertEqual(blog_post.title, "Title")
+
+
+    def test_new_post_view_redirects_after_POST(self):
+        request = HttpRequest()
+        request.method = "POST"
+        request.POST["title"] = ""
+        request.POST["date"] = "1962-10-10"
+        request.POST["body"] = ""
+        request.POST["visible"] = True
+
+        response = new_post_page(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/")
