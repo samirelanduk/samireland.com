@@ -113,7 +113,7 @@ class BlogPostingTest(TestCase):
 
     def test_sam_can_post_blogs(self):
         # Sam goes to new post page
-        self.browser.get("http://localhost:8000/blog/new")
+        self.browser.get("http://localhost:8000/blog/new/")
 
         # There is a form for entering a blog post
         form = self.browser.find_element_by_tag_name("form")

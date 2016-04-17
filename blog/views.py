@@ -13,6 +13,11 @@ def about_page(request):
     return render(request, "about.html")
 
 
+def blog_page(request):
+    blog_posts = BlogPost.objects.all().order_by("date").reverse()
+    return render(request, "blog.html", {"blog_posts": blog_posts})
+
+
 def new_post_page(request):
     if request.method == "POST":
         BlogPost.objects.create(
