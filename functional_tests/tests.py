@@ -1,4 +1,5 @@
 from selenium import webdriver
+import time
 
 from django.test import TestCase
 
@@ -118,20 +119,21 @@ class BlogPostingTest(TestCase):
         form = self.browser.find_element_by_tag_name("form")
         title_entry = form.find_elements_by_tag_name("input")[0]
         date_entry = form.find_elements_by_tag_name("input")[1]
-        body_entry = form.find_elements_by_tag_name("input")[2]
-        live_box = form.find_elements_by_tag_name("input")[3]
+        body_entry = form.find_element_by_tag_name("textarea")
+        live_box = form.find_elements_by_tag_name("input")[2]
         submit_button = form.find_elements_by_tag_name("input")[-1]
         self.assertEqual(title_entry.get_attribute("type"), "text")
         self.assertEqual(date_entry.get_attribute("type"), "date")
-        self.assertEqual(body_entry.get_attribute("type"), "textarea")
         self.assertEqual(live_box.get_attribute("type"), "checkbox")
 
         # Sam posts a blog post
         title_entry.send_keys("My first blog post")
         date_entry.send_keys("10101962")
         body_entry.send_keys("My first blog post!")
-        if not live_box.is_selected:
+        if not live_box.is_selected():
             live_box.click()
+        self.assertTrue(live_box.is_selected())
+        time.sleep(5)
         submit_button.click()
 
         # Sam goes away, another mighty victory achieved
@@ -174,6 +176,8 @@ class BlogPostingTest(TestCase):
          blog_posts[0].find_element_by_class_name("blog_post_body").text,
          "My first blog post!"
         )
+
+        self.fail()
 
 
 
