@@ -7,4 +7,4 @@ def home_page(request):
 
 
 def about_page(request):
-    return
+    return render(request, "about.html")
