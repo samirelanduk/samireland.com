@@ -5,7 +5,8 @@ import datetime
 # Create your views here.
 
 def home_page(request):
-    return render(request, "home.html")
+    latest_post = BlogPost.objects.all().order_by("date").last()
+    return render(request, "home.html", {"blog_post": latest_post})
 
 
 def about_page(request):

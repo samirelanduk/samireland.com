@@ -13,6 +13,11 @@
 <div id="latest_news">
   <h2>Latest News</h2>
   <div class="blog_post">
+    {% if blog_post %}
+      <div class="blog_post_title">{{ blog_post.title }}</div>
+      <div class="blog_post_date">{{ blog_post.date }}</div>
+      <div class="blog_post_body">{{ blog_post.body }}</div>
+    {% endif %}
   </div>
   <div id="more_posts">
     <a href="/blog/">More posts</a>
