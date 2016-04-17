@@ -3,6 +3,7 @@ from blog.views import home_page, about_page, new_post_page
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from blog.models import BlogPost
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -47,3 +48,18 @@ class NewBlogPostTest(TestCase):
         response = new_post_page(request)
         expected_html = render_to_string("new_post.html")
         self.assertEqual(response.content.decode(), expected_html)
+
+
+    def test_new_post_view_can_save_blog_post(self):
+        self.client.post(
+         "/blog/new",
+         data={
+          "title": "Title",
+          "date": "1962-10-10",
+          "body": "Some text",
+          "visible": "yes"
+         }
+        )
+        self.assertEqual(BlogPost.objects.count(), 1)
+        blog_post = BlogPost.objects.first()
+        self.assertEqual(blog_post.title, "Title")

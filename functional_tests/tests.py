@@ -135,6 +135,10 @@ class BlogPostingTest(TestCase):
         self.assertTrue(live_box.is_selected())
         time.sleep(5)
         submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         "http://localhost:8000"
+        )
 
         # Sam goes away, another mighty victory achieved
         self.browser.quit()
