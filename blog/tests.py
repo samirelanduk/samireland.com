@@ -1,5 +1,5 @@
 from django.test import TestCase
-from blog.views import home_page, about_page
+from blog.views import home_page, about_page, new_post_page
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
@@ -31,4 +31,19 @@ class AboutPageTest(TestCase):
         request = HttpRequest()
         response = about_page(request)
         expected_html = render_to_string("about.html")
+        self.assertEqual(response.content.decode(), expected_html)
+
+
+
+class NewBlogPostTest(TestCase):
+
+    def test_new_url_resolves_to_new_view(self):
+        resolved_view = resolve("/blog/new/")
+        self.assertEqual(resolved_view.func, new_post_page)
+
+
+    def test_new_post_view_uses_new_post_template(self):
+        request = HttpRequest()
+        response = new_post_page(request)
+        expected_html = render_to_string("new_post.html")
         self.assertEqual(response.content.decode(), expected_html)
