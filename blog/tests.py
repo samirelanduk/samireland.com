@@ -51,14 +51,19 @@ class ViewTests(TestCase):
         return request
 
 
-    def get_html_after_three_blog_posts(self, view):
+    def get_html_after_three_blog_posts(self, view, last_invisible=False):
         for date in (
          datetime.datetime(1950,1,1),
          datetime.datetime(1960,1,1),
          datetime.datetime(1955,1,1)
         ):
-            post = BlogPost(date=date, title=".", body=".", visible=True)
+            post = BlogPost(
+             date=date, title=".", body=".",
+             visible=not(last_invisible and date == datetime.datetime(1960,1,1))
+            )
             post.save()
+        if last_invisible:
+            BlogPost.objects
         request = HttpRequest()
         return view(request).content.decode()
 
@@ -71,6 +76,14 @@ class ViewTests(TestCase):
         home_html = self.get_html_after_three_blog_posts(views.home_page)
         self.assertIn("1960", home_html)
         self.assertNotIn("1950", home_html)
+        self.assertNotIn("1955", home_html)
+
+
+    def test_home_view_ignores_invisible_posts(self):
+        home_html = self.get_html_after_three_blog_posts(views.home_page, last_invisible=True)
+        self.assertIn("1955", home_html)
+        self.assertNotIn("1950", home_html)
+        self.assertNotIn("1960", home_html)
 
 
     def test_about_page_view_uses_about_page_template(self):
@@ -87,6 +100,15 @@ class ViewTests(TestCase):
         pos_1955 = blog_html.find("January, 1955")
         pos_1960 = blog_html.find("January, 1960")
         self.assertTrue(pos_1960 < pos_1955 < pos_1950)
+
+
+    def test_blog_page_ignores_invisible_posts(self):
+        blog_html = self.get_html_after_three_blog_posts(views.blog_page, last_invisible=True)
+        pos_1950 = blog_html.find("January, 1950")
+        pos_1955 = blog_html.find("January, 1955")
+        pos_1960 = blog_html.find("January, 1960")
+        self.assertTrue(pos_1955 < pos_1950)
+        self.assertEqual(pos_1960, -1)
 
 
     def test_new_post_view_uses_new_post_template(self):
