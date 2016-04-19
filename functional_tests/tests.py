@@ -1,9 +1,9 @@
 from selenium import webdriver
 import time
 
-from django.test import TestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class BlogContentTest(TestCase):
+class BlogContentTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -15,7 +15,7 @@ class BlogContentTest(TestCase):
 
     def test_home_page_is_correct(self):
         # The user goes to the home page
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # 'Sam Ireland' is in the header, and the title
         self.assertIn("Sam Ireland", self.browser.title)
@@ -29,17 +29,17 @@ class BlogContentTest(TestCase):
         self.assertEqual(nav_links[0].text, "Home")
         self.assertEqual(
          nav_links[0].get_attribute("href"),
-         "http://localhost:8000/"
+         self.live_server_url + "/"
         )
         self.assertEqual(nav_links[1].text, "Blog")
         self.assertEqual(
          nav_links[1].get_attribute("href"),
-         "http://localhost:8000/blog/"
+         self.live_server_url + "/blog/"
         )
         self.assertEqual(nav_links[2].text, "About")
         self.assertEqual(
          nav_links[2].get_attribute("href"),
-         "http://localhost:8000/about/"
+         self.live_server_url + "/about/"
         )
 
         # The main content contains a welcome message
@@ -64,7 +64,7 @@ class BlogContentTest(TestCase):
         self.assertEqual(more_posts.text, "More posts")
         self.assertEqual(
          more_posts.find_element_by_tag_name("a").get_attribute("href"),
-         "http://localhost:8000/blog/"
+         self.live_server_url + "/blog/"
         )
 
         # The footer contains image links to social profiles
@@ -89,7 +89,7 @@ class BlogContentTest(TestCase):
 
     def test_about_page_is_correct(self):
         # The user goes to the about page
-        self.browser.get("http://localhost:8000/about")
+        self.browser.get(self.live_server_url + "/about")
 
         # There is some descriptive information
         self.assertIn("About", self.browser.title)
@@ -101,7 +101,7 @@ class BlogContentTest(TestCase):
 
 
 
-class BlogPostingTest(TestCase):
+class BlogPostingTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -113,7 +113,7 @@ class BlogPostingTest(TestCase):
 
     def test_sam_can_post_blogs(self):
         # Sam goes to new post page
-        self.browser.get("http://localhost:8000/blog/new/")
+        self.browser.get(self.live_server_url + "/blog/new/")
 
         # There is a form for entering a blog post
         form = self.browser.find_element_by_tag_name("form")
@@ -133,12 +133,10 @@ class BlogPostingTest(TestCase):
         if not live_box.is_selected():
             live_box.click()
         self.assertTrue(live_box.is_selected())
-        time.sleep(2)
         submit_button.click()
-        time.sleep(2)
         self.assertEqual(
          self.browser.current_url,
-         "http://localhost:8000/"
+         self.live_server_url + "/"
         )
 
         # Sam goes away, another mighty victory achieved
@@ -146,7 +144,7 @@ class BlogPostingTest(TestCase):
 
         # One of Sam's many fans comes to the site
         self.browser = webdriver.Chrome()
-        self.browser.get("localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # There is the blog post
         blog_post = self.browser.find_element_by_class_name("blog_post")
@@ -164,7 +162,7 @@ class BlogPostingTest(TestCase):
         )
 
         # The fan goes to the blog page
-        self.browser.get("localhost:8000/blog")
+        self.browser.get(self.live_server_url + "/blog")
 
         # There is one blog post, and it's the same one
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
