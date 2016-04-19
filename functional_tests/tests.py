@@ -180,10 +180,104 @@ class BlogPostingTest(StaticLiveServerTestCase):
          "My first blog post!"
         )
 
-        self.fail()
+        # The fan goes away
+        self.browser.quit()
 
+        # Sam decides to write a new blog post
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog/new/")
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        body_entry = form.find_element_by_tag_name("textarea")
+        live_box = form.find_elements_by_tag_name("input")[2]
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        title_entry.send_keys("My second blog post")
+        date_entry.send_keys("11101962")
+        body_entry.send_keys("My second blog post!")
+        if not live_box.is_selected():
+            live_box.click()
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
+        self.browser.quit()
 
+        # The fan comes back, and sees the new post on the home page
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url)
+        blog_post = self.browser.find_element_by_class_name("blog_post")
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_title").text,
+         "My second blog post"
+        )
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_date").text,
+         "11 October, 1962"
+        )
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_body").text,
+         "My second blog post!"
+        )
 
+        # They go to the blog page, and there are two posts there
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 2)
 
-if __name__ == "__main__":
-    unittest.main(warnings="ignore")
+        # They are in the correct order
+        self.assertEqual(
+         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         "My second blog post"
+        )
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         "My first blog post"
+        )
+
+        # The fan goes away again
+        self.browser.quit()
+
+        # Sam writes a third post, but he isn't sure so doesn't make it visible
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog/new/")
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        body_entry = form.find_element_by_tag_name("textarea")
+        live_box = form.find_elements_by_tag_name("input")[2]
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        title_entry.send_keys("My third blog post")
+        date_entry.send_keys("12101962")
+        body_entry.send_keys("My third blog post!")
+        if live_box.is_selected():
+            live_box.click()
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
+        self.browser.quit()
+
+        # The fan comes back, but only the second post is visible
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url)
+        blog_post = self.browser.find_element_by_class_name("blog_post")
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_title").text,
+         "My second blog post"
+        )
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_date").text,
+         "11 October, 1962"
+        )
+        self.assertEqual(
+         blog_post.find_element_by_class_name("blog_post_body").text,
+         "My second blog post!"
+        )
+
+        # On the blog page, there are still only two posts
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 2)
