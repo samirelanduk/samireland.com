@@ -108,5 +108,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "samireland", "static")
 ]
-
-STATIC_URL = '/static/'
