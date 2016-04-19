@@ -111,7 +111,7 @@ class BlogPostingTest(StaticLiveServerTestCase):
         self.browser.quit()
 
 
-    def test_sam_can_post_blogs(self):
+    def sam_writes_blog_post(self, title, date, body, visible):
         # Sam goes to new post page
         self.browser.get(self.live_server_url + "/blog/new/")
 
@@ -127,16 +127,25 @@ class BlogPostingTest(StaticLiveServerTestCase):
         self.assertEqual(live_box.get_attribute("type"), "checkbox")
 
         # Sam posts a blog post
-        title_entry.send_keys("My first blog post")
-        date_entry.send_keys("10101962")
-        body_entry.send_keys("My first blog post!")
-        if not live_box.is_selected():
+        title_entry.send_keys(title)
+        date_entry.send_keys(date)
+        body_entry.send_keys(body)
+        if (live_box.is_selected() and not visible) or (not live_box.is_selected() and visible):
             live_box.click()
-        self.assertTrue(live_box.is_selected())
         submit_button.click()
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/"
+        )
+
+
+    def test_sam_can_post_blogs(self):
+        # Sam posts a first blog post
+        self.sam_writes_blog_post(
+         "My first blog post",
+         "10101962",
+         "My first blog post!",
+         True
         )
 
         # Sam goes away, another mighty victory achieved
@@ -185,22 +194,11 @@ class BlogPostingTest(StaticLiveServerTestCase):
 
         # Sam decides to write a new blog post
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/new/")
-        form = self.browser.find_element_by_tag_name("form")
-        title_entry = form.find_elements_by_tag_name("input")[0]
-        date_entry = form.find_elements_by_tag_name("input")[1]
-        body_entry = form.find_element_by_tag_name("textarea")
-        live_box = form.find_elements_by_tag_name("input")[2]
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        title_entry.send_keys("My second blog post")
-        date_entry.send_keys("11101962")
-        body_entry.send_keys("My second blog post!")
-        if not live_box.is_selected():
-            live_box.click()
-        submit_button.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
+        self.sam_writes_blog_post(
+         "My second blog post",
+         "11101962",
+         "My second blog post!",
+         True
         )
         self.browser.quit()
 
@@ -241,22 +239,11 @@ class BlogPostingTest(StaticLiveServerTestCase):
 
         # Sam writes a third post, but he isn't sure so doesn't make it visible
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/new/")
-        form = self.browser.find_element_by_tag_name("form")
-        title_entry = form.find_elements_by_tag_name("input")[0]
-        date_entry = form.find_elements_by_tag_name("input")[1]
-        body_entry = form.find_element_by_tag_name("textarea")
-        live_box = form.find_elements_by_tag_name("input")[2]
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        title_entry.send_keys("My third blog post")
-        date_entry.send_keys("12101962")
-        body_entry.send_keys("My third blog post!")
-        if live_box.is_selected():
-            live_box.click()
-        submit_button.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
+        self.sam_writes_blog_post(
+         "My third blog post",
+         "12101962",
+         "My third blog post!",
+         False
         )
         self.browser.quit()
 
