@@ -38,4 +38,20 @@ def edit_posts_page(request):
 
 
 def edit_post_page(request, post_id):
-    return render(request, "edit_post.html")
+    blog_post = BlogPost.objects.get(pk=post_id)
+    if request.method == "POST":
+        blog_post.title = request.POST["title"]
+        blog_post.date = datetime.datetime.strptime(
+         request.POST["date"], "%Y-%m-%d"
+        ).date()
+        blog_post.body = request.POST["body"]
+        blog_post.visible = request.POST.get("visible") is not None
+        blog_post.save()
+        return redirect("/blog/")
+
+    return render(request, "edit_post.html", {
+     "title": blog_post.title,
+     "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),
+     "body": blog_post.body,
+     "checked": "checked" if blog_post.visible else ""
+    })

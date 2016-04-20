@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Blog Post{% endblock %}
+
+{% block main %}
+<h1>New Blog Post</h1>
+
+<form method="POST">
+  <div>
+    <label for="title_entry">Post Title</label>
+    <input type="text" id="title_entry" name="title" value="{{ title }}">
+  </div>
+  <div>
+    <label for="date_entry">Post Date</label>
+    <input type="date" id="date_entry" name="date" value="{{ date }}">
+  </div>
+  <div>
+    <label for="body_entry">Post Body</label>
+    <textarea id="body_entry" name="body">{{ body }}</textarea>
+  </div>
+  <div>
+    <label for="is_visible">Visible</label>
+    <input type="checkbox" id="is_visible" name="visible" value="yes" {{ checked }}>
+  </div>
+  <div>
+    {% csrf_token %}
+  </div>
+  <div>
+    <input type="submit">
+  </div>
+</form>
+{% endblock %}

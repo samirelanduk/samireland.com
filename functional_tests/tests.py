@@ -344,7 +344,7 @@ class BlogPostingTest(StaticLiveServerTestCase):
         rows[0].click()
         self.assertRegex(
          self.browser.current_url,
-         self.live_server_url + r"/blog/edit/\d+$"
+         self.live_server_url + r"/blog/edit/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         title_entry = form.find_elements_by_tag_name("input")[0]
@@ -353,20 +353,21 @@ class BlogPostingTest(StaticLiveServerTestCase):
         live_box = form.find_elements_by_tag_name("input")[2]
         submit_button = form.find_elements_by_tag_name("input")[-1]
         self.assertEqual(
-         title_entry.get_attribute("text"),
+         title_entry.get_attribute("value"),
          "Third post"
         )
         self.assertEqual(
-         date_entry.get_attribute("text"),
-         "11111918"
+         date_entry.get_attribute("value"),
+         "1918-11-11"
         )
         self.assertEqual(
-         body_entry.get_attribute("text"),
+         body_entry.get_attribute("value"),
          "End"
         )
         self.assertFalse(live_box.is_selected())
         live_box.click()
         submit_button.click()
+        self.assertEqual(self.browser.current_url, self.live_server_url + "/blog/")
         self.browser.quit()
 
         # The third post is now visible
@@ -390,9 +391,9 @@ class BlogPostingTest(StaticLiveServerTestCase):
 
         # Sam wants to delete the second post - he goes to the edit page for it
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/edit")
-        table = self.browser.find_elements_by_tag_name("table")
-        rows = table.find_element_by_class_name("tr")
+        self.browser.get(self.live_server_url + "/blog/edit")
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 3)
         rows[1].click()
 

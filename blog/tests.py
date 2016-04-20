@@ -45,7 +45,8 @@ class ViewTests(TestCase):
     def check_view_uses_template(self, view, template, *args):
         request = HttpRequest()
         response = view(request, *args)
-        expected_html = render_to_string(template)
+        expected_html = render_to_string(template, *args)
+        self.maxDiff = None
         self.assertEqual(response.content.decode(), expected_html)
 
 
@@ -151,8 +152,50 @@ class ViewTests(TestCase):
         self.assertTrue(pos_1960 < pos_1955 < pos_1950)
 
 
-    def test_edit_post_view_uses_edit_post_template(self):
-        self.check_view_uses_template(views.edit_post_page, "edit_post.html", 100)
+    def test_edit_post_view_uses_contains_post_text(self):
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
+        request = HttpRequest()
+        html = views.edit_post_page(request, "1").content.decode()
+        self.assertIn("Test title", html)
+        self.assertIn("1900-01-01", html)
+        self.assertIn("Test body", html)
+        self.assertIn("checked", html)
+
+
+    def test_edit_post_view_redirects_after_post(self):
+        request = self.make_post_request()
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
+        response = views.edit_post_page(request, "1")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/blog/")
+
+
+    def test_edit_post_page_can_actually_edit_a_post(self):
+        request = self.make_post_request()
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
+        post = BlogPost.objects.first()
+        self.assertEqual(post.title, "Test title")
+        response = views.edit_post_page(request, "1")
+        post = BlogPost.objects.first()
+        self.assertEqual(post.title, ".")
 
 
 class ModelTests(TestCase):
