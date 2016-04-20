@@ -404,7 +404,7 @@ class BlogPostingTest(StaticLiveServerTestCase):
         # Now he is on a deletion page, and is asked if he is sure
         self.assertRegex(
          self.browser.current_url,
-         self.live_server_url + r"/blog/edit/\d+/delete$"
+         self.live_server_url + r"/blog/delete/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         warning = form.find_element_by_id("warning")
@@ -414,26 +414,26 @@ class BlogPostingTest(StaticLiveServerTestCase):
         )
 
         # There is a back to safety link, and a delete button
-        back_to_safety = form.find_elements_by_tag_name("a")
-        delete_button = form.find_element_by_tag_name("input")
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
 
         # He deletes, and is taken back to the edit page
         delete_button.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/edit"
+         self.live_server_url + "/blog/edit/"
         )
 
         # Now there are two rows
         table = self.browser.find_element_by_tag_name("table")
-        rows = table.find_element_by_class_name("tr")
+        rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 2)
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         rows[0].find_elements_by_tag_name("td")[0].text,
          "Third post"
         )
         self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         rows[1].find_elements_by_tag_name("td")[0].text,
          "First post"
         )
         self.browser.quit()
@@ -455,9 +455,9 @@ class BlogPostingTest(StaticLiveServerTestCase):
 
         # Sam edits the first post to have a different body
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/edit")
+        self.browser.get(self.live_server_url + "/blog/edit/")
         table = self.browser.find_element_by_tag_name("table")
-        rows = table.find_element_by_class_name("tr")
+        rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 2)
         rows[1].click()
         form = self.browser.find_element_by_tag_name("form")

@@ -53,5 +53,14 @@ def edit_post_page(request, post_id):
      "title": blog_post.title,
      "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),
      "body": blog_post.body,
-     "checked": "checked" if blog_post.visible else ""
+     "checked": "checked" if blog_post.visible else "",
+     "id": blog_post.id
     })
+
+
+def delete_post_page(request, post_id):
+    if request.method == "POST":
+        doomed_post = BlogPost.objects.get(pk=post_id)
+        doomed_post.delete()
+        return redirect("/blog/edit/")
+    return render(request, "delete_post.html")

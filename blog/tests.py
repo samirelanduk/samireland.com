@@ -39,6 +39,10 @@ class UrlTests(TestCase):
         self.check_url_returns_view("/blog/edit/100/", views.edit_post_page)
 
 
+    def test_delete_url_resolves_to_delete_post(self):
+        self.check_url_returns_view("/blog/delete/100/", views.delete_post_page)
+
+
 
 class ViewTests(TestCase):
 
@@ -196,6 +200,36 @@ class ViewTests(TestCase):
         response = views.edit_post_page(request, "1")
         post = BlogPost.objects.first()
         self.assertEqual(post.title, ".")
+
+
+    def test_delete_post_view_redirects_after_post(self):
+        request = self.make_post_request()
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
+        response = views.delete_post_page(request, "1")
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["location"], "/blog/edit/")
+
+
+    def test_delete_post_can_actually_delete_a_post(self):
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
+        self.assertEqual(BlogPost.objects.count(), 1)
+        request = HttpRequest()
+        request.method = "POST"
+        views.delete_post_page(request, "1")
+        self.assertEqual(BlogPost.objects.count(), 0)
+
 
 
 class ModelTests(TestCase):

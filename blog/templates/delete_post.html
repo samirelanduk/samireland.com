@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Posts{% endblock %}
+
+{% block main %}
+<h1>Delete Post</h1>
+<form method="POST">
+  <p id="warning">
+    This will delete the post forever. Are you sure?
+  </p>
+  {% csrf_token %}
+  <input type="submit">
+  <a href="/blog/">Back</a>
+</form>
+
+{% endblock %}
