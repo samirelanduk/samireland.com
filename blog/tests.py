@@ -35,6 +35,7 @@ class UrlTests(TestCase):
         self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
 
 
+
 class ViewTests(TestCase):
 
     def check_view_uses_template(self, view, template):
@@ -137,6 +138,13 @@ class ViewTests(TestCase):
     def test_edit_post_view_uses_edit_post_template(self):
         self.check_view_uses_template(views.edit_posts_page, "edit_posts.html")
 
+
+    def test_edit_post_view_shows_all_posts_in_correct_order(self):
+        html = self.get_html_after_three_blog_posts(views.edit_posts_page, last_invisible=True)
+        pos_1950 = html.find("January, 1950")
+        pos_1955 = html.find("January, 1955")
+        pos_1960 = html.find("January, 1960")
+        self.assertTrue(pos_1960 < pos_1955 < pos_1950)
 
 
 class ModelTests(TestCase):

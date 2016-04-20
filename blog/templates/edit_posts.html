@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Posts{% endblock %}
+
+{% block main %}
+<h1>Blog Posts.</h1>
+<table>
+  <thead>
+    <th>Title</th>
+    <th>Date</th>
+    <th>Visible</th>
+  </thead>
+  <tbody>
+    {% for blog_post in blog_posts %}
+      <tr>
+        <td>{{ blog_post.title }}</td>
+        <td>{{ blog_post.date }}</td>
+        <td>{{ blog_post.visible|yesno:"Yes,No" }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
