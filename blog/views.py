@@ -30,3 +30,7 @@ def new_post_page(request):
         )
         return redirect("/")
     return render(request, "new_post.html")
+
+
+def edit_posts_page(request):
+    return render(request, "edit_posts.html")

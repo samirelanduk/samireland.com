@@ -31,6 +31,9 @@ class UrlTests(TestCase):
         self.check_url_returns_view("/blog/new/", views.new_post_page)
 
 
+    def test_edit_url_resolves_to_edit_post(self):
+        self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
+
 
 class ViewTests(TestCase):
 
@@ -129,6 +132,10 @@ class ViewTests(TestCase):
         response = views.new_post_page(request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/")
+
+
+    def test_edit_post_view_uses_edit_post_template(self):
+        self.check_view_uses_template(views.edit_posts_page, "edit_posts.html")
 
 
 
