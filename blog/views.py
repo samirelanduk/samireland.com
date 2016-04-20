@@ -35,3 +35,7 @@ def new_post_page(request):
 def edit_posts_page(request):
     blog_posts = BlogPost.objects.all().order_by("date").reverse()
     return render(request, "edit_posts.html", {"blog_posts": blog_posts})
+
+
+def edit_post_page(request, post_id):
+    return render(request, "edit_post.html")

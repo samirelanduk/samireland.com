@@ -11,8 +11,8 @@
     <th>Visible</th>
   </thead>
   <tbody>
-    {% for blog_post in blog_posts %}
-      <tr>
+  {% for blog_post in blog_posts %}
+      <tr onclick="window.document.location='/blog/edit/{{ blog_post.id }}';">
         <td>{{ blog_post.title }}</td>
         <td>{{ blog_post.date }}</td>
         <td>{{ blog_post.visible|yesno:"Yes,No" }}</td>

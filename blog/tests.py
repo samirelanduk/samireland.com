@@ -31,16 +31,20 @@ class UrlTests(TestCase):
         self.check_url_returns_view("/blog/new/", views.new_post_page)
 
 
-    def test_edit_url_resolves_to_edit_post(self):
+    def test_edits_url_resolves_to_edits_post(self):
         self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
+
+
+    def test_edit_url_resolves_to_edit_post(self):
+        self.check_url_returns_view("/blog/edit/100/", views.edit_post_page)
 
 
 
 class ViewTests(TestCase):
 
-    def check_view_uses_template(self, view, template):
+    def check_view_uses_template(self, view, template, *args):
         request = HttpRequest()
-        response = view(request)
+        response = view(request, *args)
         expected_html = render_to_string(template)
         self.assertEqual(response.content.decode(), expected_html)
 
@@ -135,16 +139,20 @@ class ViewTests(TestCase):
         self.assertEqual(response["location"], "/")
 
 
-    def test_edit_post_view_uses_edit_post_template(self):
+    def test_edit_posts_view_uses_edit_posts_template(self):
         self.check_view_uses_template(views.edit_posts_page, "edit_posts.html")
 
 
-    def test_edit_post_view_shows_all_posts_in_correct_order(self):
+    def test_edit_posts_view_shows_all_posts_in_correct_order(self):
         html = self.get_html_after_three_blog_posts(views.edit_posts_page, last_invisible=True)
         pos_1950 = html.find("January, 1950")
         pos_1955 = html.find("January, 1955")
         pos_1960 = html.find("January, 1960")
         self.assertTrue(pos_1960 < pos_1955 < pos_1950)
+
+
+    def test_edit_post_view_uses_edit_post_template(self):
+        self.check_view_uses_template(views.edit_post_page, "edit_post.html", 100)
 
 
 class ModelTests(TestCase):
