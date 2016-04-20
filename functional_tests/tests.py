@@ -268,3 +268,212 @@ class BlogPostingTest(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
+
+
+    def test_sam_can_edit_and_delete_blogs(self):
+        # Sam writes three blog posts
+        self.sam_writes_blog_post(
+         "First post",
+         "28071914",
+         "Start",
+         True
+        )
+        self.sam_writes_blog_post(
+         "Second post",
+         "01071916",
+         "Middle",
+         True
+        )
+        self.sam_writes_blog_post(
+         "Third post",
+         "11111918",
+         "End",
+         False
+        )
+        self.browser.quit()
+
+        # A wild fan appears, and peruses the blog page
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 2)
+        self.assertEqual(
+         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         "Second post"
+        )
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         "First post"
+        )
+        self.browser.quit()
+
+        # Sam goes to the edit blog page
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/edit")
+
+        # There is a table there, with all the blog posts
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_element_by_class_name("tr")
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[0].text,
+         "Third post"
+        )
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[-1].text,
+         "No"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[0].text,
+         "Second post"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[-1].text,
+         "yes"
+        )
+        self.assertEqual(
+         rows[2].find_elements_by_tag_name("td")[0].text,
+         "First post"
+        )
+        self.assertEqual(
+         rows[2].find_elements_by_tag_name("td")[-1].text,
+         "Yes"
+        )
+
+        # Sam makes the third post visible
+        rows[0].click()
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/blog/edit/\d+$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        body_entry = form.find_element_by_tag_name("textarea")
+        live_box = form.find_elements_by_tag_name("input")[2]
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.assertEqual(
+         title_entry.get_attribute("text"),
+         "Third post"
+        )
+        self.assertEqual(
+         date_entry.get_attribute("text"),
+         "11111918"
+        )
+        self.assertEqual(
+         body_entry.get_attribute("text"),
+         "End"
+        )
+        self.assertFalse(live_box.is_selected())
+        live_box.click()
+        submit_button.click()
+        self.browser.quit()
+
+        # The third post is now visible
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 3)
+        self.assertEqual(
+         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         "Third post"
+        )
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         "Second post"
+        )
+        self.assertEqual(
+         blog_posts[2].find_element_by_class_name("blog_post_title").text,
+         "First post"
+        )
+        self.browser.quit()
+
+        # Sam wants to delete the second post - he goes to the edit page for it
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/edit")
+        table = self.browser.find_elements_by_tag_name("table")
+        rows = table.find_element_by_class_name("tr")
+        self.assertEqual(len(rows), 3)
+        rows[1].click()
+
+        # There is a delete button after the form - he presses it
+        delete_button = self.browser.find_element_by_tag_name("button")
+        delete_button.click()
+
+        # Now he is on a deletion page, and is asked if he is sure
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/blog/edit/\d+/delete$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        warning = form.find_element_by_id("warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_elements_by_tag_name("a")
+        delete_button = form.find_element_by_tag_name("input")
+
+        # He deletes, and is taken back to the edit page
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/edit"
+        )
+
+        # Now there are two rows
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_element_by_class_name("tr")
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(
+         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         "Third post"
+        )
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         "First post"
+        )
+        self.browser.quit()
+
+        # A user goes to the blog page and finds two posts there
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 2)
+        self.assertEqual(
+         blog_posts[0].find_element_by_class_name("blog_post_title").text,
+         "Third post"
+        )
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_title").text,
+         "First post"
+        )
+        self.browser.quit()
+
+        # Sam edits the first post to have a different body
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/edit")
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_element_by_class_name("tr")
+        self.assertEqual(len(rows), 2)
+        rows[1].click()
+        form = self.browser.find_element_by_tag_name("form")
+        body_entry = form.find_element_by_tag_name("textarea")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        body_entry.clear()
+        body_entry.send_keys("A modified body")
+        submit_button.click()
+        self.browser.quit()
+
+        # The user sees the modified body
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        self.assertEqual(len(blog_posts), 2)
+        self.assertEqual(
+         blog_posts[1].find_element_by_class_name("blog_post_body").text,
+         "A modified body"
+        )
+        self.browser.quit()
