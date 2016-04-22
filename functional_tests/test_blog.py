@@ -1,17 +1,10 @@
 from selenium import webdriver
+from .base import SamTest
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class BlogContentTest(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Chrome()
-
-
-    def tearDown(self):
-        self.browser.quit()
-
+class BlogContentTest(SamTest):
 
     def test_home_page_is_correct(self):
         # The user goes to the home page
@@ -101,15 +94,7 @@ class BlogContentTest(StaticLiveServerTestCase):
 
 
 
-class BlogPostingTest(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Chrome()
-
-
-    def tearDown(self):
-        self.browser.quit()
-
+class BlogPostingTest(SamTest):
 
     def sam_writes_blog_post(self, title, date, body, visible):
         # Sam goes to new post page

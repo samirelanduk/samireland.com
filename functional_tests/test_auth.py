@@ -1,15 +1,8 @@
 from selenium import webdriver
+from .base import SamTest
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class KeepOut(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Chrome()
-
-
-    def tearDown(self):
-        self.browser.quit()
-
+class KeepOut(SamTest):
 
     def test_cannot_access_protected_pages(self):
         # A crafty user has been perusing GitHub and has found the secret URLs
@@ -26,12 +19,17 @@ class KeepOut(StaticLiveServerTestCase):
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.browser.get(self.live_server_url + "/blog/edit/1")
+        self.browser.get(self.live_server_url + "/blog/edit/1/")
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.browser.get(self.live_server_url + "/blog/delete/1")
+        self.browser.get(self.live_server_url + "/blog/delete/1/")
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
+        self.browser.get(self.live_server_url + "/logout/")
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/"
@@ -55,7 +53,37 @@ class KeepOut(StaticLiveServerTestCase):
         )
         self.assertIn(
          "thus far have you come, and no further",
-         self.browser.find_elements_by_tag_name("main").text.lower()
+         self.browser.find_element_by_tag_name("main").text.lower()
         )
 
         # The user weeps, and vows to turn their life around
+
+
+
+class LetIn(SamTest):
+
+    def test_can_login(self):
+        self.sam_logs_in()
+
+
+    def test_can_access_blog_pages(self):
+        # Sam logs in
+        self.sam_logs_in()
+
+        # Sam goes to the new post page
+        self.browser.get(self.live_server_url + "/blog/new/")
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/new/"
+        )
+
+        # Sam goes to the edit posts page
+        self.browser.get(self.live_server_url + "/blog/edit/")
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/edit/"
+        )
+
+    def test_can_logout(self):
+        self.sam_logs_in()
+        self.sam_logs_out()
