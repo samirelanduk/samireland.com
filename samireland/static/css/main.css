@@ -26,6 +26,7 @@ nav {
   width: 100%;
   font-size: 80%;
   line-height: 200%;
+  margin-top: -1px;
 }
 
 .nav_links {
@@ -46,9 +47,27 @@ nav {
   color: #000000;
 }
 
+main {
+  padding: 0px 20px;
+}
+
+a {
+  color: #007BE6;
+  text-decoration: none;
+  transition: 0.3s
+}
+
+a:hover {
+  color: #7FDBFF;
+}
+
 
 @media only screen and (min-width: 568px) {
   /* iPad down */
+  html {
+    font-size: x-large;
+  }
+
   header {
     font-size: 300%;
     padding: 25px 0px;
@@ -58,15 +77,16 @@ nav {
     font-size: 100%;
   }
 
+  main {
+    padding: 0px 30px;
+  }
+
 }
 
 
 @media only screen and (min-width: 769px) {
   /* Small Desktop screens */
-  html {
-    font-size: x-large;
-  }
-  
+
   header {
     font-size: 550%;
     padding: 40px 0px;
@@ -74,6 +94,10 @@ nav {
 
   nav {
     font-size: 120%;
+  }
+
+  main {
+    padding: 0px 40px;
   }
 
 }
@@ -88,6 +112,10 @@ nav {
 
   nav {
     font-size: 140%;
+  }
+
+  main {
+    padding: 0px 50px;
   }
 
 }
