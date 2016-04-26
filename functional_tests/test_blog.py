@@ -1,14 +1,14 @@
 from selenium import webdriver
-from .base import SamTest
+from .base import FunctionalTest
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class BlogContentTest(SamTest):
+class BlogContentTest(FunctionalTest):
 
     def test_home_page_is_correct(self):
         # The user goes to the home page
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         # 'Sam Ireland' is in the header, and the title
         self.assertIn("Sam Ireland", self.browser.title)
@@ -82,7 +82,7 @@ class BlogContentTest(SamTest):
 
     def test_about_page_is_correct(self):
         # The user goes to the about page
-        self.browser.get(self.live_server_url + "/about")
+        self.browser.get(self.server_url + "/about")
 
         # There is some descriptive information
         self.assertIn("About", self.browser.title)
@@ -94,11 +94,11 @@ class BlogContentTest(SamTest):
 
 
 
-class BlogPostingTest(SamTest):
+class BlogPostingTest(FunctionalTest):
 
     def sam_writes_blog_post(self, title, date, body, visible):
         # Sam goes to new post page
-        self.browser.get(self.live_server_url + "/blog/new/")
+        self.browser.get(self.server_url + "/blog/new/")
 
         # There is a form for entering a blog post
         form = self.browser.find_element_by_tag_name("form")
@@ -138,7 +138,7 @@ class BlogPostingTest(SamTest):
 
         # One of Sam's many fans comes to the site
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         # There is the blog post
         blog_post = self.browser.find_element_by_class_name("blog_post")
@@ -156,7 +156,7 @@ class BlogPostingTest(SamTest):
         )
 
         # The fan goes to the blog page
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
 
         # There is one blog post, and it's the same one
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
@@ -189,7 +189,7 @@ class BlogPostingTest(SamTest):
 
         # The fan comes back, and sees the new post on the home page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         blog_post = self.browser.find_element_by_class_name("blog_post")
         self.assertEqual(
          blog_post.find_element_by_class_name("blog_post_title").text,
@@ -205,7 +205,7 @@ class BlogPostingTest(SamTest):
         )
 
         # They go to the blog page, and there are two posts there
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
 
@@ -234,7 +234,7 @@ class BlogPostingTest(SamTest):
 
         # The fan comes back, but only the second post is visible
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         blog_post = self.browser.find_element_by_class_name("blog_post")
         self.assertEqual(
          blog_post.find_element_by_class_name("blog_post_title").text,
@@ -250,7 +250,7 @@ class BlogPostingTest(SamTest):
         )
 
         # On the blog page, there are still only two posts
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
 
@@ -279,7 +279,7 @@ class BlogPostingTest(SamTest):
 
         # A wild fan appears, and peruses the blog page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
         self.assertEqual(
@@ -294,7 +294,7 @@ class BlogPostingTest(SamTest):
 
         # Sam goes to the edit blog page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/edit")
+        self.browser.get(self.server_url + "/blog/edit")
 
         # There is a table there, with all the blog posts
         table = self.browser.find_element_by_tag_name("table")
@@ -329,7 +329,7 @@ class BlogPostingTest(SamTest):
         rows[0].click()
         self.assertRegex(
          self.browser.current_url,
-         self.live_server_url + r"/blog/edit/\d+/$"
+         self.server_url + r"/blog/edit/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         title_entry = form.find_elements_by_tag_name("input")[0]
@@ -352,12 +352,12 @@ class BlogPostingTest(SamTest):
         self.assertFalse(live_box.is_selected())
         live_box.click()
         submit_button.click()
-        self.assertEqual(self.browser.current_url, self.live_server_url + "/blog/")
+        self.assertEqual(self.browser.current_url, self.server_url + "/blog/")
         self.browser.quit()
 
         # The third post is now visible
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 3)
         self.assertEqual(
@@ -376,7 +376,7 @@ class BlogPostingTest(SamTest):
 
         # Sam wants to delete the second post - he goes to the edit page for it
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/edit")
+        self.browser.get(self.server_url + "/blog/edit")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 3)
@@ -425,7 +425,7 @@ class BlogPostingTest(SamTest):
 
         # A user goes to the blog page and finds two posts there
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
         self.assertEqual(
@@ -440,7 +440,7 @@ class BlogPostingTest(SamTest):
 
         # Sam edits the first post to have a different body
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/edit/")
+        self.browser.get(self.server_url + "/blog/edit/")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 2)
@@ -455,7 +455,7 @@ class BlogPostingTest(SamTest):
 
         # The user sees the modified body
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog")
+        self.browser.get(self.server_url + "/blog")
         blog_posts = self.browser.find_elements_by_class_name("blog_post")
         self.assertEqual(len(blog_posts), 2)
         self.assertEqual(

@@ -1,7 +1,24 @@
 from selenium import webdriver
+import sys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class SamTest(StaticLiveServerTestCase):
+class FunctionalTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if "liveserver" in arg:
+                cls.server_url = "http://" + arg.split("=")[1]
+                return
+        super().setUpClass()
+        cls.server_url = cls.live_server_url
+
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super().tearDownClass()
+
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -13,7 +30,7 @@ class SamTest(StaticLiveServerTestCase):
 
     def sam_logs_in(self):
         # Sam goes to the login page
-        self.browser.get(self.live_server_url + "/login/")
+        self.browser.get(self.server_url + "/login/")
 
         # He logs in
         name_entry = self.browser.find_element_by_id("name_entry")
@@ -36,7 +53,7 @@ class SamTest(StaticLiveServerTestCase):
 
     def sam_logs_out(self):
         # Sam goes to the login page
-        self.browser.get(self.live_server_url + "/logout/")
+        self.browser.get(self.server_url + "/logout/")
 
         # He is asked if he would like to logout
         self.assertIn(
@@ -59,14 +76,14 @@ class SamTest(StaticLiveServerTestCase):
         )
 
         # He changes his mind
-        self.browser.get(self.live_server_url + "/logout/")
+        self.browser.get(self.server_url + "/logout/")
         yes_button = self.browser.find_element_by_tag_name("input")
         yes_button.click()
 
         # He is on the home page, logged out
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/"
+         self.server_url + "/"
         )
         self.assertNotIn(
          "logged in",
