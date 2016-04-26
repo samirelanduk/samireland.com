@@ -69,7 +69,7 @@ class BlogContentTest(SamTest):
          "http://facebok.com/samirelanduk/",
          "http://twitter.com/sam_m_ireland/",
          "http://linkedin.com/in/sam-ireland-42b73568/",
-         "http://githib.com/samirelanduk/",
+         "http://github.com/samirelanduk/",
          "http://instagram.com/samirelanduk/",
          "http://youtube.com/channel/UCeitnG6LfY-F4C3jxHd-rRA/",
          "http://plus.google.com/+samireland/"

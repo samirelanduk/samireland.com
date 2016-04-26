@@ -61,6 +61,32 @@ a:hover {
   color: #7FDBFF;
 }
 
+footer {
+  margin: 100px 0px 0px 0px;
+  padding: 0px 0px 20px 0px;
+  text-align: center;
+}
+
+footer hr {
+  width: 25%;
+  margin-bottom: 25px;
+}
+
+.external_link {
+  display: inline;
+}
+
+.external_link img {
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+  transition: 0.5s
+}
+
+.external_link img:hover {
+  opacity: 1;
+}
+
 
 @media only screen and (min-width: 568px) {
   /* iPad down */
