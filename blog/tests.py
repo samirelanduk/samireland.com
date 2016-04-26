@@ -119,6 +119,7 @@ class ViewTests(TestCase):
          visible=True
         )
         post.save()
+        return post.id
 
 
     def test_home_page_view_uses_home_page_template(self):
@@ -203,9 +204,9 @@ class ViewTests(TestCase):
 
 
     def test_edit_post_view_contains_post_text(self):
-        self.save_test_post_to_db()
+        post_id = self.save_test_post_to_db()
         request = HttpRequest()
-        html = views.edit_post_page(request, "1").content.decode()
+        html = views.edit_post_page(request, post_id).content.decode()
         self.assertIn("Test title", html)
         self.assertIn("1900-01-01", html)
         self.assertIn("Test body", html)
@@ -214,34 +215,34 @@ class ViewTests(TestCase):
 
     def test_edit_post_view_redirects_after_post(self):
         request = self.make_post_request()
-        self.save_test_post_to_db()
-        response = views.edit_post_page(request, "1")
+        post_id = self.save_test_post_to_db()
+        response = views.edit_post_page(request, post_id)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/blog/")
 
 
     def test_edit_post_page_can_actually_edit_a_post(self):
         request = self.make_post_request()
-        self.save_test_post_to_db()
+        post_id = self.save_test_post_to_db()
         post = BlogPost.objects.first()
         self.assertEqual(post.title, "Test title")
-        response = views.edit_post_page(request, "1")
+        response = views.edit_post_page(request, post_id)
         post = BlogPost.objects.first()
         self.assertEqual(post.title, ".")
 
 
     def test_delete_post_view_redirects_after_post(self):
         request = self.make_post_request()
-        self.save_test_post_to_db()
-        response = views.delete_post_page(request, "1")
+        post_id = self.save_test_post_to_db()
+        response = views.delete_post_page(request, post_id)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/blog/edit/")
 
 
     def test_delete_post_can_actually_delete_a_post(self):
-        self.save_test_post_to_db()
+        post_id = self.save_test_post_to_db()
         self.assertEqual(BlogPost.objects.count(), 1)
         request = HttpRequest()
         request.method = "POST"
-        views.delete_post_page(request, "1")
+        views.delete_post_page(request, post_id)
         self.assertEqual(BlogPost.objects.count(), 0)
