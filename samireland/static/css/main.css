@@ -10,10 +10,39 @@ body {
   margin: 0px;
 }
 
-@media only screen and (min-width: 1000px) {
+header {
+  background-color: #4A9586;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 200%;
+  padding: 10px 0px;
+}
+
+
+@media only screen and (min-width: 568px) {
+  /* Big Desktop screens */
+  header {
+    font-size: 300%;
+    padding: 25px 0px;
+  }
+
+}
+
+
+@media only screen and (min-width: 769px) {
+  /* Big Desktop screens */
+  header {
+    font-size: 550%;
+    padding: 40px 0px;
+  }
+
+}
+
+
+@media only screen and (min-width: 1024px) {
   /* Big Desktop screens */
   body {
-    width: 1000px;
+    width: 1024px;
     margin: 30px auto;
   }
 

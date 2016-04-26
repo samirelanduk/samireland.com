@@ -19,7 +19,7 @@ class CssTest(SamTest):
         self.browser.set_window_size(1100, 800)
         self.assertEqual(
          body.value_of_css_property("width"),
-         "1000px"
+         "1024px"
         )
         self.browser.set_window_size(900, 800)
         self.assertEqual(
