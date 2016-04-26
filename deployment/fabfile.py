@@ -9,8 +9,8 @@ REPO_URL = "https://github.com/samirelanduk/samireland.com.git"
 def deploy():
     site_folder = "/home/%s/sites/%s" % (env.user, env.host)
     source_folder = site_folder + "/source"
-    _create_directory_structure_if_necessary(source_folder)
-    _get_latest_source(site_folder)
+    _create_directory_structure_if_necessary(site_folder)
+    _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
@@ -24,11 +24,11 @@ def _create_directory_structure_if_necessary(site_folder):
 
 def _get_latest_source(source_folder):
     if exists(source_folder + "/.git"):
-        run("cd %s && git fetch" & source_folder)
+        run("cd %s && git fetch" % source_folder)
     else:
         run("git clone %s %s" % (REPO_URL, source_folder))
     current_commit = local("git log -n 1 --format=%H", capture=True)
-    run("cd %s %% git reset --hard %s" % (source_folder, current_commit))
+    run("cd %s && git reset --hard %s" % (source_folder, current_commit))
 
 
 def _update_settings(source_folder, site_name):
@@ -36,18 +36,14 @@ def _update_settings(source_folder, site_name):
     sed(settings_path, "DEBUG = True", "DEBUG = False")
     sed(
      settings_path,
-     "ALLOWED_HOSTS = .+$",
-     "ALLOWED_HOSTS = ['%']" % site_name
+     'ALLOWED_HOSTS =.+$',
+     'ALLOWED_HOSTS = ["%s"]' % site_name
     )
     sed(
      settings_path,
-     "django.db.backends.sqlite3",
-     "django.db.backends.postgresql_psycopg"
-    )
-    sed(
-     settings_path,
-     "os.path.join(BASE_DIR, 'db.sqlite3')",
-     "'%s', 'USER': '%s', 'PASSWORD': '%s', 'HOST': '%s'" % (
+     '"default": \{.+\}$',
+     '"default": \{"ENGINE": "django.db.backends.postgresql_psycopg2", "NAME": \
+     "%s", "USER": "%s", "PASSWORD": "%s", "HOST": "%s"\}' % (
       db, user, password, host
      )
     )
