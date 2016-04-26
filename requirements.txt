@@ -1,0 +1,2 @@
+django==1.8.11
+gunicorn==18.0
