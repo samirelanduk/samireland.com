@@ -10,30 +10,66 @@ body {
   margin: 0px;
 }
 
-header {
+header, nav, nav a {
   background-color: #4A9586;
   color: #FFFFFF;
+}
+
+header {
   text-align: center;
   font-size: 200%;
   padding: 10px 0px;
 }
 
+nav {
+  display: table;
+  width: 100%;
+  font-size: 80%;
+  line-height: 200%;
+}
+
+.nav_links {
+  display: table-row;
+}
+
+.nav_link {
+  display: table-cell;
+  text-align: center;
+}
+
+.nav_link a {
+  text-decoration: none;
+  transition: 0.5s;
+}
+
+.nav_link a:hover {
+  color: #000000;
+}
+
 
 @media only screen and (min-width: 568px) {
-  /* Big Desktop screens */
+  /* iPad down */
   header {
     font-size: 300%;
     padding: 25px 0px;
+  }
+
+  nav {
+    font-size: 100%;
   }
 
 }
 
 
 @media only screen and (min-width: 769px) {
-  /* Big Desktop screens */
+  /* Small Desktop screens */
   header {
     font-size: 550%;
     padding: 40px 0px;
+  }
+
+  nav {
+    font-size: 120%;
   }
 
 }
@@ -44,6 +80,10 @@ header {
   body {
     width: 1024px;
     margin: 30px auto;
+  }
+
+  nav {
+    font-size: 140%;
   }
 
 }
