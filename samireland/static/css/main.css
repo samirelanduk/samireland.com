@@ -6,4 +6,15 @@ html {
 
 body {
   background-color: #FFFFFF;
+  width: 100%;
+  margin: 0px;
+}
+
+@media only screen and (min-width: 1000px) {
+  /* Big Desktop screens */
+  body {
+    width: 1000px;
+    margin: 30px auto;
+  }
+
 }
