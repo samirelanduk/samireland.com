@@ -1,7 +1,7 @@
 html {
   font-family: 'Roboto Slab';
   background-color: #EEEEEE;
-  font-size: x-large;
+  font-size: large;
 }
 
 body {
@@ -63,6 +63,10 @@ nav {
 
 @media only screen and (min-width: 769px) {
   /* Small Desktop screens */
+  html {
+    font-size: x-large;
+  }
+  
   header {
     font-size: 550%;
     padding: 40px 0px;
