@@ -44,13 +44,45 @@ class UrlTests(TestCase):
 
 
 
+class ModelTests(TestCase):
+
+    def test_save_and_retrieve_blog_posts(self):
+        self.assertEqual(BlogPost.objects.all().count(), 0)
+        blog_post = BlogPost()
+        blog_post.title = "A post"
+        blog_post.date = datetime.datetime(1939, 9, 1, 5, 0, 0)
+        blog_post.body = "Blah blah blah"
+        blog_post.visible = False
+        blog_post.save()
+        self.assertEqual(BlogPost.objects.all().count(), 1)
+
+        retrieved_post = BlogPost.objects.first()
+        self.assertEqual(retrieved_post, blog_post)
+
+
+    def test_cannot_create_post_without_parameters(self):
+        params = {
+         "title":".",
+         "date":datetime.datetime.now(),
+         "body":".",
+         "visible":True
+        }
+        param_names = list(params.keys())
+        param_names.remove("visible")
+        for i in range(len(param_names)):
+            incomplete_params = params.copy()
+            del incomplete_params[param_names[i]]
+            blog_post = BlogPost(**incomplete_params)
+            self.assertRaises(ValidationError, blog_post.full_clean)
+
+
+
 class ViewTests(TestCase):
 
-    def check_view_uses_template(self, view, template, *args):
+    def check_view_uses_template(self, view, template, *view_args):
         request = HttpRequest()
-        response = view(request, *args)
-        expected_html = render_to_string(template, *args)
-        self.maxDiff = None
+        response = view(request, *view_args)
+        expected_html = render_to_string(template)
         self.assertEqual(response.content.decode(), expected_html)
 
 
@@ -75,10 +107,18 @@ class ViewTests(TestCase):
              visible=not(last_invisible and date == datetime.datetime(1960,1,1))
             )
             post.save()
-        if last_invisible:
-            BlogPost.objects
         request = HttpRequest()
         return view(request).content.decode()
+
+
+    def save_test_post_to_db(self):
+        post = BlogPost(
+         date=datetime.datetime(1900, 1, 1).date(),
+         title="Test title",
+         body="Test body",
+         visible=True
+        )
+        post.save()
 
 
     def test_home_page_view_uses_home_page_template(self):
@@ -93,7 +133,9 @@ class ViewTests(TestCase):
 
 
     def test_home_view_ignores_invisible_posts(self):
-        home_html = self.get_html_after_three_blog_posts(views.home_page, last_invisible=True)
+        home_html = self.get_html_after_three_blog_posts(
+         views.home_page, last_invisible=True
+        )
         self.assertIn("1955", home_html)
         self.assertNotIn("1950", home_html)
         self.assertNotIn("1960", home_html)
@@ -116,7 +158,9 @@ class ViewTests(TestCase):
 
 
     def test_blog_page_ignores_invisible_posts(self):
-        blog_html = self.get_html_after_three_blog_posts(views.blog_page, last_invisible=True)
+        blog_html = self.get_html_after_three_blog_posts(
+         views.blog_page, last_invisible=True
+        )
         pos_1950 = blog_html.find("January, 1950")
         pos_1955 = blog_html.find("January, 1955")
         pos_1960 = blog_html.find("January, 1960")
@@ -149,21 +193,17 @@ class ViewTests(TestCase):
 
 
     def test_edit_posts_view_shows_all_posts_in_correct_order(self):
-        html = self.get_html_after_three_blog_posts(views.edit_posts_page, last_invisible=True)
+        html = self.get_html_after_three_blog_posts(
+         views.edit_posts_page, last_invisible=True
+        )
         pos_1950 = html.find("January, 1950")
         pos_1955 = html.find("January, 1955")
         pos_1960 = html.find("January, 1960")
         self.assertTrue(pos_1960 < pos_1955 < pos_1950)
 
 
-    def test_edit_post_view_uses_contains_post_text(self):
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
+    def test_edit_post_view_contains_post_text(self):
+        self.save_test_post_to_db()
         request = HttpRequest()
         html = views.edit_post_page(request, "1").content.decode()
         self.assertIn("Test title", html)
@@ -174,13 +214,7 @@ class ViewTests(TestCase):
 
     def test_edit_post_view_redirects_after_post(self):
         request = self.make_post_request()
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
+        self.save_test_post_to_db()
         response = views.edit_post_page(request, "1")
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/blog/")
@@ -188,13 +222,7 @@ class ViewTests(TestCase):
 
     def test_edit_post_page_can_actually_edit_a_post(self):
         request = self.make_post_request()
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
+        self.save_test_post_to_db()
         post = BlogPost.objects.first()
         self.assertEqual(post.title, "Test title")
         response = views.edit_post_page(request, "1")
@@ -204,61 +232,16 @@ class ViewTests(TestCase):
 
     def test_delete_post_view_redirects_after_post(self):
         request = self.make_post_request()
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
+        self.save_test_post_to_db()
         response = views.delete_post_page(request, "1")
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/blog/edit/")
 
 
     def test_delete_post_can_actually_delete_a_post(self):
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
+        self.save_test_post_to_db()
         self.assertEqual(BlogPost.objects.count(), 1)
         request = HttpRequest()
         request.method = "POST"
         views.delete_post_page(request, "1")
         self.assertEqual(BlogPost.objects.count(), 0)
-
-
-
-class ModelTests(TestCase):
-
-    def test_save_and_retrieve_BlogPost(self):
-        self.assertEqual(BlogPost.objects.all().count(), 0)
-        blog_post = BlogPost()
-        blog_post.title = "A post"
-        blog_post.date = datetime.datetime(1939, 9, 1, 5, 0, 0)
-        blog_post.body = "Blah blah blah"
-        blog_post.visible = False
-        blog_post.save()
-        self.assertEqual(BlogPost.objects.all().count(), 1)
-
-        retrieved_post = BlogPost.objects.first()
-        self.assertEqual(retrieved_post, blog_post)
-
-
-    def test_cannot_create_post_without_parameters(self):
-        params = {
-         "title":".",
-         "date":datetime.datetime.now(),
-         "body":".",
-         "visible":True
-        }
-        param_names = list(params.keys())
-        param_names.remove("visible")
-        for i in range(len(param_names)):
-            incomplete_params = params.copy()
-            del incomplete_params[param_names[i]]
-            blog_post = BlogPost(**incomplete_params)
-            self.assertRaises(ValidationError, blog_post.full_clean)
