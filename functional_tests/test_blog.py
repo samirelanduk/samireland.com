@@ -96,7 +96,7 @@ class BlogContentTest(FunctionalTest):
 
 class BlogPostingTest(FunctionalTest):
 
-    def sam_writes_blog_post(self, title, date, body, visible):
+    def sam_writes_blog_post(self, title, date, body, visible, check_redirect=True):
         # Sam goes to new post page
         self.browser.get(self.server_url + "/blog/new/")
 
@@ -118,10 +118,11 @@ class BlogPostingTest(FunctionalTest):
         if (live_box.is_selected() and not visible) or (not live_box.is_selected() and visible):
             live_box.click()
         submit_button.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
-        )
+        if check_redirect:
+            self.assertEqual(
+             self.browser.current_url,
+             self.live_server_url + "/"
+            )
 
 
     def test_sam_can_post_blogs(self):
@@ -463,3 +464,53 @@ class BlogPostingTest(FunctionalTest):
          "A modified body"
         )
         self.browser.quit()
+
+
+    def test_sam_cannot_post_blank_blog_post(self):
+        # Sam makes a post with no title
+        self.sam_writes_blog_post("/n", "10101962", "TEST", True, check_redirect=False)
+
+        # He is still on the new page!
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/new/"
+        )
+
+        # There is an error message saying there needs to be a title
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no title"
+        )
+
+        # Sam makes a post with no date
+        self.sam_writes_blog_post("Title", "", "TEST", True, check_redirect=False)
+
+        # He is still on the new page!
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/new/"
+        )
+
+        # There is an error message saying there needs to be a title
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no date"
+        )
+
+        # Sam makes a post with no body
+        self.sam_writes_blog_post("Title", "10101962", "\n\n", True, check_redirect=False)
+
+        # He is still on the new page!
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/new/"
+        )
+
+        # There is an error message saying there needs to be a title
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no body"
+        )
