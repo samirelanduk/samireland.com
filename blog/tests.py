@@ -60,20 +60,26 @@ class ModelTests(TestCase):
         self.assertEqual(retrieved_post, blog_post)
 
 
-    def test_cannot_create_post_without_parameters(self):
-        params = {
-         "title":".",
-         "date":datetime.datetime.now(),
-         "body":".",
-         "visible":True
-        }
-        param_names = list(params.keys())
-        param_names.remove("visible")
-        for i in range(len(param_names)):
-            incomplete_params = params.copy()
-            del incomplete_params[param_names[i]]
-            blog_post = BlogPost(**incomplete_params)
-            self.assertRaises(ValidationError, blog_post.full_clean)
+    def test_cannot_create_post_without_title(self):
+        blog_post = BlogPost(title="", date=datetime.datetime.now(), body=".", visible=True)
+        with self.assertRaises(ValidationError):
+            blog_post.save()
+            blog_post.full_clean()
+
+
+    def test_cannot_create_post_without_date(self):
+        blog_post = BlogPost(title=".", date="", body=".", visible=True)
+        with self.assertRaises(ValidationError):
+            blog_post.save()
+            blog_post.full_clean()
+
+
+    def test_cannot_create_post_without_body(self):
+        blog_post = BlogPost(title="", date=datetime.datetime.now(), body="", visible=True)
+        with self.assertRaises(ValidationError):
+            blog_post.save()
+            blog_post.full_clean()
+
 
 
 

@@ -20,7 +20,7 @@ def blog_page(request):
 
 def new_post_page(request):
     if request.method == "POST":
-        BlogPost.objects.create(
+        post = BlogPost.objects.create(
          title=request.POST["title"],
          date=datetime.datetime.strptime(
           request.POST["date"], "%Y-%m-%d"
@@ -28,6 +28,7 @@ def new_post_page(request):
          body=request.POST["body"],
          visible=request.POST.get("visible") is not None
         )
+        post.full_clean()
         return redirect("/")
     return render(request, "new_post.html")
 
@@ -47,6 +48,7 @@ def edit_post_page(request, post_id):
         blog_post.body = request.POST["body"]
         blog_post.visible = request.POST.get("visible") is not None
         blog_post.save()
+        blog_post.full_clean()
         return redirect("/blog/")
 
     return render(request, "edit_post.html", {
