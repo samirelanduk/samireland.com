@@ -1,3 +1,54 @@
 .blog_post {
   background-color: #e6f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 30px;
+}
+
+.blog_post_title {
+  font-weight: bold;
+  font-size: 110%;
+}
+
+.blog_post_date {
+  font-style: italic;
+  font-size: 90%;
+  margin-bottom: 10px;
+}
+
+
+@media only screen and (min-width: 568px) {
+  /* iPad down */
+
+  .blog_post {
+    margin-left: 8%;
+    margin-right: 8%;
+    padding: 25px;
+    font-size: 90%;
+  }
+
+
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens */
+
+  .blog_post {
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 30px;
+    font-size: 90%;
+  }
+
+
+@media only screen and (min-width: 1024px) {
+  /* Big Desktop screens */
+
+  .blog_post {
+    margin-left: 50px;;
+    margin-right: 50px;;
+    padding: 40px;
+  }
+
+
 }
