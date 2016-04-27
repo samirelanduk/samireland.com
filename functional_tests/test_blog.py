@@ -121,7 +121,7 @@ class BlogPostingTest(FunctionalTest):
         if check_redirect:
             self.assertEqual(
              self.browser.current_url,
-             self.live_server_url + "/"
+             self.server_url + "/"
             )
 
 
@@ -468,7 +468,7 @@ class BlogPostingTest(FunctionalTest):
 
     def test_sam_cannot_post_blank_blog_post(self):
         # Sam makes a post with no title
-        self.sam_writes_blog_post("/n", "10101962", "TEST", True, check_redirect=False)
+        self.sam_writes_blog_post("", "10101962", "TEST", True, check_redirect=False)
 
         # He is still on the new page!
         self.assertEqual(
@@ -492,7 +492,7 @@ class BlogPostingTest(FunctionalTest):
          self.live_server_url + "/blog/new/"
         )
 
-        # There is an error message saying there needs to be a title
+        # There is an error message saying there needs to be a date
         error = self.browser.find_elements_by_class_name("error")
         self.assertEqual(
          error.text,
@@ -500,7 +500,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # Sam makes a post with no body
-        self.sam_writes_blog_post("Title", "10101962", "\n\n", True, check_redirect=False)
+        self.sam_writes_blog_post("Title", "10101962", "  ", True, check_redirect=False)
 
         # He is still on the new page!
         self.assertEqual(
@@ -508,7 +508,66 @@ class BlogPostingTest(FunctionalTest):
          self.live_server_url + "/blog/new/"
         )
 
+        # There is an error message saying there needs to be a body
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no body"
+        )
+
+
+    def test_sam_cannot_edit_a_post_to_have_blank_fields(self):
+        # Sam writes a blog post
+        self.sam_writes_blog_post("Title", "10101962", "TEST", True)
+
+        # He decides to edit it
+        self.browser.get(self.server_url + "/blog/edit/")
+        row = self.browser.find_elements_by_tag_name("tr")[-1]
+        row.click()
+        edit_url = self.browser.current_url
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        title_entry.value = "\n"
+
+        # He tries to save it, but can't
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         edit_url
+        )
+
         # There is an error message saying there needs to be a title
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no title"
+        )
+
+        # He tries to do the same with the date and body, which also fail
+        form = self.browser.find_element_by_tag_name("form")
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        date_entry.value = ""
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         edit_url
+        )
+        error = self.browser.find_elements_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no date"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        body_entry = form.find_element_by_tag_name("textarea")
+        body_entry.value = "\t"
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         edit_url
+        )
         error = self.browser.find_elements_by_class_name("error")
         self.assertEqual(
          error.text,
