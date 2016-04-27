@@ -477,7 +477,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # There is an error message saying there needs to be a title
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no title"
@@ -493,7 +493,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # There is an error message saying there needs to be a date
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no date"
@@ -509,7 +509,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # There is an error message saying there needs to be a body
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no body"
@@ -538,7 +538,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # There is an error message saying there needs to be a title
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no title"
@@ -554,7 +554,7 @@ class BlogPostingTest(FunctionalTest):
          self.browser.current_url,
          edit_url
         )
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no date"
@@ -568,7 +568,7 @@ class BlogPostingTest(FunctionalTest):
          self.browser.current_url,
          edit_url
         )
-        error = self.browser.find_elements_by_class_name("error")
+        error = self.browser.find_element_by_class_name("error")
         self.assertEqual(
          error.text,
          "You cannot submit a blog post with no body"

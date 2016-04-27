@@ -92,13 +92,13 @@ class ViewTests(TestCase):
         self.assertEqual(response.content.decode(), expected_html)
 
 
-    def make_post_request(self):
+    def make_post_request(self, title=".", date="1939-09-01", body=".", visible=True):
         request = HttpRequest()
         request.method = "POST"
-        request.POST["title"] = "."
-        request.POST["date"] = "1939-09-01"
-        request.POST["body"] = "."
-        request.POST["visible"] = True
+        request.POST["title"] = title
+        request.POST["date"] = date
+        request.POST["body"] = body
+        request.POST["visible"] = visible
         return request
 
 
@@ -193,6 +193,27 @@ class ViewTests(TestCase):
         response = views.new_post_page(request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["location"], "/")
+
+
+    def test_new_post_page_returns_error_message_when_needed(self):
+        request = self.make_post_request(title="\n")
+        response = views.new_post_page(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("cannot submit", response.content.decode())
+
+
+    def test_new_post_view_does_not_save_to_db_after_error(self):
+        self.assertEqual(BlogPost.objects.count(), 0)
+        request = self.make_post_request(title="\n")
+        response = views.new_post_page(request)
+        self.assertEqual(BlogPost.objects.count(), 0)
+
+
+    def test_new_post_vew_can_recover_from_empty_date(self):
+        request = self.make_post_request(date="")
+        response = views.new_post_page(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("cannot submit", response.content.decode())
 
 
     def test_edit_posts_view_uses_edit_posts_template(self):
