@@ -2,7 +2,7 @@ from selenium import webdriver
 import time
 from .base import FunctionalTest
 
-class CssTest(FunctionalTest):
+class MainCssTest(FunctionalTest):
 
     def test_main_css_applies(self):
         self.browser.get(self.server_url + "/")
@@ -25,4 +25,17 @@ class CssTest(FunctionalTest):
         self.assertEqual(
          body.value_of_css_property("width"),
          "900px"
+        )
+
+
+
+class BlogCss(FunctionalTest):
+
+    def test_blog_css_applies(self):
+        self.browser.get(self.server_url + "/")
+        body = self.browser.find_element_by_tag_name("body")
+        post = self.browser.find_element_by_class_name("blog_post")
+        self.assertNotEqual(
+         body.value_of_css_property("background-color"),
+         post.value_of_css_property("background-color")
         )
