@@ -47,6 +47,10 @@ def _update_settings(source_folder, site_name):
       db, user, password, host
      )
     )
+    append(
+     settings_path,
+     'STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))'
+    )
     secret_settigs_file = source_folder + "/samireland/secret_settings.py"
     if not exists(secret_settigs_file):
         chars = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"
