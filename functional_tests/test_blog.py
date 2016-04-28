@@ -501,7 +501,7 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # Sam makes a post with no body
-        self.sam_writes_blog_post("Title", "10101962", "  ", True, check_redirect=False)
+        self.sam_writes_blog_post("Title", "10101962", "", True, check_redirect=False)
 
         # He is still on the new page!
         self.assertEqual(

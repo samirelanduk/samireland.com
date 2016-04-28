@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ValidationError
 from blog.models import BlogPost
+from blog.forms import BlogPostForm
 import datetime
 
 # Create your views here.
@@ -21,36 +22,21 @@ def blog_page(request):
 
 def new_post_page(request):
     if request.method == "POST":
-        try:
-            post = BlogPost()
-            post.title = request.POST["title"].strip()
-            try:
-                post.date = datetime.datetime.strptime(
-                 request.POST["date"], "%Y-%m-%d"
-                ).date()
-            except ValueError:
-                post.body = "."
-                post.visible = True
-                post.date = datetime.datetime(1900, 1, 1)
-                post.save()
-                raise ValidationError("Invalid Date format")
-            post.body = request.POST["body"].strip()
-            post.visible = request.POST.get("visible") is not None
-            post.save()
-            post.full_clean()
-        except ValidationError:
-            post.delete()
-            invalid_field = ""
-            if not request.POST["title"].strip():
-                invalid_field = "title"
-            elif not request.POST["date"].strip():
-                invalid_field = "date"
-            else:
-                invalid_field = "body"
-            error_message = "You cannot submit a blog post with no %s" % invalid_field
-            return render(request, "new_post.html", {"error": error_message})
-        return redirect("/")
-    return render(request, "new_post.html")
+        form = BlogPostForm(request.POST)
+        if form.is_valid():
+            BlogPost.objects.create(
+             title=request.POST["title"].strip(),
+             date=datetime.datetime.strptime(
+              request.POST["date"], "%Y-%m-%d"
+             ).date(),
+             body=request.POST["body"].strip(),
+             visible=request.POST.get("visible") is not None
+            )
+            return redirect("/")
+        else:
+            return render(request, "new_post.html", {"form": form})
+    form = BlogPostForm()
+    return render(request, "new_post.html", {"form": form})
 
 
 def edit_posts_page(request):

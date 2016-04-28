@@ -151,10 +151,11 @@ class FormsTest(TestCase):
 
 class ViewTests(TestCase):
 
-    def check_view_uses_template(self, view, template, *view_args):
+    def check_view_uses_template(self, view, template, template_dict=None, *view_args):
+        template_dict = template_dict if template_dict else {}
         request = HttpRequest()
         response = view(request, *view_args)
-        expected_html = render_to_string(template)
+        expected_html = render_to_string(template, template_dict)
         self.assertEqual(response.content.decode(), expected_html)
 
 
@@ -242,7 +243,25 @@ class ViewTests(TestCase):
 
 
     def test_new_post_view_uses_new_post_template(self):
-        self.check_view_uses_template(views.new_post_page, "new_post.html")
+        form = BlogPostForm()
+        self.check_view_uses_template(
+         views.new_post_page,
+         "new_post.html",
+         template_dict={"form": form}
+        )
+
+
+    def test_new_post_view_uses_blog_post_form(self):
+        request = HttpRequest()
+        response = views.new_post_page(request)
+        self.assertIn(
+         BlogPostForm().__dict__["fields"]["title"].widget.render(
+          name="title",
+          value="",
+          attrs={"id": "id_title"}
+         ),
+         response.content.decode()
+        )
 
 
     def test_new_post_view_can_save_blog_post(self):
@@ -262,7 +281,7 @@ class ViewTests(TestCase):
 
 
     def test_new_post_page_returns_error_message_when_needed(self):
-        request = self.make_post_request(title="\n")
+        request = self.make_post_request(title="")
         response = views.new_post_page(request)
         self.assertEqual(response.status_code, 200)
         self.assertIn("cannot submit", response.content.decode())
@@ -270,7 +289,7 @@ class ViewTests(TestCase):
 
     def test_new_post_view_does_not_save_to_db_after_error(self):
         self.assertEqual(BlogPost.objects.count(), 0)
-        request = self.make_post_request(title="\n")
+        request = self.make_post_request(title="")
         response = views.new_post_page(request)
         self.assertEqual(BlogPost.objects.count(), 0)
 

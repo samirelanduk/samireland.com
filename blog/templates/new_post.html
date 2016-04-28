@@ -7,29 +7,34 @@
 
 <form method="POST">
   <div>
-    <label for="title_entry">Post Title</label>
-    <input type="text" id="title_entry" name="title">
+    <label for="{{ form.title.id_for_label }}">Title: {{ form.title }}</label>
+    {% if form.title.errors %}
+    <div class="error">
+      {{ form.title.errors }}
+    </div>
+    {% endif %}
   </div>
   <div>
-    <label for="date_entry">Post Date</label>
-    <input type="date" id="date_entry" name="date">
+    <label for="{{ form.date.id_for_label }}">Date: {{ form.date }}</label>
+    {% if form.date.errors %}
+    <div class="error">
+      {{ form.date.errors }}
+    </div>
+    {% endif %}
   </div>
   <div>
-    <label for="body_entry">Post Body</label>
-    <textarea id="body_entry" name="body"></textarea>
-  </div>
+    <label for="{{ form.body.id_for_label }}">Body: {{ form.body }}</label>
+    {% if form.body.errors %}
+    <div class="error">
+      {{ form.body.errors }}
+    </div>
+    {% endif %}
   <div>
-    <label for="is_visible">Visible</label>
-    <input type="checkbox" id="is_visible" name="visible" value="yes">
+    <label for="{{ form.visible.id_for_label }}">Visible: {{ form.visible }}</label>
   </div>
   <div>
     {% csrf_token %}
   </div>
-  {% if error %}
-  <div class="error">
-    {{ error }}
-  </div>
-  {% endif %}
   <div>
     <input type="submit">
   </div>
