@@ -1,0 +1,37 @@
+{% block blogform %}
+<form method="POST">
+  <div>
+    <label for="{{ form.title.id_for_label }}">Title: {{ form.title }}</label>
+    {% if form.title.errors %}
+    <div class="error">
+      {{ form.title.errors }}
+    </div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="{{ form.date.id_for_label }}">Date: {{ form.date }}</label>
+    {% if form.date.errors %}
+    <div class="error">
+      {{ form.date.errors }}
+    </div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="{{ form.body.id_for_label }}">Body: {{ form.body }}</label>
+    {% if form.body.errors %}
+    <div class="error">
+      {{ form.body.errors }}
+    </div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="{{ form.visible.id_for_label }}">Visible: {{ form.visible }}</label>
+  </div>
+  <div>
+    {% csrf_token %}
+  </div>
+  <div>
+    <input type="submit">
+  </div>
+</form>
+{% endblock %}

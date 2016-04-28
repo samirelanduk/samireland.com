@@ -23,8 +23,8 @@ class MainCssTest(FunctionalTest):
         )
         self.browser.set_window_size(900, 800)
         self.assertEqual(
-         body.value_of_css_property("width"),
-         "900px"
+         body.value_of_css_property("margin"),
+         "0px"
         )
 
 
