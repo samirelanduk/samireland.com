@@ -105,6 +105,48 @@ class FormsTest(TestCase):
         )
 
 
+    def test_blog_form_wont_accept_blank_title(self):
+        form = BlogPostForm(data={
+         "title": "",
+         "date": "1939-09-01",
+         "body": ".",
+         "visible": True
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+         form.errors["title"],
+         ["You cannot submit a blog post with no title"]
+        )
+
+
+    def test_blog_form_wont_accept_blank_date(self):
+        form = BlogPostForm(data={
+         "title": ".",
+         "date": "",
+         "body": ".",
+         "visible": True
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+         form.errors["date"],
+         ["You cannot submit a blog post with no date"]
+        )
+
+
+    def test_blog_form_wont_accept_blank_body(self):
+        form = BlogPostForm(data={
+         "title": ".",
+         "date": "1939-09-01",
+         "body": "",
+         "visible": True
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+         form.errors["body"],
+         ["You cannot submit a blog post with no body"]
+        )
+
+
 
 
 class ViewTests(TestCase):
