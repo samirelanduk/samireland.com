@@ -18,6 +18,24 @@
   margin-bottom: 10px;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+tr {
+  line-height: 200%;
+}
+
+tr.selectrow:hover {
+  background-color: #e6f9f9;
+  cursor: pointer;
+}
+
 
 @media only screen and (min-width: 568px) {
   /* iPad down */
