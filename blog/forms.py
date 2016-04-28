@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
+from blog.models import BlogPost
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -16,9 +17,13 @@ class PlainTextarea(forms.Textarea):
 
 
 
-class BlogPostForm(forms.Form):
+class BlogPostForm(forms.models.ModelForm):
 
-    title = forms.CharField()
-    date = forms.DateField(widget=DateInput)
-    body = forms.CharField(widget=PlainTextarea)
-    visible = forms.BooleanField()
+    class Meta:
+        model = BlogPost
+        fields = ("title", "date", "body", "visible")
+        widgets = {
+         "title": forms.fields.TextInput,
+         "date": DateInput,
+         "body": PlainTextarea
+        }
