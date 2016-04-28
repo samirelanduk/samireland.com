@@ -1,5 +1,6 @@
 from django.test import TestCase
 from blog import views
+from blog.forms import BlogPostForm
 from django.core.urlresolvers import resolve
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest
@@ -79,6 +80,29 @@ class ModelTests(TestCase):
         with self.assertRaises(ValidationError):
             blog_post.save()
             blog_post.full_clean()
+
+
+
+class FormsTest(TestCase):
+
+    def test_blog_form_has_correct_inputs(self):
+        form = BlogPostForm()
+        self.assertIn(
+         '<input id="id_title" name="title" type="text"',
+         str(form)
+        )
+        self.assertIn(
+         '<input id="id_date" name="date" type="date"',
+         str(form)
+        )
+        self.assertIn(
+         '<textarea id="id_body" name="body"',
+         str(form)
+        )
+        self.assertIn(
+         '<input id="id_visible" name="visible" type="checkbox"',
+         str(form)
+        )
 
 
 
