@@ -68,10 +68,6 @@ def edit_post_page(request, post_id):
                  request.POST["date"], "%Y-%m-%d"
                 ).date()
             except ValueError:
-                blog_post.body = "."
-                blog_post.visible = True
-                blog_post.date = datetime.datetime(1900, 1, 1)
-                blog_post.save()
                 raise ValidationError("Invalid Date format")
             blog_post.body = request.POST["body"].strip()
             blog_post.visible = request.POST.get("visible") is not None
