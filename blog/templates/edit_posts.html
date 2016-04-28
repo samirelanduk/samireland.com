@@ -12,7 +12,7 @@
   </thead>
   <tbody>
   {% for blog_post in blog_posts %}
-      <tr onclick="window.document.location='/blog/edit/{{ blog_post.id }}';">
+      <tr onclick="window.document.location='{% url 'edit_post_page' blog_post.id %}';">
         <td>{{ blog_post.title }}</td>
         <td>{{ blog_post.date }}</td>
         <td>{{ blog_post.visible|yesno:"Yes,No" }}</td>

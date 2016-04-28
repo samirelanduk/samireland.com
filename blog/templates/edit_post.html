@@ -34,5 +34,5 @@
     <input type="submit">
   </div>
 </form>
-<button onclick="window.document.location='/blog/delete/{{ id }}/';">Delete</button>
+<button onclick="window.document.location='{% url 'delete_post_page' id%}';">Delete</button>
 {% endblock %}

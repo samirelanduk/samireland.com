@@ -10,7 +10,7 @@
   </p>
   {% csrf_token %}
   <input type="submit">
-  <a href="/blog/">Back</a>
+  <a href="{% url 'blog_page' %}">Back</a>
 </form>
 
 {% endblock %}
