@@ -385,7 +385,7 @@ class BlogPostingTest(FunctionalTest):
         rows[1].click()
 
         # There is a delete button after the form - he presses it
-        delete_button = self.browser.find_element_by_tag_name("button")
+        delete_button = self.browser.find_element_by_id("delete")
         delete_button.click()
 
         # Now he is on a deletion page, and is asked if he is sure
@@ -547,6 +547,8 @@ class BlogPostingTest(FunctionalTest):
 
         # He tries to do the same with the body, which also fails
         form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        title_entry.send_keys("...")
         body_entry = form.find_element_by_tag_name("textarea")
         body_entry.clear()
         body_entry.send_keys(Keys.TAB)

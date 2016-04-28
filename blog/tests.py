@@ -151,11 +151,12 @@ class FormsTest(TestCase):
 
 class ViewTests(TestCase):
 
-    def check_view_uses_template(self, view, template, template_dict=None, *view_args):
+    def check_view_uses_template(self, view, template, *view_args, template_dict=None):
         template_dict = template_dict if template_dict else {}
         request = HttpRequest()
         response = view(request, *view_args)
         expected_html = render_to_string(template, template_dict)
+        self.maxDiff = None
         self.assertEqual(response.content.decode(), expected_html)
 
 
@@ -315,6 +316,32 @@ class ViewTests(TestCase):
         self.assertTrue(pos_1960 < pos_1955 < pos_1950)
 
 
+    def test_edit_post_view_uses_edit_post_template(self):
+        post_id = self.save_test_post_to_db()
+        blog_post = BlogPost.objects.first()
+        form = BlogPostForm(instance=blog_post)
+        self.check_view_uses_template(
+         views.edit_post_page,
+         "edit_post.html",
+         post_id,
+         template_dict={"form": form, "id": post_id}
+        )
+
+
+    def test_edit_post_view_uses_blog_post_form(self):
+        post_id = self.save_test_post_to_db()
+        request = HttpRequest()
+        response = views.edit_post_page(request, post_id)
+        self.assertIn(
+         BlogPostForm().__dict__["fields"]["title"].widget.render(
+          name="title",
+          value="Test title",
+          attrs={"id": "id_title"}
+         ),
+         response.content.decode()
+        )
+
+
     def test_edit_post_view_contains_post_text(self):
         post_id = self.save_test_post_to_db()
         request = HttpRequest()
@@ -345,7 +372,7 @@ class ViewTests(TestCase):
 
     def test_edit_post_page_returns_error_message_when_needed(self):
         post_id = self.save_test_post_to_db()
-        request = self.make_post_request(title="\n")
+        request = self.make_post_request(title="")
         response = views.edit_post_page(request, post_id)
         self.assertEqual(response.status_code, 200)
         self.assertIn("cannot submit", response.content.decode())
@@ -353,7 +380,7 @@ class ViewTests(TestCase):
 
     def test_edit_post_view_does_not_save_to_db_after_error(self):
         post_id = self.save_test_post_to_db()
-        request = self.make_post_request(title="\n")
+        request = self.make_post_request(title="")
         response = views.edit_post_page(request, post_id)
         self.assertEqual(BlogPost.objects.first().title, "Test title")
 

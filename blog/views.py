@@ -45,46 +45,23 @@ def edit_posts_page(request):
 
 
 def edit_post_page(request, post_id):
-    blog_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":
-        try:
-            blog_post.title = request.POST["title"].strip()
-            try:
-                blog_post.date = datetime.datetime.strptime(
-                 request.POST["date"], "%Y-%m-%d"
-                ).date()
-            except ValueError:
-                raise ValidationError("Invalid Date format")
-            blog_post.body = request.POST["body"].strip()
-            blog_post.visible = request.POST.get("visible") is not None
-            blog_post.full_clean()
-            blog_post.save()
-        except ValidationError:
-            invalid_field = ""
-            if not request.POST["title"].strip():
-                invalid_field = "title"
-            elif not request.POST["date"].strip():
-                invalid_field = "date"
-            else:
-                invalid_field = "body"
-            error_message = "You cannot submit a blog post with no %s" % invalid_field
-            blog_post = BlogPost.objects.get(pk=post_id)
-            return render(request, "edit_post.html", {
-             "title": blog_post.title,
-             "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),
-             "body": blog_post.body,
-             "checked": "checked" if blog_post.visible else "",
-             "id": blog_post.id,
-             "error": error_message
-            })
-        return redirect("/blog/")
-    return render(request, "edit_post.html", {
-     "title": blog_post.title,
-     "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),
-     "body": blog_post.body,
-     "checked": "checked" if blog_post.visible else "",
-     "id": blog_post.id
-    })
+        blog_post = BlogPost.objects.get(pk=post_id)
+        form = BlogPostForm(request.POST, instance=blog_post)
+        if form.is_valid():
+            form.save()
+            return redirect("/blog/")
+        else:
+            return render(request, "edit_post.html", {"form": form, "id": post_id})
+    else:
+        blog_post = BlogPost.objects.get(pk=post_id)
+        form = BlogPostForm(data={
+         "title": blog_post.title,
+         "date": blog_post.date,
+         "body": blog_post.body,
+         "visible": blog_post.visible
+        })
+        return render(request, "edit_post.html", {"form": form, "id": post_id})
 
 
 def delete_post_page(request, post_id):
