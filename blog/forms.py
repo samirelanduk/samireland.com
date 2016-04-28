@@ -27,9 +27,16 @@ class BlogPostForm(forms.models.ModelForm):
         model = BlogPost
         fields = ("title", "date", "body", "visible")
         widgets = {
-         "title": forms.fields.TextInput,
-         "date": DateInput,
-         "body": PlainTextarea
+         "title": forms.fields.TextInput(attrs={
+          "class": "pure-u-1-1 pure-u-md-19-24"
+         }),
+         "date": DateInput(),
+         "body": PlainTextarea(attrs={
+          "class": "pure-u-1-1 pure-u-md-19-24"
+         }),
+         "visible": forms.CheckboxInput(attrs={
+          "class": "pure-u-1-24"
+         })
         }
         error_messages = {
          "title": {"required": EMPTY_FIELD_ERROR % "title"},
