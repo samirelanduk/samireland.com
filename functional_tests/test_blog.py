@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 import time
 
@@ -527,7 +528,7 @@ class BlogPostingTest(FunctionalTest):
         edit_url = self.browser.current_url
         form = self.browser.find_element_by_tag_name("form")
         title_entry = form.find_elements_by_tag_name("input")[0]
-        title_entry.value = "\n"
+        title_entry.clear()
 
         # He tries to save it, but can't
         submit_button = form.find_elements_by_tag_name("input")[-1]
@@ -544,24 +545,11 @@ class BlogPostingTest(FunctionalTest):
          "You cannot submit a blog post with no title"
         )
 
-        # He tries to do the same with the date and body, which also fail
-        form = self.browser.find_element_by_tag_name("form")
-        date_entry = form.find_elements_by_tag_name("input")[1]
-        date_entry.value = ""
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        submit_button.click()
-        self.assertEqual(
-         self.browser.current_url,
-         edit_url
-        )
-        error = self.browser.find_element_by_class_name("error")
-        self.assertEqual(
-         error.text,
-         "You cannot submit a blog post with no date"
-        )
+        # He tries to do the same with the body, which also fails
         form = self.browser.find_element_by_tag_name("form")
         body_entry = form.find_element_by_tag_name("textarea")
-        body_entry.value = "\t"
+        body_entry.clear()
+        body_entry.send_keys(Keys.TAB)
         submit_button = form.find_elements_by_tag_name("input")[-1]
         submit_button.click()
         self.assertEqual(

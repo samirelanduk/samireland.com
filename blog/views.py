@@ -61,16 +61,41 @@ def edit_posts_page(request):
 def edit_post_page(request, post_id):
     blog_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":
-        blog_post.title = request.POST["title"]
-        blog_post.date = datetime.datetime.strptime(
-         request.POST["date"], "%Y-%m-%d"
-        ).date()
-        blog_post.body = request.POST["body"]
-        blog_post.visible = request.POST.get("visible") is not None
-        blog_post.save()
-        blog_post.full_clean()
+        try:
+            blog_post.title = request.POST["title"].strip()
+            try:
+                blog_post.date = datetime.datetime.strptime(
+                 request.POST["date"], "%Y-%m-%d"
+                ).date()
+            except ValueError:
+                blog_post.body = "."
+                blog_post.visible = True
+                blog_post.date = datetime.datetime(1900, 1, 1)
+                blog_post.save()
+                raise ValidationError("Invalid Date format")
+            blog_post.body = request.POST["body"].strip()
+            blog_post.visible = request.POST.get("visible") is not None
+            blog_post.full_clean()
+            blog_post.save()
+        except ValidationError:
+            invalid_field = ""
+            if not request.POST["title"].strip():
+                invalid_field = "title"
+            elif not request.POST["date"].strip():
+                invalid_field = "date"
+            else:
+                invalid_field = "body"
+            error_message = "You cannot submit a blog post with no %s" % invalid_field
+            blog_post = BlogPost.objects.get(pk=post_id)
+            return render(request, "edit_post.html", {
+             "title": blog_post.title,
+             "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),
+             "body": blog_post.body,
+             "checked": "checked" if blog_post.visible else "",
+             "id": blog_post.id,
+             "error": error_message
+            })
         return redirect("/blog/")
-
     return render(request, "edit_post.html", {
      "title": blog_post.title,
      "date": datetime.datetime.strftime(blog_post.date, "%Y-%m-%d"),

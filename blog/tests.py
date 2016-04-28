@@ -258,6 +258,29 @@ class ViewTests(TestCase):
         self.assertEqual(post.title, ".")
 
 
+    def test_edit_post_page_returns_error_message_when_needed(self):
+        post_id = self.save_test_post_to_db()
+        request = self.make_post_request(title="\n")
+        response = views.edit_post_page(request, post_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("cannot submit", response.content.decode())
+
+
+    def test_edit_post_view_does_not_save_to_db_after_error(self):
+        post_id = self.save_test_post_to_db()
+        request = self.make_post_request(title="\n")
+        response = views.edit_post_page(request, post_id)
+        self.assertEqual(BlogPost.objects.first().title, "Test title")
+
+
+    def test_edit_post_vew_can_recover_from_empty_date(self):
+        post_id = self.save_test_post_to_db()
+        request = self.make_post_request(date="")
+        response = views.edit_post_page(request, post_id)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("cannot submit", response.content.decode())
+
+
     def test_delete_post_view_redirects_after_post(self):
         request = self.make_post_request()
         post_id = self.save_test_post_to_db()
