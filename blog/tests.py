@@ -82,6 +82,14 @@ class ModelTests(TestCase):
             blog_post.full_clean()
 
 
+    def test_cannot_create_two_posts_with_same_date(self):
+        today = datetime.datetime.now().date()
+        BlogPost.objects.create(title=".", date=today, body=".", visible=True)
+        with self.assertRaises(ValidationError):
+            post = BlogPost(title=".", date=today, body=".", visible=True)
+            post.full_clean()
+
+
 
 class FormsTest(TestCase):
 

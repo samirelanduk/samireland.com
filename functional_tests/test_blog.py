@@ -586,12 +586,11 @@ class BlogPostingTest(FunctionalTest):
 
         # He decides to edit an existing post
         self.browser.get(self.server_url + "/blog/edit/")
-        row = self.browser.find_elements_by_tag_name("tr")[-1]
+        row = self.browser.find_elements_by_tag_name("tr")[1]
         row.click()
         edit_url = self.browser.current_url
         form = self.browser.find_element_by_tag_name("form")
         date_entry = form.find_elements_by_tag_name("input")[1]
-        date_entry.clear()
         date_entry.send_keys("10102012")
         submit_button = form.find_elements_by_tag_name("input")[-1]
         submit_button.click()

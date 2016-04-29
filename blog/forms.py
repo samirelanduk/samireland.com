@@ -40,6 +40,8 @@ class BlogPostForm(forms.models.ModelForm):
         }
         error_messages = {
          "title": {"required": EMPTY_FIELD_ERROR % "title"},
-         "date": {"required": EMPTY_FIELD_ERROR % "date"},
+         "date": {
+          "required": EMPTY_FIELD_ERROR % "date",
+          "unique": "There is already a blog post for this date"},
          "body": {"required": EMPTY_FIELD_ERROR % "body"}
         }
