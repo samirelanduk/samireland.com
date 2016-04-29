@@ -65,8 +65,8 @@ def edit_post_page(request, post_id):
 
 
 def delete_post_page(request, post_id):
+    doomed_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":
-        doomed_post = BlogPost.objects.get(pk=post_id)
         doomed_post.delete()
         return redirect("/blog/edit/")
-    return render(request, "delete_post.html")
+    return render(request, "delete_post.html", {"title": doomed_post.title})

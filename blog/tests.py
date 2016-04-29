@@ -88,19 +88,23 @@ class FormsTest(TestCase):
     def test_blog_form_has_correct_inputs(self):
         form = BlogPostForm()
         self.assertIn(
-         '<input id="id_title" name="title" type="text"',
+         'name="title" type="text"',
          str(form)
         )
         self.assertIn(
-         '<input id="id_date" name="date" type="date"',
+         'name="date" type="date"',
          str(form)
         )
         self.assertIn(
-         '<textarea id="id_body" name="body"',
+         '<textarea',
          str(form)
         )
         self.assertIn(
-         '<input id="id_visible" name="visible" type="checkbox"',
+         'name="body"',
+         str(form)
+        )
+        self.assertIn(
+         'name="visible" type="checkbox"',
          str(form)
         )
 
