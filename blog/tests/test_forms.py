@@ -1,7 +1,9 @@
+import datetime
 from django.test import TestCase
 from blog.forms import BlogPostForm
+from blog.models import BlogPost
 
-class FormsTest(TestCase):
+class FormsRenderingTest(TestCase):
 
     def test_blog_form_has_correct_inputs(self):
         form = BlogPostForm()
@@ -26,6 +28,9 @@ class FormsTest(TestCase):
          str(form)
         )
 
+
+
+class FormsValidationTest(TestCase):
 
     def test_blog_form_wont_accept_blank_title(self):
         form = BlogPostForm(data={
@@ -66,4 +71,20 @@ class FormsTest(TestCase):
         self.assertEqual(
          form.errors["body"],
          ["You cannot submit a blog post with no body"]
+        )
+
+
+    def test_blog_form_wont_accept_duplicate_dates(self):
+        date = datetime.datetime(1990, 9, 28).date()
+        BlogPost.objects.create(title=".", date=date, body=".", visible=True)
+        form = BlogPostForm(data={
+         "title": ".",
+         "date": "1990-09-28",
+         "body": ".",
+         "visible": True
+        })
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+         form.errors["date"],
+         ["There is already a blog post for this date"]
         )
