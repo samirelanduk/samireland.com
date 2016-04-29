@@ -1,14 +1,13 @@
 from django.test import TestCase
 from blog import views
-from blog.forms import BlogPostForm
 from django.core.urlresolvers import resolve
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from blog.forms import BlogPostForm
 from blog.models import BlogPost
 import datetime
 
-# Create your tests here.
 class UrlTests(TestCase):
 
     def check_url_returns_view(self, url, view):
@@ -45,118 +44,11 @@ class UrlTests(TestCase):
 
 
 
-class ModelTests(TestCase):
-
-    def test_save_and_retrieve_blog_posts(self):
-        self.assertEqual(BlogPost.objects.all().count(), 0)
-        blog_post = BlogPost()
-        blog_post.title = "A post"
-        blog_post.date = datetime.datetime(1939, 9, 1, 5, 0, 0)
-        blog_post.body = "Blah blah blah"
-        blog_post.visible = False
-        blog_post.save()
-        self.assertEqual(BlogPost.objects.all().count(), 1)
-
-        retrieved_post = BlogPost.objects.first()
-        self.assertEqual(retrieved_post, blog_post)
-
-
-    def test_cannot_create_post_without_title(self):
-        blog_post = BlogPost(title="", date=datetime.datetime.now(), body=".", visible=True)
-        with self.assertRaises(ValidationError):
-            blog_post.save()
-            blog_post.full_clean()
-
-
-    def test_cannot_create_post_without_date(self):
-        blog_post = BlogPost(title=".", date="", body=".", visible=True)
-        with self.assertRaises(ValidationError):
-            blog_post.save()
-            blog_post.full_clean()
-
-
-    def test_cannot_create_post_without_body(self):
-        blog_post = BlogPost(title="", date=datetime.datetime.now(), body="", visible=True)
-        with self.assertRaises(ValidationError):
-            blog_post.save()
-            blog_post.full_clean()
-
-
-    def test_cannot_create_two_posts_with_same_date(self):
-        today = datetime.datetime.now().date()
-        BlogPost.objects.create(title=".", date=today, body=".", visible=True)
-        with self.assertRaises(ValidationError):
-            post = BlogPost(title=".", date=today, body=".", visible=True)
-            post.full_clean()
 
 
 
-class FormsTest(TestCase):
-
-    def test_blog_form_has_correct_inputs(self):
-        form = BlogPostForm()
-        self.assertIn(
-         'name="title" type="text"',
-         str(form)
-        )
-        self.assertIn(
-         'name="date" type="date"',
-         str(form)
-        )
-        self.assertIn(
-         '<textarea',
-         str(form)
-        )
-        self.assertIn(
-         'name="body"',
-         str(form)
-        )
-        self.assertIn(
-         'name="visible" type="checkbox"',
-         str(form)
-        )
 
 
-    def test_blog_form_wont_accept_blank_title(self):
-        form = BlogPostForm(data={
-         "title": "",
-         "date": "1939-09-01",
-         "body": ".",
-         "visible": True
-        })
-        self.assertFalse(form.is_valid())
-        self.assertEqual(
-         form.errors["title"],
-         ["You cannot submit a blog post with no title"]
-        )
-
-
-    def test_blog_form_wont_accept_blank_date(self):
-        form = BlogPostForm(data={
-         "title": ".",
-         "date": "",
-         "body": ".",
-         "visible": True
-        })
-        self.assertFalse(form.is_valid())
-        self.assertEqual(
-         form.errors["date"],
-         ["You cannot submit a blog post with no date"]
-        )
-
-
-    def test_blog_form_wont_accept_blank_body(self):
-        form = BlogPostForm(data={
-         "title": ".",
-         "date": "1939-09-01",
-         "body": "",
-         "visible": True
-        })
-        self.assertFalse(form.is_valid())
-        self.assertEqual(
-         form.errors["body"],
-         ["You cannot submit a blog post with no body"]
-        )
 
 
 
