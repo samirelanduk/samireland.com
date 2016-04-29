@@ -1,24 +1,8 @@
-from selenium import webdriver
 import sys
+from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 class FunctionalTest(StaticLiveServerTestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        for arg in sys.argv:
-            if "liveserver" in arg:
-                cls.server_url = "http://" + arg.split("=")[1]
-                return
-        super().setUpClass()
-        cls.server_url = cls.live_server_url
-
-
-    @classmethod
-    def tearDownClass(cls):
-        if cls.server_url == cls.live_server_url:
-            super().tearDownClass()
-
 
     def setUp(self):
         self.browser = webdriver.Chrome()
@@ -30,12 +14,13 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def sam_logs_in(self):
         # Sam goes to the login page
-        self.browser.get(self.server_url + "/login/")
+        self.browser.get(self.live_server_url + "/login/")
 
         # He logs in
-        name_entry = self.browser.find_element_by_id("name_entry")
-        password_entry = self.browser.find_element_by_id("password_entry")
-        submit_button = self.browser.find_element_by_id("submit_button")
+        login_form = self.browser.find_element_by_tag_name("form")
+        name_entry = form.find_elements_by_tag_name("input")[0]
+        password_entry = form.find_elements_by_tag_name("input")[1]
+        submit_button = form.find_elements_by_tag_name("input")[-1]
         name_entry.send_keys("sam")
         password_entry.send_keys("testpassword")
         submit_button.click()
@@ -47,7 +32,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         )
         self.assertIn(
          "logged in",
-         self.find_element_by_tag_name("header").text
+         self.find_element_by_tag_name("header").text.lower()
         )
 
 
@@ -56,13 +41,14 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.get(self.server_url + "/logout/")
 
         # He is asked if he would like to logout
+        form = self.browser.find_elements_by_tag_name("form")
         self.assertIn(
          "would you like to logout?",
-         self.browser.find_element_by_tag_name("main").text.lower(),
+         form.text.lower(),
         )
 
         # He says no
-        no_button = self.browser.find_element_by_tag_name("button")
+        no_button = form.find_element_by_tag_name("a")
         no_button.click()
 
         # He is on the home page, and he is still logged in
@@ -72,12 +58,13 @@ class FunctionalTest(StaticLiveServerTestCase):
         )
         self.assertIn(
          "logged in",
-         self.find_element_by_tag_name("header").text
+         self.find_element_by_tag_name("header").text.lower()
         )
 
         # He changes his mind
         self.browser.get(self.server_url + "/logout/")
-        yes_button = self.browser.find_element_by_tag_name("input")
+        form = self.browser.find_elements_by_tag_name("form")
+        yes_button = form.find_element_by_tag_name("input")
         yes_button.click()
 
         # He is on the home page, logged out
@@ -87,5 +74,5 @@ class FunctionalTest(StaticLiveServerTestCase):
         )
         self.assertNotIn(
          "logged in",
-         self.find_element_by_tag_name("header").text
+         self.find_element_by_tag_name("header").text.lower()
         )

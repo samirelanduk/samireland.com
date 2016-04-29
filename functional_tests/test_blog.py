@@ -1,15 +1,64 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
-import time
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+class BlogTest(FunctionalTest):
 
-class BlogContentTest(FunctionalTest):
+    def sam_writes_blog_post(self, title, date, body, visible, check_redirect=True):
+        # Sam goes to new post page
+        self.browser.get(self.live_server_url + "/blog/new/")
+
+        # There is a form for entering a blog post
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        body_entry = form.find_element_by_tag_name("textarea")
+        live_box = form.find_elements_by_tag_name("input")[2]
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.assertEqual(title_entry.get_attribute("type"), "text")
+        self.assertEqual(date_entry.get_attribute("type"), "date")
+        self.assertEqual(live_box.get_attribute("type"), "checkbox")
+
+        # Sam posts a blog post
+        title_entry.send_keys(title)
+        date_entry.send_keys(date)
+        body_entry.send_keys(body)
+        if (live_box.is_selected() and not visible) or (not live_box.is_selected() and visible):
+            live_box.click()
+        submit_button.click()
+        if check_redirect:
+            self.assertEqual(
+             self.browser.current_url,
+             self.live_server_url + "/"
+            )
+
+
+    def get_home_blog_post_content(self):
+        self.browser.get(self.live_server_url)
+        blog_post = self.browser.find_element_by_class_name("blog_post")
+        return [
+         blog_post.find_element_by_class_name("blog_post_title").text,
+         blog_post.find_element_by_class_name("blog_post_date").text,
+         blog_post.find_element_by_class_name("blog_post_body").text
+        ]
+
+
+    def get_blog_page_posts_content(self):
+        self.browser.get(self.live_server_url + "/blog/")
+        blog_posts = self.browser.find_elements_by_class_name("blog_post")
+        return [[
+         blog_post.find_element_by_class_name("blog_post_title").text,
+         blog_post.find_element_by_class_name("blog_post_date").text,
+         blog_post.find_element_by_class_name("blog_post_body").text
+        ] for blog_post in blog_posts]
+
+
+class BlogContentTest(BlogTest):
 
     def test_home_page_is_correct(self):
         # The user goes to the home page
-        self.browser.get(self.server_url)
+        self.browser.get(self.live_server_url)
 
         # 'Sam Ireland' is in the header, and the title
         self.assertIn("Sam Ireland", self.browser.title)
@@ -83,7 +132,7 @@ class BlogContentTest(FunctionalTest):
 
     def test_about_page_is_correct(self):
         # The user goes to the about page
-        self.browser.get(self.server_url + "/about")
+        self.browser.get(self.live_server_url + "/about")
 
         # There is some descriptive information
         self.assertIn("About", self.browser.title)
@@ -95,38 +144,9 @@ class BlogContentTest(FunctionalTest):
 
 
 
-class BlogPostingTest(FunctionalTest):
+class NewBlogTest(BlogTest):
 
-    def sam_writes_blog_post(self, title, date, body, visible, check_redirect=True):
-        # Sam goes to new post page
-        self.browser.get(self.server_url + "/blog/new/")
-
-        # There is a form for entering a blog post
-        form = self.browser.find_element_by_tag_name("form")
-        title_entry = form.find_elements_by_tag_name("input")[0]
-        date_entry = form.find_elements_by_tag_name("input")[1]
-        body_entry = form.find_element_by_tag_name("textarea")
-        live_box = form.find_elements_by_tag_name("input")[2]
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        self.assertEqual(title_entry.get_attribute("type"), "text")
-        self.assertEqual(date_entry.get_attribute("type"), "date")
-        self.assertEqual(live_box.get_attribute("type"), "checkbox")
-
-        # Sam posts a blog post
-        title_entry.send_keys(title)
-        date_entry.send_keys(date)
-        body_entry.send_keys(body)
-        if (live_box.is_selected() and not visible) or (not live_box.is_selected() and visible):
-            live_box.click()
-        submit_button.click()
-        if check_redirect:
-            self.assertEqual(
-             self.browser.current_url,
-             self.server_url + "/"
-            )
-
-
-    def test_sam_can_post_blogs(self):
+    def test_sam_can_write_blog_post(self):
         # Sam posts a first blog post
         self.sam_writes_blog_post(
          "My first blog post",
@@ -138,42 +158,19 @@ class BlogPostingTest(FunctionalTest):
         # Sam goes away, another mighty victory achieved
         self.browser.quit()
 
-        # One of Sam's many fans comes to the site
+        # One of Sam's many fans comes to the site, and checks the home page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url)
 
         # There is the blog post
-        blog_post = self.browser.find_element_by_class_name("blog_post")
         self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_title").text,
-         "My first blog post"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_date").text,
-         "10 October, 1962"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_body").text,
-         "My first blog post!"
+         self.get_home_blog_post_content(),
+         ["My first blog post", "10 October, 1962", "My first blog post!"]
         )
 
-        # The fan goes to the blog page
-        self.browser.get(self.server_url + "/blog")
-
-        # There is one blog post, and it's the same one
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 1)
+        # The fan goes to the blog page, and sees the same post there
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
-         "My first blog post"
-        )
-        self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_date").text,
-         "10 October, 1962"
-        )
-        self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_body").text,
-         "My first blog post!"
+         self.get_blog_page_posts_content(),
+         [["My first blog post", "10 October, 1962", "My first blog post!"]]
         )
 
         # The fan goes away
@@ -191,41 +188,38 @@ class BlogPostingTest(FunctionalTest):
 
         # The fan comes back, and sees the new post on the home page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url)
-        blog_post = self.browser.find_element_by_class_name("blog_post")
         self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_title").text,
-         "My second blog post"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_date").text,
-         "11 October, 1962"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_body").text,
-         "My second blog post!"
+         self.get_home_blog_post_content(),
+         ["My second blog post", "11 October, 1962", "My second blog post!"]
         )
 
         # They go to the blog page, and there are two posts there
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 2)
-
-        # They are in the correct order
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
-         "My second blog post"
-        )
-        self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_title").text,
-         "My first blog post"
+         self.get_blog_page_posts_content(),
+         [
+          ["My second blog post", "11 October, 1962", "My second blog post!"],
+          ["My first blog post", "10 October, 1962", "My first blog post!"]
+         ]
         )
 
         # The fan goes away again
         self.browser.quit()
 
-        # Sam writes a third post, but he isn't sure so doesn't make it visible
-        self.browser = webdriver.Chrome()
+
+    def test_sam_can_post_hidden_blog_posts(self):
+        # Sam makes three blog posts, one hidden
+        self.sam_writes_blog_post(
+         "My first blog post",
+         "10101962",
+         "My first blog post!",
+         True
+        )
+        self.sam_writes_blog_post(
+         "My second blog post",
+         "11101962",
+         "My second blog post!",
+         True
+        )
         self.sam_writes_blog_post(
          "My third blog post",
          "12101962",
@@ -236,67 +230,46 @@ class BlogPostingTest(FunctionalTest):
 
         # The fan comes back, but only the second post is visible
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url)
-        blog_post = self.browser.find_element_by_class_name("blog_post")
         self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_title").text,
-         "My second blog post"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_date").text,
-         "11 October, 1962"
-        )
-        self.assertEqual(
-         blog_post.find_element_by_class_name("blog_post_body").text,
-         "My second blog post!"
+         self.get_home_blog_post_content(),
+         ["My second blog post", "11 October, 1962", "My second blog post!"]
         )
 
-        # On the blog page, there are still only two posts
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 2)
+        # On the blog page, there is only two posts
+        self.assertEqual(
+         self.get_blog_page_posts_content(),
+         [
+          ["My second blog post", "11 October, 1962", "My second blog post!"],
+          ["My first blog post", "10 October, 1962", "My first blog post!"]
+         ]
+        )
 
 
-    def test_sam_can_edit_and_delete_blogs(self):
+
+class EditBlogTest(BlogTest):
+
+    def test_sam_can_edit_blog_posts(self):
         # Sam writes three blog posts
-        self.sam_writes_blog_post(
-         "First post",
-         "28071914",
-         "Start",
-         True
-        )
-        self.sam_writes_blog_post(
-         "Second post",
-         "01071916",
-         "Middle",
-         True
-        )
-        self.sam_writes_blog_post(
-         "Third post",
-         "11111918",
-         "End",
-         False
-        )
+        self.sam_writes_blog_post("First post", "28071914", "Start", True)
+        self.sam_writes_blog_post("Second post", "01071916", "Middle", True)
+        self.sam_writes_blog_post("Third post", "11111918", "End", True)
         self.browser.quit()
 
         # A wild fan appears, and peruses the blog page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 2)
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
-         "Second post"
-        )
-        self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_title").text,
-         "First post"
+         self.get_blog_page_posts_content(),
+         [
+          ["Third post", "11 November, 1918", "End"],
+          ["Second post", "1 July, 1916", "Middle"],
+          ["First post", "28 July, 1914", "Start"]
+         ]
         )
         self.browser.quit()
 
         # Sam goes to the edit blog page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog/edit")
+        self.browser.get(self.live_server_url + "/blog/edit")
 
         # There is a table there, with all the blog posts
         table = self.browser.find_element_by_tag_name("table")
@@ -308,7 +281,7 @@ class BlogPostingTest(FunctionalTest):
         )
         self.assertEqual(
          rows[0].find_elements_by_tag_name("td")[-1].text,
-         "No"
+         "Yes"
         )
         self.assertEqual(
          rows[1].find_elements_by_tag_name("td")[0].text,
@@ -327,11 +300,11 @@ class BlogPostingTest(FunctionalTest):
          "Yes"
         )
 
-        # Sam makes the third post visible
+        # Sam makes the third post invisible
         rows[0].click()
         self.assertRegex(
          self.browser.current_url,
-         self.server_url + r"/blog/edit/\d+/$"
+         self.live_server_url + r"/blog/edit/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         title_entry = form.find_elements_by_tag_name("input")[0]
@@ -351,34 +324,58 @@ class BlogPostingTest(FunctionalTest):
          body_entry.get_attribute("value"),
          "End"
         )
-        self.assertFalse(live_box.is_selected())
+        self.assertTrue(live_box.is_selected())
         live_box.click()
         submit_button.click()
-        self.assertEqual(self.browser.current_url, self.server_url + "/blog/")
+        self.assertEqual(self.browser.current_url, self.live_server_url + "/blog/")
         self.browser.quit()
 
-        # The third post is now visible
+        # The third post is now invisible
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 3)
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
-         "Third post"
+         self.get_blog_page_posts_content(),
+         [
+          ["Second post", "1 July, 1916", "Middle"],
+          ["First post", "28 July, 1914", "Start"]
+         ]
         )
+        self.browser.quit()
+
+        # Sam edits the first post to have a different body
+        self.browser = webdriver.Chrome()
+        self.browser.get(self.live_server_url + "/blog/edit/")
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        rows[-1].click()
+        form = self.browser.find_element_by_tag_name("form")
+        body_entry = form.find_element_by_tag_name("textarea")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        body_entry.clear()
+        body_entry.send_keys("A modified body")
+        submit_button.click()
+        self.browser.quit()
+
+        # The user sees the modified body
+        self.browser = webdriver.Chrome()
         self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_title").text,
-         "Second post"
+         self.get_blog_page_posts_content(),
+         [
+          ["Second post", "1 July, 1916", "Middle"],
+          ["First post", "28 July, 1914", "A modified body"]
+         ]
         )
-        self.assertEqual(
-         blog_posts[2].find_element_by_class_name("blog_post_title").text,
-         "First post"
-        )
+
+
+    def test_sam_can_delete_blog_posts(self):
+        # Sam writes three blog posts
+        self.sam_writes_blog_post("First post", "28071914", "Start", True)
+        self.sam_writes_blog_post("Second post", "01071916", "Middle", True)
+        self.sam_writes_blog_post("Third post", "11111918", "End", True)
         self.browser.quit()
 
         # Sam wants to delete the second post - he goes to the edit page for it
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog/edit")
+        self.browser.get(self.live_server_url + "/blog/edit")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 3)
@@ -427,49 +424,22 @@ class BlogPostingTest(FunctionalTest):
 
         # A user goes to the blog page and finds two posts there
         self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 2)
         self.assertEqual(
-         blog_posts[0].find_element_by_class_name("blog_post_title").text,
-         "Third post"
+         self.get_blog_page_posts_content(),
+         [
+          ["Third post", "11 November, 1918", "End"],
+          ["First post", "28 July, 1914", "Start"]
+         ]
         )
-        self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_title").text,
-         "First post"
-        )
-        self.browser.quit()
 
-        # Sam edits the first post to have a different body
-        self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog/edit/")
-        table = self.browser.find_element_by_tag_name("table")
-        rows = table.find_elements_by_tag_name("tr")[1:]
-        self.assertEqual(len(rows), 2)
-        rows[1].click()
-        form = self.browser.find_element_by_tag_name("form")
-        body_entry = form.find_element_by_tag_name("textarea")
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        body_entry.clear()
-        body_entry.send_keys("A modified body")
-        submit_button.click()
-        self.browser.quit()
 
-        # The user sees the modified body
-        self.browser = webdriver.Chrome()
-        self.browser.get(self.server_url + "/blog")
-        blog_posts = self.browser.find_elements_by_class_name("blog_post")
-        self.assertEqual(len(blog_posts), 2)
-        self.assertEqual(
-         blog_posts[1].find_element_by_class_name("blog_post_body").text,
-         "A modified body"
-        )
-        self.browser.quit()
 
+class BlogValidationTest(BlogTest):
 
     def test_sam_cannot_post_blank_blog_post(self):
         # Sam makes a post with no title
-        self.sam_writes_blog_post("", "10101962", "TEST", True, check_redirect=False)
+        self.sam_writes_blog_post("", "10101962", "TEST", True,
+         check_redirect=False)
 
         # He is still on the new page!
         self.assertEqual(
@@ -485,7 +455,8 @@ class BlogPostingTest(FunctionalTest):
         )
 
         # Sam makes a post with no date
-        self.sam_writes_blog_post("Title", "", "TEST", True, check_redirect=False)
+        self.sam_writes_blog_post("Title", "", "TEST", True,
+         check_redirect=False)
 
         # He is still on the new page!
         self.assertEqual(
@@ -522,7 +493,7 @@ class BlogPostingTest(FunctionalTest):
         self.sam_writes_blog_post("Title", "10101962", "TEST", True)
 
         # He decides to edit it
-        self.browser.get(self.server_url + "/blog/edit/")
+        self.browser.get(self.live_server_url + "/blog/edit/")
         row = self.browser.find_elements_by_tag_name("tr")[-1]
         row.click()
         edit_url = self.browser.current_url
@@ -551,7 +522,6 @@ class BlogPostingTest(FunctionalTest):
         title_entry.send_keys("...")
         body_entry = form.find_element_by_tag_name("textarea")
         body_entry.clear()
-        body_entry.send_keys(Keys.TAB)
         submit_button = form.find_elements_by_tag_name("input")[-1]
         submit_button.click()
         self.assertEqual(
@@ -584,8 +554,14 @@ class BlogPostingTest(FunctionalTest):
          "There is already a blog post for this date"
         )
 
+
+    def test_sam_cannot_edit_a_post_to_have_existing_date(self):
+        # Sam makes two blog posts
+        self.sam_writes_blog_post("Post 1", "10102012", "TEST", True)
+        self.sam_writes_blog_post("Post 2", "11102012", "TEST", True)
+
         # He decides to edit an existing post
-        self.browser.get(self.server_url + "/blog/edit/")
+        self.browser.get(self.live_server_url + "/blog/edit/")
         row = self.browser.find_elements_by_tag_name("tr")[1]
         row.click()
         edit_url = self.browser.current_url
@@ -599,7 +575,7 @@ class BlogPostingTest(FunctionalTest):
          edit_url
         )
 
-        # And this also fails to work
+        # And this fails to work
         self.assertEqual(
          self.browser.current_url,
          edit_url
