@@ -43,6 +43,10 @@ tr.selectrow:hover {
   font-weight: bold;
 }
 
+#warning {
+  text-align: center;
+}
+
 .delete-options {
   width: 100%;
 }
