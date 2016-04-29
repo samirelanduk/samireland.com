@@ -1,9 +1,9 @@
-from django.test import TestCase
-from blog.models import BlogPost
 import datetime
 from django.core.exceptions import ValidationError
+from django.test import TestCase
+from blog.models import BlogPost
 
-class ModelTests(TestCase):
+class ModelCreationTest(TestCase):
 
     def test_save_and_retrieve_blog_posts(self):
         self.assertEqual(BlogPost.objects.all().count(), 0)
@@ -19,24 +19,24 @@ class ModelTests(TestCase):
         self.assertEqual(retrieved_post, blog_post)
 
 
+
+class ModelValidationTest(TestCase):
+
     def test_cannot_create_post_without_title(self):
         blog_post = BlogPost(title="", date=datetime.datetime.now(), body=".", visible=True)
         with self.assertRaises(ValidationError):
-            blog_post.save()
             blog_post.full_clean()
 
 
     def test_cannot_create_post_without_date(self):
         blog_post = BlogPost(title=".", date="", body=".", visible=True)
         with self.assertRaises(ValidationError):
-            blog_post.save()
             blog_post.full_clean()
 
 
     def test_cannot_create_post_without_body(self):
         blog_post = BlogPost(title="", date=datetime.datetime.now(), body="", visible=True)
         with self.assertRaises(ValidationError):
-            blog_post.save()
             blog_post.full_clean()
 
 
