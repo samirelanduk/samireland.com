@@ -8,307 +8,256 @@ from blog.forms import BlogPostForm
 from blog.models import BlogPost
 import datetime
 
-class UrlTests(TestCase):
+class ViewTest(TestCase):
 
     def check_url_returns_view(self, url, view):
-        resolved_view = resolve(url)
-        self.assertEqual(resolved_view.func, view)
+        resolver = resolve(url)
+        self.assertEqual(resolver.func, view)
 
+
+    def create_blog_post(self, title=".", date=datetime.datetime.now().date(),
+     body="...", visible=True):
+        blog_post = BlogPost.objects.create(
+         title=title,
+         date=date,
+         body=body,
+         visible=visible
+        )
+        return blog_post
+
+
+    def post_blog_post_to_view(self, view_url, title=".", date="1990-09-28", body="...",
+     visible=False):
+        response = self.client.post(view_url, data={
+         "title": title,
+         "date": date,
+         "body": body,
+         "visible": visible
+        })
+        return response
+
+
+
+class HomePageViewTests(ViewTest):
 
     def test_root_url_resolves_to_home_page_view(self):
         self.check_url_returns_view("/", views.home_page)
 
 
-    def test_about_url_resolves_to_about_view(self):
+    def test_home_page_view_uses_home_page_template(self):
+        response = self.client.get("/")
+        self.assertTemplateUsed(response, "home.html")
+
+
+    def test_home_page_view_shows_most_recent_blog_post(self):
+        self.create_blog_post(date=datetime.datetime(1990, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1992, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1991, 9, 28).date())
+        response = self.client.get("/")
+        self.assertContains(response, "1992")
+        self.assertNotContains(response, "1991")
+        self.assertNotContains(response, "1990")
+
+
+    def test_home_page_view_ignores_inivisble_blog_posts(self):
+        self.create_blog_post(date=datetime.datetime(1990, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1992, 9, 28).date(), visible=False)
+        self.create_blog_post(date=datetime.datetime(1991, 9, 28).date())
+        response = self.client.get("/")
+        self.assertContains(response, "1991")
+        self.assertNotContains(response, "1992")
+        self.assertNotContains(response, "1990")
+
+
+
+class AboutPageViewTests(ViewTest):
+
+    def test_about_url_resolves_to_about_page_view(self):
         self.check_url_returns_view("/about/", views.about_page)
 
 
-    def test_blog_url_resolves_to_blog_view(self):
+    def test_about_page_view_uses_about_page_template(self):
+        response = self.client.get("/about/")
+        self.assertTemplateUsed(response, "about.html")
+
+
+
+class BlogPageViewTests(ViewTest):
+
+    def test_blog_url_resolves_to_blog_page_view(self):
         self.check_url_returns_view("/blog/", views.blog_page)
 
 
-    def test_new_url_resolves_to_new_view(self):
-        self.check_url_returns_view("/blog/new/", views.new_post_page)
-
-
-    def test_edits_url_resolves_to_edits_post(self):
-        self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
-
-
-    def test_edit_url_resolves_to_edit_post(self):
-        self.check_url_returns_view("/blog/edit/100/", views.edit_post_page)
-
-
-    def test_delete_url_resolves_to_delete_post(self):
-        self.check_url_returns_view("/blog/delete/100/", views.delete_post_page)
-
-
-
-
-
-
-
-
-
-
-
-
-class ViewTests(TestCase):
-
-    def check_view_uses_template(self, view, template, *view_args, template_dict=None):
-        template_dict = template_dict if template_dict else {}
-        request = HttpRequest()
-        response = view(request, *view_args)
-        expected_html = render_to_string(template, template_dict)
-        self.maxDiff = None
-        self.assertEqual(response.content.decode(), expected_html)
-
-
-    def make_post_request(self, title=".", date="1939-09-01", body=".", visible=True):
-        request = HttpRequest()
-        request.method = "POST"
-        request.POST["title"] = title
-        request.POST["date"] = date
-        request.POST["body"] = body
-        request.POST["visible"] = visible
-        return request
-
-
-    def get_html_after_three_blog_posts(self, view, last_invisible=False):
-        for date in (
-         datetime.datetime(1950,1,1),
-         datetime.datetime(1960,1,1),
-         datetime.datetime(1955,1,1)
-        ):
-            post = BlogPost(
-             date=date, title=".", body=".",
-             visible=not(last_invisible and date == datetime.datetime(1960,1,1))
-            )
-            post.save()
-        request = HttpRequest()
-        return view(request).content.decode()
-
-
-    def save_test_post_to_db(self):
-        post = BlogPost(
-         date=datetime.datetime(1900, 1, 1).date(),
-         title="Test title",
-         body="Test body",
-         visible=True
-        )
-        post.save()
-        return post.id
-
-
-    def test_home_page_view_uses_home_page_template(self):
-        self.check_view_uses_template(views.home_page, "home.html")
-
-
-    def test_home_view_uses_most_recent_blog_post(self):
-        home_html = self.get_html_after_three_blog_posts(views.home_page)
-        self.assertIn("1960", home_html)
-        self.assertNotIn("1950", home_html)
-        self.assertNotIn("1955", home_html)
-
-
-    def test_home_view_ignores_invisible_posts(self):
-        home_html = self.get_html_after_three_blog_posts(
-         views.home_page, last_invisible=True
-        )
-        self.assertIn("1955", home_html)
-        self.assertNotIn("1950", home_html)
-        self.assertNotIn("1960", home_html)
-
-
-    def test_about_page_view_uses_about_page_template(self):
-        self.check_view_uses_template(views.about_page, "about.html")
-
-
     def test_blog_page_view_uses_blog_page_template(self):
-        self.check_view_uses_template(views.blog_page, "blog.html")
+        response = self.client.get("/blog/")
+        self.assertTemplateUsed(response, "blog.html")
 
 
     def test_blog_page_shows_posts_in_correct_order(self):
-        blog_html = self.get_html_after_three_blog_posts(views.blog_page)
-        pos_1950 = blog_html.find("January, 1950")
-        pos_1955 = blog_html.find("January, 1955")
-        pos_1960 = blog_html.find("January, 1960")
-        self.assertTrue(pos_1960 < pos_1955 < pos_1950)
+        self.create_blog_post(date=datetime.datetime(1990, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1992, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1991, 9, 28).date())
+        response = self.client.get("/blog/")
+        pos_1990 = response.content.decode().find("September, 1990")
+        pos_1991 = response.content.decode().find("September, 1991")
+        pos_1992 = response.content.decode().find("September, 1992")
+        self.assertTrue(pos_1992 < pos_1991 < pos_1990)
 
 
     def test_blog_page_ignores_invisible_posts(self):
-        blog_html = self.get_html_after_three_blog_posts(
-         views.blog_page, last_invisible=True
-        )
-        pos_1950 = blog_html.find("January, 1950")
-        pos_1955 = blog_html.find("January, 1955")
-        pos_1960 = blog_html.find("January, 1960")
-        self.assertTrue(pos_1955 < pos_1950)
-        self.assertEqual(pos_1960, -1)
+        self.create_blog_post(date=datetime.datetime(1990, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1992, 9, 28).date(), visible=False)
+        self.create_blog_post(date=datetime.datetime(1991, 9, 28).date())
+        response = self.client.get("/blog/")
+        pos_1990 = response.content.decode().find("September, 1990")
+        pos_1991 = response.content.decode().find("September, 1991")
+        pos_1992 = response.content.decode().find("September, 1992")
+        self.assertTrue(pos_1991 < pos_1990)
+        self.assertEqual(pos_1992, -1)
 
 
-    def test_new_post_view_uses_new_post_template(self):
-        form = BlogPostForm()
-        self.check_view_uses_template(
-         views.new_post_page,
-         "new_post.html",
-         template_dict={"form": form}
-        )
+
+class NewBlogPostViewTests(ViewTest):
+
+    def test_new_blog_post_url_resolves_to_new_blog_post_page_view(self):
+        self.check_url_returns_view("/blog/new/", views.new_post_page)
 
 
-    def test_new_post_view_uses_blog_post_form(self):
-        request = HttpRequest()
-        response = views.new_post_page(request)
-        self.assertIn(
-         BlogPostForm().__dict__["fields"]["title"].widget.render(
-          name="title",
-          value="",
-          attrs={"id": "id_title"}
-         ),
-         response.content.decode()
-        )
+    def test_new_blog_post_view_uses_new_blog_post_template(self):
+        response = self.client.get("/blog/new/")
+        self.assertTemplateUsed(response, "new_post.html")
 
 
-    def test_new_post_view_can_save_blog_post(self):
+    def test_new_blog_post_view_uses_new_blog_post_form(self):
+        response = self.client.get("/blog/new/")
+        self.assertIsInstance(response.context["form"], BlogPostForm)
+
+
+    def test_new_blog_post_view_can_save_blog_posts(self):
         self.assertEqual(BlogPost.objects.count(), 0)
-        request = self.make_post_request()
-        views.new_post_page(request)
+        self.post_blog_post_to_view("/blog/new/")
         self.assertEqual(BlogPost.objects.count(), 1)
         blog_post = BlogPost.objects.first()
         self.assertEqual(blog_post.title, ".")
+        self.assertEqual(blog_post.date, datetime.datetime(1990, 9, 28).date())
+        self.assertEqual(blog_post.body, "...")
+        self.assertEqual(blog_post.visible, False)
 
 
-    def test_new_post_view_redirects_after_POST(self):
-        request = self.make_post_request()
-        response = views.new_post_page(request)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/")
+    def test_new_blog_post_view_redirects_after_POST(self):
+        response = self.post_blog_post_to_view("/blog/new/")
+        self.assertRedirects(response, "/")
 
 
-    def test_new_post_page_returns_error_message_when_needed(self):
-        request = self.make_post_request(title="")
-        response = views.new_post_page(request)
+    def test_new_blog_post_view_returns_error_message_when_needed(self):
+        response = self.post_blog_post_to_view("/blog/new/", title="")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("cannot submit", response.content.decode())
+        self.assertContains(response, "cannot submit")
 
 
-    def test_new_post_view_does_not_save_to_db_after_error(self):
+    def test_new_blog_post_view_does_not_save_to_db_after_error(self):
         self.assertEqual(BlogPost.objects.count(), 0)
-        request = self.make_post_request(title="")
-        response = views.new_post_page(request)
+        self.post_blog_post_to_view("/blog/new/", title="")
         self.assertEqual(BlogPost.objects.count(), 0)
 
 
-    def test_new_post_vew_can_recover_from_empty_date(self):
-        request = self.make_post_request(date="")
-        response = views.new_post_page(request)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("cannot submit", response.content.decode())
+
+class EditBlogPostsViewTests(ViewTest):
+
+    def test_edit_blog_posts_url_resolves_to_edit_blog_posts_page_view(self):
+        self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
 
 
-    def test_edit_posts_view_uses_edit_posts_template(self):
-        self.check_view_uses_template(views.edit_posts_page, "edit_posts.html")
+    def test_edit_blog_posts_view_uses_edit_blog_posts_template(self):
+        response = self.client.get("/blog/edit/")
+        self.assertTemplateUsed(response, "edit_posts.html")
 
 
-    def test_edit_posts_view_shows_all_posts_in_correct_order(self):
-        html = self.get_html_after_three_blog_posts(
-         views.edit_posts_page, last_invisible=True
-        )
-        pos_1950 = html.find("January, 1950")
-        pos_1955 = html.find("January, 1955")
-        pos_1960 = html.find("January, 1960")
-        self.assertTrue(pos_1960 < pos_1955 < pos_1950)
+    def test_edit_blog_posts_view_shows_all_posts_in_correct_order(self):
+        self.create_blog_post(date=datetime.datetime(1990, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1992, 9, 28).date())
+        self.create_blog_post(date=datetime.datetime(1991, 9, 28).date())
+        response = self.client.get("/blog/edit/")
+        pos_1990 = response.content.decode().find("September, 1990")
+        pos_1991 = response.content.decode().find("September, 1991")
+        pos_1992 = response.content.decode().find("September, 1992")
+        self.assertTrue(pos_1992 < pos_1991 < pos_1990)
 
 
-    def test_edit_post_view_uses_edit_post_template(self):
-        post_id = self.save_test_post_to_db()
+
+class EditBlogPostViewTests(ViewTest):
+
+    def test_edit_blog_post_url_resolves_to_edit_blog_post_page_view(self):
+        self.check_url_returns_view("/blog/edit/23/", views.edit_post_page)
+
+
+    def test_edit_blog_post_view_uses_edit_blog_post_template(self):
+        blog_post = self.create_blog_post()
+        response = self.client.get("/blog/edit/%i/" % blog_post.id)
+        self.assertTemplateUsed(response, "edit_post.html")
+
+
+    def test_edit_blog_post_view_uses_edit_blog_post_form(self):
+        blog_post = self.create_blog_post()
+        response = self.client.get("/blog/edit/%i/" % blog_post.id)
+        self.assertIsInstance(response.context["form"], BlogPostForm)
+
+
+    def test_edit_blog_post_view_contains_blog_post_text(self):
+        blog_post = self.create_blog_post(title="Titular", body="Bodacious")
+        response = self.client.get("/blog/edit/%i/" % blog_post.id)
+        self.assertContains(response, "Titular")
+        self.assertContains(response, "Bodacious")
+
+
+    def test_edit_blog_post_view_redirects_after_POST(self):
+        blog_post = self.create_blog_post()
+        response = self.post_blog_post_to_view("/blog/edit/%i/" % blog_post.id)
+        self.assertRedirects(response, "/blog/")
+
+
+    def test_edit_blog_post_view_can_actually_edit_a_post(self):
+        blog_post = self.create_blog_post(title="original")
+        self.assertEqual(blog_post.title, "original")
+        self.post_blog_post_to_view("/blog/edit/%i/" % blog_post.id, title="new")
         blog_post = BlogPost.objects.first()
-        form = BlogPostForm(instance=blog_post)
-        self.check_view_uses_template(
-         views.edit_post_page,
-         "edit_post.html",
-         post_id,
-         template_dict={"form": form, "id": post_id}
-        )
+        self.assertEqual(blog_post.title, "new")
 
 
-    def test_edit_post_view_uses_blog_post_form(self):
-        post_id = self.save_test_post_to_db()
-        request = HttpRequest()
-        response = views.edit_post_page(request, post_id)
-        self.assertIn(
-         BlogPostForm().__dict__["fields"]["title"].widget.render(
-          name="title",
-          value="Test title",
-          attrs={"id": "id_title"}
-         ),
-         response.content.decode()
-        )
-
-
-    def test_edit_post_view_contains_post_text(self):
-        post_id = self.save_test_post_to_db()
-        request = HttpRequest()
-        html = views.edit_post_page(request, post_id).content.decode()
-        self.assertIn("Test title", html)
-        self.assertIn("1900-01-01", html)
-        self.assertIn("Test body", html)
-        self.assertIn("checked", html)
-
-
-    def test_edit_post_view_redirects_after_post(self):
-        request = self.make_post_request()
-        post_id = self.save_test_post_to_db()
-        response = views.edit_post_page(request, post_id)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/blog/")
-
-
-    def test_edit_post_page_can_actually_edit_a_post(self):
-        request = self.make_post_request()
-        post_id = self.save_test_post_to_db()
-        post = BlogPost.objects.first()
-        self.assertEqual(post.title, "Test title")
-        response = views.edit_post_page(request, post_id)
-        post = BlogPost.objects.first()
-        self.assertEqual(post.title, ".")
-
-
-    def test_edit_post_page_returns_error_message_when_needed(self):
-        post_id = self.save_test_post_to_db()
-        request = self.make_post_request(title="")
-        response = views.edit_post_page(request, post_id)
+    def test_edit_blog_post_view_returns_error_message_when_needed(self):
+        blog_post = self.create_blog_post()
+        response = self.post_blog_post_to_view("/blog/edit/%i/" % blog_post.id, title="")
         self.assertEqual(response.status_code, 200)
-        self.assertIn("cannot submit", response.content.decode())
+        self.assertContains(response, "cannot submit")
 
 
-    def test_edit_post_view_does_not_save_to_db_after_error(self):
-        post_id = self.save_test_post_to_db()
-        request = self.make_post_request(title="")
-        response = views.edit_post_page(request, post_id)
-        self.assertEqual(BlogPost.objects.first().title, "Test title")
+    def test_edit_blog_post_view_does_not_save_to_db_after_error(self):
+        blog_post = self.create_blog_post()
+        response = self.post_blog_post_to_view("/blog/edit/%i/" % blog_post.id, title="")
+        self.assertEqual(BlogPost.objects.first().title, ".")
 
 
-    def test_edit_post_vew_can_recover_from_empty_date(self):
-        post_id = self.save_test_post_to_db()
-        request = self.make_post_request(date="")
-        response = views.edit_post_page(request, post_id)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("cannot submit", response.content.decode())
+
+class DeleteBlogPostViewTests(ViewTest):
+
+    def test_delete_blog_post_url_resolves_to_delete_blog_post_page_view(self):
+        self.check_url_returns_view("/blog/delete/23/", views.delete_post_page)
 
 
-    def test_delete_post_view_redirects_after_post(self):
-        request = self.make_post_request()
-        post_id = self.save_test_post_to_db()
-        response = views.delete_post_page(request, post_id)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response["location"], "/blog/edit/")
+    def test_delete_blog_post_view_uses_delete_blog_post_template(self):
+        blog_post = self.create_blog_post()
+        response = self.client.get("/blog/delete/%i/" % blog_post.id)
+        self.assertTemplateUsed(response, "delete_post.html")
 
 
-    def test_delete_post_can_actually_delete_a_post(self):
-        post_id = self.save_test_post_to_db()
+    def test_delete_blog_post_view_redirects_after_POST(self):
+        blog_post = self.create_blog_post()
+        response = self.post_blog_post_to_view("/blog/delete/%i/" % blog_post.id)
+        self.assertRedirects(response, "/blog/edit/")
+
+
+    def test_delete_blog_post_page_can_actually_delete_a_post(self):
+        blog_post = self.create_blog_post()
         self.assertEqual(BlogPost.objects.count(), 1)
-        request = HttpRequest()
-        request.method = "POST"
-        views.delete_post_page(request, post_id)
+        self.client.post("/blog/delete/%i/" % blog_post.id)
         self.assertEqual(BlogPost.objects.count(), 0)
