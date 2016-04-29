@@ -1,12 +1,9 @@
-from django.test import TestCase
-from blog import views
-from django.core.urlresolvers import resolve
-from django.core.exceptions import ValidationError
-from django.http import HttpRequest
-from django.template.loader import render_to_string
-from blog.forms import BlogPostForm
-from blog.models import BlogPost
 import datetime
+from django.test import TestCase
+from django.core.urlresolvers import resolve
+from blog import views
+from blog.models import BlogPost
+from blog.forms import BlogPostForm
 
 class ViewTest(TestCase):
 
