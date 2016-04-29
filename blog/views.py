@@ -24,14 +24,7 @@ def new_post_page(request):
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
-            BlogPost.objects.create(
-             title=request.POST["title"].strip(),
-             date=datetime.datetime.strptime(
-              request.POST["date"], "%Y-%m-%d"
-             ).date(),
-             body=request.POST["body"].strip(),
-             visible=request.POST.get("visible") is not None
-            )
+            form.save()
             return redirect("/")
         else:
             return render(request, "new_post.html", {"form": form})
@@ -45,8 +38,8 @@ def edit_posts_page(request):
 
 
 def edit_post_page(request, post_id):
+    blog_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":
-        blog_post = BlogPost.objects.get(pk=post_id)
         form = BlogPostForm(request.POST, instance=blog_post)
         if form.is_valid():
             form.save()
@@ -54,13 +47,7 @@ def edit_post_page(request, post_id):
         else:
             return render(request, "edit_post.html", {"form": form, "id": post_id})
     else:
-        blog_post = BlogPost.objects.get(pk=post_id)
-        form = BlogPostForm(data={
-         "title": blog_post.title,
-         "date": blog_post.date,
-         "body": blog_post.body,
-         "visible": blog_post.visible
-        })
+        form = BlogPostForm(instance=blog_post)
         return render(request, "edit_post.html", {"form": form, "id": post_id})
 
 
