@@ -1,16 +1,10 @@
 import datetime
 from django.test import TestCase
-from django.core.urlresolvers import resolve
 from blog import views
 from blog.models import BlogPost
 from blog.forms import BlogPostForm
 
 class ViewTest(TestCase):
-
-    def check_url_returns_view(self, url, view):
-        resolver = resolve(url)
-        self.assertEqual(resolver.func, view)
-
 
     def create_blog_post(self, title=".", date=datetime.datetime.now().date(),
      body="...", visible=True):
@@ -36,10 +30,6 @@ class ViewTest(TestCase):
 
 
 class HomePageViewTests(ViewTest):
-
-    def test_root_url_resolves_to_home_page_view(self):
-        self.check_url_returns_view("/", views.home_page)
-
 
     def test_home_page_view_uses_home_page_template(self):
         response = self.client.get("/")
@@ -69,10 +59,6 @@ class HomePageViewTests(ViewTest):
 
 class AboutPageViewTests(ViewTest):
 
-    def test_about_url_resolves_to_about_page_view(self):
-        self.check_url_returns_view("/about/", views.about_page)
-
-
     def test_about_page_view_uses_about_page_template(self):
         response = self.client.get("/about/")
         self.assertTemplateUsed(response, "about.html")
@@ -80,10 +66,6 @@ class AboutPageViewTests(ViewTest):
 
 
 class BlogPageViewTests(ViewTest):
-
-    def test_blog_url_resolves_to_blog_page_view(self):
-        self.check_url_returns_view("/blog/", views.blog_page)
-
 
     def test_blog_page_view_uses_blog_page_template(self):
         response = self.client.get("/blog/")
@@ -115,10 +97,6 @@ class BlogPageViewTests(ViewTest):
 
 
 class NewBlogPostViewTests(ViewTest):
-
-    def test_new_blog_post_url_resolves_to_new_blog_post_page_view(self):
-        self.check_url_returns_view("/blog/new/", views.new_post_page)
-
 
     def test_new_blog_post_view_uses_new_blog_post_template(self):
         response = self.client.get("/blog/new/")
@@ -161,10 +139,6 @@ class NewBlogPostViewTests(ViewTest):
 
 class EditBlogPostsViewTests(ViewTest):
 
-    def test_edit_blog_posts_url_resolves_to_edit_blog_posts_page_view(self):
-        self.check_url_returns_view("/blog/edit/", views.edit_posts_page)
-
-
     def test_edit_blog_posts_view_uses_edit_blog_posts_template(self):
         response = self.client.get("/blog/edit/")
         self.assertTemplateUsed(response, "edit_posts.html")
@@ -183,10 +157,6 @@ class EditBlogPostsViewTests(ViewTest):
 
 
 class EditBlogPostViewTests(ViewTest):
-
-    def test_edit_blog_post_url_resolves_to_edit_blog_post_page_view(self):
-        self.check_url_returns_view("/blog/edit/23/", views.edit_post_page)
-
 
     def test_edit_blog_post_view_uses_edit_blog_post_template(self):
         blog_post = self.create_blog_post()
@@ -236,10 +206,6 @@ class EditBlogPostViewTests(ViewTest):
 
 
 class DeleteBlogPostViewTests(ViewTest):
-
-    def test_delete_blog_post_url_resolves_to_delete_blog_post_page_view(self):
-        self.check_url_returns_view("/blog/delete/23/", views.delete_post_page)
-
 
     def test_delete_blog_post_view_uses_delete_blog_post_template(self):
         blog_post = self.create_blog_post()
