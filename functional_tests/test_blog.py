@@ -54,6 +54,7 @@ class BlogTest(FunctionalTest):
         ] for blog_post in blog_posts]
 
 
+
 class BlogContentTest(BlogTest):
 
     def test_home_page_is_correct(self):
@@ -434,7 +435,7 @@ class EditBlogTest(BlogTest):
 
 
 
-class BlogValidationTest(BlogTest):
+class BlogValidationTests(BlogTest):
 
     def test_sam_cannot_post_blank_blog_post(self):
         # Sam makes a post with no title
@@ -585,3 +586,45 @@ class BlogValidationTest(BlogTest):
          error.text,
          "There is already a blog post for this date"
         )
+
+
+    def test_error_messages_disappear_after_typing(self):
+        # Sam makes a post with no title
+        self.sam_writes_blog_post("", "10101962", "TEST", True,
+         check_redirect=False)
+
+        # There is an error message saying there needs to be a title
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no title"
+        )
+
+        # Sam begins to type in the title box
+        form = self.browser.find_element_by_tag_name("form")
+        title_entry = form.find_elements_by_tag_name("input")[0]
+        title_entry.send_keys("T")
+
+        # The error message vanishes
+        error = self.browser.find_element_by_class_name("error")
+        self.assertFalse(error.is_displayed())
+
+        # Sam makes a post with no body
+        self.sam_writes_blog_post("Title", "10101962", "", True,
+         check_redirect=False)
+
+        # There is an error message saying there needs to be a title
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a blog post with no body"
+        )
+
+        # Sam begins to type in the title box
+        form = self.browser.find_element_by_tag_name("form")
+        body_entry = form.find_elements_by_tag_name("input")[2]
+        body_entry.send_keys("B")
+
+        # The error message vanishes
+        error = self.browser.find_element_by_class_name("error")
+        self.assertFalse(error.is_displayed())
