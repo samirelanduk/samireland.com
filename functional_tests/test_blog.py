@@ -563,3 +563,50 @@ class BlogPostingTest(FunctionalTest):
          error.text,
          "You cannot submit a blog post with no body"
         )
+
+
+    def test_sam_cannot_have_two_posts_with_same_date(self):
+        # Sam makes two blog posts
+        self.sam_writes_blog_post("Post 1", "10102012", "TEST", True)
+        self.sam_writes_blog_post("Post 2", "11102012", "TEST", True)
+
+        # He tries to write a third blog post with the same data as the second
+        self.sam_writes_blog_post("Post 3", "11102012", "TEST", True, check_redirect=False)
+
+        # But he can't
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/blog/new/"
+        )
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "There is already a blog post for this date"
+        )
+
+        # He decides to edit an existing post
+        self.browser.get(self.server_url + "/blog/edit/")
+        row = self.browser.find_elements_by_tag_name("tr")[-1]
+        row.click()
+        edit_url = self.browser.current_url
+        form = self.browser.find_element_by_tag_name("form")
+        date_entry = form.find_elements_by_tag_name("input")[1]
+        date_entry.clear()
+        date_entry.send_keys("10102012")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         edit_url
+        )
+
+        # And this also fails to work
+        self.assertEqual(
+         self.browser.current_url,
+         edit_url
+        )
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "There is already a blog post for this date"
+        )
