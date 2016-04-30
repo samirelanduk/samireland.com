@@ -51,6 +51,17 @@ def process_special_block(block):
     if block_type == "YOUTUBE":
         return '<div class="youtube"><iframe src="//www.youtube.com/embed/%s" \
         frameborder="0" allowfullscreen></iframe></div>' % block_arg
+
+    elif block_type == "IMAGE":
+        filename = block_arg.split()[:1][0]
+        args = " ".join(block_arg.split()[1:])
+        args = re.findall('[AC]:".*?"', args)
+        args = {arg[0]: arg[3:-1] for arg in args}
+        return '<figure><img src="/static/images/%s"%s>%s</figure>' % (
+         filename,
+         ' title="%s"' % args["A"] if "A" in args else "",
+         "<figcaption>%s</figcaption>"  % args["C"] if "C" in args else ""
+        )
     else:
         return ""
 

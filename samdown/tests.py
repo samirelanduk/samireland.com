@@ -155,3 +155,41 @@ class BlockTypeTests(TestCase):
     def test_youtube_block_produces_iframe(self):
         self.assertTrue(samdown.process_block("[YOUTUBE](xxxxx)").startswith(
          "<div class=\"youtube\"><iframe"))
+
+
+    def test_img_block_produces_image(self):
+        self.assertTrue(samdown.process_block("[IMAGE](xxxxx)").startswith(
+         "<figure><img"))
+
+
+    def test_img_alt_text(self):
+        self.assertIn(
+         'title="ALT TEXT"',
+         samdown.process_block('[IMAGE](xxxxx A:"ALT TEXT")')
+        )
+
+
+    def test_img_caption_text(self):
+        self.assertIn(
+         '<figcaption>A CAPTION</figcaption>',
+         samdown.process_block('[IMAGE](xxxxx C:"A CAPTION")')
+        )
+
+
+    def test_img_alt_text_and_caption(self):
+        self.assertIn(
+         'title="ALT TEXT"',
+         samdown.process_block('[IMAGE](xxxxx A:"ALT TEXT" C:"A CAPTION")')
+        )
+        self.assertIn(
+         '<figcaption>A CAPTION</figcaption>',
+         samdown.process_block('[IMAGE](xxxxx A:"ALT TEXT" C:"A CAPTION")')
+        )
+        self.assertIn(
+         'title="ALT TEXT"',
+         samdown.process_block('[IMAGE](xxxxx C:"A CAPTION" A:"ALT TEXT")')
+        )
+        self.assertIn(
+         '<figcaption>A CAPTION</figcaption>',
+         samdown.process_block('[IMAGE](xxxxx C:"A CAPTION" A:"ALT TEXT")')
+        )

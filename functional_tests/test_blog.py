@@ -708,7 +708,7 @@ class BlogMediaTests(BlogTest):
     def test_sam_can_post_youtube_video(self):
         # Sam posts a youtube video
         self.sam_writes_blog_post(
-         "Three Paragraph Post",
+         "Video post",
          "01012016",
          "Here is a video.\n\n[YOUTUBE](gukmEFY_SXM)",
          True
@@ -729,3 +729,32 @@ class BlogMediaTests(BlogTest):
          video_frame.size.get("width"),
          blog_post_body.size.get("width")
         )
+
+
+    def test_sam_can_post_image(self):
+        # Sam posts a youtube video
+        self.sam_writes_blog_post(
+         "Image post",
+         "01012016",
+         "Here is an image.\n\n[IMAGE](test.png A:\"hover text\" C:\"Caption\")",
+         True
+        )
+
+        # He goes to the home page, and sees an empty image there
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        paragraphs = blog_post_body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 1)
+        self.assertEqual(paragraphs[0].text, "Here is an image.")
+        figure = blog_post_body.find_element_by_tag_name("figure")
+        img = figure.find_element_by_tag_name("img")
+        self.assertEqual(
+         img.get_attribute("src"),
+         self.live_server_url + "/static/images/test.png"
+        )
+        self.assertEqual(img.get_attribute("title"), "hover text")
+        caption = figure.find_element_by_tag_name("figcaption")
+        self.assertEqual(caption.text, "Caption")
+        self.assertLess(img.size.get("width"), 150)
+
+        self.fail()
