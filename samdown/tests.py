@@ -141,3 +141,17 @@ class BlockHyperlinkTests(TestCase):
          samdown.process_block("A [link](http://test.com)[.](/about/)"),
          "<p>A <a href=\"http://test.com\">link</a><a href=\"/about/\">.</a></p>"
         )
+
+
+
+class BlockTypeTests(TestCase):
+
+    def test_normal_block_produces_paragraph(self):
+        self.assertTrue(samdown.process_block("...").startswith("<p>"))
+        self.assertTrue(samdown.process_block("[YOUTUBE](xxxx).").startswith("<p>"))
+        self.assertTrue(samdown.process_block(".[YOUTUBE](xxxx)").startswith("<p>"))
+
+
+    def test_youtube_block_produces_iframe(self):
+        self.assertTrue(samdown.process_block("[YOUTUBE](xxxxx)").startswith(
+         "<div class=\"youtube\"><iframe"))

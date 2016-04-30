@@ -6,16 +6,23 @@ def split(raw_text):
     return text.split("\n\n")
 
 
-def process_hyperlink(samdown):
-    text = samdown.split("](")[0][1:]
-    link = samdown.split("](")[1][:-1].split()[0]
-    newpage = "newpage" in samdown.split("](")[1][:-1]
+def process_hyperlink(linkmarkup):
+    text = linkmarkup.split("](")[0][1:]
+    link = linkmarkup.split("](")[1][:-1].split()[0]
+    newpage = "newpage" in linkmarkup.split("](")[1][:-1]
     return '<a href="%s"%s>%s</a>' % (
      link, ' target="_blank"' if newpage else "", text
     )
 
 
 def process_block(block):
+    if re.match("^\[.+?\]\(.+?\)$", block):
+        return process_special_block(block)
+    else:
+        return process_normal_block(block)
+
+
+def process_normal_block(block):
     hyperlink_pattern = "\[.+?\]\(.+?\)"
     hyperlinks = re.findall(hyperlink_pattern, block)[::-1]
     block = re.sub(hyperlink_pattern, "\x00", block)
@@ -37,6 +44,15 @@ def process_block(block):
 
     return "<p>%s</p>" % block
 
+
+def process_special_block(block):
+    block_type = block.split("](")[0][1:]
+    block_arg = block.split("](")[1][:-1]
+    if block_type == "YOUTUBE":
+        return '<div class="youtube"><iframe src="//www.youtube.com/embed/%s" \
+        frameborder="0" allowfullscreen></iframe></div>' % block_arg
+    else:
+        return ""
 
 def process_samdown(raw_text):
     return "\n".join([process_block(block) for block in split(raw_text)])

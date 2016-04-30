@@ -61,6 +61,22 @@ a:hover {
   color: #7FDBFF;
 }
 
+.youtube {
+  position:relative;
+	padding-bottom:56.25%;
+	padding-top:30px;
+	height:0;
+	overflow:hidden;
+}
+
+.youtube iframe {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
 footer {
   margin: 100px 0px 0px 0px;
   padding: 0px 0px 20px 0px;

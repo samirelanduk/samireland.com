@@ -700,3 +700,32 @@ class BlogFormattingTests(BlogTest):
          paragraphs[1].find_element_by_tag_name("a").get_attribute("target"),
          "_blank"
         )
+
+
+
+class BlogMediaTests(BlogTest):
+
+    def test_sam_can_post_youtube_video(self):
+        # Sam posts a youtube video
+        self.sam_writes_blog_post(
+         "Three Paragraph Post",
+         "01012016",
+         "Here is a video.\n\n[YOUTUBE](gukmEFY_SXM)",
+         True
+        )
+
+        # He goes to the home page, and sees the video there
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        paragraphs = blog_post_body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 1)
+        self.assertEqual(paragraphs[0].text, "Here is a video.")
+        video_frame = blog_post_body.find_element_by_tag_name("iframe")
+        self.assertGreaterEqual(
+         video_frame.size.get("width"),
+         blog_post_body.size.get("width") * 0.8
+        )
+        self.assertLessEqual(
+         video_frame.size.get("width"),
+         blog_post_body.size.get("width")
+        )
