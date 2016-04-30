@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from blog import urls as blog_urls
+from media import urls as media_urls
 from blog.views import about_page, home_page
 
 urlpatterns = [
     url(r'^blog/', include(blog_urls)),
+    url(r'^media/', include(media_urls)),
     url(r'^about/$', about_page, name="about_page"),
     url(r'^$', home_page, name="home_page")
 ]
