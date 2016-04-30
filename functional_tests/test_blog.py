@@ -693,10 +693,10 @@ class BlogFormattingTests(BlogTest):
         )
         self.assertEqual(paragraphs[1].find_element_by_tag_name("a").text, "link2")
         self.assertEqual(
-         paragraphs[0].find_element_by_tag_name("a").get_attribute("href"),
+         paragraphs[1].find_element_by_tag_name("a").get_attribute("href"),
          "http://test.com/"
         )
         self.assertEqual(
-         paragraphs[0].find_element_by_tag_name("a").get_attribute("target"),
+         paragraphs[1].find_element_by_tag_name("a").get_attribute("target"),
          "_blank"
         )

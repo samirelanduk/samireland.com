@@ -104,8 +104,40 @@ class BlockFormattingTests(TestCase):
          "<p>Some underlined <u>text</u></p>"
         )
 
+
     def test_mixed_formatting(self):
         self.assertEqual(
          samdown.process_block("_Some_ *formatted* **text***"),
          "<p><u>Some</u> <em>formatted</em> <b>text</b>*</p>"
+        )
+
+
+
+class BlockHyperlinkTests(TestCase):
+
+    def test_can_process_hyperlink(self):
+        self.assertEqual(
+         samdown.process_hyperlink("[link](http://test.com/)"),
+         "<a href=\"http://test.com/\">link</a>"
+        )
+
+
+    def test_can_process_hyperlink_on_new_page(self):
+        self.assertEqual(
+         samdown.process_hyperlink("[link](http://test.com/ newpage)"),
+         "<a href=\"http://test.com/\" target=\"_blank\">link</a>"
+        )
+
+
+    def test_hyperlink_translation(self):
+        self.assertEqual(
+         samdown.process_block("A [link](http://test.com)."),
+         "<p>A <a href=\"http://test.com\">link</a>.</p>"
+        )
+
+
+    def test_multiple_hyperlink_translation(self):
+        self.assertEqual(
+         samdown.process_block("A [link](http://test.com)[.](/about/)"),
+         "<p>A <a href=\"http://test.com\">link</a><a href=\"/about/\">.</a></p>"
         )
