@@ -2,8 +2,8 @@
   background-color: #e6f9f9;
   padding: 20px;
   border-radius: 10px;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 0px;
+  margin-right: 0px;
   margin-bottom: 30px;
 }
 
@@ -95,8 +95,8 @@ tr.selectrow:hover {
   /* Big Desktop screens */
 
   .blog_post {
-    margin-left: 50px;;
-    margin-right: 50px;;
+    margin-left: 50px;
+    margin-right: 50px;
     padding: 40px;
   }
 
