@@ -48,3 +48,64 @@ class PostSplittingTests(TestCase):
          samdown.split("This is a paragraph\r\n\r\nThis is a new paragraph"),
          ["This is a paragraph", "This is a new paragraph"]
         )
+
+
+
+class BlockFormattingTests(TestCase):
+
+    def test_plain_block_returns_plain_p(self):
+        self.assertEqual(
+         samdown.process_block("A paragraph"),
+         "<p>A paragraph</p>"
+        )
+
+
+    def test_italics_processing(self):
+        self.assertEqual(
+         samdown.process_block("*Some* italics text"),
+         "<p><em>Some</em> italics text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("*Some* *italics* text"),
+         "<p><em>Some</em> <em>italics</em> text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("Some italics *text*"),
+         "<p>Some italics <em>text</em></p>"
+        )
+
+
+    def test_bold_processing(self):
+        self.assertEqual(
+         samdown.process_block("**Some** bold text"),
+         "<p><b>Some</b> bold text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("**Some** **bold** text"),
+         "<p><b>Some</b> <b>bold</b> text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("Some bold **text**"),
+         "<p>Some bold <b>text</b></p>"
+        )
+
+
+    def test_underline_processing(self):
+        self.assertEqual(
+         samdown.process_block("_Some_ underlined text"),
+         "<p><u>Some</u> underlined text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("_Some_ _underlined_ text"),
+         "<p><u>Some</u> <u>underlined</u> text</p>"
+        )
+        self.assertEqual(
+         samdown.process_block("Some underlined _text_"),
+         "<p>Some underlined <u>text</u></p>"
+        )
+
+    def test_mixed_formatting(self):
+        self.assertEqual(
+         samdown.process_block("_Some_ *formatted* **text***"),
+         "<p><u>Some</u> <em>formatted</em> <b>text</b>*</p>"
+        )

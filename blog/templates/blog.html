@@ -13,7 +13,7 @@
     <div class="blog_post">
       <div class="blog_post_title">{{ blog_post.title }}</div>
       <div class="blog_post_date">{{ blog_post.date }}</div>
-      <div class="blog_post_body">{{ blog_post.body }}</div>
+      <div class="blog_post_body">{{ blog_post.formatted_body|safe }}</div>
     </div>
   {% endfor %}
 </div>

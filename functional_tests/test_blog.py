@@ -638,14 +638,14 @@ class BlogFormattingTests(BlogTest):
         self.sam_writes_blog_post(
          "Three Paragraph Post",
          "01012016",
-         "Paragraph 1.\n\nParagraph 2.\n\nParagraph 3",
+         "Paragraph 1.\n\nParagraph 2.\n\nParagraph 3.",
          True
         )
 
         # He goes to the home page and sees a post, with three paragraphs
         self.browser.get(self.live_server_url + "/")
         blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
-        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        paragraphs = blog_post_body.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 3)
         self.assertEqual(paragraphs[0].text, "Paragraph 1.")
         self.assertEqual(paragraphs[1].text, "Paragraph 2.")
@@ -664,7 +664,7 @@ class BlogFormattingTests(BlogTest):
         # He goes to the home page and sees a post, with three paragraphs
         self.browser.get(self.live_server_url + "/")
         blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
-        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        paragraphs = blog_post_body.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 3)
         self.assertEqual(paragraphs[0].find_element_by_tag_name("em").text, "graph")
         self.assertEqual(paragraphs[1].find_element_by_tag_name("u").text, "graph")
@@ -683,7 +683,7 @@ class BlogFormattingTests(BlogTest):
         # He goes to the home page and sees a post, with three paragraphs
         self.browser.get(self.live_server_url + "/")
         blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
-        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        paragraphs = blog_post_body.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Here is a link.")
         self.assertEqual(paragraphs[0].find_element_by_tag_name("a").text, "link")
