@@ -1,4 +1,5 @@
 import time
+import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
@@ -757,4 +758,111 @@ class BlogMediaTests(BlogTest):
         self.assertEqual(caption.text, "Caption")
         self.assertLess(img.size.get("width"), 150)
 
-        self.fail()
+        # He goes to upload the image
+        self.browser.get(self.live_server_url + "/media/upload/")
+
+        # There is a form asking for the name of the image
+        form = self.browser.find_element_by_tag_name("form")
+        name_input = form.find_element_by_tag_name("input")
+        name_input.send_keys("test.png")
+
+        # There is also an image uploader
+        file_input = form.find_elements_by_tag_name("input")[1]
+        file_input.send_keys(os.getcwd() + "/blog/static/tests/test.png")
+
+        # He submits
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+
+        # He is on the media page
+        self.assertEqual(self.browser.current_url, self.live_server_url + "/media/")
+
+        # There is a grid of images, including the new one
+        image_grid = self.browser.find_element_by_id("image_grid")
+        image_cells = image_grid.find_elements_by_class_name("image_cell")
+        test_image_cell = [cell for cell in image_cells\
+         if cell.find_element_by_class_name("image_title").text == "test.png"][0]
+        test_image = test_image_cell.find_elements_by_tag_name("img")
+
+        # He returns to the home page
+        self.browser.get(self.live_server_url + "/")
+
+        # The image is now fully rendered
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        figure = blog_post_body.find_element_by_tag_name("figure")
+        img = figure.find_element_by_tag_name("img")
+        self.assertEqual(
+         img.get_attribute("src"),
+         self.live_server_url + "/static/images/test.png"
+        )
+        self.assertGreaterEqual(
+         img.size.get("width"),
+         blog_post_body.size.get("width") * 0.8
+        )
+        self.assertLessEqual(
+         img.size.get("width"),
+         blog_post_body.size.get("width")
+        )
+
+        # He decides to delete the image, by returning to the media page
+        self.assertEqual(self.browser.current_url, self.live_server_url + "/media/")
+        image_grid = self.browser.find_element_by_id("image_grid")
+        image_cells = image_grid.find_elements_by_class_name("image_cell")
+        test_image_cell = [cell for cell in image_cells\
+         if cell.find_element_by_class_name("image_title").text == "test.png"][0]
+
+        # Clicking the image goes to the full image page
+        test_image_cell.click()
+        self.assertEqual(
+         self.current_url,
+         self.live_server_url + "/static/images/test.png"
+        )
+        self.browser.back()
+
+        # There is a delete button
+        image_grid = self.browser.find_element_by_id("image_grid")
+        image_cells = image_grid.find_elements_by_class_name("image_cell")
+        test_image_cell = [cell for cell in image_cells\
+         if cell.find_element_by_class_name("image_title").text == "test.png"][0]
+        delete_button = test_image_cell.find_elements_by_tag_name("a")[-1]
+        self.assertEqual(delete_button.text, "Delete")
+
+        # He clicks it, and is taken to a delete image page
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/media/delete/test.png"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        warning = form.find_element_by_id("warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He deletes, and is taken back to the media page
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/media/"
+        )
+
+        # The image is gone
+        image_grid = self.browser.find_element_by_id("image_grid")
+        image_cells = image_grid.find_elements_by_class_name("image_cell")
+        self.assertEqual(
+         len([cell for cell in image_cells\
+          if cell.find_element_by_class_name("image_title").text == "test.png"]),
+         0
+        )
+
+        # The image no longer displays on the blog page
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        figure = blog_post_body.find_element_by_tag_name("figure")
+        img = figure.find_element_by_tag_name("img")
+        self.assertLess(img.size.get("width"), 150)
