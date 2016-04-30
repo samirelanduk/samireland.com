@@ -628,3 +628,75 @@ class BlogValidationTests(BlogTest):
         # The error message vanishes
         error = self.browser.find_element_by_class_name("error")
         self.assertFalse(error.is_displayed())
+
+
+
+class BlogFormattingTests(BlogTest):
+
+    def test_blog_post_has_paragraphs(self):
+        # Sam writes a post with three paragraphs
+        self.sam_writes_blog_post(
+         "Three Paragraph Post",
+         "01012016",
+         "Paragraph 1.\n\nParagraph 2.\n\nParagraph 3",
+         True
+        )
+
+        # He goes to the home page and sees a post, with three paragraphs
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        self.assertEqual(len(paragraphs), 3)
+        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
+        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
+        self.assertEqual(paragraphs[2].text, "Paragraph 3.")
+
+
+    def test_blog_post_italics_bold_underline(self):
+        # Sam writes three blog posts with formatting
+        self.sam_writes_blog_post(
+         "Three Paragraph Post",
+         "01012016",
+         "Para*graph* 1.\n\n\nPara_graph_ 2.\n\n\n\nPara**graph** 3",
+         True
+        )
+
+        # He goes to the home page and sees a post, with three paragraphs
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        self.assertEqual(len(paragraphs), 3)
+        self.assertEqual(paragraphs[0].find_element_by_tag_name("em").text, "graph")
+        self.assertEqual(paragraphs[1].find_element_by_tag_name("u").text, "graph")
+        self.assertEqual(paragraphs[2].find_element_by_tag_name("b").text, "graph")
+
+
+    def test_blog_post_hyperlinks(self):
+        # Sam writes a blog post with two links, one to open in a new page
+        self.sam_writes_blog_post(
+         "Three Paragraph Post",
+         "01012016",
+         "Here is a [link](http://hogwarts.ac.uk/the_sorting_hat/).\n\n[link2](http://test.com/ newpage])",
+         True
+        )
+
+        # He goes to the home page and sees a post, with three paragraphs
+        self.browser.get(self.live_server_url + "/")
+        blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
+        paragraphs = blog_post_body.find_elements_by_class_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Here is a link.")
+        self.assertEqual(paragraphs[0].find_element_by_tag_name("a").text, "link")
+        self.assertEqual(
+         paragraphs[0].find_element_by_tag_name("a").get_attribute("href"),
+         "http://hogwarts.ac.uk/the_sorting_hat/"
+        )
+        self.assertEqual(paragraphs[1].find_element_by_tag_name("a").text, "link2")
+        self.assertEqual(
+         paragraphs[0].find_element_by_tag_name("a").get_attribute("href"),
+         "http://test.com/"
+        )
+        self.assertEqual(
+         paragraphs[0].find_element_by_tag_name("a").get_attribute("target"),
+         "_blank"
+        )
