@@ -270,7 +270,7 @@ class EditBlogTest(BlogTest):
 
         # Sam goes to the edit blog page
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/edit")
+        self.browser.get(self.live_server_url + "/blog/edit/")
 
         # There is a table there, with all the blog posts
         table = self.browser.find_element_by_tag_name("table")
@@ -376,7 +376,7 @@ class EditBlogTest(BlogTest):
 
         # Sam wants to delete the second post - he goes to the edit page for it
         self.browser = webdriver.Chrome()
-        self.browser.get(self.live_server_url + "/blog/edit")
+        self.browser.get(self.live_server_url + "/blog/edit/")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 3)
