@@ -12,7 +12,8 @@
   {% for image in images %}
     <div class="image_cell">
       <div class="image_title">{{ image.imagetitle }}</div>
-      <img src="/{{ image.imagefile.url }}">
+      <a href="/{{ image.imagefile.url }}"><img src="/{{ image.imagefile.url }}"></a>
+      <a href="/media/delete/{{ image.imagetitle }}/">Delete</a>
     </div>
   {% endfor %}
 </div>

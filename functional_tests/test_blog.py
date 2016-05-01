@@ -812,7 +812,7 @@ class BlogMediaTests(BlogTest):
             test_image_cell.click()
             self.assertEqual(
              self.browser.current_url,
-             self.live_server_url + "/static/images/ftest.png"
+             self.live_server_url + "/media/images/ftest.png"
             )
             self.browser.back()
 
@@ -820,7 +820,7 @@ class BlogMediaTests(BlogTest):
             image_grid = self.browser.find_element_by_id("image_grid")
             image_cells = image_grid.find_elements_by_class_name("image_cell")
             test_image_cell = [cell for cell in image_cells\
-             if cell.find_element_by_class_name("image_title").text == "ftest.png"][0]
+             if cell.find_element_by_class_name("image_title").text == "ftest"][0]
             delete_button = test_image_cell.find_elements_by_tag_name("a")[-1]
             self.assertEqual(delete_button.text, "Delete")
 
@@ -828,7 +828,7 @@ class BlogMediaTests(BlogTest):
             delete_button.click()
             self.assertEqual(
              self.browser.current_url,
-             self.live_server_url + "/media/delete/ftest.png"
+             self.live_server_url + "/media/delete/ftest/"
             )
             form = self.browser.find_element_by_tag_name("form")
             warning = form.find_element_by_id("warning")
