@@ -20,5 +20,9 @@ def upload_media_page(request):
     return render(request, "upload_media.html", {"form": form})
 
 
-def delete_media_page(request, filename):
-    return render(request, "delete_media.html")
+def delete_media_page(request, imagetitle):
+    doomed_image = Image.objects.get(imagetitle=imagetitle)
+    if request.method == "POST":
+        doomed_image.delete()
+        return redirect("/media/")
+    return render(request, "delete_media.html", {"image": doomed_image})

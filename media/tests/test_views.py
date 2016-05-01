@@ -65,5 +65,41 @@ class UploadMediaPageTests(MediaTest):
 class DeleteMediaPageTests(MediaTest):
 
     def test_delete_media_page_view_uses_delete_media_template(self):
-        response = self.client.get("/media/delete/x/")
-        self.assertTemplateUsed(response, "delete_media.html")
+        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = Image.objects.create(imagetitle="nameofthisfile", imagefile=image_file)
+        try:
+            response = self.client.get("/media/delete/nameofthisfile/")
+            self.assertTemplateUsed(response, "delete_media.html")
+        finally:
+            image.delete()
+
+
+    def test_delete_media_page_contains_image_title(self):
+        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = Image.objects.create(imagetitle="nameofthisfile", imagefile=image_file)
+        try:
+            response = self.client.get("/media/delete/%s/" % image.imagetitle)
+            self.assertContains(response, image.imagetitle)
+        finally:
+            image.delete()
+
+
+    def test_delete_media_page_views_redirects_after_post(self):
+        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = Image.objects.create(imagetitle="nameofthisfile", imagefile=image_file)
+        try:
+            response = self.client.post("/media/delete/%s/" % image.imagetitle)
+            self.assertRedirects(response, "/media/")
+        finally:
+            image.delete()
+
+
+    def test_delete_media_view_can_actually_delete_media(self):
+        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = Image.objects.create(imagetitle="nameofthisfile", imagefile=image_file)
+        try:
+            self.assertEqual(Image.objects.count(), 1)
+            self.client.post("/media/delete/%s/" % image.imagetitle)
+            self.assertEqual(Image.objects.count(), 0)
+        finally:
+            image.delete()

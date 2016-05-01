@@ -853,7 +853,7 @@ class BlogMediaTests(BlogTest):
             image_cells = image_grid.find_elements_by_class_name("image_cell")
             self.assertEqual(
              len([cell for cell in image_cells\
-              if cell.find_element_by_class_name("image_title").text == "ftest.png"]),
+              if cell.find_element_by_class_name("image_title").text == "ftest"]),
              0
             )
 

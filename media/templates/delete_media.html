@@ -7,4 +7,20 @@
 
 {% block main %}
 <h1>Delete Media</h1>
+
+<form method="POST">
+  <div id="delete-title"><q>{{ image.imagetitle }}</q></div>
+  <p id="warning">
+    This will delete the image forever. Are you sure?
+  </p>
+  {% csrf_token %}
+  <div class="delete-options">
+    <div class="delete-option">
+      <input type="submit" value="Yes - delete">
+    </div>
+    <div class="delete-option">
+      <a href="{% url 'media_page' %}">No - go back</a>
+    </div>
+  </div>
+</form>
 {% endblock %}
