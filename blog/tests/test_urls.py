@@ -1,4 +1,4 @@
-from django.core.urlresolvers import resolve
+from django.core.urlresolvers import resolve, Resolver404
 from django.test import TestCase
 from blog import views
 
@@ -35,3 +35,8 @@ class UrlTest(TestCase):
 
     def test_delete_blog_post_url_resolves_to_delete_blog_post_page_view(self):
         self.check_url_returns_view("/blog/delete/23/", views.delete_post_page)
+
+
+    def test_blog_urls_are_not_greedy(self):
+        with self.assertRaises(Resolver404):
+            resolve("/blog/xxxx")
