@@ -67,6 +67,10 @@ def process_special_block(block):
          ' title="%s"' % args["A"] if "A" in args else "",
          "<figcaption>%s</figcaption>"  % args["C"] if "C" in args else ""
         )
+    elif block_type == "VIDEO":
+        video = Image.objects.all().filter(imagetitle=block_arg).first()
+        filename = "/" + video.imagefile.url if video else MEDIA_URL + block_arg
+        return '<video src="%s" controls>' % filename
     else:
         return ""
 

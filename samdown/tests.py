@@ -202,3 +202,14 @@ class BlockTypeTests(TestCase):
          '<figcaption>A CAPTION</figcaption>',
          samdown.process_block('[IMAGE](xxxxx C:"A CAPTION" A:"ALT TEXT")')
         )
+
+
+    def test_video_block_produces_block(self):
+        video_file = SimpleUploadedFile("downtest.mov", b"\x00\x01\x02\x03")
+        video = Image.objects.create(imagetitle="test", imagefile=video_file)
+        try:
+            self.assertTrue(samdown.process_block("[VIDEO](test)").startswith(
+             "<video src="))
+            self.assertIn("%s.mov" % datetime.datetime.now().strftime("%Y%m%d"), samdown.process_block("[VIDEO](test)"))
+        finally:
+            video.delete()

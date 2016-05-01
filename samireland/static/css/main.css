@@ -74,6 +74,11 @@ figure img {
   height: auto;
 }
 
+video {
+  width: 100%;
+  height: auto;
+}
+
 figcaption {
   background-color: #FFFFFF;
   font-size: 70%;

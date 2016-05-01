@@ -47,14 +47,14 @@ def _update_settings(source_folder, site_name):
       db, user, password, host
      )
     )
+    sed(
+     settings_path,
+     '"media", "images"',
+     '"../../samireland-media"'
+    )
     append(
      settings_path,
      'STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))'
-    )
-    sed(
-     settings_path,
-     'MEDIA_ROOT = os.path.join(BASE_DIR, "media", "images")',
-     'MEDIA_ROOT = os.path.join(BASE_DIR, "..", "..", "samireland-media")'
     )
     secret_settigs_file = source_folder + "/samireland/secret_settings.py"
     if not exists(secret_settigs_file):
