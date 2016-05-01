@@ -70,7 +70,7 @@ def process_special_block(block):
     elif block_type == "VIDEO":
         video = MediaFile.objects.all().filter(mediatitle=block_arg).first()
         filename = "/" + video.mediafile.url if video else MEDIA_URL + block_arg
-        return '<video src="%s" controls>' % filename
+        return '<video src="%s" controls></video>' % filename
     else:
         return ""
 
