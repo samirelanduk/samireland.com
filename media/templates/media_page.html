@@ -2,7 +2,12 @@
 
 {% block title %}Media{% endblock %}
 
+{% block precss %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+{% endblock %}
+
 {% block extrahead %}
+<link rel="stylesheet" type="text/css" href="/static/css/media.css">
 {% endblock %}
 
 {% block main %}
@@ -10,10 +15,9 @@
 
 <div id="image_grid">
   {% for image in images %}
-    <div class="image_cell">
+    <div class="image_cell" style="background-image: url(/{{ image.imagefile.url }});">
       <div class="image_title">{{ image.imagetitle }}</div>
-      <a href="/{{ image.imagefile.url }}"><img src="/{{ image.imagefile.url }}"></a>
-      <a href="/media/delete/{{ image.imagetitle }}/">Delete</a>
+      <a class="pure-button delete-button" href="/media/delete/{{ image.imagetitle }}/">Delete</a>
     </div>
   {% endfor %}
 </div>
