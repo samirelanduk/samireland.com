@@ -1,18 +1,18 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 from . import MediaTest
 from media.forms import MediaForm
-from media.models import Image
+from media.models import MediaFile
 
 class FormsRenderingTests(MediaTest):
 
     def test_media_form_has_correct_inputs(self):
         form = MediaForm()
         self.assertIn(
-         'name="imagetitle" type="text"',
+         'name="mediatitle" type="text"',
          str(form)
         )
         self.assertIn(
-         'name="imagefile" type="file"',
+         'name="mediafile" type="file"',
          str(form)
         )
 
@@ -21,28 +21,28 @@ class FormsRenderingTests(MediaTest):
 class FormsValidationTests(MediaTest):
 
     def test_media_form_wont_accept_blank_title(self):
-        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
         form = MediaForm(data={
-         "imagetitle": "",
-         "imagefile": image_file
+         "mediatitle": "",
+         "mediafile": media_file
         })
         self.assertFalse(form.is_valid())
         self.assertEqual(
-         form.errors["imagetitle"],
+         form.errors["mediatitle"],
          ["You cannot submit media with no title"]
         )
 
 
     def test_media_form_wont_accept_duplicate_titles(self):
-        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
-        Image.objects.create(imagetitle="test", imagefile=image_file)
-        image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        MediaFile.objects.create(mediatitle="test", mediafile=media_file)
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
         form = MediaForm(data={
-         "imagetitle": "test",
-         "imagefile": image_file
+         "mediatitle": "test",
+         "mediafile": media_file
         })
         self.assertFalse(form.is_valid())
         self.assertEqual(
-         form.errors["imagetitle"],
+         form.errors["mediatitle"],
          ["There is already media with this title"]
         )

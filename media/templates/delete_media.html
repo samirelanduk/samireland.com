@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block extrahead %}
-<link rel="stylesheet" type="text/css" href="/static/css/forms.css">s
+<link rel="stylesheet" type="text/css" href="/static/css/forms.css">
 {% endblock %}
 
 {% block main %}
 <h1>Delete Media</h1>
 
 <form method="POST" class="pure-form">
-  <div id="delete-title"><q>{{ image.imagetitle }}</q></div>
+  <div id="delete-title"><q>{{ media.mediatitle }}</q></div>
   <p id="warning">
     This will delete the image forever. Are you sure?
   </p>

@@ -14,10 +14,10 @@
 <h1>All Media</h1>
 
 <div id="image_grid">
-  {% for image in images %}
-    <div class="image_cell" style="background-image: url(/{{ image.imagefile.url }});" onclick="document.location='/{{ image.imagefile.url }}';">
-      <div class="image_title">{{ image.imagetitle }}</div>
-      <a class="pure-button delete-button" href="/media/delete/{{ image.imagetitle }}/">Delete</a>
+  {% for mediafile in media %}
+    <div class="image_cell" style="background-image: url(/{{ mediafile.mediafile.url }});" onclick="document.location='/{{ mediafile.mediafile.url }}';">
+      <div class="image_title">{{ mediafile.mediatitle }}</div>
+      <a class="pure-button delete-button" href="/media/delete/{{ mediafile.mediatitle }}/">Delete</a>
     </div>
   {% endfor %}
 </div>

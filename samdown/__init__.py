@@ -1,5 +1,5 @@
 import re
-from media.models import Image
+from media.models import MediaFile
 from samireland.settings import MEDIA_URL
 
 def split(raw_text):
@@ -56,8 +56,8 @@ def process_special_block(block):
 
     elif block_type == "IMAGE":
         imagename = block_arg.split()[:1][0]
-        image = Image.objects.all().filter(imagetitle=imagename).first()
-        filename = "/" + image.imagefile.url if image else MEDIA_URL + imagename
+        image = MediaFile.objects.all().filter(mediatitle=imagename).first()
+        filename = "/" + image.mediafile.url if image else MEDIA_URL + imagename
 
         args = " ".join(block_arg.split()[1:])
         args = re.findall('[AC]:".*?"', args)
@@ -68,8 +68,8 @@ def process_special_block(block):
          "<figcaption>%s</figcaption>"  % args["C"] if "C" in args else ""
         )
     elif block_type == "VIDEO":
-        video = Image.objects.all().filter(imagetitle=block_arg).first()
-        filename = "/" + video.imagefile.url if video else MEDIA_URL + block_arg
+        video = MediaFile.objects.all().filter(mediatitle=block_arg).first()
+        filename = "/" + video.mediafile.url if video else MEDIA_URL + block_arg
         return '<video src="%s" controls>' % filename
     else:
         return ""

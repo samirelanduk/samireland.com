@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from media.models import Image
+from media.models import MediaFile
 import samdown
 
 class PostSplittingTests(TestCase):
@@ -161,8 +161,8 @@ class BlockTypeTests(TestCase):
 
 
     def test_img_block_produces_image(self):
-        image_file = SimpleUploadedFile("downtest.png", b"\x00\x01\x02\x03")
-        image = Image.objects.create(imagetitle="test", imagefile=image_file)
+        media_file = SimpleUploadedFile("downtest.png", b"\x00\x01\x02\x03")
+        image = MediaFile.objects.create(mediatitle="test", mediafile=media_file)
         try:
             self.assertTrue(samdown.process_block("[IMAGE](test)").startswith(
              "<figure><img"))
@@ -206,7 +206,7 @@ class BlockTypeTests(TestCase):
 
     def test_video_block_produces_block(self):
         video_file = SimpleUploadedFile("downtest.mov", b"\x00\x01\x02\x03")
-        video = Image.objects.create(imagetitle="test", imagefile=video_file)
+        video = MediaFile.objects.create(mediatitle="test", mediafile=video_file)
         try:
             self.assertTrue(samdown.process_block("[VIDEO](test)").startswith(
              "<video src="))

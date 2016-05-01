@@ -7,7 +7,7 @@ def create_filename(instance, filename):
 
 
 # Create your models here.
-class Image(models.Model):
+class MediaFile(models.Model):
 
-    imagetitle = models.TextField(default="", unique=True)
-    imagefile = models.FileField(upload_to=create_filename)
+    mediatitle = models.TextField(default="", unique=True)
+    mediafile = models.FileField(upload_to=create_filename)

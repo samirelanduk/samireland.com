@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from media.forms import MediaForm
-from media.models import Image
+from media.models import MediaFile
 
 # Create your views here.
 def media_page(request):
-    images = Image.objects.all()
-    return render(request, "media_page.html", {"images": images})
+    media = MediaFile.objects.all()
+    return render(request, "media_page.html", {"media": media})
 
 
 def upload_media_page(request):
@@ -20,9 +20,9 @@ def upload_media_page(request):
     return render(request, "upload_media.html", {"form": form})
 
 
-def delete_media_page(request, imagetitle):
-    doomed_image = Image.objects.get(imagetitle=imagetitle)
+def delete_media_page(request, mediatitle):
+    doomed_image = MediaFile.objects.get(mediatitle=mediatitle)
     if request.method == "POST":
         doomed_image.delete()
         return redirect("/media/")
-    return render(request, "delete_media.html", {"image": doomed_image})
+    return render(request, "delete_media.html", {"media": doomed_image})
