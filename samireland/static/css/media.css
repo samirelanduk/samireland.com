@@ -10,6 +10,7 @@
   height: 150px;
   background-size: cover;
   margin: 5px;
+  cursor: pointer;
 }
 
 .image_title {

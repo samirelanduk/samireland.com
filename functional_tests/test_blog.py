@@ -678,7 +678,7 @@ class BlogFormattingTests(BlogTest):
         self.sam_writes_blog_post(
          "Three Paragraph Post",
          "01012016",
-         "Here is a [link](http://hogwarts.ac.uk/the_sorting_hat/).\n\n[link2](http://test.com/ newpage])",
+         "Here is a [link](http://hogwarts.ac.uk/the_sorting_hat/).\n\n[link2](http://test.com/ newpage]).",
          True
         )
 
@@ -686,6 +686,7 @@ class BlogFormattingTests(BlogTest):
         self.browser.get(self.live_server_url + "/")
         blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
         paragraphs = blog_post_body.find_elements_by_tag_name("p")
+        time.sleep(10)
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Here is a link.")
         self.assertEqual(paragraphs[0].find_element_by_tag_name("a").text, "link")

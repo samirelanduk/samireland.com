@@ -13,7 +13,12 @@ class MediaForm(forms.models.ModelForm):
         fields = ("imagetitle", "imagefile")
 
         widgets = {
-         "imagetitle": forms.fields.TextInput()
+         "imagetitle": forms.fields.TextInput(attrs={
+          "class": "pure-u-1-1 pure-u-md-15-24"
+         }),
+         "imagefile": forms.widgets.FileInput(attrs={
+          "class": "pure-u-1-1 pure-u-md-15-24"
+         })
         }
 
         error_messages = {

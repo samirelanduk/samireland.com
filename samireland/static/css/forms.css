@@ -22,6 +22,10 @@ input[type=submit] {
   margin-top: 40px;
 }
 
+input[type=file] {
+  font-size: 75%;
+}
+
 #id_body {
   height: 400px;
 }
@@ -39,6 +43,38 @@ input[type=submit] {
 #delete {
   margin-top: 30px;
   background-color: #7f0000;
+  color: #FFFFFF;
+}
+
+#delete-title {
+  text-align: center;
+  font-size: 70%;
+  font-style: italic;
+  font-weight: bold;
+}
+
+#warning {
+  text-align: center;
+}
+
+.delete-options {
+  width: 100%;
+}
+
+.delete-option {
+  display: inline-block;
+  width: 49%;
+  text-align: center;
+}
+
+.delete-option input[type=submit] {
+  margin-top: 0px;
+  background-color: #B33A3A;
+  color: #FFFFFF;
+}
+
+.delete-option a {
+  background-color: #8BD8C6;
   color: #FFFFFF;
 }
 

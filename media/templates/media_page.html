@@ -15,7 +15,7 @@
 
 <div id="image_grid">
   {% for image in images %}
-    <div class="image_cell" style="background-image: url(/{{ image.imagefile.url }});">
+    <div class="image_cell" style="background-image: url(/{{ image.imagefile.url }});" onclick="document.location='/{{ image.imagefile.url }}';">
       <div class="image_title">{{ image.imagetitle }}</div>
       <a class="pure-button delete-button" href="/media/delete/{{ image.imagetitle }}/">Delete</a>
     </div>
