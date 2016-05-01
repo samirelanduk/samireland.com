@@ -1,4 +1,5 @@
 import os
+import datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
 from media.models import Image
@@ -16,7 +17,10 @@ class ModelCreationTest(MediaTest):
         image.save()
 
         self.assertEqual(Image.objects.all().count(), 1)
-        self.assertIn("test.png", os.listdir(MEDIA_ROOT + "/images"))
+        self.assertIn(
+         datetime.datetime.now().strftime("%Y%m%d") + ".png",
+         os.listdir(MEDIA_ROOT + "/images")
+        )
 
         retrieved_image = Image.objects.first()
         self.assertEqual(retrieved_image, image)
@@ -27,11 +31,17 @@ class ModelCreationTest(MediaTest):
         image = Image(imagetitle="test", imagefile=image_file)
         image.save()
         self.assertEqual(Image.objects.all().count(), 1)
-        self.assertIn("test.png", os.listdir(MEDIA_ROOT + "/images"))
+        self.assertIn(
+         datetime.datetime.now().strftime("%Y%m%d") + ".png",
+         os.listdir(MEDIA_ROOT + "/images")
+        )
 
         image.delete()
         self.assertEqual(Image.objects.all().count(), 0)
-        self.assertNotIn("test.png", os.listdir(MEDIA_ROOT + "/images"))
+        self.assertNotIn(
+         datetime.datetime.now().strftime("%Y%m%d") + ".png",
+         os.listdir(MEDIA_ROOT + "/images")
+        )
 
 
 

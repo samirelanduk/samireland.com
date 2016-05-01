@@ -22,8 +22,8 @@ class MediaPageTests(MediaTest):
 
         response = self.client.get("/media/")
         try:
-            self.assertContains(response, "test.png")
-            self.assertContains(response, "test2.png")
+            self.assertContains(response, image1.imagefile.url)
+            self.assertContains(response, image2.imagefile.url)
         finally:
             image1.delete()
             image2.delete()
