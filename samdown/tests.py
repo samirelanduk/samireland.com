@@ -1,4 +1,6 @@
 from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from media.models import Image
 import samdown
 
 class PostSplittingTests(TestCase):
@@ -158,8 +160,14 @@ class BlockTypeTests(TestCase):
 
 
     def test_img_block_produces_image(self):
-        self.assertTrue(samdown.process_block("[IMAGE](xxxxx)").startswith(
-         "<figure><img"))
+        image_file = SimpleUploadedFile("downtest.png", b"\x00\x01\x02\x03")
+        image = Image.objects.create(imagetitle="test", imagefile=image_file)
+        try:
+            self.assertTrue(samdown.process_block("[IMAGE](test)").startswith(
+             "<figure><img"))
+            self.assertIn("downtest.png", samdown.process_block("[IMAGE](test)"))
+        finally:
+            image.delete()
 
 
     def test_img_alt_text(self):

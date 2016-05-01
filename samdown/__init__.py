@@ -1,4 +1,6 @@
 import re
+from media.models import Image
+from samireland.settings import MEDIA_URL
 
 def split(raw_text):
     text = re.sub("\r\n", "\n", raw_text)
@@ -53,11 +55,14 @@ def process_special_block(block):
         frameborder="0" allowfullscreen></iframe></div>' % block_arg
 
     elif block_type == "IMAGE":
-        filename = block_arg.split()[:1][0]
+        imagename = block_arg.split()[:1][0]
+        image = Image.objects.all().filter(imagetitle=imagename).first()
+        filename = image.imagefile.url if image else MEDIA_URL + "images/" + imagename
+
         args = " ".join(block_arg.split()[1:])
         args = re.findall('[AC]:".*?"', args)
         args = {arg[0]: arg[3:-1] for arg in args}
-        return '<figure><img src="/static/images/%s"%s>%s</figure>' % (
+        return '<figure><img src="%s"%s>%s</figure>' % (
          filename,
          ' title="%s"' % args["A"] if "A" in args else "",
          "<figcaption>%s</figcaption>"  % args["C"] if "C" in args else ""

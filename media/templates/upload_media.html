@@ -8,7 +8,7 @@
 {% block main %}
 <h1>Upload Media</h1>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   <div>
     <label for="{{ form.imagetitle.id_for_label }}">Image Name:</label>
     {{ form.imagetitle }}
@@ -23,7 +23,7 @@
     {{ form.imagefile }}
     {% if form.imagefile.errors %}
     <div class="error">
-      {{ form.date.errors }}
+      {{ form.imagefile.errors }}
     </div>
     {% endif %}
   </div>
