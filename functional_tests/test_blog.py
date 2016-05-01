@@ -1,5 +1,6 @@
 import time
 import os
+import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from samireland.settings import MEDIA_ROOT
@@ -686,7 +687,6 @@ class BlogFormattingTests(BlogTest):
         self.browser.get(self.live_server_url + "/")
         blog_post_body = self.browser.find_element_by_class_name("blog_post_body")
         paragraphs = blog_post_body.find_elements_by_tag_name("p")
-        time.sleep(10)
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Here is a link.")
         self.assertEqual(paragraphs[0].find_element_by_tag_name("a").text, "link")
@@ -754,7 +754,7 @@ class BlogMediaTests(BlogTest):
             img = figure.find_element_by_tag_name("img")
             self.assertEqual(
              img.get_attribute("src"),
-             self.live_server_url + "/media/images/ftest"
+             self.live_server_url + "/mediafiles/ftest"
             )
             self.assertEqual(img.get_attribute("title"), "hover text")
             caption = figure.find_element_by_tag_name("figcaption")
@@ -795,7 +795,7 @@ class BlogMediaTests(BlogTest):
             img = figure.find_element_by_tag_name("img")
             self.assertEqual(
              img.get_attribute("src"),
-             self.live_server_url + "/media/images/ftest.png"
+             self.live_server_url + "/mediafiles/%s.png" % datetime.datetime.now().strftime("%Y%m%d")
             )
             self.assertLessEqual(
              img.size.get("width"),
@@ -813,7 +813,7 @@ class BlogMediaTests(BlogTest):
             test_image_cell.click()
             self.assertEqual(
              self.browser.current_url,
-             self.live_server_url + "/media/images/ftest.png"
+             self.live_server_url + "/mediafiles/%s.png" % datetime.datetime.now().strftime("%Y%m%d")
             )
             self.browser.back()
 
@@ -865,10 +865,10 @@ class BlogMediaTests(BlogTest):
             img = figure.find_element_by_tag_name("img")
             self.assertEqual(
              img.get_attribute("src"),
-             self.live_server_url + "/media/images/ftest"
+             self.live_server_url + "/mediafiles/ftest"
             )
         finally:
             try:
-                os.remove(MEDIA_ROOT + "/images/ftest.png")
+                os.remove(MEDIA_ROOT + "/%s.png" % datetime.datetime.now().strftime("%Y%m%d"))
             except OSError:
                 pass

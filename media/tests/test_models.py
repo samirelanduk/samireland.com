@@ -9,7 +9,7 @@ from . import MediaTest
 class ModelCreationTest(MediaTest):
 
     def test_can_save_images(self):
-        self.assertNotIn("test.png", os.listdir(MEDIA_ROOT + "/images"))
+        self.assertNotIn("test.png", os.listdir(MEDIA_ROOT))
         self.assertEqual(Image.objects.all().count(), 0)
 
         image_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
@@ -19,7 +19,7 @@ class ModelCreationTest(MediaTest):
         self.assertEqual(Image.objects.all().count(), 1)
         self.assertIn(
          datetime.datetime.now().strftime("%Y%m%d") + ".png",
-         os.listdir(MEDIA_ROOT + "/images")
+         os.listdir(MEDIA_ROOT)
         )
 
         retrieved_image = Image.objects.first()
@@ -33,14 +33,14 @@ class ModelCreationTest(MediaTest):
         self.assertEqual(Image.objects.all().count(), 1)
         self.assertIn(
          datetime.datetime.now().strftime("%Y%m%d") + ".png",
-         os.listdir(MEDIA_ROOT + "/images")
+         os.listdir(MEDIA_ROOT)
         )
 
         image.delete()
         self.assertEqual(Image.objects.all().count(), 0)
         self.assertNotIn(
          datetime.datetime.now().strftime("%Y%m%d") + ".png",
-         os.listdir(MEDIA_ROOT + "/images")
+         os.listdir(MEDIA_ROOT)
         )
 
 

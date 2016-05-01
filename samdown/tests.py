@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from media.models import Image
@@ -165,7 +166,7 @@ class BlockTypeTests(TestCase):
         try:
             self.assertTrue(samdown.process_block("[IMAGE](test)").startswith(
              "<figure><img"))
-            self.assertIn("downtest.png", samdown.process_block("[IMAGE](test)"))
+            self.assertIn("%s.png" % datetime.datetime.now().strftime("%Y%m%d"), samdown.process_block("[IMAGE](test)"))
         finally:
             image.delete()
 

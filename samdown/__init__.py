@@ -57,7 +57,7 @@ def process_special_block(block):
     elif block_type == "IMAGE":
         imagename = block_arg.split()[:1][0]
         image = Image.objects.all().filter(imagetitle=imagename).first()
-        filename = "/" + image.imagefile.url if image else MEDIA_URL + "images/" + imagename
+        filename = "/" + image.imagefile.url if image else MEDIA_URL + imagename
 
         args = " ".join(block_arg.split()[1:])
         args = re.findall('[AC]:".*?"', args)
