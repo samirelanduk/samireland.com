@@ -61,6 +61,30 @@ a:hover {
   color: #7FDBFF;
 }
 
+figure {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+figcaption {
+  background-color: #FFFFFF;
+  font-size: 70%;
+  text-align: center;
+  font-style: italic;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  opacity: 0.9;
+  border-top: 1px solid black;
+}
+
 .youtube {
   position:relative;
 	padding-bottom:56.25%;
