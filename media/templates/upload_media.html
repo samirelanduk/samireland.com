@@ -7,4 +7,29 @@
 
 {% block main %}
 <h1>Upload Media</h1>
+
+<form method="POST">
+  <div>
+    <label for="{{ form.imagetitle.id_for_label }}">Image Name:</label>
+    {{ form.imagetitle }}
+    {% if form.imagetitle.errors %}
+    <div class="error">
+      {{ form.imagetitle.errors }}
+    </div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="{{ form.imagefile.id_for_label }}">File:</label>
+    {{ form.imagefile }}
+    {% if form.imagefile.errors %}
+    <div class="error">
+      {{ form.date.errors }}
+    </div>
+    {% endif %}
+  </div>
+  {% csrf_token %}
+  <div>
+    <input type="submit">
+  </div>
+</form>
 {% endblock %}

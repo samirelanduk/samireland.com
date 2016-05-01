@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from media.forms import MediaForm
 
 # Create your views here.
 def media_page(request):
@@ -6,7 +7,10 @@ def media_page(request):
 
 
 def upload_media_page(request):
-    return render(request, "upload_media.html")
+    if request.method == "POST":
+        return redirect("/media/")
+    form = MediaForm()
+    return render(request, "upload_media.html", {"form": form})
 
 
 def delete_media_page(request, filename):
