@@ -2,13 +2,19 @@
 
 {% block title %}Delete Media{% endblock %}
 
+{% block precss %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+{% endblock %}
+
 {% block extrahead %}
+<link rel="stylesheet" type="text/css" href="/static/css/forms.css">
+<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
 {% endblock %}
 
 {% block main %}
 <h1>Delete Media</h1>
 
-<form method="POST">
+<form method="POST" class="pure-form">
   <div id="delete-title"><q>{{ image.imagetitle }}</q></div>
   <p id="warning">
     This will delete the image forever. Are you sure?
@@ -16,10 +22,10 @@
   {% csrf_token %}
   <div class="delete-options">
     <div class="delete-option">
-      <input type="submit" value="Yes - delete">
+      <input type="submit" value="Yes - delete" class="pure-button">
     </div>
     <div class="delete-option">
-      <a href="{% url 'media_page' %}">No - go back</a>
+      <a href="{% url 'media_page' %}" class="pure-button">No - go back</a>
     </div>
   </div>
 </form>
