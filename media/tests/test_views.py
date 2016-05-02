@@ -1,15 +1,23 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from media.forms import MediaForm
 from media.models import MediaFile
 from . import MediaTest
 from media import views
 
+class ViewTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="person", password="secret")
+        self.client.login(username="person", password="secret")
 
 
-class MediaPageTests(MediaTest):
+
+class MediaPageTests(ViewTest):
 
     def test_media_page_view_is_protected(self):
+        self.client.logout()
         response = self.client.get("/media/")
         self.assertRedirects(response, "/")
 
@@ -35,9 +43,10 @@ class MediaPageTests(MediaTest):
 
 
 
-class UploadMediaPageTests(MediaTest):
+class UploadMediaPageTests(ViewTest):
 
     def test_upload_media_page_view_is_protected(self):
+        self.client.logout()
         response = self.client.get("/media/upload/")
         self.assertRedirects(response, "/")
 
@@ -72,9 +81,10 @@ class UploadMediaPageTests(MediaTest):
 
 
 
-class DeleteMediaPageTests(MediaTest):
+class DeleteMediaPageTests(ViewTest):
 
     def test_delete_media_page_view_is_protected(self):
+        self.client.logout()
         media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
         image = MediaFile.objects.create(mediatitle="nameofthisfile", mediafile=media_file)
         try:

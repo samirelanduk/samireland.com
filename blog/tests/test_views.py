@@ -1,10 +1,16 @@
 import datetime
 from django.test import TestCase
+from django.contrib.auth.models import User
 from blog import views
 from blog.models import BlogPost
 from blog.forms import BlogPostForm
 
 class ViewTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="person", password="secret")
+        self.client.login(username="person", password="secret")
+
 
     def create_blog_post(self, title=".", date=datetime.datetime.now().date(),
      body="...", visible=True):
@@ -99,6 +105,7 @@ class BlogPageViewTests(ViewTest):
 class NewBlogPostViewTests(ViewTest):
 
     def test_new_blog_post_view_is_protected(self):
+        self.client.logout()
         response = self.client.get("/blog/new/")
         self.assertRedirects(response, "/")
 
@@ -145,6 +152,7 @@ class NewBlogPostViewTests(ViewTest):
 class EditBlogPostsViewTests(ViewTest):
 
     def test_edit_blog_posts_view_is_protected(self):
+        self.client.logout()
         response = self.client.get("/blog/edit/")
         self.assertRedirects(response, "/")
 
@@ -169,6 +177,7 @@ class EditBlogPostsViewTests(ViewTest):
 class EditBlogPostViewTests(ViewTest):
 
     def test_edit_blog_post_view_is_protected(self):
+        self.client.logout()
         blog_post = self.create_blog_post()
         response = self.client.get("/blog/edit/%i/" % blog_post.id)
         self.assertRedirects(response, "/")
@@ -224,6 +233,7 @@ class EditBlogPostViewTests(ViewTest):
 class DeleteBlogPostViewTests(ViewTest):
 
     def test_delete_blog_post_view_is_protected(self):
+        self.client.logout()
         blog_post = self.create_blog_post()
         response = self.client.get("/blog/delete/%i/" % blog_post.id)
         self.assertRedirects(response, "/")
