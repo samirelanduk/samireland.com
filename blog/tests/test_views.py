@@ -98,6 +98,11 @@ class BlogPageViewTests(ViewTest):
 
 class NewBlogPostViewTests(ViewTest):
 
+    def test_new_blog_post_view_is_protected(self):
+        response = self.client.get("/blog/new/")
+        self.assertRedirects(response, "/")
+
+
     def test_new_blog_post_view_uses_new_blog_post_template(self):
         response = self.client.get("/blog/new/")
         self.assertTemplateUsed(response, "new_post.html")
@@ -139,6 +144,11 @@ class NewBlogPostViewTests(ViewTest):
 
 class EditBlogPostsViewTests(ViewTest):
 
+    def test_edit_blog_posts_view_is_protected(self):
+        response = self.client.get("/blog/edit/")
+        self.assertRedirects(response, "/")
+
+
     def test_edit_blog_posts_view_uses_edit_blog_posts_template(self):
         response = self.client.get("/blog/edit/")
         self.assertTemplateUsed(response, "edit_posts.html")
@@ -157,6 +167,12 @@ class EditBlogPostsViewTests(ViewTest):
 
 
 class EditBlogPostViewTests(ViewTest):
+
+    def test_edit_blog_post_view_is_protected(self):
+        blog_post = self.create_blog_post()
+        response = self.client.get("/blog/edit/%i/" % blog_post.id)
+        self.assertRedirects(response, "/")
+
 
     def test_edit_blog_post_view_uses_edit_blog_post_template(self):
         blog_post = self.create_blog_post()
@@ -206,6 +222,12 @@ class EditBlogPostViewTests(ViewTest):
 
 
 class DeleteBlogPostViewTests(ViewTest):
+
+    def test_delete_blog_post_view_is_protected(self):
+        blog_post = self.create_blog_post()
+        response = self.client.get("/blog/delete/%i/" % blog_post.id)
+        self.assertRedirects(response, "/")
+
 
     def test_delete_blog_post_view_uses_delete_blog_post_template(self):
         blog_post = self.create_blog_post()

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from blog.models import BlogPost
 from blog.forms import BlogPostForm
@@ -20,6 +21,7 @@ def blog_page(request):
     return render(request, "blog.html", {"blog_posts": blog_posts})
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def new_post_page(request):
     if request.method == "POST":
         form = BlogPostForm(request.POST)
@@ -32,11 +34,13 @@ def new_post_page(request):
     return render(request, "new_post.html", {"form": form})
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def edit_posts_page(request):
     blog_posts = BlogPost.objects.all().order_by("date").reverse()
     return render(request, "edit_posts.html", {"blog_posts": blog_posts})
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def edit_post_page(request, post_id):
     blog_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":
@@ -51,6 +55,7 @@ def edit_post_page(request, post_id):
         return render(request, "edit_post.html", {"form": form, "id": post_id})
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def delete_post_page(request, post_id):
     doomed_post = BlogPost.objects.get(pk=post_id)
     if request.method == "POST":

@@ -3,7 +3,6 @@ from unittest import skip
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from .base import FunctionalTest
 
-@skip
 class KeepOut(FunctionalTest):
 
     def test_cannot_access_protected_pages(self):
@@ -21,12 +20,12 @@ class KeepOut(FunctionalTest):
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.browser.get(self.live_server_url + "/blog/edit/1/")
+        self.browser.get(self.live_server_url + "/media/")
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.browser.get(self.live_server_url + "/blog/delete/1/")
+        self.browser.get(self.live_server_url + "/media/upload/")
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/"

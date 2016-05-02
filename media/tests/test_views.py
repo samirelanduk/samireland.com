@@ -9,6 +9,11 @@ from media import views
 
 class MediaPageTests(MediaTest):
 
+    def test_media_page_view_is_protected(self):
+        response = self.client.get("/media/")
+        self.assertRedirects(response, "/")
+
+
     def test_media_page_view_uses_media_page_template(self):
         response = self.client.get("/media/")
         self.assertTemplateUsed(response, "media_page.html")
@@ -31,6 +36,10 @@ class MediaPageTests(MediaTest):
 
 
 class UploadMediaPageTests(MediaTest):
+
+    def test_upload_media_page_view_is_protected(self):
+        response = self.client.get("/media/upload/")
+        self.assertRedirects(response, "/")
 
     def test_upload_media_page_view_uses_upload_media_template(self):
         response = self.client.get("/media/upload/")
@@ -63,6 +72,16 @@ class UploadMediaPageTests(MediaTest):
 
 
 class DeleteMediaPageTests(MediaTest):
+
+    def test_delete_media_page_view_is_protected(self):
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile.objects.create(mediatitle="nameofthisfile", mediafile=media_file)
+        try:
+            response = self.client.get("/media/delete/nameofthisfile/")
+            self.assertRedirects(response, "/")
+        finally:
+            image.delete()
+
 
     def test_delete_media_page_view_uses_delete_media_template(self):
         media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
