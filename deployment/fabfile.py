@@ -9,9 +9,11 @@ REPO_URL = "https://github.com/samirelanduk/samireland.com.git"
 def deploy():
     site_folder = "/home/%s/sites/%s" % (env.user, env.host)
     source_folder = site_folder + "/source"
+    base_path = source_folder + "/samireland/templates/base.html"
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
+    _add_google_analytics(env.host, )
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
@@ -62,6 +64,15 @@ def _update_settings(source_folder, site_name):
         key = "".join(random.SystemRandom().choice(chars) for _ in range(50))
         append(secret_settigs_file, "SECRET_KEY = '%s'" % key)
 
+
+def _add_google_analytics(host, base_path):
+    if host == "samireland.com":
+        with open("analytics.html") as f:
+            sed(
+             base_path,
+             "<!--google-analytics-->",
+             f.read()
+            )
 
 def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + "/../virtualenv"
