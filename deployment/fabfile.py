@@ -43,7 +43,7 @@ def _update_settings(source_folder, site_name):
     )
     sed(
      settings_path,
-     '"default": \{.+\}$',
+     '"default": \{"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")\}',
      '"default": \{"ENGINE": "django.db.backends.postgresql_psycopg2", "NAME": \
      "%s", "USER": "%s", "PASSWORD": "%s", "HOST": "%s"\}' % (
       db, user, password, host
@@ -67,12 +67,11 @@ def _update_settings(source_folder, site_name):
 
 def _add_google_analytics(host, base_path):
     if host == "samireland.com":
-        with open("analytics.html") as f:
-            sed(
-             base_path,
-             "<!--google-analytics-->",
-             "{% block analytics %}{% endblock %}"
-            )
+        sed(
+         base_path,
+         "<!--google-analytics-->",
+         "{% block analytics %}{% endblock %}"
+        )
 
 def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + "/../virtualenv"
