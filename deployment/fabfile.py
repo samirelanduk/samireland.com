@@ -13,7 +13,7 @@ def deploy():
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
     _update_settings(source_folder, env.host)
-    _add_google_analytics(env.host, )
+    _add_google_analytics(env.host, base_path)
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
@@ -71,7 +71,7 @@ def _add_google_analytics(host, base_path):
             sed(
              base_path,
              "<!--google-analytics-->",
-             f.read()
+             "{% block analytics %}{% endblock %}"
             )
 
 def _update_virtualenv(source_folder):
