@@ -30,20 +30,15 @@ class KeepOut(FunctionalTest):
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.browser.get(self.live_server_url + "/logout/")
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
-        )
 
 
     def test_login_attempt_fails(self):
         # Utterly demoralised, the user decides to try and login
-        self.browser.get(self.live_server_url + "/login/")
+        self.browser.get(self.live_server_url + "/account/login/")
         login_form = self.browser.find_element_by_tag_name("form")
-        name_entry = form.find_elements_by_tag_name("input")[0]
-        password_entry = form.find_elements_by_tag_name("input")[1]
-        submit_button = form.find_elements_by_tag_name("input")[-1]
+        name_entry = login_form.find_elements_by_tag_name("input")[0]
+        password_entry = login_form.find_elements_by_tag_name("input")[1]
+        submit_button = login_form.find_elements_by_tag_name("input")[-1]
         name_entry.send_keys("badguy1337")
         password_entry.send_keys("h4ck0r")
         submit_button.click()
@@ -51,15 +46,14 @@ class KeepOut(FunctionalTest):
         # The attempt fails. The user weeps, and vows to turn their life around
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/login/fail/"
+         self.live_server_url + "/account/youshallnotpass/"
         )
         self.assertIn(
-         "thus far have you come, and no further",
+         "thus far shall you come, and no farther",
          self.browser.find_element_by_tag_name("main").text.lower()
         )
 
 
-@skip
 class LetIn(FunctionalTest):
 
     def test_can_login(self):

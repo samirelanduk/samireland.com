@@ -15,7 +15,11 @@
 </head>
 
 <body>
-  <header>Sam Ireland</header>
+  <header>Sam Ireland
+    {% if user.is_authenticated %}
+    <a href="/account/logout/" class="logout">Logout</a>
+    {% endif %}
+  </header>
   <nav>
     <div class="nav_links">
       <div class="nav_link">
