@@ -41,6 +41,7 @@ class UploadMediaPageTests(MediaTest):
         response = self.client.get("/media/upload/")
         self.assertRedirects(response, "/")
 
+
     def test_upload_media_page_view_uses_upload_media_template(self):
         response = self.client.get("/media/upload/")
         self.assertTemplateUsed(response, "upload_media.html")

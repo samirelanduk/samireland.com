@@ -41,7 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_cleanup',
     'blog',
-    'media'
+    'media',
+    'account'
 )
 
 MIDDLEWARE_CLASSES = (
