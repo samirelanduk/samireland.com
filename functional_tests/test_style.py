@@ -45,6 +45,7 @@ class BlogCssTest(FunctionalTest):
 class FormCssTest(FunctionalTest):
 
     def test_form_css_applies(self):
+        self.sam_logs_in()
         self.browser.get(self.live_server_url + "/blog/new/")
         form = self.browser.find_element_by_tag_name("form")
         self.assertEqual(

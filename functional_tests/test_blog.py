@@ -152,6 +152,7 @@ class NewBlogTest(BlogTest):
 
     def test_sam_can_write_blog_post(self):
         # Sam posts a first blog post
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "My first blog post",
          "10101962",
@@ -160,6 +161,7 @@ class NewBlogTest(BlogTest):
         )
 
         # Sam goes away, another mighty victory achieved
+        self.sam_logs_out()
         self.browser.quit()
 
         # One of Sam's many fans comes to the site, and checks the home page
@@ -182,12 +184,14 @@ class NewBlogTest(BlogTest):
 
         # Sam decides to write a new blog post
         self.browser = webdriver.Chrome()
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "My second blog post",
          "11101962",
          "My second blog post!",
          True
         )
+        self.sam_logs_out()
         self.browser.quit()
 
         # The fan comes back, and sees the new post on the home page
@@ -212,6 +216,7 @@ class NewBlogTest(BlogTest):
 
     def test_sam_can_post_hidden_blog_posts(self):
         # Sam makes three blog posts, one hidden
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "My first blog post",
          "10101962",
@@ -230,6 +235,7 @@ class NewBlogTest(BlogTest):
          "My third blog post!",
          False
         )
+        self.sam_logs_out()
         self.browser.quit()
 
         # The fan comes back, but only the second post is visible
@@ -254,9 +260,11 @@ class EditBlogTest(BlogTest):
 
     def test_sam_can_edit_blog_posts(self):
         # Sam writes three blog posts
+        self.sam_logs_in()
         self.sam_writes_blog_post("First post", "28071914", "Start", True)
         self.sam_writes_blog_post("Second post", "01071916", "Middle", True)
         self.sam_writes_blog_post("Third post", "11111918", "End", True)
+        self.sam_logs_out()
         self.browser.quit()
 
         # A wild fan appears, and peruses the blog page
@@ -273,6 +281,7 @@ class EditBlogTest(BlogTest):
 
         # Sam goes to the edit blog page
         self.browser = webdriver.Chrome()
+        self.sam_logs_in()
         self.browser.get(self.live_server_url + "/blog/edit/")
 
         # There is a table there, with all the blog posts
@@ -332,6 +341,7 @@ class EditBlogTest(BlogTest):
         live_box.click()
         submit_button.click()
         self.assertEqual(self.browser.current_url, self.live_server_url + "/blog/")
+        self.sam_logs_out()
         self.browser.quit()
 
         # The third post is now invisible
@@ -347,6 +357,7 @@ class EditBlogTest(BlogTest):
 
         # Sam edits the first post to have a different body
         self.browser = webdriver.Chrome()
+        self.sam_logs_in()
         self.browser.get(self.live_server_url + "/blog/edit/")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
@@ -357,6 +368,7 @@ class EditBlogTest(BlogTest):
         body_entry.clear()
         body_entry.send_keys("A modified body")
         submit_button.click()
+        self.sam_logs_out()
         self.browser.quit()
 
         # The user sees the modified body
@@ -372,6 +384,7 @@ class EditBlogTest(BlogTest):
 
     def test_sam_can_delete_blog_posts(self):
         # Sam writes three blog posts
+        self.sam_logs_in()
         self.sam_writes_blog_post("First post", "28071914", "Start", True)
         self.sam_writes_blog_post("Second post", "01071916", "Middle", True)
         self.sam_writes_blog_post("Third post", "11111918", "End", True)
@@ -379,6 +392,7 @@ class EditBlogTest(BlogTest):
 
         # Sam wants to delete the second post - he goes to the edit page for it
         self.browser = webdriver.Chrome()
+        self.sam_logs_in()
         self.browser.get(self.live_server_url + "/blog/edit/")
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
@@ -442,6 +456,7 @@ class BlogValidationTests(BlogTest):
 
     def test_sam_cannot_post_blank_blog_post(self):
         # Sam makes a post with no title
+        self.sam_logs_in()
         self.sam_writes_blog_post("", "10101962", "TEST", True,
          check_redirect=False)
 
@@ -494,6 +509,7 @@ class BlogValidationTests(BlogTest):
 
     def test_sam_cannot_edit_a_post_to_have_blank_fields(self):
         # Sam writes a blog post
+        self.sam_logs_in()
         self.sam_writes_blog_post("Title", "10101962", "TEST", True)
 
         # He decides to edit it
@@ -541,6 +557,7 @@ class BlogValidationTests(BlogTest):
 
     def test_sam_cannot_have_two_posts_with_same_date(self):
         # Sam makes two blog posts
+        self.sam_logs_in()
         self.sam_writes_blog_post("Post 1", "10102012", "TEST", True)
         self.sam_writes_blog_post("Post 2", "11102012", "TEST", True)
 
@@ -561,6 +578,7 @@ class BlogValidationTests(BlogTest):
 
     def test_sam_cannot_edit_a_post_to_have_existing_date(self):
         # Sam makes two blog posts
+        self.sam_logs_in()
         self.sam_writes_blog_post("Post 1", "10102012", "TEST", True)
         self.sam_writes_blog_post("Post 2", "11102012", "TEST", True)
 
@@ -593,6 +611,7 @@ class BlogValidationTests(BlogTest):
 
     def test_error_messages_disappear_after_typing(self):
         # Sam makes a post with no title
+        self.sam_logs_in()
         self.sam_writes_blog_post("", "10101962", "TEST", True,
          check_redirect=False)
 
@@ -638,6 +657,7 @@ class BlogFormattingTests(BlogTest):
 
     def test_blog_post_has_paragraphs(self):
         # Sam writes a post with three paragraphs
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "Three Paragraph Post",
          "01012016",
@@ -657,6 +677,7 @@ class BlogFormattingTests(BlogTest):
 
     def test_blog_post_italics_bold_underline(self):
         # Sam writes three blog posts with formatting
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "Three Paragraph Post",
          "01012016",
@@ -676,6 +697,7 @@ class BlogFormattingTests(BlogTest):
 
     def test_blog_post_hyperlinks(self):
         # Sam writes a blog post with two links, one to open in a new page
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "Three Paragraph Post",
          "01012016",
@@ -710,6 +732,7 @@ class BlogMediaTests(BlogTest):
 
     def test_sam_can_post_youtube_video(self):
         # Sam posts a youtube video
+        self.sam_logs_in()
         self.sam_writes_blog_post(
          "Video post",
          "01012016",
@@ -737,6 +760,7 @@ class BlogMediaTests(BlogTest):
     def test_sam_can_post_image(self):
         try:
             # Sam posts a youtube video
+            self.sam_logs_in()
             self.sam_writes_blog_post(
              "Image post",
              "01012016",
