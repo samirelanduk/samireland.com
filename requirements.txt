@@ -1,3 +1,4 @@
 django==1.8.11
 gunicorn==18.0
 django_cleanup==0.4.2
+psycopg2
