@@ -38,7 +38,7 @@ def _update_settings(source_folder, site_name):
     sed(
      settings_path,
      'ALLOWED_HOSTS =.+$',
-     'ALLOWED_HOSTS = ["%s"]' % site_name
+     'ALLOWED_HOSTS = ["%s", "%s"]' % (site_name, "www." + site_name)
     )
     sed(
      settings_path,
@@ -70,7 +70,7 @@ def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + "/../virtualenv"
     if not exists(virtualenv_folder + "/bin/pip"):
         run("virtualenv --python=python3 %s" % virtualenv_folder)
-    run("%s/bin/pip install -r %s/requirements.txt" % (
+    run("%s/bin/pip3 install -r %s/requirements.txt" % (
      virtualenv_folder, source_folder
     ))
 
