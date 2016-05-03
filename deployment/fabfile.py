@@ -63,7 +63,7 @@ def _add_google_analytics(host, base_path):
         sed(
          base_path,
          "<!--google-analytics-->",
-         "{% block analytics %}{% endblock %}"
+         '{% include "analytics.html" %}{% endblock %}'
         )
 
 def _update_virtualenv(source_folder):
