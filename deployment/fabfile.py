@@ -50,13 +50,13 @@ def _update_settings(source_folder, site_name):
      'STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))'
     )
     secret_settigs_file = source_folder + "/samireland/secret_settings.py"
-    if not exists(secret_settigs_file):
-        put("../samireland/secret_settings.py", source_folder + "/samireland/secret_settings.py")
-        sed(
-         source_folder + "/samireland/secret_settings.py",
-         ': local_db',
-         ': live_db'
-        )
+    put("../samireland/secret_settings.py", secret_settigs_file)
+    put("../samireland/config.py", source_folder + "/samireland/config.py")
+    sed(
+     secret_settigs_file,
+     ': local_db',
+     ': live_db'
+    )
 
 def _add_google_analytics(host, base_path):
     if host == "samireland.com":
