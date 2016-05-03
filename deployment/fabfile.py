@@ -1,6 +1,5 @@
 from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run
-from config import db, user, password, host
+from fabric.api import env, local, run, put
 import random
 
 REPO_URL = "https://github.com/samirelanduk/samireland.com.git"
@@ -43,14 +42,6 @@ def _update_settings(source_folder, site_name):
     )
     sed(
      settings_path,
-     '"default": \{"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")\}',
-     '"default": \{"ENGINE": "django.db.backends.postgresql_psycopg2", "NAME": \
-     "%s", "USER": "%s", "PASSWORD": "%s", "HOST": "%s"\}' % (
-      db, user, password, host
-     )
-    )
-    sed(
-     settings_path,
      '"media", "images"',
      '"../../samireland-media"'
     )
@@ -60,10 +51,12 @@ def _update_settings(source_folder, site_name):
     )
     secret_settigs_file = source_folder + "/samireland/secret_settings.py"
     if not exists(secret_settigs_file):
-        chars = "abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)"
-        key = "".join(random.SystemRandom().choice(chars) for _ in range(50))
-        append(secret_settigs_file, "SECRET_KEY = '%s'" % key)
-
+        put("../samireland/secret_settings.py", source_folder + "/samireland/secret_settings.py")
+        sed(
+         source_folder + "/samireland/secret_settings.py",
+         ': local_db',
+         ': live_db'
+        )
 
 def _add_google_analytics(host, base_path):
     if host == "samireland.com":
