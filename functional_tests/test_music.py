@@ -49,9 +49,9 @@ class MusicContentTest(FunctionalTest):
         past_thirty = progress.find_element_by_id("month")
         self.assertEqual(
          past_thirty.find_element_by_tag_name("h3").text,
-         "Past Thirty Days"
+         "Past Sixty Days"
         )
-        charts = past_thirty.find_elements_by_class_name("charts")
+        charts = past_thirty.find_elements_by_class_name("chart")
         self.assertEqual(len(charts), 2)
         for chart in charts:
             self.assertIsNot(chart.find_element_by_tag_name("svg"), None)
@@ -62,7 +62,7 @@ class MusicContentTest(FunctionalTest):
          past_year.find_element_by_tag_name("h3").text,
          "Past Twelve Months"
         )
-        charts = past_year.find_elements_by_class_name("charts")
+        charts = past_year.find_elements_by_class_name("chart")
         self.assertEqual(len(charts), 2)
         for chart in charts:
             self.assertIsNot(chart.find_element_by_tag_name("svg"), None)
