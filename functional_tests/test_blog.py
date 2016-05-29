@@ -69,10 +69,10 @@ class BlogContentTest(BlogTest):
         header = self.browser.find_element_by_tag_name("header")
         self.assertIn("Sam Ireland", header.text)
 
-        # The nav bar has links to this page, the blog, and the about page
+        # The nav bar has links to this page, the blog, piano, and the about page
         nav = self.browser.find_element_by_tag_name("nav")
         nav_links = nav.find_elements_by_tag_name("a")
-        self.assertEqual(len(nav_links), 3)
+        self.assertEqual(len(nav_links), 4)
         self.assertEqual(nav_links[0].text, "Home")
         self.assertEqual(
          nav_links[0].get_attribute("href"),
@@ -83,9 +83,14 @@ class BlogContentTest(BlogTest):
          nav_links[1].get_attribute("href"),
          self.live_server_url + "/blog/"
         )
-        self.assertEqual(nav_links[2].text, "About")
+        self.assertEqual(nav_links[2].text, "Piano")
         self.assertEqual(
          nav_links[2].get_attribute("href"),
+         self.live_server_url + "/piano/"
+        )
+        self.assertEqual(nav_links[3].text, "About")
+        self.assertEqual(
+         nav_links[3].get_attribute("href"),
          self.live_server_url + "/about/"
         )
 
