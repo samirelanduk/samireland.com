@@ -2,12 +2,12 @@ from django.shortcuts import render
 
 # Create your views here.
 def piano_page(request):
-    pass
+    return render(request, "piano.html")
 
 
 def practice_page(request):
-    pass
+    return render(request, "pianopractice.html")
 
 
 def update_page(request):
-    pass
+    return render(request, "pianoupdate.html")
