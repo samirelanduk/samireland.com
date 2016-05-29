@@ -223,3 +223,116 @@ class PracticeAppTest(FunctionalTest):
         stop = self.browser.find_elemenst_by_tag_name[1]("button")
         stop.click()
         self.assertEqual(display.text, "")
+
+
+
+class UpdateTest(FunctionalTest):
+
+    def add_practice(self, date, minutes):
+        # There is a form for adding a new session
+        form = self.browser.find_element_by_tag_name("form")
+        date = form.find_elements_by_tag_name("input")[0]
+        self.assertEqual(minutes.get_attribute("type"), "date")
+        self.assertEqual(
+         date.get_attribute("value"),
+         datetime.datetime.now().strftime("%Y-%m-%d")
+        )
+        minutes = form.find_elements_by_tag_name("input")[1]
+        self.assertEqual(minutes.get_attribute("type"), "text")
+        submit = form.find_elements_by_tag_name("input")[-1]
+
+        # Sam adds x minutes for the date
+        date.send_keys(date.strftime("%d%m%Y"))
+        minutes.send_keys(str(minutes))
+        submit.click()
+
+        # He is still on the same page
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/music/update/"
+        )
+
+
+    def test_can_add_practice_data(self):
+        # Sam goes to the practice page
+        self.sam_logs_in()
+        self.browser.get(self.live_server_url + "/music/update/")
+
+        # There is a table for practice data, currently empty
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        self.add_practice(datetime.datetime.now(), 10)
+
+        # There is one row now
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 1)
+
+        # The row contains the correct information
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[0].text,
+         datetime.datetime.now().strftime("%d %m, %Y")
+        )
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "10"
+        )
+
+        # He adds three more times
+        self.add_practice(
+         datetime.datetime.now() - datetime.timedelta(days=2),
+         40
+        )
+        self.add_practice(
+         datetime.datetime.now() - datetime.timedelta(days=90),
+         5
+        )
+        self.add_practice(
+         datetime.datetime.now() - datetime.timedelta(days=1),
+         30
+        )
+
+        # The data is in the table
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "10"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[1].text,
+         "30"
+        )
+        self.assertEqual(
+         rows[2].find_elements_by_tag_name("td")[1].text,
+         "40"
+        )
+        self.assertEqual(
+         rows[3].find_elements_by_tag_name("td")[1].text,
+         "5"
+        )
+
+        # Each of the rows has a delete button
+        for row in rows[::-1]:
+            last_cell = self.browser.find_elements_by_tag_name("td")[-1]
+            form = last_cell.find_element_by_tag_name("form")
+            delete_button = form.find_element_by_tag_name("input")
+            self.assertEqual(
+             delete_button.get_attribute("value"),
+             "Delete"
+            )
+
+        # Sam deletes one of the sessions
+        delete_button.click()
+
+        # There are now three rows
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "30"
+        )
