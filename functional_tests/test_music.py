@@ -11,8 +11,8 @@ class MusicContentTest(FunctionalTest):
 
         # 'Learning Piano' is in the header, and the title
         self.assertIn("Learning Piano", self.browser.title)
-        header = self.browser.find_element_by_tag_name("header")
-        self.assertIn("Learning Piano", header.text)
+        h1 = self.browser.find_element_by_tag_name("h1")
+        self.assertIn("Learning Piano", h1.text)
 
         # There is some explanatory text
         explanation = self.browser.find_element_by_id("explanation")
