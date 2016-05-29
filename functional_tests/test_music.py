@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
@@ -65,3 +66,60 @@ class MusicContentTest(FunctionalTest):
         self.assertEqual(len(charts), 2)
         for chart in charts:
             self.assertIsNot(chart.find_element_by_tag_name("svg"), None)
+
+
+
+class PracticeAppTest(FunctionalTest):
+
+    def test_can_practice_notes(self):
+        # The user goes to the practice page
+        self.browser.get(self.live_server_url + "/music/practice/")
+
+        # There is a an option to specify the kind of practice to do
+        options = self.browser.find_element_by_id(
+         "options").find_elements_by_class_name("option")
+
+        # The first option is notes - they click it
+        self.assertEqual(
+         options[0].find_elements_by_tag_name("label").text,
+         "Notes"
+        )
+        options[0].find_elements_by_tag_name("input").click()
+
+        # There is also an option to specify the number of seconds
+        seconds = self.browser.find_element_by_id(
+         "seconds").find_elements_by_tag_name("input")
+        seconds.send_keys("1")
+
+        # They start the practice
+        start = self.browser.find_element_by_tag_name("button")
+        display = self.browser.find_element_by_id("display")
+        self.assertEqual(display.text, "")
+        start.click()
+
+        # They go for ten seconds
+        note = display.text
+        allowed_values = [
+         "A", "B", "C", "D", "E", "F", "G",
+         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+        ]
+        for i in range(10):
+            self.assertIn(note, allowed_values)
+            time.sleep(1)
+            next_note = display.text
+            self.assertNotEqual(note, next_note)
+            note = next_note
+
+        # It's too much - they try again at two seconds
+        stop = self.browser.find_elemenst_by_tag_name[1]("button")
+        stop.click()
+        self.assertEqual(display.text, "")
+        seconds.send_keys("2")
+        start.click()
+        note = display.text
+        for i in range(10):
+            self.assertIn(note, allowed_values)
+            time.sleep(1)
+            next_note = display.text
+            self.assertNotEqual(note, next_note)
+            note = next_note
