@@ -7,7 +7,7 @@ class MusicContentTest(FunctionalTest):
 
     def test_main_music_page_looks_right(self):
         # The user goes to the music page
-        self.browser.get(self.live_server_url + "/music/")
+        self.browser.get(self.live_server_url + "/piano/")
 
         # 'Learning Piano' is in the header, and the title
         self.assertIn("Learning Piano", self.browser.title)
@@ -36,7 +36,7 @@ class MusicContentTest(FunctionalTest):
 
     def test_main_music_page_graphs(self):
         # The user goes to the music page
-        self.browser.get(self.live_server_url + "/music/")
+        self.browser.get(self.live_server_url + "/piano/")
 
         # There is a section on practice progress
         progress = self.browser.find_element_by_id("progress")
@@ -73,7 +73,7 @@ class PracticeAppTest(FunctionalTest):
 
     def test_can_practice_notes(self):
         # The user goes to the practice page
-        self.browser.get(self.live_server_url + "/music/practice/")
+        self.browser.get(self.live_server_url + "/piano/practice/")
 
         # There is a an option to specify the kind of practice to do
         options = self.browser.find_element_by_id(
@@ -249,14 +249,14 @@ class UpdateTest(FunctionalTest):
         # He is still on the same page
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/music/update/"
+         self.live_server_url + "/piano/update/"
         )
 
 
     def test_can_add_practice_data(self):
         # Sam goes to the practice page
         self.sam_logs_in()
-        self.browser.get(self.live_server_url + "/music/update/")
+        self.browser.get(self.live_server_url + "/piano/update/")
 
         # There is a table for practice data, currently empty
         table = self.browser.find_element_by_tag_name("table")
