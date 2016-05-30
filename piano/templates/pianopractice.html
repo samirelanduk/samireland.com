@@ -1,1 +1,18 @@
 {% extends "base.html" %}
+
+{% block main %}
+<h1>Notes Practice</h1>
+
+<div id="options">
+  <div class="option">
+    <label for="id_notes">Notes</label>
+    <input type="radio" id="id_notes" checked>
+  </div>
+  <div id="seconds">
+    <input type="text">
+  </div>
+  <button>Start</button>
+
+  <div id="display"></div>
+</div>
+{% endblock %}

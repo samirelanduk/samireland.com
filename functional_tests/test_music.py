@@ -81,14 +81,14 @@ class PracticeAppTest(FunctionalTest):
 
         # The first option is notes - they click it
         self.assertEqual(
-         options[0].find_elements_by_tag_name("label").text,
+         options[0].find_element_by_tag_name("label").text,
          "Notes"
         )
-        options[0].find_elements_by_tag_name("input").click()
+        options[0].find_element_by_tag_name("input").click()
 
         # There is also an option to specify the number of seconds
         seconds = self.browser.find_element_by_id(
-         "seconds").find_elements_by_tag_name("input")
+         "seconds").find_element_by_tag_name("input")
         seconds.send_keys("1")
 
         # They start the practice
