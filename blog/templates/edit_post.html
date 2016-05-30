@@ -17,3 +17,7 @@
 {% include "blogform.html" %}
 <a id="delete" href="{% url 'delete_post_page' id %}" class="pure-button button-error">Delete</a>
 {% endblock %}
+
+{% block js %}
+<script src="/static/js/blog.js"></script>
+{% endblock %}
