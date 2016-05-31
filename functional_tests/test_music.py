@@ -174,7 +174,7 @@ class PracticeAppTest(FunctionalTest):
 
     def test_can_practice_reading_notes(self):
         # The user goes to the practice page
-        self.browser.get(self.live_server_url + "/music/practice/")
+        self.browser.get(self.live_server_url + "/piano/practice/")
 
         # There is a an option to specify the kind of practice to do
         options = self.browser.find_element_by_id(
@@ -182,14 +182,14 @@ class PracticeAppTest(FunctionalTest):
 
         # The third option is reading - they click it
         self.assertEqual(
-         options[2].find_elements_by_tag_name("label").text,
-         "Reading Music"
+         options[2].find_element_by_tag_name("label").text,
+         "Sheet Notes"
         )
-        options[2].find_elements_by_tag_name("input").click()
+        options[2].find_element_by_tag_name("input").click()
 
         # There is also an option to specify the number of seconds
         seconds = self.browser.find_element_by_id(
-         "seconds").find_elements_by_tag_name("input")
+         "seconds").find_element_by_tag_name("input")
         seconds.send_keys("1")
 
         # They start the practice
@@ -199,6 +199,7 @@ class PracticeAppTest(FunctionalTest):
         start.click()
 
         # There is svg in the display
+        time.sleep(5)
         svg = display.find_element_by_tag_name("svg")
 
         # The SVG has five evenly spaced lines

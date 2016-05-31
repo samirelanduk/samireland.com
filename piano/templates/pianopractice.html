@@ -2,6 +2,10 @@
 
 {% block title %}Practice{% endblock %}
 
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="/static/css/piano.css">
+{% endblock %}
+
 {% block main %}
 <h1>Notes Practice</h1>
 
@@ -14,6 +18,10 @@
     <label for="id_chords">Chords</label>
     <input type="radio" id="id_chords" name="options">
   </div>
+  <div class="option">
+    <label for="id_sheets">Sheet Notes</label>
+    <input type="radio" id="id_sheets" name="options">
+  </div>
   <div id="seconds">
     <input type="text" id="id_seconds">
   </div>
@@ -21,6 +29,12 @@
   <button id="stop" disabled="disabled">Stop</button>
 </div>
 <div id="display"></div>
+
+<div id="svgcontainer">
+  <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+    <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+  </svg>
+</div>
 {% endblock %}
 
 {% block js %}

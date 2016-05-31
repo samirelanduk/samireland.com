@@ -16,8 +16,8 @@ $("#start").on("click", function() {
     ]
   } else {
     notes = [
-         "A", "B", "C", "D", "E", "F", "G",
-         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+     "A", "B", "C", "D", "E", "F", "G",
+     "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
     ]
   }
   $("#display").html(notes[Math.floor(Math.random() * notes.length)]);
@@ -34,4 +34,15 @@ $("#stop").on("click", function() {
   $('#stop').attr("disabled", true);
   clearInterval(runner);
   $("#display").html("");
+})
+
+
+$("input[name=options]").on("click", function() {
+  if ($("#stop").is(":disabled")) {
+    if ($("#id_sheets").is(':checked')) {
+      $("#display").html($("#svgcontainer").html());
+    } else {
+      $("#display").html("");
+    }
+  }
 })
