@@ -89,7 +89,7 @@ class PracticeAppTest(FunctionalTest):
         # There is also an option to specify the number of seconds
         seconds = self.browser.find_element_by_id(
          "seconds").find_element_by_tag_name("input")
-        seconds.send_keys("1")
+        seconds.send_keys("0.1")
 
         # They start the practice
         start = self.browser.find_element_by_tag_name("button")
@@ -105,13 +105,13 @@ class PracticeAppTest(FunctionalTest):
         ]
         for i in range(10):
             self.assertIn(note, allowed_values)
-            time.sleep(1)
+            time.sleep(0.1)
             next_note = display.text
             self.assertNotEqual(note, next_note)
             note = next_note
 
         # It's too much - they try again at two seconds
-        stop = self.browser.find_elemenst_by_tag_name[1]("button")
+        stop = self.browser.find_elements_by_tag_name("button")[1]
         stop.click()
         self.assertEqual(display.text, "")
         seconds.send_keys("2")
