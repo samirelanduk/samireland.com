@@ -1,6 +1,8 @@
 var runner;
 
 $("#start").on("click", function() {
+  $('#start').attr("disabled", true);
+  $('#stop').attr("disabled", false);
   var seconds = $("#id_seconds").val();
   if ($.isNumeric(seconds)) {
     seconds = parseFloat(seconds);
@@ -21,6 +23,8 @@ $("#start").on("click", function() {
 
 
 $("#stop").on("click", function() {
+  $('#start').attr("disabled", false);
+  $('#stop').attr("disabled", true);
   clearInterval(runner);
   $("#display").html("");
 })
