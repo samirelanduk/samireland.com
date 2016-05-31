@@ -1,3 +1,5 @@
+var runner;
+
 $("#start").on("click", function() {
   var seconds = $("#id_seconds").val();
   if ($.isNumeric(seconds)) {
@@ -10,9 +12,15 @@ $("#start").on("click", function() {
        "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
       ]
   $("#display").html(notes[Math.floor(Math.random() * notes.length)]);
-  window.setInterval(function(){
+  runner = window.setInterval(function(){
     next_notes = notes.slice(0);
     next_notes.splice(next_notes.indexOf($("#display").html()), 1);
     $("#display").html(next_notes[Math.floor(Math.random() * next_notes.length)]);
   }, seconds * 1000);
+})
+
+
+$("#stop").on("click", function() {
+  clearInterval(runner);
+  $("#display").html("");
 })

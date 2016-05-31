@@ -113,13 +113,15 @@ class PracticeAppTest(FunctionalTest):
         # It's too much - they try again at two seconds
         stop = self.browser.find_elements_by_tag_name("button")[1]
         stop.click()
+        time.sleep(0.2)
         self.assertEqual(display.text, "")
-        seconds.send_keys("2")
+        seconds.clear()
+        seconds.send_keys("0.2")
         start.click()
         note = display.text
         for i in range(10):
             self.assertIn(note, allowed_values)
-            time.sleep(1)
+            time.sleep(0.2)
             next_note = display.text
             self.assertNotEqual(note, next_note)
             note = next_note
