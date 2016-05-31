@@ -129,7 +129,7 @@ class PracticeAppTest(FunctionalTest):
 
     def test_can_practice_chords(self):
         # The user goes to the practice page
-        self.browser.get(self.live_server_url + "/music/practice/")
+        self.browser.get(self.live_server_url + "/piano/practice/")
 
         # There is a an option to specify the kind of practice to do
         options = self.browser.find_element_by_id(
@@ -137,15 +137,15 @@ class PracticeAppTest(FunctionalTest):
 
         # The second option is chords - they click it
         self.assertEqual(
-         options[1].find_elements_by_tag_name("label").text,
+         options[1].find_element_by_tag_name("label").text,
          "Chords"
         )
-        options[1].find_elements_by_tag_name("input").click()
+        options[1].find_element_by_tag_name("input").click()
 
         # There is also an option to specify the number of seconds
         seconds = self.browser.find_element_by_id(
-         "seconds").find_elements_by_tag_name("input")
-        seconds.send_keys("1")
+         "seconds").find_element_by_tag_name("input")
+        seconds.send_keys("0.1")
 
         # They start the practice
         start = self.browser.find_element_by_tag_name("button")
@@ -160,14 +160,15 @@ class PracticeAppTest(FunctionalTest):
         ]
         for i in range(10):
             self.assertIn(chord, allowed_values)
-            time.sleep(1)
+            time.sleep(0.1)
             next_chord = display.text
             self.assertNotEqual(chord, next_chord)
             chord = next_chord
 
         # They stop
-        stop = self.browser.find_elemenst_by_tag_name[1]("button")
+        stop = self.browser.find_elements_by_tag_name("button")[1]
         stop.click()
+        time.sleep(0.3)
         self.assertEqual(display.text, "")
 
 

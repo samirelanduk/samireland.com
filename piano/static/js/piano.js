@@ -9,10 +9,17 @@ $("#start").on("click", function() {
   } else {
     seconds = 5.0;
   }
-  var notes = [
-       "A", "B", "C", "D", "E", "F", "G",
-       "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
-      ]
+  var notes;
+  if ($("#id_chords").is(':checked')) {
+    notes = [
+     "A Major", "B Major", "C Major", "D Major", "E Major", "F Major", "G Major"
+    ]
+  } else {
+    notes = [
+         "A", "B", "C", "D", "E", "F", "G",
+         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+    ]
+  }
   $("#display").html(notes[Math.floor(Math.random() * notes.length)]);
   runner = window.setInterval(function(){
     next_notes = notes.slice(0);
