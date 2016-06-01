@@ -116,11 +116,23 @@ $("#start").on("click", function() {
   if ($("#id_sheets").is(':checked')) {
     var note = notes[Math.floor(Math.random() * notes.length)];
     paintGrandStaff(note);
+    window.setTimeout(function() {
+     context.font = "40px Arial";
+     context.textAlign = "center";
+     context.textBaseline = "middle";
+     context.fillText(note[0], canvas.width / 2, canvas.height / 2);
+    }, seconds * 800);
     runner = window.setInterval(function(){
       next_notes = notes.slice(0);
       next_notes.splice(next_notes.indexOf(note), 1);
       note = next_notes[Math.floor(Math.random() * next_notes.length)]
       paintGrandStaff(note);
+      window.setTimeout(function() {
+       context.font = "40px Arial";
+       context.textAlign = "center";
+       context.textBaseline = "middle";
+       context.fillText(note[0], canvas.width / 2, canvas.height / 2);
+      }, seconds * 800);
     }, seconds * 1000);
   } else {
     context = canvas.getContext("2d");
