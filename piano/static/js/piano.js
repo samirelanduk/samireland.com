@@ -11,7 +11,7 @@ $(window).load(function() {
 
 
 // For a given tone, decide which staff to use
-function pickStaff(note) {
+function pickCleff(note) {
   var cleff;
   if ((note[1] > 4) || ((note[1] === 4) && (["G", "A", "B"].indexOf(note[0].slice(0, 1)) != -1))) {
     cleff = "treble";
@@ -43,8 +43,9 @@ function paintGrandStaff(note) {
   var bottomStaff = new Vex.Flow.Stave(10, 100, canvas.width - 20, {spacing_between_lines_px: 10});
   topStaff.addClef('treble').setContext(context).draw();
   bottomStaff.addClef('bass').setContext(context).draw();
+  $("canvas").attr("staff", "yes");
   if (note != null) {
-    var allocatedCleff = pickStaff(note);
+    var allocatedCleff = pickCleff(note);
     var voice = new Vex.Flow.Voice({
       num_beats: 1,
       beat_value: 4,
@@ -78,6 +79,7 @@ $("input[type=button]").on("click", function() {
     } else {
       context = canvas.getContext("2d");
       context.clearRect(0, 0, canvas.width, canvas.height);
+      $("canvas").attr("staff", "no");
     }
   }
 })
@@ -120,6 +122,7 @@ $("#start").on("click", function() {
     if ($("#id_sheets").hasClass("pure-button-active")) {
       var note = notes[Math.floor(Math.random() * notes.length)];
       paintGrandStaff(note);
+      $("canvas").attr("display", note);
       window.setTimeout(function() {
        context.font = "40px Arial";
        context.textAlign = "center";
@@ -131,6 +134,7 @@ $("#start").on("click", function() {
         next_notes.splice(next_notes.indexOf(note), 1);
         note = next_notes[Math.floor(Math.random() * next_notes.length)]
         paintGrandStaff(note);
+        $("canvas").attr("display", note);
         answer = window.setTimeout(function() {
          context.font = "40px Arial";
          context.textAlign = "center";
@@ -145,12 +149,14 @@ $("#start").on("click", function() {
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(note, canvas.width / 2, canvas.height / 2);
+      $("canvas").attr("display", note);
       runner = window.setInterval(function(){
         next_notes = notes.slice(0);
         next_notes.splice(next_notes.indexOf(note), 1);
         context.clearRect(0, 0, canvas.width, canvas.height);
         note = next_notes[Math.floor(Math.random() * next_notes.length)]
         context.fillText(note, canvas.width / 2, canvas.height / 2);
+        $("canvas").attr("display", note);
       }, seconds * 1000);
     }
   }
@@ -166,6 +172,8 @@ $("#stop").on("click", function() {
   clearInterval(answer);
   context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
+  $("canvas").attr("staff", "no");
+  $("canvas").attr("display", "");
   if ($("#id_sheets").hasClass("pure-button-active")) {
     paintGrandStaff(null);
   }

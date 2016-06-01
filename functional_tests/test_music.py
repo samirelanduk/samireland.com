@@ -81,48 +81,63 @@ class PracticeAppTest(FunctionalTest):
 
         # The first option is notes - they click it
         self.assertEqual(
-         options[0].find_element_by_tag_name("label").text,
+         options[0].get_attribute("value"),
          "Notes"
         )
-        options[0].find_element_by_tag_name("input").click()
+        options[0].click()
 
         # There is also an option to specify the number of seconds
-        seconds = self.browser.find_element_by_id(
-         "seconds").find_element_by_tag_name("input")
+        seconds = self.browser.find_element_by_id("id_seconds")
         seconds.send_keys("0.1")
 
         # They start the practice
-        start = self.browser.find_element_by_tag_name("button")
-        display = self.browser.find_element_by_id("display")
-        self.assertEqual(display.text, "")
+        start = self.browser.find_element_by_id("start")
+        canvas = self.browser.find_element_by_tag_name("canvas")
+        self.assertEqual(canvas.get_attribute("display"), "")
         start.click()
 
         # They go for ten seconds
-        note = display.text
+        note = canvas.get_attribute("display")
         allowed_values = [
-         "A", "B", "C", "D", "E", "F", "G",
-         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+         "A", "B", "C", "D", "E", "F", "G"
         ]
         for i in range(10):
             self.assertIn(note, allowed_values)
             time.sleep(0.1)
-            next_note = display.text
+            next_note = canvas.get_attribute("display")
             self.assertNotEqual(note, next_note)
             note = next_note
 
         # It's too much - they try again at two seconds
-        stop = self.browser.find_elements_by_tag_name("button")[1]
+        stop = self.browser.find_element_by_id("stop")
         stop.click()
         time.sleep(0.2)
-        self.assertEqual(display.text, "")
+        self.assertEqual(canvas.get_attribute("display"), "")
         seconds.clear()
         seconds.send_keys("0.2")
         start.click()
-        note = display.text
+        note = canvas.get_attribute("display")
         for i in range(10):
             self.assertIn(note, allowed_values)
             time.sleep(0.2)
-            next_note = display.text
+            next_note = canvas.get_attribute("display")
+            self.assertNotEqual(note, next_note)
+            note = next_note
+        stop.click()
+
+
+        # Feeling more confident, they decide to include black keys
+        self.browser.find_element_by_id("id_black").click()
+        allowed_values = [
+         "A", "B", "C", "D", "E", "F", "G",
+         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+        ]
+        start.click()
+        note = canvas.get_attribute("display")
+        for i in range(10):
+            self.assertIn(note, allowed_values)
+            time.sleep(0.2)
+            next_note = canvas.get_attribute("display")
             self.assertNotEqual(note, next_note)
             note = next_note
 
@@ -135,41 +150,56 @@ class PracticeAppTest(FunctionalTest):
         options = self.browser.find_element_by_id(
          "options").find_elements_by_class_name("option")
 
-        # The second option is chords - they click it
+        # The first option is notes - they click it
         self.assertEqual(
-         options[1].find_element_by_tag_name("label").text,
+         options[1].get_attribute("value"),
          "Chords"
         )
-        options[1].find_element_by_tag_name("input").click()
+        options[1].click()
 
         # There is also an option to specify the number of seconds
-        seconds = self.browser.find_element_by_id(
-         "seconds").find_element_by_tag_name("input")
+        seconds = self.browser.find_element_by_id("id_seconds")
         seconds.send_keys("0.1")
 
         # They start the practice
-        start = self.browser.find_element_by_tag_name("button")
-        display = self.browser.find_element_by_id("display")
-        self.assertEqual(display.text, "")
+        start = self.browser.find_element_by_id("start")
+        canvas = self.browser.find_element_by_tag_name("canvas")
+        self.assertEqual(canvas.get_attribute("display"), "")
         start.click()
 
         # They go for ten seconds
-        chord = display.text
+        chord = canvas.get_attribute("display")
         allowed_values = [
          "A Major", "B Major", "C Major", "D Major", "E Major", "F Major", "G Major",
         ]
         for i in range(10):
             self.assertIn(chord, allowed_values)
             time.sleep(0.1)
-            next_chord = display.text
+            next_chord = canvas.get_attribute("display")
             self.assertNotEqual(chord, next_chord)
             chord = next_chord
 
         # They stop
-        stop = self.browser.find_elements_by_tag_name("button")[1]
+        stop = self.browser.find_element_by_id("stop")
         stop.click()
-        time.sleep(0.3)
-        self.assertEqual(display.text, "")
+        time.sleep(0.2)
+        self.assertEqual(canvas.get_attribute("display"), "")
+
+        # Feeling more confident, they decide to include black keys
+        self.browser.find_element_by_id("id_black").click()
+        allowed_values = [
+         "A Major", "B Major", "C Major", "D Major", "E Major", "F Major", "G Major",
+         "A♭ Major", "A♯ Major", "B♭ Major", "C♯ Major", "D♭ Major", "D♯ Major",
+         "E♭ Major", "F♯ Major", "G♭ Major", "G♯ Major"
+        ]
+        start.click()
+        chord = canvas.get_attribute("display")
+        for i in range(10):
+            self.assertIn(chord, allowed_values)
+            time.sleep(0.1)
+            next_chord = canvas.get_attribute("display")
+            self.assertNotEqual(chord, next_chord)
+            chord = next_chord
 
 
     def test_can_practice_reading_notes(self):
@@ -180,53 +210,63 @@ class PracticeAppTest(FunctionalTest):
         options = self.browser.find_element_by_id(
          "options").find_elements_by_class_name("option")
 
-        # The third option is reading - they click it
+        # The first option is notes - they click it and get a grand staff
         self.assertEqual(
-         options[2].find_element_by_tag_name("label").text,
+         options[2].get_attribute("value"),
          "Sheet Notes"
         )
-        options[2].find_element_by_tag_name("input").click()
+        canvas = self.browser.find_element_by_tag_name("canvas")
+        self.assertEqual(canvas.get_attribute("staff"), "no")
+        options[2].click()
+        self.assertEqual(canvas.get_attribute("staff"), "yes")
 
         # There is also an option to specify the number of seconds
-        seconds = self.browser.find_element_by_id(
-         "seconds").find_element_by_tag_name("input")
-        seconds.send_keys("1")
+        seconds = self.browser.find_element_by_id("id_seconds")
+        seconds.send_keys("0.1")
 
         # They start the practice
-        start = self.browser.find_element_by_tag_name("button")
-        display = self.browser.find_element_by_id("display")
-        self.assertEqual(display.text, "")
+        start = self.browser.find_element_by_id("start")
+        self.assertEqual(canvas.get_attribute("display"), "")
         start.click()
 
-        # There is svg in the display
-        time.sleep(5)
-        svg = display.find_element_by_tag_name("svg")
-
-        # The SVG has five evenly spaced lines
-        lines = svg.find_elements_by_tag_name("line")
-        self.assertEqual(len(lines), 5)
-        line_positions = [line.get_attribute("y1") for line in lines]
-        gap = line_positions[1] - line_positions[0]
-        self.assertEqual(line_positions[2] - line_positions[1], gap)
-        self.assertEqual(line_positions[3] - line_positions[2], gap)
-        self.assertEqual(line_positions[4] - line_positions[3], gap)
-
         # They go for ten seconds
-        position = svg.find_element_by_tag_name("ellipse").get_attribute("cy")
-        allowed_values = line_positions + [pos + (gap/2) for pos in line_positions]
-        allowed_values += [line_positions[-1] + ((gap/2) * x) for x in range(6)]
-        allowed_values += [line_positions[0] - ((gap/2) * x) for x in range(6)]
+        note = canvas.get_attribute("display")
+        notes = ["A", "B", "C", "D", "E", "F", "G"]
+        keys = [2, 3, 4, 5]
+        allowed_values = ["%s,%i"% (note, key) for note in notes for key in keys]
         for i in range(10):
-            self.assertIn(position, allowed_values)
-            time.sleep(1)
-            next_position = svg.find_element_by_tag_name("ellipse").get_attribute("cy")
-            self.assertNotEqual(position, next_position)
-            position = next_position
+            self.assertIn(note, allowed_values)
+            time.sleep(0.1)
+            next_note = canvas.get_attribute("display")
+            self.assertNotEqual(note, next_note)
+            note = next_note
 
         # They stop
-        stop = self.browser.find_elemenst_by_tag_name[1]("button")
+        stop = self.browser.find_element_by_id("stop")
         stop.click()
-        self.assertEqual(display.text, "")
+        time.sleep(0.2)
+        self.assertEqual(canvas.get_attribute("display"), "")
+
+        # Feeling more confident, they decide to include black keys
+        self.browser.find_element_by_id("id_black").click()
+        notes = [
+         "A", "B", "C", "D", "E", "F", "G",
+         "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
+        ]
+        allowed_values = ["%s,%i"% (note, key) for note in notes for key in keys]
+        start.click()
+        note = canvas.get_attribute("display")
+        for i in range(10):
+            self.assertIn(note, allowed_values)
+            time.sleep(0.1)
+            next_note = canvas.get_attribute("display")
+            self.assertNotEqual(note, next_note)
+            note = next_note
+
+        # They stop and get rid of the staff
+        stop.click()
+        options[0].click()
+        self.assertEqual(canvas.get_attribute("staff"), "no")
 
 
 
