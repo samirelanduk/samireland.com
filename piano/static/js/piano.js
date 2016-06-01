@@ -12,14 +12,24 @@ $(window).load(function() {
 // For a given tone, decide which staff to use
 function pickStaff(note) {
   var cleff;
-  if ((note[1] > 4) || ((note[1] === 4) && (["G", "A", "B"].indexOf(note[0]) != -1))) {
+  if ((note[1] > 4) || ((note[1] === 4) && (["G", "A", "B"].indexOf(note[0].slice(0, 1)) != -1))) {
     cleff = "treble";
-  } else if ((note[1] < 3) || ((note[1] === 3) && (["C", "D", "E", "F"].indexOf(note[0]) != -1))) {
+  } else if ((note[1] < 3) || ((note[1] === 3) && (["C", "D", "E", "F"].indexOf(note[0].slice(0, 1)) != -1))) {
     cleff = "bass";
   } else {
     cleff = ["treble", "bass"][Math.floor(Math.random() * 2)];
   }
   return cleff;
+}
+
+
+// Converts a note to its vexflow equivalent
+function processNote(note) {
+  if (note.length == 1) {
+    return note;
+  } else {
+    return note.slice(0, 1) + {"♯": "#", "♭": "b"}[note.slice(1)];
+  }
 }
 
 
@@ -40,11 +50,16 @@ function paintGrandStaff(note) {
       resolution: Vex.Flow.RESOLUTION
     });
     var staveNotes;
-    var notes = [
-      new Vex.Flow.StaveNote({ clef: allocatedCleff, keys: [note[0] + "/" + note[1]], duration: "q" })
-      //new Vex.Flow.StaveNote({ clef: "bass", keys: ["D/3"], duration: "q" })
-    ];
-    voice.addTickables(notes);
+    if (note[0].length == 1) {
+      staveNotes = [new Vex.Flow.StaveNote(
+       { clef: allocatedCleff, keys: [processNote(note[0]) + "/" + note[1]], duration: "q" }
+      )];
+    } else {
+      staveNotes = [new Vex.Flow.StaveNote(
+       { clef: allocatedCleff, keys: [processNote(note[0]) + "/" + note[1]], duration: "q" }
+      ).addAccidental(0, new Vex.Flow.Accidental(processNote(note[0]).slice(1)))];
+    }
+    voice.addTickables(staveNotes);
     var formatter = new Vex.Flow.Formatter().joinVoices([voice]).format([voice], 500);
     voice.draw(context,allocatedCleff === "treble" ? topStaff : bottomStaff);
     //voice.draw(context, bottomStaff);
@@ -77,25 +92,25 @@ $("#start").on("click", function() {
     seconds = 2.0;
   }
 
-  var notes;
+  var notes = ["A", "B", "C", "D", "E", "F", "G"];
+  if ($("#id_black").is(":checked")) {
+    notes = notes.concat(["A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"])
+  }
   if ($("#id_chords").is(':checked')) {
-    notes = [
-     "A Major", "B Major", "C Major", "D Major", "E Major", "F Major", "G Major"
-    ]
+    chords = [];
+    for (var i = 0; i < notes.length; i++) {
+      chords.push(notes[i] + " Major")
+    }
+    notes = chords;
   } else if ($("#id_sheets").is(':checked')) {
-    var tones = ["C", "D", "E", "F", "G", "A", "B"];
     var keys = [2, 3, 4, 5];
-    notes = [];
-    for (var t = 0; t < tones.length; t++) {
+    tones = [];
+    for (var n = 0; n < notes.length; n++) {
       for (var k = 0; k < keys.length; k++) {
-        notes.push([tones[t], keys[k]])
+        tones.push([notes[n], keys[k]])
       }
     }
-  } else {
-    notes = [
-     "A", "B", "C", "D", "E", "F", "G",
-     "A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"
-    ]
+    notes = tones;
   }
 
   if ($("#id_sheets").is(':checked')) {
