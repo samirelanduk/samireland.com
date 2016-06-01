@@ -1,4 +1,5 @@
 var runner;
+var answer;
 var canvas;
 var context;
 
@@ -68,9 +69,11 @@ function paintGrandStaff(note) {
 
 
 // Prep the canvas when option changed
-$("input[name=options]").on("click", function() {
-  if ($("#stop").is(":disabled")) {
-    if ($("#id_sheets").is(':checked')) {
+$("input[type=button]").on("click", function() {
+  $(this).addClass("pure-button-active");
+  $("input[type=button]").not(this).removeClass("pure-button-active");
+  if ($("#stop").hasClass("pure-button-disabled")) {
+    if ($("#id_sheets").hasClass("pure-button-active")) {
       paintGrandStaff(null);
     } else {
       context = canvas.getContext("2d");
@@ -82,50 +85,40 @@ $("input[name=options]").on("click", function() {
 
 // Start the practice
 $("#start").on("click", function() {
-  $('#start').attr("disabled", true);
-  $('#stop').attr("disabled", false);
+  if ($("#stop").hasClass("pure-button-disabled")) {
+    $('#start').addClass("pure-button-disabled");
+    $('#stop').removeClass("pure-button-disabled");
 
-  var seconds = $("#id_seconds").val();
-  if ($.isNumeric(seconds)) {
-    seconds = parseFloat(seconds);
-  } else {
-    seconds = 2.0;
-  }
-
-  var notes = ["A", "B", "C", "D", "E", "F", "G"];
-  if ($("#id_black").is(":checked")) {
-    notes = notes.concat(["A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"])
-  }
-  if ($("#id_chords").is(':checked')) {
-    chords = [];
-    for (var i = 0; i < notes.length; i++) {
-      chords.push(notes[i] + " Major")
+    var seconds = $("#id_seconds").val();
+    if ($.isNumeric(seconds)) {
+      seconds = parseFloat(seconds);
+    } else {
+      seconds = 2.0;
     }
-    notes = chords;
-  } else if ($("#id_sheets").is(':checked')) {
-    var keys = [2, 3, 4, 5];
-    tones = [];
-    for (var n = 0; n < notes.length; n++) {
-      for (var k = 0; k < keys.length; k++) {
-        tones.push([notes[n], keys[k]])
+
+    var notes = ["A", "B", "C", "D", "E", "F", "G"];
+    if ($("#id_black").is(":checked")) {
+      notes = notes.concat(["A♭", "A♯", "B♭", "C♯", "D♭", "D♯", "E♭", "F♯", "G♭", "G♯"])
+    }
+    if ($("#id_chords").hasClass("pure-button-active")) {
+      chords = [];
+      for (var i = 0; i < notes.length; i++) {
+        chords.push(notes[i] + " Major")
       }
+      notes = chords;
+    } else if ($("#id_sheets").hasClass("pure-button-active")) {
+      var keys = [2, 3, 4, 5];
+      tones = [];
+      for (var n = 0; n < notes.length; n++) {
+        for (var k = 0; k < keys.length; k++) {
+          tones.push([notes[n], keys[k]])
+        }
+      }
+      notes = tones;
     }
-    notes = tones;
-  }
 
-  if ($("#id_sheets").is(':checked')) {
-    var note = notes[Math.floor(Math.random() * notes.length)];
-    paintGrandStaff(note);
-    window.setTimeout(function() {
-     context.font = "40px Arial";
-     context.textAlign = "center";
-     context.textBaseline = "middle";
-     context.fillText(note[0], canvas.width / 2, canvas.height / 2);
-    }, seconds * 800);
-    runner = window.setInterval(function(){
-      next_notes = notes.slice(0);
-      next_notes.splice(next_notes.indexOf(note), 1);
-      note = next_notes[Math.floor(Math.random() * next_notes.length)]
+    if ($("#id_sheets").hasClass("pure-button-active")) {
+      var note = notes[Math.floor(Math.random() * notes.length)];
       paintGrandStaff(note);
       window.setTimeout(function() {
        context.font = "40px Arial";
@@ -133,34 +126,47 @@ $("#start").on("click", function() {
        context.textBaseline = "middle";
        context.fillText(note[0], canvas.width / 2, canvas.height / 2);
       }, seconds * 800);
-    }, seconds * 1000);
-  } else {
-    context = canvas.getContext("2d");
-    var note = notes[Math.floor(Math.random() * notes.length)];
-    context.font = "60px Arial";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-    context.fillText(note, canvas.width / 2, canvas.height / 2);
-    runner = window.setInterval(function(){
-      next_notes = notes.slice(0);
-      next_notes.splice(next_notes.indexOf(note), 1);
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      note = next_notes[Math.floor(Math.random() * next_notes.length)]
+      runner = window.setInterval(function(){
+        next_notes = notes.slice(0);
+        next_notes.splice(next_notes.indexOf(note), 1);
+        note = next_notes[Math.floor(Math.random() * next_notes.length)]
+        paintGrandStaff(note);
+        answer = window.setTimeout(function() {
+         context.font = "40px Arial";
+         context.textAlign = "center";
+         context.textBaseline = "middle";
+         context.fillText(note[0], canvas.width / 2, canvas.height / 2);
+        }, seconds * 800);
+      }, seconds * 1000);
+    } else {
+      context = canvas.getContext("2d");
+      var note = notes[Math.floor(Math.random() * notes.length)];
+      context.font = $("#id_notes").hasClass("pure-button-active") ? "120px Arial" : "60px Arial";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
       context.fillText(note, canvas.width / 2, canvas.height / 2);
-    }, seconds * 1000);
+      runner = window.setInterval(function(){
+        next_notes = notes.slice(0);
+        next_notes.splice(next_notes.indexOf(note), 1);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        note = next_notes[Math.floor(Math.random() * next_notes.length)]
+        context.fillText(note, canvas.width / 2, canvas.height / 2);
+      }, seconds * 1000);
+    }
   }
 })
 
 
 // Stop the practice
 $("#stop").on("click", function() {
-  $('#start').attr("disabled", false);
-  $('#stop').attr("disabled", true);
+  $('#stop').addClass("pure-button-disabled");
+  $('#start').removeClass("pure-button-disabled");
 
   clearInterval(runner);
+  clearInterval(answer);
   context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
-  if ($("#id_sheets").is(':checked')) {
+  if ($("#id_sheets").hasClass("pure-button-active")) {
     paintGrandStaff(null);
   }
 })
