@@ -276,19 +276,19 @@ class UpdateTest(FunctionalTest):
     def add_practice(self, date, minutes):
         # There is a form for adding a new session
         form = self.browser.find_element_by_tag_name("form")
-        date = form.find_elements_by_tag_name("input")[0]
-        self.assertEqual(minutes.get_attribute("type"), "date")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        self.assertEqual(date_input.get_attribute("type"), "date")
         self.assertEqual(
-         date.get_attribute("value"),
+         date_input.get_attribute("value"),
          datetime.datetime.now().strftime("%Y-%m-%d")
         )
-        minutes = form.find_elements_by_tag_name("input")[1]
-        self.assertEqual(minutes.get_attribute("type"), "text")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        self.assertEqual(minutes_input.get_attribute("type"), "text")
         submit = form.find_elements_by_tag_name("input")[-1]
 
         # Sam adds x minutes for the date
-        date.send_keys(date.strftime("%d%m%Y"))
-        minutes.send_keys(str(minutes))
+        date_input.send_keys(date.strftime("%d%m%Y"))
+        minutes_input.send_keys(str(minutes))
         submit.click()
 
         # He is still on the same page

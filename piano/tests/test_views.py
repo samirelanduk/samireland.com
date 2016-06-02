@@ -2,6 +2,7 @@ import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from piano import views
+from piano.models import PracticeSession
 
 class ViewTest(TestCase):
 
@@ -32,3 +33,15 @@ class UpdatePageViewTests(ViewTest):
     def test_piano_update_page_view_uses_piano_update_page_template(self):
         response = self.client.get("/piano/update/")
         self.assertTemplateUsed(response, "pianoupdate.html")
+
+
+    def test_piano_update_page_view_can_save_session(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.client.post("/piano/update/", {
+         "date": "2010-01-03",
+         "minutes": 45
+        })
+        self.assertEqual(PracticeSession.objects.count(), 1)
+        session = PracticeSession.objects.first()
+        self.assertEqual(session.minutes, 45)
+        self.assertEqual(session.date, datetime.datetime(2010, 1, 3).date())

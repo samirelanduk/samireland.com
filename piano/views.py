@@ -1,5 +1,8 @@
 import requests
+import datetime
 from django.shortcuts import render
+from piano.models import PracticeSession
+from piano.forms import PracticeSessionForm
 
 # Create your views here.
 def piano_page(request):
@@ -20,4 +23,8 @@ def practice_page(request):
 
 
 def update_page(request):
-    return render(request, "pianoupdate.html")
+    today = datetime.datetime.now()
+    form = PracticeSessionForm(initial={"date": today})
+    if request.method == "POST":
+        pass
+    return render(request, "pianoupdate.html", {"today": today, "form": form})
