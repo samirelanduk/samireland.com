@@ -7,9 +7,20 @@
 
 {% block main %}
 <h1>Practice Sessions</h1>
-<form>
+<form method="POST">
   {{ form.date }}
+  {% if form.date.errors %}
+  <div class="error">
+    {{ form.date.errors }}
+  </div>
+  {% endif %}
   {{ form.minutes }}
+  {% if form.minutes.errors %}
+  <div class="error">
+    {{ form.minutes.errors }}
+  </div>
+  {% endif %}
+  {% csrf_token %}
 </form>
 <table>
   <thead>

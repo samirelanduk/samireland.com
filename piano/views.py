@@ -1,6 +1,6 @@
 import requests
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from piano.models import PracticeSession
 from piano.forms import PracticeSessionForm
 
@@ -26,5 +26,10 @@ def update_page(request):
     today = datetime.datetime.now()
     form = PracticeSessionForm(initial={"date": today})
     if request.method == "POST":
-        pass
-    return render(request, "pianoupdate.html", {"today": today, "form": form})
+        form = PracticeSessionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/piano/update/")
+        else:
+            return render(request, "pianoupdate.html", {"form": form})
+    return render(request, "pianoupdate.html", {"form": form})
