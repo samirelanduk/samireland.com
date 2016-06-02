@@ -1,0 +1,50 @@
+form, fieldset {
+  display: block;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type=date], input[type=text] {
+  width: 230;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type=submit], input[type=date], input[type=text] {
+  margin-top: 20px;
+}
+
+.error {
+  color: #FF9494;
+  font-size: 65%;
+  text-align: center;
+}
+
+.error ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+table {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+  margin-top: 40px;
+}
+
+th {
+  text-align: left;
+}
+
+tr {
+  line-height: 200%;
+}
+
+td input[type=submit] {
+  margin-top: 0px;
+  background-color: #7F0000;
+  color: #FFFFFF;
+  font-size: 70%;
+}

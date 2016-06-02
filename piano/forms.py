@@ -18,7 +18,10 @@ class PracticeSessionForm(forms.models.ModelForm):
         fields = ("date", "minutes")
         widgets = {
          "date": DateInput(),
-         "minutes": forms.fields.TextInput()
+         "minutes": forms.fields.TextInput(attrs={
+          "placeholder": "Minutes",
+          "autocomplete": "off"
+         })
         }
         error_messages = {
          "minutes": {
