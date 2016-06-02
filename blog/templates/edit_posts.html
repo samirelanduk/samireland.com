@@ -16,12 +16,12 @@
   </thead>
   <tbody>
   {% for blog_post in blog_posts %}
-      <tr class="selectrow" onclick="window.document.location='{% url 'edit_post_page' blog_post.id %}';">
-        <td>{{ blog_post.title }}</td>
-        <td>{{ blog_post.date }}</td>
-        <td>{{ blog_post.visible|yesno:"Yes,No" }}</td>
-      </tr>
-    {% endfor %}
+    <tr class="selectrow" onclick="window.document.location='{% url 'edit_post_page' blog_post.id %}';">
+      <td>{{ blog_post.title }}</td>
+      <td>{{ blog_post.date }}</td>
+      <td>{{ blog_post.visible|yesno:"Yes,No" }}</td>
+    </tr>
+  {% endfor %}
   </tbody>
 </table>
 {% endblock %}

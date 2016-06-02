@@ -318,7 +318,7 @@ class UpdateTest(FunctionalTest):
         # The row contains the correct information
         self.assertEqual(
          rows[0].find_elements_by_tag_name("td")[0].text,
-         datetime.datetime.now().strftime("%d %m, %Y")
+         datetime.datetime.now().strftime("%-d %B, %Y")
         )
         self.assertEqual(
          rows[0].find_elements_by_tag_name("td")[1].text,

@@ -21,6 +21,7 @@
   </div>
   {% endif %}
   {% csrf_token %}
+  <input type="submit">
 </form>
 <table>
   <thead>
@@ -29,6 +30,12 @@
     <th></th>
   </thead>
   <tbody>
+  {% for session in sessions %}
+    <tr>
+      <td>{{ session.date }}</td>
+      <td>{{ session.minutes }}</td>
+    </tr>
+  {% endfor %}
   </tbody>
 </table>
 {% endblock %}

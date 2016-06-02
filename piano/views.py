@@ -32,4 +32,5 @@ def update_page(request):
             return redirect("/piano/update/")
         else:
             return render(request, "pianoupdate.html", {"form": form})
-    return render(request, "pianoupdate.html", {"form": form})
+    sessions = PracticeSession.objects.all().order_by("date").reverse()
+    return render(request, "pianoupdate.html", {"form": form, "sessions": sessions})
