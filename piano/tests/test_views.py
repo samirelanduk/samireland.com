@@ -91,3 +91,26 @@ class UpdatePageViewTests(ViewTest):
         pos_1991 = response.content.decode().find("September, 1991")
         pos_1992 = response.content.decode().find("September, 1992")
         self.assertTrue(pos_1992 < pos_1991 < pos_1990)
+
+
+    def test_piano_update_page_view_can_delete_sessions(self):
+        PracticeSession.objects.create(
+         date=datetime.datetime(1991, 9, 28).date(),
+         minutes=10
+        )
+        PracticeSession.objects.create(
+         date=datetime.datetime(1992, 9, 28).date(),
+         minutes=10
+        )
+        PracticeSession.objects.create(
+         date=datetime.datetime(1990, 9, 28).date(),
+         minutes=10
+        )
+        response = self.client.post("/piano/update/", {
+         "date": "1991-09-28"
+        })
+        self.assertEqual(PracticeSession.objects.count(), 2)
+        self.assertNotIn(
+         1991,
+         [session.date.year for session in PracticeSession.objects.all()]
+        )

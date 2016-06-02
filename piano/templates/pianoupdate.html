@@ -34,6 +34,7 @@
     <tr>
       <td>{{ session.date }}</td>
       <td>{{ session.minutes }}</td>
+      <td><form method="POST"><input type="hidden" name="date" value="{{ session.formatted_date }}">{% csrf_token %}<input value="Delete" type="submit"></form></td>
     </tr>
   {% endfor %}
   </tbody>

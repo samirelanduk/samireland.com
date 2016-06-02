@@ -26,11 +26,17 @@ def update_page(request):
     today = datetime.datetime.now()
     form = PracticeSessionForm(initial={"date": today})
     if request.method == "POST":
-        form = PracticeSessionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/piano/update/")
+        if "minutes" in request.POST:
+            form = PracticeSessionForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect("/piano/update/")
+            else:
+                return render(request, "pianoupdate.html", {"form": form})
         else:
-            return render(request, "pianoupdate.html", {"form": form})
+            doomed_post = PracticeSession.objects.get(date=request.POST["date"])
+            doomed_post.delete()
+            return redirect("/piano/update/")
+
     sessions = PracticeSession.objects.all().order_by("date").reverse()
     return render(request, "pianoupdate.html", {"form": form, "sessions": sessions})

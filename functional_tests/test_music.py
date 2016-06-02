@@ -364,7 +364,7 @@ class UpdateTest(FunctionalTest):
         for row in rows[::-1]:
             last_cell = self.browser.find_elements_by_tag_name("td")[-1]
             form = last_cell.find_element_by_tag_name("form")
-            delete_button = form.find_element_by_tag_name("input")
+            delete_button = form.find_elements_by_tag_name("input")[-1]
             self.assertEqual(
              delete_button.get_attribute("value"),
              "Delete"
@@ -379,5 +379,13 @@ class UpdateTest(FunctionalTest):
         self.assertEqual(len(rows), 3)
         self.assertEqual(
          rows[0].find_elements_by_tag_name("td")[1].text,
+         "10"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[1].text,
          "30"
+        )
+        self.assertEqual(
+         rows[2].find_elements_by_tag_name("td")[1].text,
+         "40"
         )
