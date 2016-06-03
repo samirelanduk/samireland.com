@@ -186,6 +186,14 @@
       legend: {
         enabled: false
       },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} hours</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
       plotOptions: {
         area: {
           fillColor: {
@@ -214,7 +222,7 @@
       },
       series: [{
         type: 'area',
-        name: 'Practice (hours)',
+        name: 'Practice',
         data: [
           {% for day in cumulative_sixty %}
             [Date.UTC({{day.0.year}},{{day.0.month}}-1,{{day.0.day}}), {{day.1}} / 60],
@@ -244,6 +252,14 @@
       legend: {
         enabled: false
       },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} hours</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
       plotOptions: {
         area: {
           fillColor: {
@@ -272,7 +288,7 @@
       },
       series: [{
         type: 'area',
-        name: 'Practice (hours)',
+        name: 'Practice',
         data: [
           {% for day in cumulative_year %}
             [Date.UTC({{day.0.year}},{{day.0.month}}-1,{{day.0.day}}), {{day.1}} / 60],
