@@ -1,6 +1,7 @@
 import requests
 import datetime
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from piano.models import PracticeSession
 from piano.forms import PracticeSessionForm
 
@@ -57,6 +58,7 @@ def practice_page(request):
     return render(request, "pianopractice.html")
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def update_page(request):
     today = datetime.datetime.now()
     form = PracticeSessionForm(initial={"date": today})

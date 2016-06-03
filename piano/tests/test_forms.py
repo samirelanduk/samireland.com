@@ -12,7 +12,7 @@ class SessionFormsRenderingTest(TestCase):
          str(form)
         )
         self.assertIn(
-         'name="minutes" type="text"',
+         'name="minutes" placeholder="Minutes" type="text"',
          str(form)
         )
 

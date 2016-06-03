@@ -30,6 +30,12 @@ class PracticePageViewTests(ViewTest):
 
 class UpdatePageViewTests(ViewTest):
 
+    def test_piano_update_page_view_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/piano/update/")
+        self.assertRedirects(response, "/")
+
+
     def test_piano_update_page_view_uses_piano_update_page_template(self):
         response = self.client.get("/piano/update/")
         self.assertTemplateUsed(response, "pianoupdate.html")
