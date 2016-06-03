@@ -2,6 +2,11 @@
 
 {% block title %}Learning Piano{% endblock %}
 
+{% block extrahead %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+{% endblock %}
+
 {% block main %}
 <h1>Learning Piano</h1>
 
@@ -39,24 +44,242 @@
   <h2>Progress</h2>
   <div id="month">
     <h3>Past Sixty Days</h3>
-    <div class="chart">
-      <svg></svg>
-    </div>
-    <div class="chart">
-      <svg></svg>
-    </div>
+    <div class="chart" id="sixty"></div>
+    <div class="chart" id="cumula60"></div>
   </div>
   <div id="year">
     <h3>Past Twelve Months</h3>
-    <div class="chart">
-      <svg></svg>
-    </div>
-    <div class="chart">
-      <svg></svg>
-    </div>
+    <div class="chart" id="oneyear"></div>
+    <div class="chart" id="cumula365"></div>
   </div>
 
 </div>
+{% endblock %}
 
+{% block js %}
+<script>
+  $(function () {
+    $('#sixty').highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Practice - Past Sixty Days'
+      },
+      xAxis: {
+        type: 'datetime',
+        crosshair: true,
+        title: {
+          text: 'Date'
+        },
+        min: Date.UTC({{sixty_days_ago.year}},{{sixty_days_ago.month}}-1,{{sixty_days_ago.day}}),
+        max: Date.UTC({{today.year}},{{today.month}}-1,{{today.day}})
+      },
+      yAxis: {
+        min: 0,
+        max: 90,
+        tickInterval: 30,
+        minorTickInterval: 10,
+        title: {
+          text: 'Time (mins)'
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} mins</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: [{
+        name: 'Practice',
+        data: [
+          {% for session in sixty_sessions %}
+            [Date.UTC({{session.date.year}},{{session.date.month}}-1,{{session.date.day}}), {{session.minutes}}],
+          {% endfor %}
+        ]
+      }]
+    });
+  });
 
+  $(function () {
+    $('#oneyear').highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Practice - Past Year'
+      },
+      xAxis: {
+        type: 'datetime',
+        crosshair: true,
+        title: {
+          text: 'Date'
+        },
+        min: Date.UTC({{one_year_ago.year}},{{one_year_ago.month}}-1,{{one_year_ago.day}}),
+        max: Date.UTC({{today.year}},{{today.month}}-1,{{today.day}})
+      },
+      yAxis: {
+        min: 0,
+        max: 90,
+        tickInterval: 30,
+        minorTickInterval: 10,
+        title: {
+          text: 'Time (mins)'
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} mins</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: [{
+        name: 'Practice',
+        data: [
+          {% for session in year_sessions %}
+            [Date.UTC({{session.date.year}},{{session.date.month}}-1,{{session.date.day}}), {{session.minutes}}],
+          {% endfor %}
+        ]
+      }]
+    });
+  });
+
+  $(function () {
+    $("#cumula60").highcharts({
+      chart: {
+        zoomType: 'x'
+      },
+      title: {
+        text: 'Cumulative Practice (Past Sixty Days)'
+      },
+      xAxis: {
+        type: 'datetime'
+      },
+      yAxis: {
+        title: {
+          text: 'Time (hours)'
+        },
+        min: 0
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        area: {
+          fillColor: {
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 0,
+              y2: 1
+            },
+            stops: [
+              [0, Highcharts.getOptions().colors[0]],
+              [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+            ]
+          },
+          marker: {
+            radius: 2
+          },
+          lineWidth: 1,
+          states: {
+            hover: {
+                lineWidth: 1
+            }
+          },
+          threshold: null
+        }
+      },
+      series: [{
+        type: 'area',
+        name: 'Practice (hours)',
+        data: [
+          {% for day in cumulative_sixty %}
+            [Date.UTC({{day.0.year}},{{day.0.month}}-1,{{day.0.day}}), {{day.1}} / 60],
+          {% endfor %}
+        ]
+      }]
+    });
+  });
+
+  $(function () {
+    $("#cumula365").highcharts({
+      chart: {
+        zoomType: 'x'
+      },
+      title: {
+        text: 'Cumulative Practice (Past Year)'
+      },
+      xAxis: {
+        type: 'datetime'
+      },
+      yAxis: {
+        title: {
+          text: 'Time (hours)'
+        },
+        min: 0
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        area: {
+          fillColor: {
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 0,
+              y2: 1
+            },
+            stops: [
+              [0, Highcharts.getOptions().colors[0]],
+              [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+            ]
+          },
+          marker: {
+            radius: 2
+          },
+          lineWidth: 1,
+          states: {
+            hover: {
+                lineWidth: 1
+            }
+          },
+          threshold: null
+        }
+      },
+      series: [{
+        type: 'area',
+        name: 'Practice (hours)',
+        data: [
+          {% for day in cumulative_year %}
+            [Date.UTC({{day.0.year}},{{day.0.month}}-1,{{day.0.day}}), {{day.1}} / 60],
+          {% endfor %}
+        ]
+      }]
+    });
+  });
+</script>
 {% endblock %}
