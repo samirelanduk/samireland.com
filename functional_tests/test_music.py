@@ -373,6 +373,50 @@ class UpdateTest(FunctionalTest):
         # Sam deletes one of the sessions
         delete_button.click()
 
+        # Now he is on a deletion page, and is asked if he is sure
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/piano/update/\d+/$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        warning = form.find_element_by_id("warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He goes back to safety
+        back_to_safety.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/piano/update/"
+        )
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 4)
+
+        # He changes his mind and goes back
+        delete_button = rows[-1].find_elements_by_tag_name("input")[-1]
+        delete_button.click()
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/piano/update/\d+/$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+
+        # He deletes, and is taken back to the edit page
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/piano/update/"
+        )
+
         # There are now three rows
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
