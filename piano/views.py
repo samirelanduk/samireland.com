@@ -60,22 +60,17 @@ def practice_page(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def update_page(request):
+    sessions = PracticeSession.objects.all().order_by("date").reverse()
     today = datetime.datetime.now()
     form = PracticeSessionForm(initial={"date": today})
     if request.method == "POST":
-        if "minutes" in request.POST:
-            form = PracticeSessionForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect("/piano/update/")
-            else:
-                return render(request, "pianoupdate.html", {"form": form})
-        else:
-            doomed_post = PracticeSession.objects.get(date=request.POST["date"])
-            doomed_post.delete()
+        form = PracticeSessionForm(request.POST)
+        if form.is_valid():
+            form.save()
             return redirect("/piano/update/")
+        else:
+            return render(request, "pianoupdate.html", {"form": form, "sessions": sessions})
 
-    sessions = PracticeSession.objects.all().order_by("date").reverse()
     return render(request, "pianoupdate.html", {"form": form, "sessions": sessions})
 
 

@@ -432,3 +432,75 @@ class UpdateTest(FunctionalTest):
          rows[2].find_elements_by_tag_name("td")[1].text,
          "40"
         )
+
+
+
+    def test_cannot_post_session_with_no_date(self):
+        self.sam_logs_in()
+
+        # Sam tries to submit a session with no date
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        self.browser.execute_script("document.getElementById('id_date').setAttribute('value', '')");
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(10)
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a session with no date")
+
+
+    def test_cannot_post_session_with_no_minutes(self):
+        self.sam_logs_in()
+
+        # Sam tries to submit a session with no minutes
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a session with no minutes")
+
+
+    def test_cannot_post_session_with_duplicate_date(self):
+        self.sam_logs_in()
+
+        # Sam submits a post for today
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(10)
+        submit.click()
+
+        # Sam tries to submit a session with the same date
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(20)
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 1)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "There is already a session for this date")
