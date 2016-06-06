@@ -363,10 +363,9 @@ class UpdateTest(FunctionalTest):
         # Each of the rows has a delete button
         for row in rows[::-1]:
             last_cell = self.browser.find_elements_by_tag_name("td")[-1]
-            form = last_cell.find_element_by_tag_name("form")
-            delete_button = form.find_elements_by_tag_name("input")[-1]
+            delete_button = last_cell.find_element_by_tag_name("a")
             self.assertEqual(
-             delete_button.get_attribute("value"),
+             delete_button.text,
              "Delete"
             )
 
@@ -376,7 +375,7 @@ class UpdateTest(FunctionalTest):
         # Now he is on a deletion page, and is asked if he is sure
         self.assertRegex(
          self.browser.current_url,
-         self.live_server_url + r"/piano/update/\d+/$"
+         self.live_server_url + r"/piano/delete/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         warning = form.find_element_by_id("warning")
@@ -400,11 +399,11 @@ class UpdateTest(FunctionalTest):
         self.assertEqual(len(rows), 4)
 
         # He changes his mind and goes back
-        delete_button = rows[-1].find_elements_by_tag_name("input")[-1]
+        delete_button = rows[-1].find_elements_by_tag_name("a")[-1]
         delete_button.click()
         self.assertRegex(
          self.browser.current_url,
-         self.live_server_url + r"/piano/update/\d+/$"
+         self.live_server_url + r"/piano/delete/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
         delete_button = form.find_elements_by_tag_name("input")[-1]

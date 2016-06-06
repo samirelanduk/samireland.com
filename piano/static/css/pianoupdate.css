@@ -42,11 +42,13 @@ tr {
   line-height: 200%;
 }
 
-td input[type=submit] {
+td a {
   margin-top: 0px;
   background-color: #7F0000;
   color: #FFFFFF;
   font-size: 70%;
+  padding: 2px;
+  border-radius: 3px;
 }
 
 

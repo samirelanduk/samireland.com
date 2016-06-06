@@ -19,3 +19,7 @@ class UrlTest(TestCase):
 
     def test_update_url_resolves_to_update_page_view(self):
         self.check_url_returns_view("/piano/update/", views.update_page)
+
+
+    def test_delete_url_resolves_to_delete_page_view(self):
+        self.check_url_returns_view("/piano/delete/1/", views.delete_page)

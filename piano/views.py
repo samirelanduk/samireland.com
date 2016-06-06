@@ -77,3 +77,13 @@ def update_page(request):
 
     sessions = PracticeSession.objects.all().order_by("date").reverse()
     return render(request, "pianoupdate.html", {"form": form, "sessions": sessions})
+
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def delete_page(request, session_id):
+    session = PracticeSession.objects.get(pk=session_id)
+    if request.method == "POST":
+        session.delete()
+        return redirect("/piano/update/")
+    return render(request, "pianodelete.html", {"session": session})

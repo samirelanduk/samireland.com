@@ -41,11 +41,7 @@
       <td>{{ session.date }}</td>
       <td>{{ session.minutes }}</td>
       <td>
-        <form method="POST" class="pure-form">
-          <input type="hidden" name="date" value="{{ session.formatted_date }}">
-          {% csrf_token %}
-          <input value="Delete" type="submit">
-        </form>
+        <a href="{% url 'delete_piano_page' session.pk %}" class="button-error">Delete</a>
       </td>
     </tr>
   {% endfor %}

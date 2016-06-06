@@ -99,24 +99,30 @@ class UpdatePageViewTests(ViewTest):
         self.assertTrue(pos_1992 < pos_1991 < pos_1990)
 
 
+
+class DeletePageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        PracticeSession.objects.create(minutes=10, date=datetime.datetime.now())
+
+    def test_piano_delete_page_view_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/piano/delete/1/")
+        self.assertRedirects(response, "/")
+
+
+    def test_piano_delete_page_view_uses_piano_delete_page_template(self):
+        response = self.client.get("/piano/delete/1/")
+        self.assertTemplateUsed(response, "pianodelete.html")
+
+
+    def test_piano_update_page_view_redirects_after_POST(self):
+        response = self.client.post("/piano/delete/1/")
+        self.assertRedirects(response, "/piano/update/")
+
+
     def test_piano_update_page_view_can_delete_sessions(self):
-        PracticeSession.objects.create(
-         date=datetime.datetime(1991, 9, 28).date(),
-         minutes=10
-        )
-        PracticeSession.objects.create(
-         date=datetime.datetime(1992, 9, 28).date(),
-         minutes=10
-        )
-        PracticeSession.objects.create(
-         date=datetime.datetime(1990, 9, 28).date(),
-         minutes=10
-        )
-        response = self.client.post("/piano/update/", {
-         "date": "1991-09-28"
-        })
-        self.assertEqual(PracticeSession.objects.count(), 2)
-        self.assertNotIn(
-         1991,
-         [session.date.year for session in PracticeSession.objects.all()]
-        )
+        self.assertEqual(PracticeSession.objects.count(), 1)
+        response = self.client.post("/piano/delete/1/")
+        self.assertEqual(PracticeSession.objects.count(), 0)
