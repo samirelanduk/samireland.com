@@ -6,9 +6,10 @@ from media.models import MediaFile
 from . import MediaTest
 from media import views
 
-class ViewTest(TestCase):
+class ViewTest(MediaTest):
 
     def setUp(self):
+        MediaTest.setUp(self)
         self.user = User.objects.create_user(username="person", password="secret")
         self.client.login(username="person", password="secret")
 
