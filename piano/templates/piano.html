@@ -42,6 +42,13 @@
 
 <div id="progress">
   <h2>Progress</h2>
+  <p>I've been practicing for {{ hours }}
+    {% if minutes != 0 %}
+    hours and {{ minutes }} minutes.
+    {% else %}
+    hours.
+    {% endif %}
+  </p>
   <div id="month">
     <h3>Past Sixty Days</h3>
     <div class="chart" id="sixty"></div>

@@ -42,6 +42,9 @@ def piano_page(request):
          next_day,
          sum([session.minutes for session in PracticeSession.objects.all().filter(date__lte=next_day)])
         ])
+    all_minutes = sum([session.minutes for session in PracticeSession.objects.all()])
+    hours = all_minutes // 60
+    minutes = all_minutes % 60
     return render(request, "piano.html", {
      "recent_code": yt_code,
      "today": today,
@@ -50,7 +53,9 @@ def piano_page(request):
      "year_sessions": year_sessions,
      "one_year_ago": one_year_ago,
      "cumulative_sixty": cumulative_sixty,
-     "cumulative_year": cumulative_year
+     "cumulative_year": cumulative_year,
+     "hours": hours,
+     "minutes": minutes
     })
 
 
