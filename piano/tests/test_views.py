@@ -19,6 +19,26 @@ class PianoPageViewTests(ViewTest):
         self.assertTemplateUsed(response, "piano.html")
 
 
+    def test_piano_page_can_display_total_practice(self):
+        PracticeSession.objects.create(
+         date=datetime.datetime(1991, 9, 28).date(),
+         minutes=10
+        )
+        response = self.client.get("/piano/")
+        self.assertContains(response, "practicing for 0\n    \n    hours and 10 minutes.")
+        PracticeSession.objects.create(
+         date=datetime.datetime(1991, 9, 29).date(),
+         minutes=80
+        )
+        response = self.client.get("/piano/")
+        self.assertContains(response, "practicing for 1\n    \n    hours and 30 minutes.")
+        PracticeSession.objects.create(
+         date=datetime.datetime(1991, 9, 30).date(),
+         minutes=30
+        )
+        response = self.client.get("/piano/")
+        self.assertContains(response, "practicing for 2\n    \n    hours.")
+
 
 class PracticePageViewTests(ViewTest):
 
