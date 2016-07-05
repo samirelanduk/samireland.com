@@ -62,7 +62,7 @@ class MuscleGroupTests(ExcerciseTest):
         self.add_muscle_group("knees")
         self.add_muscle_group("toes")
 
-        # They three groups are on the edit page
+        # The three groups are on the edit page
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 3)
@@ -127,3 +127,57 @@ class MuscleGroupTests(ExcerciseTest):
         self.assertEqual(len(groups), 2)
         self.assertEqual(groups[0], "knees")
         self.assertEqual(groups[1], "toes")
+
+
+    def test_can_modify_muscle_group_name(self):
+        # Sam adds three muscle groups
+        self.add_muscle_group("shoulders")
+        self.add_muscle_group("knees")
+        self.add_muscle_group("toes")
+
+        # The three groups are on the edit page
+        section = self.browser.find_element_by_id("muscle")
+        groups = section.find_elements_by_class_name("muscle-group")
+        self.assertEqual(len(groups), 3)
+        self.assertEqual(groups[0], "knees")
+        self.assertEqual(groups[1], "shoulders")
+        self.assertEqual(groups[2], "toes")
+
+        # He clicks the shoulders text and is taken to its page
+        groups[1].click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit/shoulders/"
+        )
+        self.assertEqual(
+         self.browser.find_element_by_tag_name("h1").text,
+         "shoulders"
+        )
+
+        # There is a section to change the name
+        new_name = self.browser.find_element_by_id("editname")
+        textbox = new_name.find_elements_by_tag_name("input")[0]
+        self.assertEqual(textbox.get_attribute("type"), "text")
+        submit = section.find_elements_by_tag_name("input")[1]
+        self.assertEqual(textbox.get_attribute("type"), "submit")
+
+        # He changes the name to 'neck'
+        textbox.send_keys("neck")
+        submit.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit/neck/"
+        )
+        self.assertEqual(
+         self.browser.find_element_by_tag_name("h1").text,
+         "neck"
+        )
+
+        # The name has changed on the edit page too
+        self.browser.get(self.live_server_url + "/health/edit/")
+        section = self.browser.find_element_by_id("muscle")
+        groups = section.find_elements_by_class_name("muscle-group")
+        self.assertEqual(len(groups), 3)
+        self.assertEqual(groups[0], "knees")
+        self.assertEqual(groups[1], "neck")
+        self.assertEqual(groups[2], "toes")
