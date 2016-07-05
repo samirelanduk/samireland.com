@@ -41,7 +41,7 @@ class MuscleGroupTests(ExcerciseTest):
 
         # The muscle group is there
         section = self.browser.find_element_by_id("muscle")
-        groups = section.find_elements_by_class_name("musclegroup")
+        groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 1)
         self.assertEqual(groups[0], "toes")
 
@@ -50,7 +50,80 @@ class MuscleGroupTests(ExcerciseTest):
 
         # There are two muscle groups there now, in alphabetical order
         section = self.browser.find_element_by_id("muscle")
-        groups = section.find_elements_by_class_name("musclegroup")
+        groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 2)
         self.assertEqual(groups[0], "eyebrows")
+        self.assertEqual(groups[1], "toes")
+
+
+    def test_can_delete_muscle_group(self):
+        # Sam adds three muscle groups
+        self.add_muscle_group("shoulders")
+        self.add_muscle_group("knees")
+        self.add_muscle_group("toes")
+
+        # They three groups are on the edit page
+        section = self.browser.find_element_by_id("muscle")
+        groups = section.find_elements_by_class_name("muscle-group")
+        self.assertEqual(len(groups), 3)
+        self.assertEqual(groups[0], "knees")
+        self.assertEqual(groups[1], "shoulders")
+        self.assertEqual(groups[2], "toes")
+
+        # He clicks the shoulders text and is taken to its page
+        groups[1].click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit/shoulders/"
+        )
+        self.assertEqual(
+         self.browser.find_element_by_tag_name("h1").text,
+         "Shoulders"
+        )
+
+        # There is a button to delete the group
+        delete = self.browser.find_element_by_id("deletebutton")
+        delete.click()
+
+        # He is on a page asking him if he is sure
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit/shoulders/delete/"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        warning = form.find_element_by_id("warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He goes back to safety
+        back_to_safety.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit/shoulders/"
+        )
+
+        # He changes his mind and goes back
+        delete = self.browser.find_element_by_id("deletebutton")
+        delete.click()
+
+        # He deletes, and is taken back to the edit page
+        form = self.browser.find_element_by_tag_name("form")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/health/edit"
+        )
+
+        # The group is gone
+        section = self.browser.find_element_by_id("muscle")
+        groups = section.find_elements_by_class_name("muscle-group")
+        self.assertEqual(len(groups), 2)
+        self.assertEqual(groups[0], "knees")
         self.assertEqual(groups[1], "toes")
