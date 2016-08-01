@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'blog',
     'piano',
     'media',
-    'account'
+    'account',
+    'health'
 )
 
 MIDDLEWARE_CLASSES = (
