@@ -10,14 +10,14 @@ class ExcerciseTest(FunctionalTest):
 
         # There is a section on muscle groups
         section = self.browser.find_element_by_id("muscle")
-        heading = section.find_elements_by_tag_name("h2")
+        heading = section.find_element_by_tag_name("h2")
         self.assertEqual(heading.text, "Muscle Groups")
 
         # At the end there is a textbox and a button to add a new group
         textbox = section.find_elements_by_tag_name("input")[-2]
         self.assertEqual(textbox.get_attribute("type"), "text")
         submit = section.find_elements_by_tag_name("input")[-1]
-        self.assertEqual(textbox.get_attribute("type"), "submit")
+        self.assertEqual(submit.get_attribute("type"), "submit")
 
         # He enters a new group
         textbox.send_keys(name)
