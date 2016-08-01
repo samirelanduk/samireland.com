@@ -26,7 +26,7 @@ class ExcerciseTest(FunctionalTest):
         # He is still on the same page
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit"
+         self.live_server_url + "/health/edit/"
         )
 
 
