@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from health.forms import MuscleGroupForm
 from health.models import MuscleGroup
 
@@ -17,5 +18,8 @@ def edit_page(request):
 
 
 def musclegroup_page(request, name):
-    group = MuscleGroup.objects.get(name=name)
+    try:
+        group = MuscleGroup.objects.get(name=name)
+    except MuscleGroup.DoesNotExist:
+        raise Http404()
     return render(request, "musclegroup.html", {"group": group})

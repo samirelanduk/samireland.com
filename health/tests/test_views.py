@@ -76,3 +76,8 @@ class MuscleGroupViewTests(ViewTest):
         group = MuscleGroup.objects.get(name="legs")
         response = self.client.get("/health/edit/musclegroup/legs/")
         self.assertEqual(response.context["group"], group)
+
+
+    def test_invalid_group_returns_404(self):
+        response = self.client.get("/health/edit/musclegroup/toes/")
+        self.assertEqual(response.status_code, 404)
