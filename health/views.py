@@ -16,5 +16,5 @@ def edit_page(request):
     })
 
 
-def musclegroup_page():
-    pass
+def musclegroup_page(request, name):
+    return render(request, "musclegroup.html")

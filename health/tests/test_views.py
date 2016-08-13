@@ -55,3 +55,16 @@ class EditPageViewTests(ViewTest):
         pos_spine = response.content.decode().find("spine")
         pos_thorax = response.content.decode().find("thorax")
         self.assertTrue(pos_abdomen < pos_spine < pos_thorax)
+
+
+
+class MuscleGroupViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        MuscleGroup.objects.create(name="arms")
+
+
+    def test_musclegroup_view_uses_musclegroup_template(self):
+        response = self.client.get("/health/edit/musclegroup/arms/")
+        self.assertTemplateUsed(response, "musclegroup.html")
