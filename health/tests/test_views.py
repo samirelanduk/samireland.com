@@ -41,3 +41,17 @@ class EditPageViewTests(ViewTest):
         self.assertEqual(MuscleGroup.objects.count(), 0)
         self.client.post("/health/edit/", data={"name": ""})
         self.assertEqual(MuscleGroup.objects.count(), 0)
+
+
+    def test_edit_page_lists_muscle_groups(self):
+        MuscleGroup.objects.create(name="thorax")
+        MuscleGroup.objects.create(name="abdomen")
+        MuscleGroup.objects.create(name="spine")
+        response = self.client.get("/health/edit/")
+        self.assertContains(response, "thorax")
+        self.assertContains(response, "abdomen")
+        self.assertContains(response, "spine")
+        pos_abdomen = response.content.decode().find("thorax")
+        pos_spine = response.content.decode().find("abdomen")
+        pos_thorax = response.content.decode().find("spine")
+        self.assertTrue(pos_abdomen < pos_spine < pos_thorax)

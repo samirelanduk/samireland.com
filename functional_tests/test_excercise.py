@@ -43,7 +43,7 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 1)
-        self.assertEqual(groups[0], "toes")
+        self.assertEqual(groups[0].text, "toes")
 
         # He adds another
         self.add_muscle_group("eyebrows")
@@ -52,8 +52,8 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 2)
-        self.assertEqual(groups[0], "eyebrows")
-        self.assertEqual(groups[1], "toes")
+        self.assertEqual(groups[0].text, "eyebrows")
+        self.assertEqual(groups[1].text, "toes")
 
 
     def test_can_delete_muscle_group(self):
