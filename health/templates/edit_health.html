@@ -8,7 +8,7 @@
 <div id="muscle">
   <h2>Muscle Groups</h2>
   {% for muscle_group in muscle_groups %}
-    <div class="muscle-group">{{ muscle_group.name }}</div>
+    <div class="muscle-group"><a href="musclegroup/{{ muscle_group.name }}/">{{ muscle_group.name }}</a></div>
   {% endfor %}
   <form method="POST">
     {% csrf_token %}

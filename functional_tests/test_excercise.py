@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
+import time
 
 class ExcerciseTest(FunctionalTest):
 
@@ -71,7 +72,7 @@ class MuscleGroupTests(ExcerciseTest):
         self.assertEqual(groups[2].text, "toes")
 
         # He clicks the shoulders text and is taken to its page
-        groups[1].click()
+        groups[1].find_element_by_tag_name("a").click()
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/health/edit/musclegroup/shoulders/"
