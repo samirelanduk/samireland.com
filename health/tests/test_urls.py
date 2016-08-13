@@ -14,7 +14,7 @@ class UrlTest(TestCase):
 
 
     def test_health_muscle_url_resolves_to_health_muscle_view(self):
-        self.check_url_returns_view("/health/edit/musclegroup/Xxx/", views.musclegroup_page)
+        self.check_url_returns_view("/health/edit/musclegroup/Xxx Xxx-X/", views.musclegroup_page)
 
 
     def test_health_muscle_delete_url_resolves_to_health_muscle_delete_view(self):
