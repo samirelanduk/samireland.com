@@ -9,7 +9,7 @@
   <h2>Muscle Groups</h2>
   <form method="POST">
     {% csrf_token %}
-    <input type="text">
+    {{ group_form.name }}
     <input type="submit">
   </form>
 </div>

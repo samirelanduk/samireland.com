@@ -1,9 +1,9 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
-from blog import views
-from blog.models import BlogPost
-from blog.forms import BlogPostForm
+from health import views
+from health.models import MuscleGroup
+from health.forms import MuscleGroupForm
 
 class ViewTest(TestCase):
 
@@ -13,8 +13,13 @@ class ViewTest(TestCase):
 
 
 
-class HomePageViewTests(ViewTest):
+class EditPageViewTests(ViewTest):
 
     def test_edit_page_view_uses_edit_page_template(self):
         response = self.client.get("/health/edit/")
         self.assertTemplateUsed(response, "edit_health.html")
+
+
+    def test_edit_page_view_uses_muscle_group_form(self):
+        response = self.client.get("/health/edit/")
+        self.assertIsInstance(response.context["group_form"], MuscleGroupForm)
