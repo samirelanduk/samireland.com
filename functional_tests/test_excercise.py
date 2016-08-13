@@ -119,7 +119,7 @@ class MuscleGroupTests(ExcerciseTest):
         delete_button.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit"
+         self.live_server_url + "/health/edit/"
         )
 
         # The group is gone

@@ -107,3 +107,8 @@ class MuscleGroupDeletionViewTests(ViewTest):
     def test_invalid_group_returns_404(self):
         response = self.client.get("/health/edit/musclegroup/toes/delete/")
         self.assertEqual(response.status_code, 404)
+
+
+    def test_redirects_on_post(self):
+        response = self.client.post("/health/edit/musclegroup/legs/delete/")
+        self.assertRedirects(response, "/health/edit/")
