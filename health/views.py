@@ -31,5 +31,6 @@ def musclegroup_delete_page(request, name):
     except MuscleGroup.DoesNotExist:
         raise Http404()
     if request.method == "POST":
+        group.delete()
         return redirect("/health/edit/")
     return render(request, "musclegroup_delete.html", {"group": group})

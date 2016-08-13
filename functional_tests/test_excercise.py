@@ -126,8 +126,8 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 2)
-        self.assertEqual(groups[0], "knees")
-        self.assertEqual(groups[1], "toes")
+        self.assertEqual(groups[0].text, "knees")
+        self.assertEqual(groups[1].text, "toes")
 
 
     def test_can_modify_muscle_group_name(self):

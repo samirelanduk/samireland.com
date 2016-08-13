@@ -112,3 +112,11 @@ class MuscleGroupDeletionViewTests(ViewTest):
     def test_redirects_on_post(self):
         response = self.client.post("/health/edit/musclegroup/legs/delete/")
         self.assertRedirects(response, "/health/edit/")
+
+
+    def test_can_actually_delete_muscle_group(self):
+        self.assertEqual(MuscleGroup.objects.count(), 3)
+        self.client.post("/health/edit/musclegroup/legs/delete/")
+        self.assertEqual(MuscleGroup.objects.count(), 2)
+        MuscleGroup.objects.get(name="arms")
+        MuscleGroup.objects.get(name="fingers")
