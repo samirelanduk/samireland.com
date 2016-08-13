@@ -23,3 +23,7 @@ def musclegroup_page(request, name):
     except MuscleGroup.DoesNotExist:
         raise Http404()
     return render(request, "musclegroup.html", {"group": group})
+
+
+def musclegroup_delete_page(request, name):
+    pass
