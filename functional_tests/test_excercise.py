@@ -77,14 +77,13 @@ class MuscleGroupTests(ExcerciseTest):
          self.browser.current_url,
          self.live_server_url + "/health/edit/musclegroup/shoulders/"
         )
-        time.sleep(4)
         self.assertEqual(
          self.browser.find_element_by_tag_name("h1").text,
          "shoulders"
         )
 
         # There is a button to delete the group
-        delete = self.browser.find_element_by_id("deletebutton")
+        delete = self.browser.find_element_by_id("delete-button")
         delete.click()
 
         # He is on a page asking him if he is sure
