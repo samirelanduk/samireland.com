@@ -9,7 +9,7 @@ def edit_page(request):
         if group_form.is_valid():
             group_form.save()
         return redirect("/health/edit/")
-    muscle_groups = MuscleGroup.objects.all()
+    muscle_groups = MuscleGroup.objects.all().order_by("name")
     group_form = MuscleGroupForm()
     return render(request, "edit_health.html", {
      "group_form": group_form, "muscle_groups": muscle_groups
