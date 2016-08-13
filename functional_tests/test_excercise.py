@@ -145,7 +145,7 @@ class MuscleGroupTests(ExcerciseTest):
         self.assertEqual(groups[2].text, "toes")
 
         # He clicks the shoulders text and is taken to its page
-        groups[1].click()
+        groups[1].find_element_by_tag_name("a").click()
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/health/edit/musclegroup/shoulders/"
@@ -156,11 +156,11 @@ class MuscleGroupTests(ExcerciseTest):
         )
 
         # There is a section to change the name
-        new_name = self.browser.find_element_by_id("editname")
-        textbox = new_name.find_elements_by_tag_name("input")[0]
+        new_name = self.browser.find_element_by_id("edit-name")
+        textbox = new_name.find_elements_by_tag_name("input")[1]
         self.assertEqual(textbox.get_attribute("type"), "text")
-        submit = section.find_elements_by_tag_name("input")[1]
-        self.assertEqual(textbox.get_attribute("type"), "submit")
+        submit = new_name.find_elements_by_tag_name("input")[2]
+        self.assertEqual(submit.get_attribute("type"), "submit")
 
         # He changes the name to 'neck'
         textbox.send_keys("neck")
@@ -179,6 +179,6 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 3)
-        self.assertEqual(groups[0], "knees")
-        self.assertEqual(groups[1], "neck")
-        self.assertEqual(groups[2], "toes")
+        self.assertEqual(groups[0].text, "knees")
+        self.assertEqual(groups[1].text, "neck")
+        self.assertEqual(groups[2].text, "toes")

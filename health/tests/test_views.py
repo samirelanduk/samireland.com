@@ -83,6 +83,11 @@ class MuscleGroupViewTests(ViewTest):
         self.assertEqual(response.status_code, 404)
 
 
+    def test_musclegroup_view_uses_muscle_group_form(self):
+        response = self.client.get("/health/edit/musclegroup/legs/")
+        self.assertIsInstance(response.context["form"], MuscleGroupForm)
+
+
 
 class MuscleGroupDeletionViewTests(ViewTest):
 
