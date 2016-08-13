@@ -110,7 +110,7 @@ class MuscleGroupTests(ExcerciseTest):
         )
 
         # He changes his mind and goes back
-        delete = self.browser.find_element_by_id("deletebutton")
+        delete = self.browser.find_element_by_id("delete-button")
         delete.click()
 
         # He deletes, and is taken back to the edit page
