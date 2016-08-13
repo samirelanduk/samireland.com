@@ -23,3 +23,8 @@ class EditPageViewTests(ViewTest):
     def test_edit_page_view_uses_muscle_group_form(self):
         response = self.client.get("/health/edit/")
         self.assertIsInstance(response.context["group_form"], MuscleGroupForm)
+
+
+    def test_redirects_to_self_with_get_after_post(self):
+        response = self.client.post("/health/edit/")
+        self.assertRedirects(response, "/health/edit/")
