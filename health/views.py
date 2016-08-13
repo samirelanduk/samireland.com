@@ -14,3 +14,7 @@ def edit_page(request):
     return render(request, "edit_health.html", {
      "group_form": group_form, "muscle_groups": muscle_groups
     })
+
+
+def musclegroup_page():
+    pass

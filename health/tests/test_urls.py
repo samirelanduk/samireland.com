@@ -11,3 +11,7 @@ class UrlTest(TestCase):
 
     def test_health_edit_url_resolves_to_health_edit_view(self):
         self.check_url_returns_view("/health/edit/", views.edit_page)
+
+
+    def test_health_muscle_url_resolves_to_health_muscle_view(self):
+        self.check_url_returns_view("/health/edit/musclegroup/xxx/", views.musclegroup_page)

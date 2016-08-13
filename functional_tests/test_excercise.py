@@ -66,15 +66,15 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 3)
-        self.assertEqual(groups[0], "knees")
-        self.assertEqual(groups[1], "shoulders")
-        self.assertEqual(groups[2], "toes")
+        self.assertEqual(groups[0].text, "knees")
+        self.assertEqual(groups[1].text, "shoulders")
+        self.assertEqual(groups[2].text, "toes")
 
         # He clicks the shoulders text and is taken to its page
         groups[1].click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit/shoulders/"
+         self.live_server_url + "/health/edit/musclegroup/shoulders/"
         )
         self.assertEqual(
          self.browser.find_element_by_tag_name("h1").text,
@@ -88,7 +88,7 @@ class MuscleGroupTests(ExcerciseTest):
         # He is on a page asking him if he is sure
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit/shoulders/delete/"
+         self.live_server_url + "/health/edit/musclegroup/shoulders/delete/"
         )
         form = self.browser.find_element_by_tag_name("form")
         warning = form.find_element_by_id("warning")
@@ -105,7 +105,7 @@ class MuscleGroupTests(ExcerciseTest):
         back_to_safety.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit/shoulders/"
+         self.live_server_url + "/health/edit/musclegroup/shoulders/"
         )
 
         # He changes his mind and goes back
@@ -139,15 +139,15 @@ class MuscleGroupTests(ExcerciseTest):
         section = self.browser.find_element_by_id("muscle")
         groups = section.find_elements_by_class_name("muscle-group")
         self.assertEqual(len(groups), 3)
-        self.assertEqual(groups[0], "knees")
-        self.assertEqual(groups[1], "shoulders")
-        self.assertEqual(groups[2], "toes")
+        self.assertEqual(groups[0].text, "knees")
+        self.assertEqual(groups[1].text, "shoulders")
+        self.assertEqual(groups[2].text, "toes")
 
         # He clicks the shoulders text and is taken to its page
         groups[1].click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit/shoulders/"
+         self.live_server_url + "/health/edit/musclegroup/shoulders/"
         )
         self.assertEqual(
          self.browser.find_element_by_tag_name("h1").text,
@@ -166,7 +166,7 @@ class MuscleGroupTests(ExcerciseTest):
         submit.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/health/edit/neck/"
+         self.live_server_url + "/health/edit/musclegroup/neck/"
         )
         self.assertEqual(
          self.browser.find_element_by_tag_name("h1").text,
