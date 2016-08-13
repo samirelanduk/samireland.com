@@ -35,3 +35,9 @@ class EditPageViewTests(ViewTest):
         self.client.post("/health/edit/", data={"name": "arm"})
         self.assertEqual(MuscleGroup.objects.count(), 1)
         self.assertEqual(MuscleGroup.objects.first().name, "arm")
+
+
+    def test_edit_page_view_wont_save_incorrect_posts(self):
+        self.assertEqual(MuscleGroup.objects.count(), 0)
+        self.client.post("/health/edit/", data={"name": ""})
+        self.assertEqual(MuscleGroup.objects.count(), 0)
