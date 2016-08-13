@@ -28,3 +28,10 @@ class EditPageViewTests(ViewTest):
     def test_redirects_to_self_with_get_after_post(self):
         response = self.client.post("/health/edit/")
         self.assertRedirects(response, "/health/edit/")
+
+
+    def test_edit_page_view_can_save_muscle_group(self):
+        self.assertEqual(MuscleGroup.objects.count(), 0)
+        self.client.post("/health/edit/", data={"name": "arm"})
+        self.assertEqual(MuscleGroup.objects.count(), 1)
+        self.assertEqual(MuscleGroup.objects.first().name, "arm")
