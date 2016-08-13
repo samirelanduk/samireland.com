@@ -26,4 +26,8 @@ def musclegroup_page(request, name):
 
 
 def musclegroup_delete_page(request, name):
-    pass
+    try:
+        group = MuscleGroup.objects.get(name=name)
+    except MuscleGroup.DoesNotExist:
+        raise Http404()
+    return render(request, "musclegroup_delete.html", {"group": group})

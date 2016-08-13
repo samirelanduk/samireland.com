@@ -81,3 +81,29 @@ class MuscleGroupViewTests(ViewTest):
     def test_invalid_group_returns_404(self):
         response = self.client.get("/health/edit/musclegroup/toes/")
         self.assertEqual(response.status_code, 404)
+
+
+
+class MuscleGroupDeletionViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        MuscleGroup.objects.create(name="arms")
+        MuscleGroup.objects.create(name="legs")
+        MuscleGroup.objects.create(name="fingers")
+
+
+    def test_musclegroup_deleteion_view_uses_musclegroup_deletion_template(self):
+        response = self.client.get("/health/edit/musclegroup/arms/delete/")
+        self.assertTemplateUsed(response, "musclegroup_delete.html")
+
+
+    def test_musclegroup_deleteion_view_uses_correct_group(self):
+        group = MuscleGroup.objects.get(name="legs")
+        response = self.client.get("/health/edit/musclegroup/legs/delete/")
+        self.assertEqual(response.context["group"], group)
+
+
+    def test_invalid_group_returns_404(self):
+        response = self.client.get("/health/edit/musclegroup/toes/delete/")
+        self.assertEqual(response.status_code, 404)
