@@ -63,8 +63,16 @@ class MuscleGroupViewTests(ViewTest):
     def setUp(self):
         ViewTest.setUp(self)
         MuscleGroup.objects.create(name="arms")
+        MuscleGroup.objects.create(name="legs")
+        MuscleGroup.objects.create(name="fingers")
 
 
     def test_musclegroup_view_uses_musclegroup_template(self):
         response = self.client.get("/health/edit/musclegroup/arms/")
         self.assertTemplateUsed(response, "musclegroup.html")
+
+
+    def test_musclegroup_view_uses_correct_group(self):
+        group = MuscleGroup.objects.get(name="legs")
+        response = self.client.get("/health/edit/musclegroup/legs/")
+        self.assertEqual(response.context["group"], group)

@@ -17,4 +17,5 @@ def edit_page(request):
 
 
 def musclegroup_page(request, name):
-    return render(request, "musclegroup.html")
+    group = MuscleGroup.objects.get(name=name)
+    return render(request, "musclegroup.html", {"group": group})
