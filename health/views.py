@@ -22,6 +22,13 @@ def musclegroup_page(request, name):
         group = MuscleGroup.objects.get(name=name)
     except MuscleGroup.DoesNotExist:
         raise Http404()
+    if request.method == "POST":
+        form = MuscleGroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return redirect("/health/edit/musclegroup/%s/" % request.POST["name"])
+        else:
+            return redirect("/health/edit/musclegroup/%s/" % group.name)
     form = MuscleGroupForm()
     return render(request, "musclegroup.html", {"group": group, "form": form})
 

@@ -88,6 +88,19 @@ class MuscleGroupViewTests(ViewTest):
         self.assertIsInstance(response.context["form"], MuscleGroupForm)
 
 
+    def test_musclegroup_view_can_change_name(self):
+        self.client.post("/health/edit/musclegroup/legs/", data={"name": "toes"})
+        MuscleGroup.objects.get(name="arms")
+        MuscleGroup.objects.get(name="fingers")
+        MuscleGroup.objects.get(name="toes")
+
+
+
+    def test_musclegroup_view_redirects_properly_on_namechange(self):
+        response = self.client.post("/health/edit/musclegroup/legs/", data={"name": "toes"})
+        self.assertRedirects(response, "/health/edit/musclegroup/toes/")
+
+
 
 class MuscleGroupDeletionViewTests(ViewTest):
 
