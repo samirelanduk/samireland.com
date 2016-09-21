@@ -196,3 +196,15 @@ class MuscleGroupTests(ExcerciseTest):
          error.text,
          "You cannot submit a muscle group with no name"
         )
+
+        # Sam tries to add a group with an existing name which also fails
+        self.add_muscle_group("arms")
+        self.assertEqual(
+         len(self.browser.find_elements_by_class_name("error")), 0
+        )
+        self.add_muscle_group("arms")
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "There is already a muscle group with this name"
+        )

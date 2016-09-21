@@ -12,5 +12,8 @@ class MuscleGroupForm(forms.models.ModelForm):
         }
 
         error_messages = {
-         "name": {"required": "You cannot submit a muscle group with no name"}
+         "name": {
+          "required": "You cannot submit a muscle group with no name",
+          "unique": "There is already a muscle group with this name"
+         }
         }
