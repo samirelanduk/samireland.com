@@ -14,6 +14,11 @@
     {% csrf_token %}
     {{ group_form.name }}
     <input type="submit">
+    {% if group_form.name.errors %}
+    <div class="error">
+      {{ group_form.name.errors }}
+    </div>
+    {% endif %}
   </form>
 </div>
 

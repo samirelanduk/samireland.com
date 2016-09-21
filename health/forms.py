@@ -10,3 +10,7 @@ class MuscleGroupForm(forms.models.ModelForm):
         widgets = {
          "name": forms.fields.TextInput()
         }
+
+        error_messages = {
+         "name": {"required": "You cannot submit a muscle group with no name"}
+        }

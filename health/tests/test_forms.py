@@ -10,3 +10,15 @@ class FormsRenderingTest(TestCase):
          'name="name" type="text"',
          str(form)
         )
+
+
+
+class FormsValidationTest(TestCase):
+
+    def test_muscle_group_form_wont_accept_blank_name(self):
+        form = MuscleGroupForm(data={"name":""})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+         form.errors["name"],
+         ["You cannot submit a muscle group with no name"]
+        )

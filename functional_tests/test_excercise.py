@@ -182,3 +182,17 @@ class MuscleGroupTests(ExcerciseTest):
         self.assertEqual(groups[0].text, "knees")
         self.assertEqual(groups[1].text, "neck")
         self.assertEqual(groups[2].text, "toes")
+
+
+    def test_muscle_group_validation(self):
+        self.sam_logs_in()
+
+        # Sam tries to add a muscle group with no name
+        self.add_muscle_group("")
+
+        # He is still on the page and there is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(
+         error.text,
+         "You cannot submit a muscle group with no name"
+        )
