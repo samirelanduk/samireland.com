@@ -26,7 +26,7 @@ class EditPageViewTests(ViewTest):
 
 
     def test_redirects_to_self_with_get_after_post(self):
-        response = self.client.post("/health/edit/")
+        response = self.client.post("/health/edit/", data={"name": "arm"})
         self.assertRedirects(response, "/health/edit/")
 
 
