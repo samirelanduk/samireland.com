@@ -35,6 +35,11 @@ class KeepOut(FunctionalTest):
          self.browser.current_url,
          self.live_server_url + "/"
         )
+        self.browser.get(self.live_server_url + "/health/edit/")
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
 
 
     def test_login_attempt_fails(self):

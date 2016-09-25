@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 from health.forms import MuscleGroupForm
 from health.models import MuscleGroup
 
 # Create your views here.
+@login_required(login_url="/", redirect_field_name=None)
 def edit_page(request):
     if request.method == "POST":
         group_form = MuscleGroupForm(request.POST)
@@ -22,6 +24,7 @@ def edit_page(request):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def musclegroup_page(request, name):
     try:
         group = MuscleGroup.objects.get(name=name)
@@ -38,6 +41,7 @@ def musclegroup_page(request, name):
     return render(request, "musclegroup.html", {"group": group, "form": form})
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def musclegroup_delete_page(request, name):
     try:
         group = MuscleGroup.objects.get(name=name)

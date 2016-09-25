@@ -15,6 +15,12 @@ class ViewTest(TestCase):
 
 class EditPageViewTests(ViewTest):
 
+    def test_edit_page_view_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/health/edit/")
+        self.assertRedirects(response, "/")
+
+
     def test_edit_page_view_uses_edit_page_template(self):
         response = self.client.get("/health/edit/")
         self.assertTemplateUsed(response, "edit_health.html")
@@ -67,6 +73,12 @@ class MuscleGroupViewTests(ViewTest):
         MuscleGroup.objects.create(name="fingers")
 
 
+    def test_musclegroup_view_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/health/edit/musclegroup/arms/")
+        self.assertRedirects(response, "/")
+
+
     def test_musclegroup_view_uses_musclegroup_template(self):
         response = self.client.get("/health/edit/musclegroup/arms/")
         self.assertTemplateUsed(response, "musclegroup.html")
@@ -109,6 +121,12 @@ class MuscleGroupDeletionViewTests(ViewTest):
         MuscleGroup.objects.create(name="arms")
         MuscleGroup.objects.create(name="legs")
         MuscleGroup.objects.create(name="fingers")
+
+
+    def test_musclegroup_deletion_view_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/health/edit/musclegroup/arms/delete/")
+        self.assertRedirects(response, "/")
 
 
     def test_musclegroup_deleteion_view_uses_musclegroup_deletion_template(self):
