@@ -18,7 +18,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 from blog import urls as blog_urls
 from piano import urls as piano_urls
-from health import urls as health_urls
 from media import urls as media_urls
 from account import urls as account_urls
 from blog.views import about_page, home_page
@@ -26,7 +25,6 @@ from blog.views import about_page, home_page
 urlpatterns = [
     url(r'^blog/', include(blog_urls)),
     url(r'^piano/', include(piano_urls)),
-    url(r'^health/', include(health_urls)),
     url(r'^media/', include(media_urls)),
     url(r'^account/', include(account_urls)),
     url(r'^about/$', about_page, name="about_page"),
