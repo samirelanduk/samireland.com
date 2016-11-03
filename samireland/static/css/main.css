@@ -22,15 +22,32 @@ header {
   padding: 10px 0px;
 }
 
-.logout, .logout:hover {
-  background-color: #3B5998;
+header a, header a:hover {
+  color: #FFFFFF;
+}
+
+#right_links, #left_links {
+  font-size: 10%;
   position: absolute;
   top: 0;
+}
+
+#left_links {
+  left: 0;
+}
+
+#left_links .piano {
+  background-color: #444444;
+}
+
+#right_links {
   right: 0;
+  background-color: #3B5998;
+}
+
+.login-link, .login-link:hover {
+
   font-size: 10%;
-  padding-left: 1%;
-  padding-right: 1%;
-  color: #FFFFFF;
 }
 
 nav {
@@ -60,7 +77,7 @@ nav {
 }
 
 main {
-  display: block; 
+  display: block;
   padding: 0px 20px;
 }
 

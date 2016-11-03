@@ -22,7 +22,12 @@
 <body>
   <header>Sam Ireland
     {% if user.is_authenticated %}
-    <a href="/account/logout/" class="logout">Logout</a>
+    <div id="left_links">
+      <a href="/piano/update/" class="piano">Piano</a>
+    </div>
+    <div id="right_links">
+      <a href="/account/logout/">Logout</a>
+    </div>
     {% endif %}
   </header>
   <nav>
