@@ -125,13 +125,13 @@ class BlogContentTest(BlogTest):
         external_links = external_links.find_elements_by_class_name("external_link")
         self.assertEqual(len(external_links), 7)
         required_links = [
-         "http://facebok.com/samirelanduk/",
-         "http://twitter.com/sam_m_ireland/",
-         "http://linkedin.com/in/sam-ireland-42b73568/",
-         "http://github.com/samirelanduk/",
-         "http://instagram.com/samirelanduk/",
-         "http://youtube.com/channel/UCeitnG6LfY-F4C3jxHd-rRA/",
-         "http://plus.google.com/+samireland/"
+         "https://facebook.com/samirelanduk/",
+         "https://twitter.com/sam_m_ireland/",
+         "https://linkedin.com/in/sam-ireland-42b73568/",
+         "https://github.com/samirelanduk/",
+         "https://instagram.com/samirelanduk/",
+         "https://youtube.com/channel/UCeitnG6LfY-F4C3jxHd-rRA/",
+         "https://www.researchgate.net/profile/Sam_Ireland2/"
         ]
         for link in external_links:
             a = link.find_element_by_tag_name("a")
