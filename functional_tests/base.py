@@ -35,10 +35,11 @@ class FunctionalTest(StaticLiveServerTestCase):
          self.browser.current_url,
          self.live_server_url + "/"
         )
-        self.assertIn(
-         "logout",
-         self.browser.find_element_by_tag_name("header").text.lower()
-        )
+        for required_text in ["Logout", "Piano", "New Blog", "Edit Blog"]:
+            self.assertIn(
+             required_text,
+             self.browser.find_element_by_tag_name("header").text
+            )
 
 
     def sam_logs_out(self):
