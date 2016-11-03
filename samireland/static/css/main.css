@@ -24,6 +24,7 @@ header {
 
 header a, header a:hover {
   color: #FFFFFF;
+  display: block;
 }
 
 #right_links, #left_links {
@@ -38,6 +39,14 @@ header a, header a:hover {
 
 #left_links .piano {
   background-color: #444444;
+}
+
+#left_links .blog-new {
+  background-color:	#E9967A;
+}
+
+#left_links .blog-edit {
+  background-color:	#F94D00;
 }
 
 #right_links {
