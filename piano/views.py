@@ -7,16 +7,6 @@ from piano.forms import PracticeSessionForm
 
 # Create your views here.
 def piano_page(request):
-    yt_html = requests.get(
-     "https://www.youtube.com/channel/UCILeIbhtlv4lmgAaZbPKr8A"
-    ).text
-    title_start = yt_html.find('<h3 class="yt-lockup-title ">')
-    href_start = yt_html[title_start:].find("href=")
-    href_end = yt_html[title_start + href_start:].find(">")
-    yt_code = yt_html[
-     title_start + href_start:title_start + href_start + href_end
-    ].split("=")[-1].split('"')[0]
-
     today = datetime.datetime.now().date()
     sixty_days_ago = today - datetime.timedelta(days=60)
     sixty_sessions = PracticeSession.objects.all().filter(date__gte=sixty_days_ago).order_by("date")
@@ -46,7 +36,6 @@ def piano_page(request):
     hours = all_minutes // 60
     minutes = all_minutes % 60
     return render(request, "piano.html", {
-     "recent_code": yt_code,
      "today": today,
      "sixty_sessions": sixty_sessions,
      "sixty_days_ago": sixty_days_ago,
