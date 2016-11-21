@@ -87,6 +87,7 @@ class NewArticleTest(FunctionalTest):
         self.sam_writes_article("Title", "Summary", "01012001", "Main", True)
 
         # He goes to the main page and there is the article summary
+        self.browser.get(self.live_server_url + "/")
         latest_writing = self.browser.find_element_by_id("latest_writing")
         article_div = latest_writing.find_element_by_class_name("article-box")
         self.assertEqual(
@@ -112,3 +113,65 @@ class NewArticleTest(FunctionalTest):
         self.assertEqual(summary.text, "Summary")
         self.assertEqual(date.text, "1 January, 2001")
         self.assertEqual(body.text, "Body")
+
+
+    def test_can_write_multiple_articles(self):
+        # Sam writes multiple excellent articles
+        self.sam_logs_in()
+        self.sam_writes_article("Title4", "Summary4", "01012004", "Main4", True)
+        self.sam_writes_article("Title2", "Summary2", "01012002", "Main2", True)
+        self.sam_writes_article("Title1", "Summary1", "01012001", "Main1", True)
+        self.sam_writes_article("Title5", "Summary5", "01012005", "Main5", True)
+        self.sam_writes_article("Title3", "Summary3", "01012003", "Main3", True)
+
+        # They are on the writing page, in order of date
+        self.browser.get(self.live_server_url + "/writing/")
+        article_divs = self.browser.find_elements_by_class_name("article-box")
+        self.assertEqual(len(article_divs), 5)
+        self.assertEqual(
+         article_divs[0].find_element_by_tag_name("article-box-title").text,
+         "Title5"
+        )
+        self.assertEqual(
+         article_divs[1].find_element_by_tag_name("article-box-title").text,
+         "Title4"
+        )
+        self.assertEqual(
+         article_divs[2].find_element_by_tag_name("article-box-title").text,
+         "Title3"
+        )
+        self.assertEqual(
+         article_divs[3].find_element_by_tag_name("article-box-title").text,
+         "Title2"
+        )
+        self.assertEqual(
+         article_divs[4].find_element_by_tag_name("article-box-title").text,
+         "Title1"
+        )
+
+
+    def test_most_recent_article_is_on_main_page(self):
+        # Sam writes multiple excellent articles
+        self.sam_logs_in()
+        self.sam_writes_article("Title4", "Summary4", "01012004", "Main4", True)
+        self.sam_writes_article("Title2", "Summary2", "01012002", "Main2", True)
+        self.sam_writes_article("Title1", "Summary1", "01012001", "Main1", True)
+        self.sam_writes_article("Title5", "Summary5", "01012005", "Main5", True)
+        self.sam_writes_article("Title3", "Summary3", "01012003", "Main3", True)
+
+        # Sam finds the most recent article on the main page
+        self.browser.get(self.live_server_url + "/")
+        latest_writing = self.browser.find_element_by_id("latest_writing")
+        article_div = latest_writing.find_element_by_class_name("article-box")
+        self.assertEqual(
+         article_div.find_element_by_tag_name("article-box-title").text,
+         "Title5"
+        )
+        self.assertEqual(
+         article_div.find_element_by_tag_name("article-box-summary").text,
+         "Summar5"
+        )
+        self.assertEqual(
+         article_div.find_element_by_tag_name("article-box-summary").text,
+         "5 January, 2001"
+        )
