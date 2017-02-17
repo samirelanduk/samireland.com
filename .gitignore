@@ -1,6 +1,0 @@
-*.pyc
-__pycache__
-*.sqlite3
-secret_settings.py
-config.py
-media/images
