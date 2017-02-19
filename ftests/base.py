@@ -1,7 +1,7 @@
 from selenium import webdriver
-from django.test import TestCase
+from django.test import LiveServerTestCase
 
-class FunctionalTest(TestCase):
+class FunctionalTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
