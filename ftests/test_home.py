@@ -53,3 +53,22 @@ class BasePageLayoutTests(FunctionalTest):
             links = child.find_elements_by_tag_name("a")
             self.assertEqual(len(links), 1)
             self.assertIsNot(links[0].find_element_by_tag_name("img"), None)
+
+
+
+class HomePageTests(FunctionalTest):
+
+    def test_home_page_has_image_and_brief_summary(self):
+        self.browser.get(self.live_server_url + "/")
+        main = self.browser.find_element_by_tag_name("main")
+
+        # There are two children elements of main
+        children = main.find_elements_by_xpath("./*")
+        self.assertEqual(len(children), 2)
+
+        # They are both divs, and one has an image
+        self.assertEqual(children[0].tag_name, "div")
+        self.assertEqual(children[0].get_property("id"), "me-image")
+        self.assertIsNot(children[0].find_element_by_tag_name("img"), None)
+        self.assertEqual(children[1].tag_name, "div")
+        self.assertEqual(children[1].get_property("id"), "brief-summary")

@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="author" content="Sam Ireland">
   <meta name="description" content="Sam Ireland's personal website">
+  <title>{% block title %}{% endblock %} - Sam Ireland</title>
 </head>
 
 <body>
@@ -14,7 +15,10 @@
      <li><a href="/research/">Research</a></li>
      <li><a href="/about/">About</a></li>
   </ul></nav>
-  <main></main>
+  <main>
+    {% block main %}
+    {% endblock %}
+  </main>
   <footer><ul>
     <li><a href="" target="_blank"><img></a></li>
     <li><a href="" target="_blank"><img></a></li>
