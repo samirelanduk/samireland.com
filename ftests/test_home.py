@@ -80,6 +80,17 @@ class BasePageStyleTests(FunctionalTest):
         self.assertNotEqual(body.value_of_css_property("margin-bottom"), "0px")
 
 
+    def test_body_has_different_background_to_backdrop(self):
+        self.browser.get(self.live_server_url + "/")
+        body = self.browser.find_element_by_tag_name("body")
+        backdrop = self.browser.find_element_by_tag_name("html")
+        self.assertNotEqual(
+         body.value_of_css_property("background-color"),
+         backdrop.value_of_css_property("background-color")
+        )
+
+
+
 class HomePageTests(FunctionalTest):
 
     def test_home_page_has_image_and_brief_summary(self):
