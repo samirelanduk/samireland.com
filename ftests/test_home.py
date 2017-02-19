@@ -9,3 +9,9 @@ class BasePageLayoutTests(FunctionalTest):
          [element.tag_name for element in body.find_elements_by_xpath("./*")],
          ["header", "nav", "main", "footer"]
         )
+
+
+    def test_name_in_header(self):
+        self.browser.get(self.live_server_url + "/")
+        header = self.browser.find_element_by_tag_name("header")
+        self.assertIn("Sam Ireland", header.text)
