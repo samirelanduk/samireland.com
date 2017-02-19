@@ -33,3 +33,23 @@ class BasePageLayoutTests(FunctionalTest):
         for child in children:
             self.assertEqual(child.tag_name, "li")
             self.assertEqual(len(child.find_elements_by_tag_name("a")), 1)
+
+
+    def test_footer_is_unordered_list_of_img_links(self):
+        self.browser.get(self.live_server_url + "/")
+        footer = self.browser.find_element_by_tag_name("footer")
+
+        # The only child of the footer is a <ul>
+        children = footer.find_elements_by_xpath("./*")
+        self.assertEqual(len(children), 1)
+        ul = children[0]
+        self.assertEqual(ul.tag_name, "ul")
+
+        # ul has list of links
+        children = ul.find_elements_by_xpath("./*")
+        self.assertTrue(2 <= len(children) <= 15)
+        for child in children:
+            self.assertEqual(child.tag_name, "li")
+            links = child.find_elements_by_tag_name("a")
+            self.assertEqual(len(links), 1)
+            self.assertIsNot(links[0].find_element_by_tag_name("img"), None)
