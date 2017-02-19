@@ -6,3 +6,8 @@ class UrlTest(TestCase):
     def check_url_returns_view(self, url, view):
         resolver = resolve(url)
         self.assertEqual(resolver.func, view)
+
+
+
+class ViewTest(TestCase):
+    pass
