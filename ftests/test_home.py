@@ -90,6 +90,23 @@ class BasePageStyleTests(FunctionalTest):
         )
 
 
+    def test_two_different_non_TNR_fonts(self):
+        self.browser.get(self.live_server_url + "/")
+        header = self.browser.find_element_by_tag_name("header")
+        normal_text_div = self.browser.find_element_by_id("brief-summary")
+        self.assertNotEqual(
+         header.value_of_css_property("font-family"),
+         "Times New Roman"
+        )
+        self.assertNotEqual(
+         normal_text_div.value_of_css_property("font-family"),
+         "Times New Roman"
+        )
+        self.assertNotEqual(
+         header.value_of_css_property("font-family"),
+         normal_text_div.value_of_css_property("font-family")
+        )
+
 
 class HomePageTests(FunctionalTest):
 
