@@ -2,7 +2,6 @@ html {
   background-color: #EEEEEE;
   font-family: 'Roboto';
   font-size: large;
-  padding: 0px;
 }
 
 header, nav, h1, h2, h3, h4, h5 {
@@ -25,6 +24,7 @@ header {
 
 #navicon {
   float: right;
+  padding-left: 5%;
   padding-right: 5%;
   cursor: pointer;
 }
@@ -71,12 +71,53 @@ nav a:hover {
 
 }
 
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens and up */
+
+  header {
+    text-align: center;
+    line-height: 170px;
+    font-size: 500%;
+    padding: 0px;
+  }
+
+  #navicon {
+    display: none;
+  }
+
+  nav {
+    display: block;
+    text-align: center;
+  }
+
+  nav li {
+    display: inline;
+  }
+
+  nav a {
+    display: inline-block;
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+}
+
 
 @media only screen and (min-width: 1024px) {
   /* Big Desktop screens */
   body {
     width: 1024px;
     margin: 30px auto;
+  }
+
+  header {
+    line-height: 240px;
+    font-size: 700%;
+  }
+
+  nav li {
+    line-height: 50px;
+    font-size: 120%;
   }
 
 }

@@ -179,6 +179,33 @@ class BasePageStyleTests(FunctionalTest):
         self.assertEqual(len(set([link.location["x"] for link in links])), 3)
 
 
+    def test_header_and_nav_work_on_desktop(self):
+        self.browser.set_window_size(800, 900)
+        self.browser.get(self.live_server_url + "/")
+
+        # The header is centred and there is no nav icon
+        header = self.browser.find_element_by_tag_name("header")
+        self.assertEqual(
+         header.value_of_css_property("text-align"),
+         "center"
+        )
+        navicon = self.browser.find_element_by_id("navicon")
+        self.assertEqual(
+         navicon.value_of_css_property("display"),
+         "none"
+        )
+
+        # The navbar is below it
+        navbar = self.browser.find_element_by_tag_name("nav")
+        self.assertGreater(navbar.location["y"], header.location["y"])
+
+        # The links are all on one row
+        links = navbar.find_elements_by_tag_name("li")
+        first_link_y = links[0].location["y"]
+        for link in links[1:]:
+            self.assertEqual(link.location["y"], first_link_y)
+
+
 
 class HomePageTests(FunctionalTest):
 
