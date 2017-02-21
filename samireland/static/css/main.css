@@ -60,6 +60,11 @@ nav a:hover {
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */
+  header {
+    line-height: 75px;
+    font-size: 200%;
+  }
+
   nav li {
     width: 32.5%;
   }
