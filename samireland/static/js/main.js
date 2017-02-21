@@ -5,5 +5,7 @@ $('#navicon').on('click', function() {
 $(window).on("resize", function() {
   if ($("#navicon").is(":hidden")) {
     $("nav").show();
-  }
+  } else {
+		$("nav").hide();
+	}
 });

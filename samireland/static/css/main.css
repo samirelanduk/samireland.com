@@ -42,9 +42,11 @@ nav ul {
 
 nav li {
   display: inline-block;
-  width: 49%;
+  width: 50%;
   text-align: center;
   margin: 0px;
+  box-sizing: border-box;
+  border: 1px solid #4A9586;;
   line-height: 40px;
 }
 
@@ -66,7 +68,7 @@ nav a:hover {
   }
 
   nav li {
-    width: 32.5%;
+    width: 33.33%;
   }
 
 }
@@ -92,6 +94,7 @@ nav a:hover {
 
   nav li {
     display: inline;
+    border: 0px;
   }
 
   nav a {
