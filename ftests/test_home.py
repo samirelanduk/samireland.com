@@ -1,3 +1,4 @@
+from time import sleep
 from .base import FunctionalTest
 
 class BasePageLayoutTests(FunctionalTest):
@@ -106,6 +107,77 @@ class BasePageStyleTests(FunctionalTest):
          header.value_of_css_property("font-family"),
          normal_text_div.value_of_css_property("font-family")
         )
+
+
+    def test_header_and_nav_work_on_mobile(self):
+        self.browser.get(self.live_server_url + "/")
+
+        # The header is left aligned
+        header = self.browser.find_element_by_tag_name("header")
+        self.assertEqual(
+         header.value_of_css_property("text-align"),
+         "start"
+        )
+
+        # There is a navicon to the right
+        navicon = self.browser.find_element_by_id("navicon")
+        self.assertEqual(header.location["y"], navicon.location["y"])
+        self.assertLess(header.location["x"], navicon.location["x"])
+
+        # The navbar itself isn't displayed
+        navbar = self.browser.find_element_by_tag_name("nav")
+        self.assertEqual(
+         navbar.value_of_css_property("display"),
+         "none"
+        )
+
+        # Clicking the navicon makes the nav appear
+        navicon.click()
+        self.assertNotEqual(
+         navbar.value_of_css_property("display"),
+         "none"
+        )
+
+        # The links are in two columns
+        links = navbar.find_elements_by_tag_name("li")
+        self.assertEqual(len(set([link.location["x"] for link in links])), 2)
+
+        # Clicking the navicon again makes the nav disappear
+        navicon.click()
+        sleep(1.5)
+        self.assertEqual(
+         navbar.value_of_css_property("display"),
+         "none"
+        )
+
+        # The user opens the page on an iPad
+        self.browser.set_window_size(700, 900)
+        self.browser.get(self.live_server_url + "/")
+
+        # The basic layout is still the same
+        header = self.browser.find_element_by_tag_name("header")
+        self.assertEqual(
+         header.value_of_css_property("text-align"),
+         "start"
+        )
+        navicon = self.browser.find_element_by_id("navicon")
+        self.assertEqual(header.location["y"], navicon.location["y"])
+        self.assertLess(header.location["x"], navicon.location["x"])
+        navbar = self.browser.find_element_by_tag_name("nav")
+        self.assertEqual(
+         navbar.value_of_css_property("display"),
+         "none"
+        )
+
+        # But the links are in three columns now
+        navicon.click()
+        self.assertNotEqual(
+         navbar.value_of_css_property("display"),
+         "none"
+        )
+        links = navbar.find_elements_by_tag_name("li")
+        self.assertEqual(len(set([link.location["x"] for link in links])), 3)
+
 
 
 class HomePageTests(FunctionalTest):

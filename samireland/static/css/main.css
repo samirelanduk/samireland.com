@@ -1,6 +1,7 @@
 html {
   background-color: #EEEEEE;
   font-family: 'Roboto';
+  font-size: large;
 }
 
 header, nav, h1, h2, h3, h4, h5 {
@@ -10,6 +11,52 @@ header, nav, h1, h2, h3, h4, h5 {
 body {
   margin: 0px;
   background-color: #FFFFFF;
+}
+
+header {
+  font-size: 150%;
+  background-color: #4A9586;
+  color: #FFFFFF;
+  padding-left: 5%;
+  line-height: 50px;
+}
+
+
+#navicon {
+  float: right;
+  padding-right: 5%;
+}
+
+nav {
+  display: none;
+  background-color: #5CA193;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+nav li {
+  display: inline-block;
+  width: 49%;
+  text-align: center;
+  margin: 0px;
+  line-height: 40px;
+}
+
+nav a {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+@media only screen and (min-width: 568px) {
+  /* iPad and up */
+  nav li {
+    width: 32%;
+  }
+
 }
 
 

@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   <meta name="author" content="Sam Ireland">
   <meta name="description" content="Sam Ireland's personal website">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% endblock %} - Sam Ireland</title>
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+  <script type="text/javascript" src="static/js/main.js" async></script>
   <link href='http://fonts.googleapis.com/css?family=Roboto+Slab'
    rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Roboto'
@@ -14,10 +17,13 @@
 </head>
 
 <body>
-  <header>Sam Ireland</header>
+  <header>Sam Ireland<div id="navicon">&#9776;</div></header>
   <nav><ul>
      <li><a href="/">Home</a></li>
      <li><a href="/research/">Research</a></li>
+     <li><a href="/projects/">Projects</a></li>
+     <li><a href="/writing/">Writing</a></li>
+     <li><a href="/blog/">Blog</a></li>
      <li><a href="/about/">About</a></li>
   </ul></nav>
   <main>
