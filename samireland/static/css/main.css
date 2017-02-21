@@ -2,6 +2,7 @@ html {
   background-color: #EEEEEE;
   font-family: 'Roboto';
   font-size: large;
+  padding: 0px;
 }
 
 header, nav, h1, h2, h3, h4, h5 {
@@ -25,6 +26,7 @@ header {
 #navicon {
   float: right;
   padding-right: 5%;
+  cursor: pointer;
 }
 
 nav {
@@ -51,10 +53,15 @@ nav a {
   text-decoration: none;
 }
 
+nav a:hover {
+  color: #111111;
+  transition: 0.5s
+}
+
 @media only screen and (min-width: 568px) {
   /* iPad and up */
   nav li {
-    width: 32%;
+    width: 32.5%;
   }
 
 }
