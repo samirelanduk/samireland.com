@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def home_page(request):
@@ -25,4 +25,5 @@ def fence_page(request):
 
 
 def logout_page(request):
-    pass
+    logout(request)
+    return redirect("/")

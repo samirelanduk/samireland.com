@@ -307,6 +307,6 @@ class AuthTests(FunctionalTest):
          self.live_server_url + "/"
         )
 
-        # There are no links in the header
+        # There is only one link in the header
         header = self.browser.find_element_by_tag_name("header")
-        self.assertEqual(header.find_elements_by_tag_name("a"), [])
+        self.assertEqual(len(header.find_elements_by_tag_name("a")), 1)
