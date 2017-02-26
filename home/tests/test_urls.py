@@ -13,3 +13,7 @@ class HomeUrlTests(UrlTest):
 
     def test_fence_url_resolves_to_fence_view(self):
         self.check_url_returns_view("/youshallnotpass/", views.fence_page)
+
+
+    def test_logout_url_resolves_to_logout_view(self):
+        self.check_url_returns_view("/logout/", views.logout_page)

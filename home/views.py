@@ -22,3 +22,7 @@ def login_page(request):
 
 def fence_page(request):
     return render(request, "fence.html")
+
+
+def logout_page(request):
+    pass
