@@ -1,0 +1,64 @@
+form .input-row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  border-radius: 10px;
+  font-size: 150%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  margin-top: 30px;
+  font-size: 120%;
+  padding: 10px;
+  background-color: #4A9586;
+  color: #FFFFFF;
+  border-radius: 5px;
+  border: 0px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #418C7E;
+}
+
+@media only screen and (min-width: 568px) {
+  /* iPad and up */
+  input[type=text], input[type=password] {
+    width: 75%;
+  }
+
+}
+
+
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens and up */
+
+  label, h1, .submit-row {
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+    padding-right: 10px;
+  }
+
+  .form-row {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  input[type=text], input[type=password] {
+    display: inline-block;
+    width: 85%;
+  }
+
+}
