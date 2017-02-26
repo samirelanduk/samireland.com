@@ -15,9 +15,22 @@ a#login-link {
   cursor: text;
 }
 
+a#logout-link {
+  font-size: 20%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  background-color: #3B5998;
+  line-height: 1;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
 body {
   margin: 0px;
   background-color: #FFFFFF;
+  position: relative;
 }
 
 header {

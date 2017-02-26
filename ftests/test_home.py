@@ -264,7 +264,7 @@ class AuthTests(FunctionalTest):
 
         # There is a logout button
         header = self.browser.find_element_by_tag_name("header")
-        logout_link = header.find_elements_by_tag_name[0]
+        logout_link = header.find_elements_by_tag_name("a")[1]
         self.assertEqual(logout_link.text, "Logout")
 
 
@@ -295,7 +295,7 @@ class AuthTests(FunctionalTest):
 
         # There is a logout link
         header = self.browser.find_element_by_tag_name("header")
-        logout_link = header.find_elements_by_tag_name[0]
+        logout_link = header.find_elements_by_tag_name("a")[1]
 
         # They click it
         logout_link.click()
