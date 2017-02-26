@@ -1,0 +1,50 @@
+h1 {
+  margin: 0px;
+}
+
+#intro {
+  display: table;
+}
+
+#intro-row {
+  display: table-row;
+}
+
+#me-image {
+  display: block;
+  padding-left: 5%;
+  padding-right: 5%;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+}
+
+#brief-summary {
+  display: block;
+}
+
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens and up */
+
+  #me-image {
+    display: table-cell;
+    vertical-align: middle;
+    margin-top: 0px;
+  }
+
+  #brief-summary {
+    display: table-cell;
+  }
+
+  /*#me-image {
+    display: inline-block;
+    width: 15%;
+  }
+
+  #brief-summary {
+    display: inline-block;
+    width: 70%;
+  }*/
+
+}

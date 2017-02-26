@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}Home{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/home.css">
+{% endblock %}
 
 {% block main %}
-<div id="me-image"><img></div>
-<div id="brief-summary"></div>
+<div id="intro">
+  <h1>Hello</h1>
+  <div id="intro-row">
+    <div id="brief-summary">
+    </div>
+    <div id="me-image"><img class="circle" src="/static/images/me.jpeg"></div>
+  </div>
+</div>
 {% endblock %}

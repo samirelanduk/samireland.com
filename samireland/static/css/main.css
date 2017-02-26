@@ -1,7 +1,8 @@
 html {
   background-color: #EEEEEE;
-  font-family: 'Roboto';
+  font-family: 'Open Sans';
   font-size: large;
+  line-height: 2;
 }
 
 header, nav, h1, h2, h3, h4, h5 {
@@ -58,6 +59,19 @@ nav a {
 nav a:hover {
   color: #111111;
   transition: 0.5s
+}
+
+main {
+  padding: 40px 60px;;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.circle {
+  border-radius: 50%;
 }
 
 @media only screen and (min-width: 568px) {

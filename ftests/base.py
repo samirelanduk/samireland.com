@@ -1,5 +1,6 @@
 from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.auth.models import User
 
 class FunctionalTest(StaticLiveServerTestCase):
 
