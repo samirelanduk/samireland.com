@@ -19,3 +19,9 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def login(self):
         self.client.login(username="testsam", password="testpassword")
+        cookie = self.client.cookies["sessionid"].value
+        self.browser.get(self.live_server_url + "/")
+        self.browser.add_cookie({
+         "name": "sessionid", "value": cookie, "secure": False, "path": "/"
+        })
+        self.browser.refresh()
