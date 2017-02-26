@@ -13,3 +13,8 @@ class LoginViewTests(ViewTest):
     def test_login_view_uses_login_template(self):
         response = self.client.get("/authenticate/")
         self.assertTemplateUsed(response, "login.html")
+
+
+    def test_login_view_redirects_to_home_on_post(self):
+        response = self.client.post("/authenticate/")
+        self.assertRedirects(response, "/")

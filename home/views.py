@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 def home_page(request):
@@ -6,4 +6,6 @@ def home_page(request):
 
 
 def login_page(request):
+    if request.method == "POST":
+        return redirect("/")
     return render(request, "login.html")
