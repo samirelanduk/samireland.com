@@ -14,5 +14,11 @@ def login_page(request):
         )
         if user:
             login(request, user)
-        return redirect("/")
+            return redirect("/")
+        else:
+            return redirect("/youshallnotpass/")
     return render(request, "login.html")
+
+
+def fence_page(request):
+    return render(request, "fence.html")

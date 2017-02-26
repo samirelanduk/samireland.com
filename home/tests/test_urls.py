@@ -9,3 +9,7 @@ class HomeUrlTests(UrlTest):
 
     def test_login_url_resolves_to_login_view(self):
         self.check_url_returns_view("/authenticate/", views.login_page)
+
+
+    def test_fence_url_resolves_to_fence_view(self):
+        self.check_url_returns_view("/youshallnotpass/", views.fence_page)

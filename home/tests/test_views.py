@@ -30,3 +30,19 @@ class LoginViewTests(ViewTest):
          "password": "testpassword"
         })
         self.assertIn("_auth_user_id", self.client.session)
+
+
+    def test_login_view_redirects_to_fence_on_incorrect_post(self):
+        response = self.client.post("/authenticate/", data={
+         "username": "testsam",
+         "password": "wrongpassword"
+        })
+        self.assertRedirects(response, "/youshallnotpass/")
+
+
+
+class FenceViewTests(ViewTest):
+
+    def test_fence_view_uses_fence_template(self):
+        response = self.client.get("/youshallnotpass/")
+        self.assertTemplateUsed(response, "fence.html")
