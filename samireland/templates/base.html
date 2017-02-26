@@ -21,7 +21,9 @@
   <header>
     Sam Ire<a href="/authenticate/" id="login-link">l</a>and
     <div id="navicon">&#9776;</div>
+    {% if user.is_authenticated %}
     <a href="/logout/" id="logout-link">Logout</a>
+    {% endif %}
   </header>
   <nav><ul><li>
     <a href="/">Home</a>

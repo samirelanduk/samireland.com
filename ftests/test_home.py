@@ -233,13 +233,14 @@ class AuthTests(FunctionalTest):
     def test_can_login(self):
         self.browser.get(self.live_server_url + "/")
 
-        # The 'l' is a link
+        # The 'l' is a link and it is the only one
         header = self.browser.find_element_by_tag_name("header")
-        link = header.find_element_by_tag_name("a")
-        self.assertEqual(link.text, "l")
+        links = header.find_elements_by_tag_name("a")
+        self.assertEqual(links[0].text, "l")
+        self.assertEqual(len(links), 1)
 
         # Clicking it goes to the login page
-        link.click()
+        links[0].click()
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/authenticate/"
