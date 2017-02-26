@@ -16,5 +16,17 @@ class LoginViewTests(ViewTest):
 
 
     def test_login_view_redirects_to_home_on_post(self):
-        response = self.client.post("/authenticate/")
+        response = self.client.post("/authenticate/", data={
+         "username": "testsam",
+         "password": "testpassword"
+        })
         self.assertRedirects(response, "/")
+
+
+    def test_login_view_can_login(self):
+        self.assertNotIn("_auth_user_id", self.client.session)
+        response = self.client.post("/authenticate/", data={
+         "username": "testsam",
+         "password": "testpassword"
+        })
+        self.assertIn("_auth_user_id", self.client.session)
