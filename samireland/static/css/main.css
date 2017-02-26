@@ -16,7 +16,7 @@ a#login-link {
 }
 
 a#logout-link {
-  font-size: 20%;
+  font-size: 50%;
   position: absolute;
   top: 0;
   right: 0;
@@ -114,6 +114,10 @@ img {
     line-height: 170px;
     font-size: 500%;
     padding: 0px;
+  }
+
+  a#logout-link {
+    font-size: 30%;
   }
 
   #navicon {
