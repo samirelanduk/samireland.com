@@ -20,4 +20,4 @@ class HomeUrlTests(UrlTest):
 
 
     def test_edit_home_page_resolves_to_edit_home_view(self):
-        self.check_url_returns_view("/edit/", views.edit_page)
+        self.check_url_returns_view("/edit/home/", views.edit_page)

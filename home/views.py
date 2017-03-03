@@ -29,5 +29,5 @@ def logout_page(request):
     return redirect("/")
 
 
-def edit_page(request):
+def edit_page(request, text):
     return render(request, "edit.html")

@@ -67,5 +67,5 @@ class LogoutViewTests(ViewTest):
 class EditViewTests(ViewTest):
 
     def test_edit_view_uses_edit_template(self):
-        response = self.client.get("/edit/")
+        response = self.client.get("/edit/home/")
         self.assertTemplateUsed(response, "edit.html")
