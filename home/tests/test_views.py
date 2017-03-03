@@ -69,3 +69,8 @@ class EditViewTests(ViewTest):
     def test_edit_view_uses_edit_template(self):
         response = self.client.get("/edit/home/")
         self.assertTemplateUsed(response, "edit.html")
+
+
+    def test_edit_view_redirects_to_home_on_post(self):
+        response = self.client.post("/edit/home/")
+        self.assertRedirects(response, "/")

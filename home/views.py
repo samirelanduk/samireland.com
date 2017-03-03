@@ -30,4 +30,6 @@ def logout_page(request):
 
 
 def edit_page(request, text):
+    if request.method == "POST":
+        return redirect("/")
     return render(request, "edit.html")
