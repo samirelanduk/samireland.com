@@ -27,3 +27,7 @@ def fence_page(request):
 def logout_page(request):
     logout(request)
     return redirect("/")
+
+
+def edit_page():
+    pass
