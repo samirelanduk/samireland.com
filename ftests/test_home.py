@@ -248,9 +248,8 @@ class HomePageTests(FunctionalTest):
 
         # There is a form for entering the text
         form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_elements_by_tag_name("input")[0]
-        self.assertEqual(textarea.get_attribute("type"), "textarea")
-        self.assertEqual(textarea.get_attribute("value"), "")
+        textarea = form.find_element_by_tag_name("textarea")
+        self.assertEqual(textarea.get_attribute("value").strip(), "")
         submit_button = form.find_elements_by_tag_name("input")[-1]
 
         # Text is entered and submitted
@@ -278,8 +277,7 @@ class HomePageTests(FunctionalTest):
 
         # The form has the current text in it
         form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_elements_by_tag_name("input")[0]
-        self.assertEqual(textarea.get_attribute("type"), "textarea")
+        textarea = form.find_element_by_tag_name("textarea")
         self.assertEqual(
          textarea.get_attribute("value"),
          "Paragraph 1.\n\nParagraph 2."

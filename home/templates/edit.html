@@ -3,5 +3,9 @@
 {% block title %}Edit{% endblock %}
 
 {% block main %}
-
+<form method="POST">
+  <textarea value=""></textarea>
+  {% csrf_token %}
+  <input type="submit">
+</form>
 {% endblock %}
