@@ -226,6 +226,10 @@ class HomePageTests(FunctionalTest):
         self.assertEqual(children[1].get_property("id"), "me-image")
         self.assertIsNot(children[1].find_element_by_tag_name("img"), None)
 
+        # There are no links in the summary while logged out
+        self.assertEqual(len(children[0].find_element_by_tag_name("a")), 0)
+
+
 
     def test_can_change_home_page_text(self):
         self.login()
@@ -383,3 +387,15 @@ class AuthTests(FunctionalTest):
         # There is only one link in the header
         header = self.browser.find_element_by_tag_name("header")
         self.assertEqual(len(header.find_elements_by_tag_name("a")), 1)
+
+
+    def test_private_pages_are_private(self):
+        private_pages = (
+         "/edit/home/"
+        )
+        for page in private_pages:
+            self.browser,get(self.live_server_url + page)
+            self.assertEqual(
+             self.browser.current_url,
+             self.live_server_url + "/"
+            )
