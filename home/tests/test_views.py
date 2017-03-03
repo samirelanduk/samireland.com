@@ -54,10 +54,18 @@ class LogoutViewTests(ViewTest):
     def test_logout_view_redirects_to_home(self):
         response = self.client.get("/logout/")
         self.assertRedirects(response, "/")
-        
+
 
     def test_logout_view_will_logout(self):
         self.client.login(username="testsam", password="testpassword")
         self.assertIn("_auth_user_id", self.client.session)
         self.client.get("/logout/")
         self.assertNotIn("_auth_user_id", self.client.session)
+
+
+
+class EditViewTests(ViewTest):
+
+    def test_edit_view_uses_edit_template(self):
+        response = self.client.get("/edit/")
+        self.assertTemplateUsed(response, "edit.html")
