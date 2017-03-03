@@ -70,7 +70,7 @@ class BasePageStyleTests(FunctionalTest):
         self.assertEqual(body.value_of_css_property("margin"), "0px")
 
         # But at 1025px, the body detatches
-        self.browser.set_window_size(1035, 800) # Subtract 10px for window frame
+        self.browser.set_window_size(1035, 1000) # Subtract 10px for window frame
         self.assertEqual(body.value_of_css_property("width"), "1024px")
         self.assertEqual(
          body.value_of_css_property("margin-left"),
