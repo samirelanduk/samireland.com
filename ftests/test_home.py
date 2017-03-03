@@ -227,6 +227,79 @@ class HomePageTests(FunctionalTest):
         self.assertIsNot(children[1].find_element_by_tag_name("img"), None)
 
 
+    def test_can_change_home_page_text(self):
+        self.login()
+        self.browser.get(self.live_server_url + "/")
+
+        # There is a link to edit home text
+        overview = self.browser.find_element_by_id("brief-summary")
+        edit_link = overview.find_element_by_tag_name("a")
+
+        # Clicking it takes you to the edit page
+        edit_link.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/edit/home/"
+        )
+
+        # There is a form for entering the text
+        form = self.browser.find_element_by_tag_name("form")
+        textarea = form.find_elements_by_tag_name("input")[0]
+        self.assertEqual(textarea.get_attribute("type"), "textarea")
+        self.assertEqual(textarea.get_attribute("value"), "")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+
+        # Text is entered and submitted
+        textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
+        submit_button.click()
+
+        # The home page has the new text
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
+        overview = self.browser.find_element_by_id("brief-summary")
+        paragraphs = overview.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
+        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
+
+        # Unhappy, they click the edit link again
+        edit_link = overview.find_element_by_tag_name("a")
+        edit_link.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/edit/home/"
+        )
+
+        # The form has the current text in it
+        form = self.browser.find_element_by_tag_name("form")
+        textarea = form.find_elements_by_tag_name("input")[0]
+        self.assertEqual(textarea.get_attribute("type"), "textarea")
+        self.assertEqual(
+         textarea.get_attribute("value"),
+         "Paragraph 1.\n\nParagraph 2."
+        )
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+
+        # The user changes the text
+        textarea.clear()
+        textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
+        submit_button.click()
+
+        # The home page has the new text
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/"
+        )
+        overview = self.browser.find_element_by_id("brief-summary")
+        paragraphs = overview.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 3)
+        self.assertEqual(paragraphs[0].text, "Number 1.")
+        self.assertEqual(paragraphs[1].text, "Number 2.")
+        self.assertEqual(paragraphs[2].text, "Number 3.")
+
+
 
 class AuthTests(FunctionalTest):
 
