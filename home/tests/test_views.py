@@ -74,9 +74,20 @@ class LogoutViewTests(ViewTest):
 
 class EditViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.client.login(username="testsam", password="testpassword")
+
+
     def test_edit_view_uses_edit_template(self):
         response = self.client.get("/edit/home/")
         self.assertTemplateUsed(response, "edit.html")
+
+
+    def test_edit_view_denies_entry_when_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get("/edit/home/")
+        self.assertRedirects(response, "/")
 
 
     def test_edit_view_redirects_to_home_on_post(self):

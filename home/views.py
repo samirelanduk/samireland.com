@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import Http404
 from home.models import EditableText
@@ -33,6 +34,7 @@ def logout_page(request):
     return redirect("/")
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def edit_page(request, name):
     ALLOWED_NAMES = ("home")
     if name not in ALLOWED_NAMES:

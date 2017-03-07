@@ -389,7 +389,7 @@ class AuthTests(FunctionalTest):
 
     def test_private_pages_are_private(self):
         private_pages = (
-         "/edit/home/"
+         "/edit/home/",
         )
         for page in private_pages:
             self.browser.get(self.live_server_url + page)
