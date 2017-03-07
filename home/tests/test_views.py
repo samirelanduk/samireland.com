@@ -1,3 +1,4 @@
+from home.models import EditableText
 from samireland.tests import ViewTest
 
 class HomePageViewTests(ViewTest):
@@ -74,3 +75,11 @@ class EditViewTests(ViewTest):
     def test_edit_view_redirects_to_home_on_post(self):
         response = self.client.post("/edit/home/")
         self.assertRedirects(response, "/")
+
+
+    def test_edit_view_can_create_text_record_if_it_doesnt_exist(self):
+        self.assertEqual(len(EditableText.objects.filter(name="home")), 0)
+        self.client.post("/edit/home/")
+        self.assertEqual(len(EditableText.objects.filter(name="home")), 1)
+        text = EditableText.objects.first()
+        self.assertEqual(text.name, "home")

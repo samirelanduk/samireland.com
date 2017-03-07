@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from home.models import EditableText
 
 # Create your views here.
 def home_page(request):
@@ -29,7 +30,9 @@ def logout_page(request):
     return redirect("/")
 
 
-def edit_page(request, text):
+def edit_page(request, name):
     if request.method == "POST":
+        if not EditableText.objects.filter(name=name):
+            EditableText.objects.create(name=name, content="")
         return redirect("/")
     return render(request, "edit.html")
