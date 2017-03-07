@@ -89,8 +89,23 @@ img {
   height: auto;
 }
 
+a {
+  text-decoration: none;
+}
+
 .circle {
   border-radius: 50%;
+}
+
+.edit-link {
+  position: absolute;
+  right: 0;
+  top: -20px;
+  background-color: #3B5998;
+  color: #FFFFFF;
+  border-radius: 5px;
+  line-height: 1.1;
+  padding: 3px;
 }
 
 @media only screen and (min-width: 568px) {
