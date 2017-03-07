@@ -22,3 +22,8 @@ class UrlTest(SamTest):
 
 class ViewTest(SamTest):
     pass
+
+
+
+class ModelTest(SamTest):
+    pass

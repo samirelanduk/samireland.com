@@ -227,7 +227,7 @@ class HomePageTests(FunctionalTest):
         self.assertIsNot(children[1].find_element_by_tag_name("img"), None)
 
         # There are no links in the summary while logged out
-        self.assertEqual(len(children[0].find_element_by_tag_name("a")), 0)
+        self.assertEqual(len(children[0].find_elements_by_tag_name("a")), 0)
 
 
 
@@ -392,7 +392,7 @@ class AuthTests(FunctionalTest):
          "/edit/home/"
         )
         for page in private_pages:
-            self.browser,get(self.live_server_url + page)
+            self.browser.get(self.live_server_url + page)
             self.assertEqual(
              self.browser.current_url,
              self.live_server_url + "/"
