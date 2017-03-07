@@ -73,13 +73,23 @@ class EditViewTests(ViewTest):
 
 
     def test_edit_view_redirects_to_home_on_post(self):
-        response = self.client.post("/edit/home/")
+        response = self.client.post("/edit/home/", data={"content": "some content"})
         self.assertRedirects(response, "/")
 
 
     def test_edit_view_can_create_text_record_if_it_doesnt_exist(self):
         self.assertEqual(len(EditableText.objects.filter(name="home")), 0)
-        self.client.post("/edit/home/")
+        self.client.post("/edit/home/", data={"content": "some content"})
         self.assertEqual(len(EditableText.objects.filter(name="home")), 1)
         text = EditableText.objects.first()
         self.assertEqual(text.name, "home")
+        self.assertEqual(text.content, "some content")
+
+
+    def test_edit_view_can_update_existing_text_record(self):
+        EditableText.objects.create(name="home", content="some content")
+        self.client.post("/edit/home/", data={"content": "new content"})
+        self.assertEqual(len(EditableText.objects.filter(name="home")), 1)
+        text = EditableText.objects.first()
+        self.assertEqual(text.name, "home")
+        self.assertEqual(text.content, "new content")

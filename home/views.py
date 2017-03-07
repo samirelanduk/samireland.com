@@ -33,6 +33,10 @@ def logout_page(request):
 def edit_page(request, name):
     if request.method == "POST":
         if not EditableText.objects.filter(name=name):
-            EditableText.objects.create(name=name, content="")
+            EditableText.objects.create(name=name, content=request.POST["content"])
+        else:
+            text = EditableText.objects.filter(name=name).first()
+            text.content = request.POST["content"]
+            text.save()
         return redirect("/")
     return render(request, "edit.html")
