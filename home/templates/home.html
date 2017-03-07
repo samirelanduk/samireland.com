@@ -10,7 +10,7 @@
   <h1>Hello</h1>
   <div id="intro-row">
     <div id="brief-summary">
-      {{ text.content }}
+      {{ text.samdown_content|safe }}
       <a href="/edit/home/">Edit</a>
     </div>
     <div id="me-image"><img class="circle" src="/static/images/me.jpeg"></div>
