@@ -45,4 +45,6 @@ def edit_page(request, name):
             text.content = request.POST["content"]
             text.save()
         return redirect("/")
-    return render(request, "edit.html")
+    text = EditableText.objects.filter(name="home").first()
+    text = text if text else ""
+    return render(request, "edit.html", {"text": text})

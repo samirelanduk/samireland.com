@@ -4,7 +4,7 @@
 
 {% block main %}
 <form method="POST">
-  <textarea value="" name="content"></textarea>
+  <textarea name="content">{{ text.content }}</textarea>
   {% csrf_token %}
   <input type="submit">
 </form>

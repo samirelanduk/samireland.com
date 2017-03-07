@@ -107,3 +107,11 @@ class EditViewTests(ViewTest):
         self.assertEqual(response.status_code, 404)
         response = self.client.get("/edit/home/")
         self.assertEqual(response.status_code, 200)
+
+
+    def test_edit_view_uses_home_text_in_form(self):
+        EditableText.objects.create(name="home", content="some content")
+        response = self.client.get("/edit/home/")
+        editable_text = response.context["text"]
+        self.assertEqual(editable_text.name, "home")
+        self.assertContains(response, "some content</textarea>")
