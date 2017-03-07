@@ -93,3 +93,10 @@ class EditViewTests(ViewTest):
         text = EditableText.objects.first()
         self.assertEqual(text.name, "home")
         self.assertEqual(text.content, "new content")
+
+
+    def test_only_certain_names_can_be_edited(self):
+        response = self.client.get("/edit/wrongwrongwrong/")
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get("/edit/home/")
+        self.assertEqual(response.status_code, 200)

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.http import Http404
 from home.models import EditableText
 
 # Create your views here.
@@ -31,6 +32,9 @@ def logout_page(request):
 
 
 def edit_page(request, name):
+    ALLOWED_NAMES = ("home")
+    if name not in ALLOWED_NAMES:
+        raise Http404("Not a valid name")
     if request.method == "POST":
         if not EditableText.objects.filter(name=name):
             EditableText.objects.create(name=name, content=request.POST["content"])
