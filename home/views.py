@@ -5,7 +5,9 @@ from home.models import EditableText
 
 # Create your views here.
 def home_page(request):
-    return render(request, "home.html")
+    text = EditableText.objects.filter(name="home").first()
+    text = text if text else ""
+    return render(request, "home.html", {"text": text})
 
 
 def login_page(request):

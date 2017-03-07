@@ -8,6 +8,13 @@ class HomePageViewTests(ViewTest):
         self.assertTemplateUsed(response, "home.html")
 
 
+    def test_home_view_uses_home_editable_text(self):
+        EditableText.objects.create(name="home", content="some content")
+        response = self.client.get("/")
+        editable_text = response.context["text"]
+        self.assertEqual(editable_text.name, "home")
+
+
 
 class LoginViewTests(ViewTest):
 
