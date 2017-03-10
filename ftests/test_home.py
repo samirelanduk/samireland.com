@@ -209,28 +209,6 @@ class BasePageStyleTests(FunctionalTest):
 
 class HomePageTests(FunctionalTest):
 
-    def test_home_page_has_image_and_brief_summary(self):
-        self.browser.get(self.live_server_url + "/")
-        main = self.browser.find_element_by_tag_name("main")
-
-        # main starts with an intro section
-        intro = main.find_element_by_id("intro")
-        intro_row = intro.find_element_by_id("intro-row")
-        children = intro_row.find_elements_by_xpath("./*")
-        self.assertEqual(len(children), 2)
-
-        # They are both divs, and one has an image
-        self.assertEqual(children[0].tag_name, "div")
-        self.assertEqual(children[0].get_property("id"), "brief-summary")
-        self.assertEqual(children[1].tag_name, "div")
-        self.assertEqual(children[1].get_property("id"), "me-image")
-        self.assertIsNot(children[1].find_element_by_tag_name("img"), None)
-
-        # There are no links in the summary while logged out
-        self.assertEqual(len(children[0].find_elements_by_tag_name("a")), 0)
-
-
-
     def test_can_change_home_page_text(self):
         self.login()
         self.browser.get(self.live_server_url + "/")
