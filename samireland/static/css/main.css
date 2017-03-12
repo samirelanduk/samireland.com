@@ -82,7 +82,7 @@ nav a:hover {
 }
 
 main {
-  padding: 40px 60px;;
+  padding: 20px 30px;;
 }
 
 footer {
@@ -151,6 +151,10 @@ a {
     width: 33.33%;
   }
 
+  main {
+    padding: 25px 40px;;
+  }
+
 }
 
 @media only screen and (min-width: 769px) {
@@ -187,6 +191,10 @@ a {
     padding-right: 4%;
   }
 
+  main {
+    padding: 30px 50px;;
+  }
+
   footer img {
     margin-left: 5px;
     margin-right: 5px;
@@ -210,6 +218,10 @@ a {
   nav li {
     line-height: 50px;
     font-size: 120%;
+  }
+
+  main {
+    padding: 40px 60px;;
   }
 
 }
