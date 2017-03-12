@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-from .secrets import SECRET_KEY
+from .secrets import SECRET_KEY, DATABASES
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -66,17 +66,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "samireland.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
-}
-
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))
 STATICFILES_DIRS = [
  os.path.join(BASE_DIR, "samireland", "static")
 ]

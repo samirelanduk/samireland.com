@@ -1,3 +1,5 @@
 django==1.8.17
 selenium
 samdown
+gunicorn
+psycopg2
