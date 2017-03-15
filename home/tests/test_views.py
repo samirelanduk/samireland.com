@@ -16,6 +16,14 @@ class HomePageViewTests(ViewTest):
 
 
 
+class AboutPageViewTests(ViewTest):
+
+    def test_about_view_uses_about_template(self):
+        response = self.client.get("/about/")
+        self.assertTemplateUsed(response, "about.html")
+
+
+
 class LoginViewTests(ViewTest):
 
     def test_login_view_uses_login_template(self):

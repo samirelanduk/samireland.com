@@ -11,6 +11,10 @@ def home_page(request):
     return render(request, "home.html", {"text": text})
 
 
+def about_page(request):
+    return render(request, "about.html")
+
+
 def login_page(request):
     if request.method == "POST":
         user = authenticate(

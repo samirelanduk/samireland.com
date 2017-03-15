@@ -284,6 +284,7 @@ class HomePageTests(FunctionalTest):
 class AboutPageTests(FunctionalTest):
 
     def test_about_page_structure(self):
+        self.browser.set_window_size(800, 600)
         self.browser.get(self.live_server_url + "/")
 
         # The last nav link goes to the about page

@@ -7,6 +7,10 @@ class HomeUrlTests(UrlTest):
         self.check_url_returns_view("/", views.home_page)
 
 
+    def test_about_page_url_resolves_to_about_page_view(self):
+        self.check_url_returns_view("/about/", views.about_page)
+
+
     def test_login_url_resolves_to_login_view(self):
         self.check_url_returns_view("/authenticate/", views.login_page)
 
