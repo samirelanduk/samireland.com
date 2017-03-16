@@ -301,6 +301,11 @@ class AboutPageTests(FunctionalTest):
         h1 = main.find_element_by_tag_name("h1")
         about_bio = main.find_element_by_id("about-bio")
 
+        # There is no edit link because they are not logged in
+        links = about_bio.find_elements_by_tag_name("a")
+        self.assertEqual(len(links),0)
+
+
 
     def test_can_change_about_page_text(self):
         self.login()
@@ -333,7 +338,7 @@ class AboutPageTests(FunctionalTest):
          self.live_server_url + "/about/"
         )
         about_bio = self.browser.find_element_by_id("about-bio")
-        paragraphs = overview.find_elements_by_tag_name("p")
+        paragraphs = about_bio.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Paragraph 1.")
         self.assertEqual(paragraphs[1].text, "Paragraph 2.")
@@ -366,7 +371,7 @@ class AboutPageTests(FunctionalTest):
          self.live_server_url + "/about/"
         )
         about_bio = self.browser.find_element_by_id("about-bio")
-        paragraphs = overview.find_elements_by_tag_name("p")
+        paragraphs = about_bio.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 3)
         self.assertEqual(paragraphs[0].text, "Number 1.")
         self.assertEqual(paragraphs[1].text, "Number 2.")

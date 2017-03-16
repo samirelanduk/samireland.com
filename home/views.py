@@ -12,7 +12,9 @@ def home_page(request):
 
 
 def about_page(request):
-    return render(request, "about.html")
+    text = EditableText.objects.filter(name="about").first()
+    text = text if text else ""
+    return render(request, "about.html", {"text": text})
 
 
 def login_page(request):
@@ -40,7 +42,7 @@ def logout_page(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def edit_page(request, name):
-    ALLOWED_NAMES = ("home")
+    ALLOWED_NAMES = {"home": "/", "about": "/about/"}
     if name not in ALLOWED_NAMES:
         raise Http404("Not a valid name")
     if request.method == "POST":
@@ -50,7 +52,7 @@ def edit_page(request, name):
             text = EditableText.objects.filter(name=name).first()
             text.content = request.POST["content"]
             text.save()
-        return redirect("/")
-    text = EditableText.objects.filter(name="home").first()
+        return redirect(ALLOWED_NAMES[name])
+    text = EditableText.objects.filter(name=name).first()
     text = text if text else ""
     return render(request, "edit.html", {"text": text})

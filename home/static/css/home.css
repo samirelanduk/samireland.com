@@ -24,20 +24,3 @@ h1 {
   display: block;
   position: relative;
 }
-
-@media only screen and (min-width: 769px) {
-  /* Small Desktop screens and up */
-
-  
-
-  /*#me-image {
-    display: inline-block;
-    width: 15%;
-  }
-
-  #brief-summary {
-    display: inline-block;
-    width: 70%;
-  }*/
-
-}
