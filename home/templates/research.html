@@ -2,10 +2,17 @@
 
 {% block title %}Research{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/research.css">
+{% endblock %}
+
 {% block main %}
 <h1>My Research</h1>
 
 <div id="research-summary">
+  {{ text.samdown_content|safe }}
+  {% if user.is_authenticated %}<a href="/edit/research/" class="edit-link">Edit</a>{% endif %}
+</div>
 </div>
 
 <div id="publications">

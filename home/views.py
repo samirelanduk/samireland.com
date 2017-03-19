@@ -18,7 +18,9 @@ def about_page(request):
 
 
 def research_page(request):
-    return render(request, "research.html")
+    text = EditableText.objects.filter(name="research").first()
+    text = text if text else ""
+    return render(request, "research.html", {"text": text})
 
 
 def login_page(request):
@@ -46,7 +48,7 @@ def logout_page(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def edit_page(request, name):
-    ALLOWED_NAMES = {"home": "/", "about": "/about/"}
+    ALLOWED_NAMES = {"home": "/", "about": "/about/", "research": "/research/"}
     if name not in ALLOWED_NAMES:
         raise Http404("Not a valid name")
     if request.method == "POST":

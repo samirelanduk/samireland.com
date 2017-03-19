@@ -38,6 +38,13 @@ class ResearchPageViewTests(ViewTest):
         self.assertTemplateUsed(response, "research.html")
 
 
+    def test_about_view_uses_home_editable_text(self):
+        EditableText.objects.create(name="research", content="some content")
+        response = self.client.get("/research/")
+        editable_text = response.context["text"]
+        self.assertEqual(editable_text.name, "research")
+
+
 
 class LoginViewTests(ViewTest):
 
@@ -123,6 +130,11 @@ class EditViewTests(ViewTest):
         self.assertRedirects(response, "/about/")
 
 
+    def test_edit_research_view_redirects_to_research_on_post(self):
+        response = self.client.post("/edit/research/", data={"content": "some content"})
+        self.assertRedirects(response, "/research/")
+
+
     def test_edit_view_can_create_home_text_record_if_it_doesnt_exist(self):
         self.assertEqual(len(EditableText.objects.filter(name="home")), 0)
         self.client.post("/edit/home/", data={"content": "some content"})
@@ -132,12 +144,21 @@ class EditViewTests(ViewTest):
         self.assertEqual(text.content, "some content")
 
 
-    def test_edit_view_can_create_aboit_text_record_if_it_doesnt_exist(self):
+    def test_edit_view_can_create_about_text_record_if_it_doesnt_exist(self):
         self.assertEqual(len(EditableText.objects.filter(name="about")), 0)
         self.client.post("/edit/about/", data={"content": "some content"})
         self.assertEqual(len(EditableText.objects.filter(name="about")), 1)
         text = EditableText.objects.first()
         self.assertEqual(text.name, "about")
+        self.assertEqual(text.content, "some content")
+
+
+    def test_edit_view_can_create_research_text_record_if_it_doesnt_exist(self):
+        self.assertEqual(len(EditableText.objects.filter(name="research")), 0)
+        self.client.post("/edit/research/", data={"content": "some content"})
+        self.assertEqual(len(EditableText.objects.filter(name="research")), 1)
+        text = EditableText.objects.first()
+        self.assertEqual(text.name, "research")
         self.assertEqual(text.content, "some content")
 
 
@@ -159,12 +180,23 @@ class EditViewTests(ViewTest):
         self.assertEqual(text.content, "new content")
 
 
+    def test_edit_view_can_update_existing_research_text_record(self):
+        EditableText.objects.create(name="research", content="some content")
+        self.client.post("/edit/research/", data={"content": "new content"})
+        self.assertEqual(len(EditableText.objects.filter(name="research")), 1)
+        text = EditableText.objects.first()
+        self.assertEqual(text.name, "research")
+        self.assertEqual(text.content, "new content")
+
+
     def test_only_certain_names_can_be_edited(self):
         response = self.client.get("/edit/wrongwrongwrong/")
         self.assertEqual(response.status_code, 404)
         response = self.client.get("/edit/home/")
         self.assertEqual(response.status_code, 200)
         response = self.client.get("/edit/about/")
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get("/edit/research/")
         self.assertEqual(response.status_code, 200)
 
 
@@ -173,4 +205,20 @@ class EditViewTests(ViewTest):
         response = self.client.get("/edit/home/")
         editable_text = response.context["text"]
         self.assertEqual(editable_text.name, "home")
+        self.assertContains(response, "some content</textarea>")
+
+
+    def test_edit_view_uses_about_text_in_form(self):
+        EditableText.objects.create(name="about", content="some content")
+        response = self.client.get("/edit/about/")
+        editable_text = response.context["text"]
+        self.assertEqual(editable_text.name, "about")
+        self.assertContains(response, "some content</textarea>")
+
+
+    def test_edit_view_uses_research_text_in_form(self):
+        EditableText.objects.create(name="research", content="some content")
+        response = self.client.get("/edit/research/")
+        editable_text = response.context["text"]
+        self.assertEqual(editable_text.name, "research")
         self.assertContains(response, "some content</textarea>")
