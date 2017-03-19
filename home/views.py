@@ -17,6 +17,10 @@ def about_page(request):
     return render(request, "about.html", {"text": text})
 
 
+def research_page(request):
+    return render(request, "research.html")
+
+
 def login_page(request):
     if request.method == "POST":
         user = authenticate(

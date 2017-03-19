@@ -382,6 +382,7 @@ class AboutPageTests(FunctionalTest):
 class ResearchPageTests(FunctionalTest):
 
     def test_research_page_structure(self):
+        self.browser.set_window_size(800, 600)
         self.browser.get(self.live_server_url + "/")
 
         # The second nav link goes to the research page
