@@ -332,7 +332,7 @@ class AboutPageTests(FunctionalTest):
         textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
         submit_button.click()
 
-        # The home page has the new text
+        # The about page has the new text
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/about/"
@@ -365,13 +365,115 @@ class AboutPageTests(FunctionalTest):
         textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
         submit_button.click()
 
-        # The home page has the new text
+        # The about page has the new text
         self.assertEqual(
          self.browser.current_url,
          self.live_server_url + "/about/"
         )
         about_bio = self.browser.find_element_by_id("about-bio")
         paragraphs = about_bio.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 3)
+        self.assertEqual(paragraphs[0].text, "Number 1.")
+        self.assertEqual(paragraphs[1].text, "Number 2.")
+        self.assertEqual(paragraphs[2].text, "Number 3.")
+
+
+
+class ResearchPageTests(FunctionalTest):
+
+    def test_research_page_structure(self):
+        self.browser.get(self.live_server_url + "/")
+
+        # The second nav link goes to the research page
+        nav = self.browser.find_element_by_tag_name("nav")
+        nav_links = nav.find_elements_by_tag_name("a")
+        nav_links[1].click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/research/"
+        )
+
+        # There is a h1 and a block of text
+        main = self.browser.find_element_by_tag_name("main")
+        h1 = main.find_element_by_tag_name("h1")
+        research_summary = main.find_element_by_id("research-summary")
+
+        # There is no edit link because they are not logged in
+        links = research_summary.find_elements_by_tag_name("a")
+        self.assertEqual(len(links),0)
+
+        # There is a div for publications
+        publications = main.find_element_by_id("publications")
+        h2 = publications.find_elements_by_tag_name("h2")
+        no_publications = publications.find_element_by_tag_name("p")
+
+
+
+    def test_can_change_research_page_text(self):
+        self.login()
+        self.browser.get(self.live_server_url + "/research/")
+
+        # There is a link to edit home text
+        research_summary = self.browser.find_element_by_id("research-summary")
+        edit_link = research_summary.find_element_by_tag_name("a")
+
+        # Clicking it takes you to the edit page
+        edit_link.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/edit/research/"
+        )
+
+        # There is a form for entering the text
+        form = self.browser.find_element_by_tag_name("form")
+        textarea = form.find_element_by_tag_name("textarea")
+        self.assertEqual(textarea.get_attribute("value").strip(), "")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+
+        # Text is entered and submitted
+        textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
+        submit_button.click()
+
+        # The research page has the new text
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/research/"
+        )
+        research_summary = self.browser.find_element_by_id("research-summary")
+        paragraphs = research_summary.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
+        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
+
+        # Unhappy, they click the edit link again
+        edit_link = research_summary.find_element_by_tag_name("a")
+        edit_link.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/edit/research/"
+        )
+
+        # The form has the current text in it
+        form = self.browser.find_element_by_tag_name("form")
+        textarea = form.find_element_by_tag_name("textarea")
+        self.assertEqual(
+         textarea.get_attribute("value"),
+         "Paragraph 1.\n\nParagraph 2."
+        )
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+
+        # The user changes the text
+        textarea.clear()
+        textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
+        submit_button.click()
+
+        # The research page has the new text
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/research/"
+        )
+        research_summary = self.browser.find_element_by_id("research-summary")
+        paragraphs = research_summary.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 3)
         self.assertEqual(paragraphs[0].text, "Number 1.")
         self.assertEqual(paragraphs[1].text, "Number 2.")
