@@ -210,74 +210,7 @@ class BasePageStyleTests(FunctionalTest):
 class HomePageTests(FunctionalTest):
 
     def test_can_change_home_page_text(self):
-        self.login()
-        self.browser.get(self.live_server_url + "/")
-
-        # There is a link to edit home text
-        overview = self.browser.find_element_by_id("brief-summary")
-        edit_link = overview.find_element_by_tag_name("a")
-
-        # Clicking it takes you to the edit page
-        edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/home/"
-        )
-
-        # There is a form for entering the text
-        form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
-        self.assertEqual(textarea.get_attribute("value").strip(), "")
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-
-        # Text is entered and submitted
-        textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
-        submit_button.click()
-
-        # The home page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
-        )
-        overview = self.browser.find_element_by_id("brief-summary")
-        paragraphs = overview.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 2)
-        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
-        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
-
-        # Unhappy, they click the edit link again
-        edit_link = overview.find_element_by_tag_name("a")
-        edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/home/"
-        )
-
-        # The form has the current text in it
-        form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
-        self.assertEqual(
-         textarea.get_attribute("value"),
-         "Paragraph 1.\n\nParagraph 2."
-        )
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-
-        # The user changes the text
-        textarea.clear()
-        textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
-        submit_button.click()
-
-        # The home page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/"
-        )
-        overview = self.browser.find_element_by_id("brief-summary")
-        paragraphs = overview.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 3)
-        self.assertEqual(paragraphs[0].text, "Number 1.")
-        self.assertEqual(paragraphs[1].text, "Number 2.")
-        self.assertEqual(paragraphs[2].text, "Number 3.")
+        self.check_can_edit_text("/", "brief-summary", "home")
 
 
 
@@ -308,74 +241,7 @@ class AboutPageTests(FunctionalTest):
 
 
     def test_can_change_about_page_text(self):
-        self.login()
-        self.browser.get(self.live_server_url + "/about/")
-
-        # There is a link to edit home text
-        about_bio = self.browser.find_element_by_id("about-bio")
-        edit_link = about_bio.find_element_by_tag_name("a")
-
-        # Clicking it takes you to the edit page
-        edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/about/"
-        )
-
-        # There is a form for entering the text
-        form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
-        self.assertEqual(textarea.get_attribute("value").strip(), "")
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-
-        # Text is entered and submitted
-        textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
-        submit_button.click()
-
-        # The about page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/about/"
-        )
-        about_bio = self.browser.find_element_by_id("about-bio")
-        paragraphs = about_bio.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 2)
-        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
-        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
-
-        # Unhappy, they click the edit link again
-        edit_link = about_bio.find_element_by_tag_name("a")
-        edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/about/"
-        )
-
-        # The form has the current text in it
-        form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
-        self.assertEqual(
-         textarea.get_attribute("value"),
-         "Paragraph 1.\n\nParagraph 2."
-        )
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-
-        # The user changes the text
-        textarea.clear()
-        textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
-        submit_button.click()
-
-        # The about page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/about/"
-        )
-        about_bio = self.browser.find_element_by_id("about-bio")
-        paragraphs = about_bio.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 3)
-        self.assertEqual(paragraphs[0].text, "Number 1.")
-        self.assertEqual(paragraphs[1].text, "Number 2.")
-        self.assertEqual(paragraphs[2].text, "Number 3.")
+        self.check_can_edit_text("/about/", "about-bio", "about")
 
 
 
@@ -411,74 +277,351 @@ class ResearchPageTests(FunctionalTest):
 
 
     def test_can_change_research_page_text(self):
+        self.check_can_edit_text("/research/", "research-summary", "research")
+
+
+
+class ProjectPageTests(FunctionalTest):
+
+    def test_project_page_leads_to_piano_project(self):
+        self.browser.set_window_size(800, 600)
+        self.browser.get(self.live_server_url + "/")
+
+        # The third nav link goes to the project page
+        nav = self.browser.find_element_by_tag_name("nav")
+        nav_links = nav.find_elements_by_tag_name("a")
+        nav_links[2].click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/projects/"
+        )
+
+        # There is a h1 and a block of text
+        main = self.browser.find_element_by_tag_name("main")
+        h1 = main.find_element_by_tag_name("h1")
+        projects_summary = main.find_element_by_id("projects-summary")
+
+        # There is no edit link because they are not logged in
+        links = projects_summary.find_elements_by_tag_name("a")
+        self.assertEqual(len(links), 0)
+
+        # There is a div devoted to the piano project
+        piano_section = main.find_element_by_id("piano-project")
+        h2 = piano_section.find_element_by_id("h2")
+        piano_summary = piano_section.find_element_by_id("piano-project-summary")
+        more_piano_link = piano_section.find_elements_by_tag_name("a")[-1]
+
+        # There is no edit link because they are not logged in
+        links = piano_summary.find_elements_by_tag_name("a")
+        self.assertEqual(len(links), 0)
+
+        # They click the link for more information and are taken to piano page
+        more_piano_link.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/piano/"
+        )
+
+        # There is a h1 and a block of text
+        main = self.browser.find_element_by_tag_name("main")
+        h1 = main.find_element_by_tag_name("h1")
+        piano_description = main.find_element_by_id("piano-description")
+
+        # There is no edit link because they are not logged in
+        links = piano_description.find_elements_by_tag_name("a")
+        self.assertEqual(len(links), 0)
+
+        # There is also a section for piano progress
+        piano_progress = main.find_element_by_id("piano-progress")
+
+
+    def test_can_change_project_page_text(self):
+        self.check_can_edit_text("/projects/", "projects-summary", "projects")
+
+
+    def test_can_change_piano_summary_text(self):
+        self.check_can_edit_text("/projects/", "piano-summary", "piano-brief")
+
+
+    def test_can_change_piano_description_text(self):
+        self.check_can_edit_text(
+         "/projects/piano/", "piano-description", "piano-long"
+        )
+
+
+    def test_can_update_piano_progress(self):
         self.login()
-        self.browser.get(self.live_server_url + "/research/")
+        self.browser.get(self.live_server_url)
 
-        # There is a link to edit home text
-        research_summary = self.browser.find_element_by_id("research-summary")
-        edit_link = research_summary.find_element_by_tag_name("a")
+        # There is a piano link in the header
+        header = self.browser.find_element_by_tag_name("header")
+        piano_update_link = header.find_element_by_id("piano-update-link")
 
-        # Clicking it takes you to the edit page
-        edit_link.click()
+        # They click it and are taken to the piano update page
+        piano_update_link.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/edit/research/"
+         self.live_server_url + "/piano/update/"
         )
 
-        # There is a form for entering the text
+        # There is a table for practice data, currently empty
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is a form for adding a new session
         form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
-        self.assertEqual(textarea.get_attribute("value").strip(), "")
-        submit_button = form.find_elements_by_tag_name("input")[-1]
+        date_input = form.find_elements_by_tag_name("input")[0]
+        self.assertEqual(
+         date_input.get_attribute("value"),
+         datetime.datetime.now().strftime("%Y-%m-%d")
+        )
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
 
-        # Text is entered and submitted
-        textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
-        submit_button.click()
+        # User adds 10 minutes for today
+        minutes_input.send_keys("10")
+        submit.click()
 
-        # The research page has the new text
+        # He is still on the same page
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/research/"
+         self.live_server_url + "/piano/update/"
         )
-        research_summary = self.browser.find_element_by_id("research-summary")
-        paragraphs = research_summary.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 2)
-        self.assertEqual(paragraphs[0].text, "Paragraph 1.")
-        self.assertEqual(paragraphs[1].text, "Paragraph 2.")
 
-        # Unhappy, they click the edit link again
-        edit_link = research_summary.find_element_by_tag_name("a")
-        edit_link.click()
+         # There is one row now
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 1)
+
+        # The row contains the correct information
         self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/research/"
+         rows[0].find_elements_by_tag_name("td")[0].text,
+         datetime.datetime.now().strftime("%-d %B, %Y")
+        )
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "10"
         )
 
-        # The form has the current text in it
+        # The piano page now says 10 minutes
+        self.browser.get(self.live_server_url + "/piano/")
+        piano_progress = main.find_element_by_id("piano-progress")
+        first_p = piano_progress.find_element_by_tag_name("p")
+        self.assertIn("10 minutes", first_p.text)
+
+        # The user adds 50 minutes for ages ago
+        self.browser.get(self.live_server_url + "/piano/update")
         form = self.browser.find_element_by_tag_name("form")
-        textarea = form.find_element_by_tag_name("textarea")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        date_input.send_keys(date.strftime("22092004"))
+        minutes_input.send_keys("10")
+        submit.click()
+
+        # The new entry is on the table
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 2)
         self.assertEqual(
-         textarea.get_attribute("value"),
-         "Paragraph 1.\n\nParagraph 2."
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "10"
         )
-        submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[1].text,
+         "50"
+        )
 
-        # The user changes the text
-        textarea.clear()
-        textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
-        submit_button.click()
+        # The piano page now says 1 hour
+        self.browser.get(self.live_server_url + "/piano/")
+        piano_progress = main.find_element_by_id("piano-progress")
+        first_p = piano_progress.find_element_by_tag_name("p")
+        self.assertIn("1 hour", first_p.text)
 
-        # The research page has the new text
+        # The user adds 90 minutes for the far future
+        self.browser.get(self.live_server_url + "/piano/update")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        date_input.send_keys(date.strftime("28092090"))
+        minutes_input.send_keys("90")
+        submit.click()
+
+        # The new entry is on the table
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "90"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[1].text,
+         "10"
+        )
+        self.assertEqual(
+         rows[2].find_elements_by_tag_name("td")[1].text,
+         "50"
+        )
+
+        # The piano page now says 2.5 hours
+        self.browser.get(self.live_server_url + "/piano/")
+        piano_progress = main.find_element_by_id("piano-progress")
+        first_p = piano_progress.find_element_by_tag_name("p")
+        self.assertIn("2 hours and 30 minutes", first_p.text)
+
+        # Each of the rows has a delete button on the update page
+        self.browser.get(self.live_server_url + "/piano/update")
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        for row in rows[::-1]:
+            last_cell = self.browser.find_elements_by_tag_name("td")[-1]
+            delete_button = last_cell.find_element_by_tag_name("a")
+            self.assertEqual(
+             delete_button.text,
+             "Delete"
+            )
+
+        # He deletes one of the sessions
+        delete_button.click()
+
+        # Now he is on a deletion page, and is asked if he is sure
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/piano/delete/\d+/$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        warning = form.find_element_by_id("warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He goes back to safety
+        back_to_safety.click()
         self.assertEqual(
          self.browser.current_url,
-         self.live_server_url + "/research/"
+         self.live_server_url + "/piano/update/"
         )
-        research_summary = self.browser.find_element_by_id("research-summary")
-        paragraphs = research_summary.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 3)
-        self.assertEqual(paragraphs[0].text, "Number 1.")
-        self.assertEqual(paragraphs[1].text, "Number 2.")
-        self.assertEqual(paragraphs[2].text, "Number 3.")
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 4)
+
+        # He changes his mind and goes back
+        delete_button = rows[-1].find_elements_by_tag_name("a")[-1]
+        delete_button.click()
+        self.assertRegex(
+         self.browser.current_url,
+         self.live_server_url + r"/piano/delete/\d+/$"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+
+        # He deletes, and is taken back to the edit page
+        delete_button.click()
+        self.assertEqual(
+         self.browser.current_url,
+         self.live_server_url + "/piano/update/"
+        )
+
+        # There are now three rows
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(
+         rows[0].find_elements_by_tag_name("td")[1].text,
+         "90"
+        )
+        self.assertEqual(
+         rows[1].find_elements_by_tag_name("td")[1].text,
+         "10"
+        )
+
+        # The piano page now says 1 hours 40 mins
+        self.browser.get(self.live_server_url + "/piano/")
+        piano_progress = main.find_element_by_id("piano-progress")
+        first_p = piano_progress.find_element_by_tag_name("p")
+        self.assertIn("1 hours and 40 minute", first_p.text)
+
+
+    def test_cannot_post_session_with_no_date(self):
+        self.login()
+
+        # He tries to submit a session with no date
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        self.browser.execute_script(
+         "document.getElementById('id_date').setAttribute('value', '');"
+        )
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(10)
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a session with no date")
+
+
+    def test_cannot_post_session_with_no_minutes(self):
+        self.login()
+
+        # He tries to submit a session with no minutes
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a session with no minutes")
+
+
+    def test_cannot_post_session_with_duplicate_date(self):
+        self.login()
+
+        # He submits a post for today
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(10)
+        submit.click()
+
+        # He tries to submit a session with the same date
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        submit = form.find_elements_by_tag_name("input")[-1]
+        minutes_input.send_keys(20)
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 1)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "There is already a session for this date")
 
 
 
