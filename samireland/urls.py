@@ -14,7 +14,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from home import urls as home_urls
+from piano import urls as piano_urls
 
 urlpatterns = [
+ url(r"^piano/", include(piano_urls)),
  url(r"^", include(home_urls)),
 ]
