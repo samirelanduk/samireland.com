@@ -8,6 +8,6 @@ urlpatterns = [
  url(r"^edit/(.+)/$", views.edit_page, name="edit_page"),
  url(r"^about/$", views.about_page, name="about_page"),
  url(r"^research/$", views.research_page, name="research_page"),
- url(r"^projects/$", views.project_page, name="project_page"),
+ url(r"^projects/$", views.projects_page, name="projects_page"),
  url(r"^$", views.home_page, name="home_page")
 ]
