@@ -307,7 +307,7 @@ class ProjectPageTests(FunctionalTest):
 
         # There is a div devoted to the piano project
         piano_section = main.find_element_by_id("piano-project")
-        h2 = piano_section.find_element_by_tag_name("h2")
+        h2 = piano_section.find_element_by_tag("h2")
         piano_summary = piano_section.find_element_by_id("piano-project-summary")
         more_piano_link = piano_section.find_elements_by_tag_name("a")[-1]
 
@@ -340,7 +340,7 @@ class ProjectPageTests(FunctionalTest):
 
 
     def test_can_change_piano_summary_text(self):
-        self.check_can_edit_text("/projects/", "piano-summary", "piano-brief")
+        self.check_can_edit_text("/projects/", "piano-project-summary", "piano-brief")
 
 
     def test_can_change_piano_description_text(self):

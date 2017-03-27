@@ -56,8 +56,15 @@ class ProjectPageViewTests(ViewTest):
     def test_project_view_uses_project_editable_text(self):
         EditableText.objects.create(name="projects", content="some content")
         response = self.client.get("/projects/")
-        editable_text = response.context["text"]
+        editable_text = response.context["projects_text"]
         self.assertEqual(editable_text.name, "projects")
+
+
+    def test_project_view_uses_piano_summary_editable_text(self):
+        EditableText.objects.create(name="piano-brief", content="some content")
+        response = self.client.get("/projects/")
+        editable_text = response.context["piano_text"]
+        self.assertEqual(editable_text.name, "piano-brief")
 
 
 
@@ -155,6 +162,11 @@ class EditViewTests(ViewTest):
         self.assertRedirects(response, "/projects/")
 
 
+    def test_edit_piano_brief_view_redirects_to_projects_on_post(self):
+        response = self.client.post("/edit/piano-brief/", data={"content": "some content"})
+        self.assertRedirects(response, "/projects/")
+
+
     def test_edit_view_can_create_home_text_record_if_it_doesnt_exist(self):
         self.assertEqual(len(EditableText.objects.filter(name="home")), 0)
         self.client.post("/edit/home/", data={"content": "some content"})
@@ -164,66 +176,12 @@ class EditViewTests(ViewTest):
         self.assertEqual(text.content, "some content")
 
 
-    def test_edit_view_can_create_about_text_record_if_it_doesnt_exist(self):
-        self.assertEqual(len(EditableText.objects.filter(name="about")), 0)
-        self.client.post("/edit/about/", data={"content": "some content"})
-        self.assertEqual(len(EditableText.objects.filter(name="about")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "about")
-        self.assertEqual(text.content, "some content")
-
-
-    def test_edit_view_can_create_research_text_record_if_it_doesnt_exist(self):
-        self.assertEqual(len(EditableText.objects.filter(name="research")), 0)
-        self.client.post("/edit/research/", data={"content": "some content"})
-        self.assertEqual(len(EditableText.objects.filter(name="research")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "research")
-        self.assertEqual(text.content, "some content")
-
-
-    def test_edit_view_can_create_projects_text_record_if_it_doesnt_exist(self):
-        self.assertEqual(len(EditableText.objects.filter(name="projects")), 0)
-        self.client.post("/edit/projects/", data={"content": "some content"})
-        self.assertEqual(len(EditableText.objects.filter(name="projects")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "projects")
-        self.assertEqual(text.content, "some content")
-
-
     def test_edit_view_can_update_existing_home_text_record(self):
         EditableText.objects.create(name="home", content="some content")
         self.client.post("/edit/home/", data={"content": "new content"})
         self.assertEqual(len(EditableText.objects.filter(name="home")), 1)
         text = EditableText.objects.first()
         self.assertEqual(text.name, "home")
-        self.assertEqual(text.content, "new content")
-
-
-    def test_edit_view_can_update_existing_about_text_record(self):
-        EditableText.objects.create(name="about", content="some content")
-        self.client.post("/edit/about/", data={"content": "new content"})
-        self.assertEqual(len(EditableText.objects.filter(name="about")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "about")
-        self.assertEqual(text.content, "new content")
-
-
-    def test_edit_view_can_update_existing_research_text_record(self):
-        EditableText.objects.create(name="research", content="some content")
-        self.client.post("/edit/research/", data={"content": "new content"})
-        self.assertEqual(len(EditableText.objects.filter(name="research")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "research")
-        self.assertEqual(text.content, "new content")
-
-
-    def test_edit_view_can_update_existing_projects_text_record(self):
-        EditableText.objects.create(name="projects", content="some content")
-        self.client.post("/edit/projects/", data={"content": "new content"})
-        self.assertEqual(len(EditableText.objects.filter(name="projects")), 1)
-        text = EditableText.objects.first()
-        self.assertEqual(text.name, "projects")
         self.assertEqual(text.content, "new content")
 
 
@@ -238,6 +196,8 @@ class EditViewTests(ViewTest):
         self.assertEqual(response.status_code, 200)
         response = self.client.get("/edit/projects/")
         self.assertEqual(response.status_code, 200)
+        response = self.client.get("/edit/piano-brief/")
+        self.assertEqual(response.status_code, 200)
 
 
     def test_edit_view_uses_home_text_in_form(self):
@@ -245,28 +205,4 @@ class EditViewTests(ViewTest):
         response = self.client.get("/edit/home/")
         editable_text = response.context["text"]
         self.assertEqual(editable_text.name, "home")
-        self.assertContains(response, "some content</textarea>")
-
-
-    def test_edit_view_uses_about_text_in_form(self):
-        EditableText.objects.create(name="about", content="some content")
-        response = self.client.get("/edit/about/")
-        editable_text = response.context["text"]
-        self.assertEqual(editable_text.name, "about")
-        self.assertContains(response, "some content</textarea>")
-
-
-    def test_edit_view_uses_research_text_in_form(self):
-        EditableText.objects.create(name="research", content="some content")
-        response = self.client.get("/edit/research/")
-        editable_text = response.context["text"]
-        self.assertEqual(editable_text.name, "research")
-        self.assertContains(response, "some content</textarea>")
-
-
-    def test_edit_view_uses_projects_text_in_form(self):
-        EditableText.objects.create(name="projects", content="some content")
-        response = self.client.get("/edit/projects/")
-        editable_text = response.context["text"]
-        self.assertEqual(editable_text.name, "projects")
         self.assertContains(response, "some content</textarea>")
