@@ -46,6 +46,14 @@ class ResearchPageViewTests(ViewTest):
 
 
 
+class ProjectPageViewTests(ViewTest):
+
+    def test_project_view_uses_project_template(self):
+        response = self.client.get("/project/")
+        self.assertTemplateUsed(response, "project.html")
+
+
+
 class LoginViewTests(ViewTest):
 
     def test_login_view_uses_login_template(self):

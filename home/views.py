@@ -23,6 +23,10 @@ def research_page(request):
     return render(request, "research.html", {"text": text})
 
 
+def project_page(request):
+    return render(request, "project.html")
+
+
 def login_page(request):
     if request.method == "POST":
         user = authenticate(
