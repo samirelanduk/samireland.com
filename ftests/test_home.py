@@ -345,7 +345,7 @@ class ProjectPageTests(FunctionalTest):
 
     def test_can_change_piano_description_text(self):
         self.check_can_edit_text(
-         "/projects/piano/", "piano-description", "piano-long"
+         "/piano/", "piano-description", "piano-long"
         )
 
 

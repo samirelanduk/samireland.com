@@ -61,7 +61,8 @@ def edit_page(request, name):
      "about": "/about/",
      "research": "/research/",
      "projects": "/projects/",
-     "piano-brief": "/projects/"
+     "piano-brief": "/projects/",
+     "piano-long": "/piano/"
     }
     if name not in ALLOWED_NAMES:
         raise Http404("Not a valid name")
