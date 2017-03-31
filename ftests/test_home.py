@@ -1,4 +1,5 @@
 from time import sleep
+import datetime
 from .base import FunctionalTest
 
 class BasePageLayoutTests(FunctionalTest):
