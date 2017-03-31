@@ -28,6 +28,22 @@ a#logout-link {
   color: #FFFFFF;
 }
 
+#quick-links-left {
+  font-size: 25%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+a.quick-link {
+  display: block;
+  color: #FFFFFF;
+  display: block;
+  background-color: #3B5998;
+  line-height: 1;
+  text-decoration: none;
+}
+
 body {
   margin: 0px;
   background-color: #FFFFFF;

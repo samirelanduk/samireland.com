@@ -9,7 +9,7 @@ class PianoPageViewTests(ViewTest):
 
 
     def test_piano_view_uses_piano_long_editable_text(self):
-        EditableText.objects.create(name="piano_long", content="some content")
+        EditableText.objects.create(name="piano-long", content="some content")
         response = self.client.get("/piano/")
         editable_text = response.context["text"]
-        self.assertEqual(editable_text.name, "piano_long")
+        self.assertEqual(editable_text.name, "piano-long")

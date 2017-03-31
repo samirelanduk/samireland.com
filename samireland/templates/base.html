@@ -25,6 +25,9 @@
     Sam Ire<a href="/authenticate/" id="login-link">l</a>and
     <div id="navicon">&#9776;</div>
     {% if user.is_authenticated %}
+    <div id="quick-links-left">
+      <a href="/piano/update/" id="piano-update-link" class="quick-link">Piano</a>
+    </div>
     <a href="/logout/" id="logout-link">Logout</a>
     {% endif %}
   </header>
