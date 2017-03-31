@@ -390,7 +390,7 @@ class ProjectPageTests(FunctionalTest):
          self.live_server_url + "/piano/update/"
         )
 
-         # There is one row now
+        # There is one row now
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 1)
@@ -407,7 +407,7 @@ class ProjectPageTests(FunctionalTest):
 
         # The piano page now says 10 minutes
         self.browser.get(self.live_server_url + "/piano/")
-        piano_progress = main.find_element_by_id("piano-progress")
+        piano_progress = self.browser.find_element_by_id("piano-progress")
         first_p = piano_progress.find_element_by_tag_name("p")
         self.assertIn("10 minutes", first_p.text)
 
@@ -417,8 +417,8 @@ class ProjectPageTests(FunctionalTest):
         date_input = form.find_elements_by_tag_name("input")[0]
         minutes_input = form.find_elements_by_tag_name("input")[1]
         submit = form.find_elements_by_tag_name("input")[-1]
-        date_input.send_keys(date.strftime("22092004"))
-        minutes_input.send_keys("10")
+        date_input.send_keys("22092004")
+        minutes_input.send_keys("50")
         submit.click()
 
         # The new entry is on the table
@@ -436,7 +436,7 @@ class ProjectPageTests(FunctionalTest):
 
         # The piano page now says 1 hour
         self.browser.get(self.live_server_url + "/piano/")
-        piano_progress = main.find_element_by_id("piano-progress")
+        piano_progress = self.browser.find_element_by_id("piano-progress")
         first_p = piano_progress.find_element_by_tag_name("p")
         self.assertIn("1 hour", first_p.text)
 
@@ -446,14 +446,14 @@ class ProjectPageTests(FunctionalTest):
         date_input = form.find_elements_by_tag_name("input")[0]
         minutes_input = form.find_elements_by_tag_name("input")[1]
         submit = form.find_elements_by_tag_name("input")[-1]
-        date_input.send_keys(date.strftime("28092090"))
+        date_input.send_keys("28092090")
         minutes_input.send_keys("90")
         submit.click()
 
         # The new entry is on the table
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
-        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows), 3)
         self.assertEqual(
          rows[0].find_elements_by_tag_name("td")[1].text,
          "90"
@@ -469,7 +469,7 @@ class ProjectPageTests(FunctionalTest):
 
         # The piano page now says 2.5 hours
         self.browser.get(self.live_server_url + "/piano/")
-        piano_progress = main.find_element_by_id("piano-progress")
+        piano_progress = self.browser.find_element_by_id("piano-progress")
         first_p = piano_progress.find_element_by_tag_name("p")
         self.assertIn("2 hours and 30 minutes", first_p.text)
 

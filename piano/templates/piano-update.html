@@ -9,12 +9,22 @@
 <h1>Practice Sessions</h1>
 
 <form method="POST">
-  <input type="date" value="{{ today }}">
-  <input type="text">
-  <input type="submit">
+  <input type="date" name="date" value="{{ today }}">
+  <input type="text" name="minutes">
   {% csrf_token %}
+  <input type="submit">
 </form>
 
 <table>
+  <thead><th>Date</th><th>Minutes</th><th></th></thead>
+  <tbody>
+    {% for session in sessions %}
+    <tr>
+      <td>{{ session.date|date:"d F, Y" }}</td>
+      <td>{{ session.minutes }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
 </table>
 {% endblock %}

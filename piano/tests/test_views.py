@@ -1,5 +1,6 @@
 from datetime import datetime
 from home.models import EditableText
+from piano.models import PracticeSession
 from samireland.tests import ViewTest
 
 class PianoPageViewTests(ViewTest):
@@ -16,6 +17,27 @@ class PianoPageViewTests(ViewTest):
         self.assertEqual(editable_text.name, "piano-long")
 
 
+    def test_piano_update_view_gives_total_practice_tile(self):
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "0 hours")
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "10 minutes")
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=50)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "1 hour")
+        PracticeSession.objects.create(date=datetime(2017, 3, 3), minutes=10)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "1 hour and 10 minutes")
+        PracticeSession.objects.create(date=datetime(2017, 3, 4), minutes=50)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "2 hours")
+        PracticeSession.objects.create(date=datetime(2017, 3, 5), minutes=10)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["practice_time"], "2 hours and 10 minutes")
+
+
+
 
 class PianoUpdatePageViewTests(ViewTest):
 
@@ -30,3 +52,37 @@ class PianoUpdatePageViewTests(ViewTest):
          response.context["today"],
          datetime.now().strftime("%Y-%m-%d")
         )
+
+
+    def test_piano_update_view_reloads_on_post(self):
+        response = self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": 45
+        })
+        self.assertRedirects(response, "/piano/update/")
+
+
+    def test_piano_update_view_can_make_new_practice_session(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": 45
+        })
+        self.assertEqual(PracticeSession.objects.count(), 1)
+        session = PracticeSession.objects.first()
+        self.assertEqual(session.minutes, 45)
+        self.assertEqual(session.date, datetime(2010, 1, 3).date())
+
+
+    def test_piano_update_view_sends_all_practice_sessions(self):
+        response = self.client.get("/piano/update/")
+        self.assertEqual(response.context["sessions"], [])
+        d1 = PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
+        response = self.client.get("/piano/update/")
+        self.assertEqual(response.context["sessions"], [d1])
+        d2 = PracticeSession.objects.create(date=datetime(2017, 3, 2), minutes=5)
+        response = self.client.get("/piano/update/")
+        self.assertEqual(response.context["sessions"], [d2, d1])
+        d3 = PracticeSession.objects.create(date=datetime(2017, 2, 28), minutes=1)
+        response = self.client.get("/piano/update/")
+        self.assertEqual(response.context["sessions"], [d2, d1, d3])

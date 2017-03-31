@@ -81,6 +81,8 @@ LANGUAGE_CODE = "en-gb"
 
 TIME_ZONE = "UTC"
 
+DATE_FORMAT = 'j F, Y'
+
 USE_I18N = True
 
 USE_L10N = True
