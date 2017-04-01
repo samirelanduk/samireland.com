@@ -17,13 +17,13 @@ class PianoPageViewTests(ViewTest):
         self.assertEqual(editable_text.name, "piano-long")
 
 
-    def test_piano_update_view_gives_total_practice_tile(self):
+    def test_piano_update_view_gives_total_practice_time(self):
         response = self.client.get("/piano/")
         self.assertEqual(response.context["practice_time"], "0 hours")
         PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
         response = self.client.get("/piano/")
         self.assertEqual(response.context["practice_time"], "10 minutes")
-        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=50)
+        PracticeSession.objects.create(date=datetime(2017, 3, 2), minutes=50)
         response = self.client.get("/piano/")
         self.assertEqual(response.context["practice_time"], "1 hour")
         PracticeSession.objects.create(date=datetime(2017, 3, 3), minutes=10)
@@ -84,6 +84,22 @@ class PianoUpdatePageViewTests(ViewTest):
         self.assertEqual(
          response.context["error_text"],
          "You cannot submit a session with no date"
+        )
+
+
+    def test_date_needs_to_be_unique_in_piano_update_view(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": 45
+        })
+        response = self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": 10
+        })
+        self.assertEqual(
+         response.context["error_text"],
+         "There is already a session for this date"
         )
 
 

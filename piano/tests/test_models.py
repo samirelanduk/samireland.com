@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.core.exceptions import ValidationError
 from samireland.tests import ModelTest
 from piano.models import PracticeSession
 
@@ -14,3 +15,11 @@ class PracticeSessionTest(ModelTest):
 
         retrieved_session = PracticeSession.objects.first()
         self.assertEqual(retrieved_session, session)
+
+
+    def test_practice_session_date_has_to_be_unique(self):
+        today = datetime.now().date()
+        PracticeSession.objects.create(minutes=5, date=today)
+        with self.assertRaises(ValidationError):
+            post = PracticeSession(minutes=10, date=today)
+            post.full_clean()

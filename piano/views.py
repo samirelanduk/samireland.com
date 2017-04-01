@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
+from django.db.utils import IntegrityError
 from home.models import EditableText
 from piano.models import PracticeSession
 
@@ -41,10 +42,17 @@ def piano_update_page(request):
              "sessions": sessions,
              "error_text": error_text
             })
-        PracticeSession.objects.create(
-         date=request.POST["date"],
-         minutes=request.POST["minutes"]
-        )
+        try:
+            PracticeSession.objects.create(
+             date=request.POST["date"],
+             minutes=request.POST["minutes"]
+            )
+        except IntegrityError:
+            return render(request, "piano-update.html", {
+             "today": datetime.now().strftime("%Y-%m-%d"),
+             "sessions": sessions,
+             "error_text": "There is already a session for this date"
+            })
         return redirect("/piano/update/")
     return render(request, "piano-update.html", {
      "today": datetime.now().strftime("%Y-%m-%d"),
