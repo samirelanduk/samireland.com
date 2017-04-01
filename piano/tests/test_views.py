@@ -86,3 +86,43 @@ class PianoUpdatePageViewTests(ViewTest):
         d3 = PracticeSession.objects.create(date=datetime(2017, 2, 28), minutes=1)
         response = self.client.get("/piano/update/")
         self.assertEqual(response.context["sessions"], [d2, d1, d3])
+
+
+class PianoDeletePageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
+
+
+    def test_piano_delete_view_uses_piano_delete_template(self):
+        response = self.client.get("/piano/delete/1/")
+        self.assertTemplateUsed(response, "piano-delete.html")
+
+
+    def test_piano_delete_view_knows_session(self):
+        response = self.client.get("/piano/delete/1/")
+        self.assertEqual(
+         response.context["session"],
+         PracticeSession.objects.first()
+        )
+
+
+    def test_piano_delete_view_redirects_to_update_page_on_post(self):
+        response = self.client.post("/piano/delete/1/")
+        self.assertRedirects(response, "/piano/update/")
+
+
+    def test_piano_delete_view_can_delete_given_id(self):
+        self.assertEqual(PracticeSession.objects.all().count(), 1)
+        self.assertEqual(PracticeSession.objects.first().pk, 1)
+        self.client.post("/piano/delete/1/")
+        self.assertEqual(PracticeSession.objects.all().count(), 0)
+
+
+    def test_piano_delete_view_does_nothing_when_given_wrong_id(self):
+        self.assertEqual(PracticeSession.objects.all().count(), 1)
+        self.assertEqual(PracticeSession.objects.first().pk, 1)
+        response = self.client.post("/piano/delete/2/")
+        self.assertEqual(PracticeSession.objects.all().count(), 1)
+        self.assertRedirects(response, "/piano/")

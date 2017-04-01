@@ -20,8 +20,9 @@
   <tbody>
     {% for session in sessions %}
     <tr>
-      <td>{{ session.date|date:"d F, Y" }}</td>
+      <td>{{ session.date|date:"j F, Y" }}</td>
       <td>{{ session.minutes }}</td>
+      <td><a href="/piano/delete/{{ session.pk }}/">Delete</a></td>
     </tr>
     {% endfor %}
   </tbody>

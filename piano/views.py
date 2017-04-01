@@ -35,3 +35,13 @@ def piano_update_page(request):
      "today": datetime.now().strftime("%Y-%m-%d"),
      "sessions": sessions
     })
+
+
+def piano_delete_page(request, pk):
+    if PracticeSession.objects.filter(pk=pk).count() == 0:
+        return redirect("/piano/")
+    session = PracticeSession.objects.get(pk=pk)
+    if request.method == "POST":
+        session.delete()
+        return redirect("/piano/update/")
+    return render(request, "piano-delete.html", {"session": session})

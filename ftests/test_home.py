@@ -494,7 +494,10 @@ class ProjectPageTests(FunctionalTest):
          self.live_server_url + r"/piano/delete/\d+/$"
         )
         form = self.browser.find_element_by_tag_name("form")
-        warning = form.find_element_by_id("warning")
+        description = form.find_element_by_id("delete-description")
+        self.assertIn("22 September, 2004", description.text)
+        self.assertIn("50 minutes", description.text)
+        warning = form.find_element_by_id("delete-warning")
         self.assertIn(
          "are you sure?",
          warning.text.lower()
@@ -512,7 +515,7 @@ class ProjectPageTests(FunctionalTest):
         )
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
-        self.assertEqual(len(rows), 4)
+        self.assertEqual(len(rows), 3)
 
         # He changes his mind and goes back
         delete_button = rows[-1].find_elements_by_tag_name("a")[-1]
@@ -532,7 +535,7 @@ class ProjectPageTests(FunctionalTest):
          self.live_server_url + "/piano/update/"
         )
 
-        # There are now three rows
+        # There are now two rows
         table = self.browser.find_element_by_tag_name("table")
         rows = table.find_elements_by_tag_name("tr")[1:]
         self.assertEqual(len(rows), 2)
@@ -547,9 +550,9 @@ class ProjectPageTests(FunctionalTest):
 
         # The piano page now says 1 hours 40 mins
         self.browser.get(self.live_server_url + "/piano/")
-        piano_progress = main.find_element_by_id("piano-progress")
+        piano_progress = self.browser.find_element_by_id("piano-progress")
         first_p = piano_progress.find_element_by_tag_name("p")
-        self.assertIn("1 hours and 40 minute", first_p.text)
+        self.assertIn("1 hour and 40 minutes", first_p.text)
 
 
     def test_cannot_post_session_with_no_date(self):
