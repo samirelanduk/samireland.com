@@ -9,7 +9,7 @@ label {
   box-sizing: border-box;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], input[type=date] {
   width: 100%;
   border-radius: 10px;
   font-size: 150%;
@@ -43,7 +43,7 @@ textarea {
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */
-  input[type=text], input[type=password] {
+  input[type=text], input[type=password], input[type=date] {
     width: 75%;
   }
 
@@ -63,11 +63,6 @@ textarea {
   .form-row {
     margin-left: 10px;
     margin-right: 10px;
-  }
-
-  input[type=text], input[type=password] {
-    display: inline-block;
-    width: 85%;
   }
 
 }

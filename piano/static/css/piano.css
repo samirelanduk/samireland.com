@@ -1,3 +1,74 @@
 #piano-description {
   position: relative;
 }
+
+form {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input[type=text], input[type=date] {
+  width: 250px;
+}
+
+table {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  border-collapse: collapse;
+  margin-top: 40px;
+}
+
+th {
+  text-align: left;
+}
+
+tr {
+  line-height: 200%;
+}
+
+td a {
+  margin-top: 0px;
+  background-color: #7F0000;
+  color: #FFFFFF;
+  font-size: 70%;
+  padding: 2px;
+  border-radius: 3px;
+}
+
+
+@media only screen and (min-width: 568px) {
+  /* iPad down */
+  table {
+    width: 80%;
+  }
+
+}
+
+
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens */
+
+  table {
+    width: 75%;
+  }
+
+  form {
+    text-align: center;
+  }
+
+  .input-row, input[type=text], input[type=date] {
+    display: inline;
+  }
+
+}
+
+
+@media only screen and (min-width: 1024px) {
+  /* Big Desktop screens */
+  table {
+    width: 70%;
+  }
+
+}
