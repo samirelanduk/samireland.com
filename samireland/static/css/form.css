@@ -75,7 +75,7 @@ textarea {
 @media only screen and (min-width: 769px) {
   /* Small Desktop screens and up */
 
-  label, h1, .submit-row {
+  label, .submit-row {
     display: inline-block;
     width: 15%;
     text-align: right;
