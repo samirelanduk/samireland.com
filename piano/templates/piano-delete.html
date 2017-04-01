@@ -3,10 +3,11 @@
 {% block title %}Delete Piano Session{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/form.css">
 {% endblock %}
 
 {% block main %}
-<form method="POST">
+<form method="POST" class="delete-form">
   <div id="delete-description">{{ session.date|date:"j F, Y" }} - {{ session.minutes }} minutes</div>
   <div id="delete-warning">This will delete the session forever. Are you sure?</div>
   {% csrf_token %}
