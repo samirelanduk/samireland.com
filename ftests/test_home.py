@@ -598,6 +598,23 @@ class ProjectPageTests(FunctionalTest):
         error = self.browser.find_element_by_class_name("error")
         self.assertEqual(error.text, "You cannot submit a session with no minutes")
 
+        # He tries to submit a session with nonsense minutes
+        self.browser.get(self.live_server_url + "/piano/update/")
+        form = self.browser.find_element_by_tag_name("form")
+        minutes_input = form.find_elements_by_tag_name("input")[1]
+        minutes_input.send_keys("string")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # It doesn't work
+        table = self.browser.find_element_by_tag_name("table")
+        rows = table.find_elements_by_tag_name("tr")[1:]
+        self.assertEqual(len(rows), 0)
+
+        # There is an error message
+        error = self.browser.find_element_by_class_name("error")
+        self.assertEqual(error.text, "Minutes have to be a number")
+
 
     def test_cannot_post_session_with_duplicate_date(self):
         self.login()

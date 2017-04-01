@@ -87,6 +87,32 @@ class PianoUpdatePageViewTests(ViewTest):
         )
 
 
+    def test_minutes_needs_to_be_given_in_piano_update_view(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        response = self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": ""
+        })
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.assertEqual(
+         response.context["error_text"],
+         "You cannot submit a session with no minutes"
+        )
+
+
+    def test_minutes_needs_to_be_proper_in_piano_update_view(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        response = self.client.post("/piano/update/", data={
+         "date": "2010-01-03",
+         "minutes": "uhiud"
+        })
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.assertEqual(
+         response.context["error_text"],
+         "Minutes have to be a number"
+        )
+
+
     def test_piano_update_view_sends_all_practice_sessions(self):
         response = self.client.get("/piano/update/")
         self.assertEqual(response.context["sessions"], [])

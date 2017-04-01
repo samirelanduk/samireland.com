@@ -26,13 +26,20 @@ def piano_page(request):
 def piano_update_page(request):
     sessions = list(PracticeSession.objects.all().order_by("date").reverse())
     if request.method == "POST":
+        error_text = None
         try:
             datetime.strptime(request.POST["date"], "%Y-%m-%d")
         except:
+            error_text = "You cannot submit a session with no date"
+        if not request.POST["minutes"]:
+            error_text = "You cannot submit a session with no minutes"
+        elif not request.POST["minutes"].isdigit():
+            error_text = "Minutes have to be a number"
+        if error_text:
             return render(request, "piano-update.html", {
              "today": datetime.now().strftime("%Y-%m-%d"),
              "sessions": sessions,
-             "error_text": "You cannot submit a session with no date"
+             "error_text": error_text
             })
         PracticeSession.objects.create(
          date=request.POST["date"],
