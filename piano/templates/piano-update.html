@@ -9,12 +9,16 @@
 <h1>Practice Sessions</h1>
 
 <form method="POST">
-  <input type="date" name="date" value="{{ today }}">
+  <input type="date" name="date" value="{{ today }}" id="id_date">
   <input type="text" name="minutes">
   {% csrf_token %}
   <input type="submit">
 </form>
-
+{% if error_text %}
+  <div class="error">
+    {{ error_text}}
+  </div>
+{% endif %}
 <table>
   <thead><th>Date</th><th>Minutes</th><th></th></thead>
   <tbody>

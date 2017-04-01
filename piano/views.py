@@ -24,13 +24,21 @@ def piano_page(request):
 
 
 def piano_update_page(request):
+    sessions = list(PracticeSession.objects.all().order_by("date").reverse())
     if request.method == "POST":
+        try:
+            datetime.strptime(request.POST["date"], "%Y-%m-%d")
+        except:
+            return render(request, "piano-update.html", {
+             "today": datetime.now().strftime("%Y-%m-%d"),
+             "sessions": sessions,
+             "error_text": "You cannot submit a session with no date"
+            })
         PracticeSession.objects.create(
          date=request.POST["date"],
          minutes=request.POST["minutes"]
         )
         return redirect("/piano/update/")
-    sessions = list(PracticeSession.objects.all().order_by("date").reverse())
     return render(request, "piano-update.html", {
      "today": datetime.now().strftime("%Y-%m-%d"),
      "sessions": sessions

@@ -74,6 +74,19 @@ class PianoUpdatePageViewTests(ViewTest):
         self.assertEqual(session.date, datetime(2010, 1, 3).date())
 
 
+    def test_date_needs_to_be_proper_in_piano_update_view(self):
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        response = self.client.post("/piano/update/", data={
+         "date": "",
+         "minutes": 45
+        })
+        self.assertEqual(PracticeSession.objects.count(), 0)
+        self.assertEqual(
+         response.context["error_text"],
+         "You cannot submit a session with no date"
+        )
+
+
     def test_piano_update_view_sends_all_practice_sessions(self):
         response = self.client.get("/piano/update/")
         self.assertEqual(response.context["sessions"], [])
