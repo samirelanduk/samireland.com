@@ -15,7 +15,9 @@ subprocess.call(
 
 # What branch are we on?
 branch = subprocess.check_output("git branch", shell=True).decode()
-branch = branch.split("\n")[0].split()[1]
+branches = branch.split("\n")
+current_branch = [branch for branch in branches if branch.startswith("*")][0]
+branch = current_branch.split()[1]
 
 # What files is git tracking?
 tracked_files = subprocess.check_output(
@@ -44,6 +46,13 @@ subprocess.call(
  "ssh %s 'sed -i s/£/\\\"/g ~/%s/source/samireland/settings.py'" % (sitename, sitename),
  shell=True
 )
+
+# Add google analytics
+if sitename == "samireland.com":
+    subprocess.call(
+     "ssh %s 'sed -i s/\"<!--analytics-->\"/\"\{%% include \\\"analytics.html\\\" %%\}\"/g ~/%s/source/samireland/templates/base.html'" % (sitename, sitename),
+     shell=True
+    )
 
 # Upload the secret settings
 subprocess.call(
