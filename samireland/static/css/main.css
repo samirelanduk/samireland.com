@@ -90,11 +90,12 @@ nav li {
 nav a {
   color: #FFFFFF;
   text-decoration: none;
+  transition: 0.4s;
 }
 
 nav a:hover {
   color: #111111;
-  transition: 0.5s
+  transition: 0.5s;
 }
 
 main {
