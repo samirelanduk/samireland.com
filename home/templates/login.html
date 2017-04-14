@@ -1,26 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}Login{% endblock %}
-{% block css %}
-<link rel="stylesheet" type="text/css" href="/static/css/form.css">
-{% endblock %}
 
 {% block main %}
+<h1>Login</h1>
 <form method="POST">
-  <h1>Login</h1>
-  <div class="input-row">
-    <label for="id_username">
+  <label for="id_username">
       Username:
-    </label><input type="text" name="username" id="id_username">
-  </div>
-  <div>
-    <label for="id_password">
-      Password:
-    </label><input type="password" name="password" id="id_password">
-  </div class="input-row">
+  </label>
+  <input type="text" name="username" id="id_username">
+  <label for="id_password">
+    Password:
+  </label>
+  <input type="password" name="password" id="id_password">
   {% csrf_token %}
-  <div class="input-row submit-row">
-    <input type="submit">
-  </div>
+  <input type="submit">
 </form>
 {% endblock %}

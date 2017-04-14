@@ -3,20 +3,15 @@
 {% block title %}Piano Sessions{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="/static/css/form.css">
 <link rel="stylesheet" type="text/css" href="/static/css/piano.css">
 {% endblock %}
 
 {% block main %}
 <h1>Practice Sessions</h1>
 
-<form method="POST">
-  <div class="input-row">
-    <input type="date" name="date" value="{{ today }}" id="id_date">
-  </div>
-  <div class="input-row">
-    <input type="text" name="minutes" autocomplete="off" placeholder="minutes">
-  </div>
+<form method="POST" class="one-row">
+  <input type="date" name="date" value="{{ today }}" id="id_date">
+  <input type="text" name="minutes" autocomplete="off" placeholder="minutes">
   {% csrf_token %}
   <input type="submit">
 </form>

@@ -2,10 +2,6 @@
 
 {% block title %}Delete Piano Session{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="/static/css/form.css">
-{% endblock %}
-
 {% block main %}
 <form method="POST" class="delete-form">
   <div id="delete-description">{{ session.date|date:"j F, Y" }} - {{ session.minutes }} minutes</div>
