@@ -681,47 +681,43 @@ class ProjectPageTests(FunctionalTest):
         # The sixty day bar chart is correct
         sixty_days_ago = today - datetime.timedelta(days=60)
         last_sixty_days = [s for s in piano_data if s["day"] > sixty_days_ago]
-        for index, session in enumerate(last_sixty_days):
+        self.assertEqual(
+         self.browser.execute_script("return sixty_bar.xAxis[0].min;"),
+         int((sixty_days_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return sixty_bar.xAxis[0].max;"),
+         int(today.strftime("%s")) * 1000
+        )
+        days_with_minutes = [day for day in last_sixty_days if day["minutes"]]
+        for index, day in enumerate(days_with_minutes):
             self.assertEqual(
-             self.browser.execute_script("return sixty_bar.xAxis[0].min;"),
-             int((sixty_days_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+             self.browser.execute_script("return sixty_bar.series[0].data[%i].x;" % index),
+             int(days_with_minutes[index]["day"].strftime("%s")) * 1000
             )
             self.assertEqual(
-             self.browser.execute_script("return sixty_bar.xAxis[0].max;"),
-             int(today.strftime("%s")) * 1000
+             self.browser.execute_script("return sixty_bar.series[0].data[%i].y;" % index),
+             days_with_minutes[index]["minutes"]
             )
-            days_with_minutes = [day for day in last_sixty_days if day["minutes"]]
-            for index, day in enumerate(days_with_minutes):
-                self.assertEqual(
-                 self.browser.execute_script("return sixty_bar.series[0].data[%i].x;" % index),
-                 int(days_with_minutes[index]["day"].strftime("%s")) * 1000
-                )
-                self.assertEqual(
-                 self.browser.execute_script("return sixty_bar.series[0].data[%i].y;" % index),
-                 days_with_minutes[index]["minutes"]
-                )
 
-            ''''''
-            '''self.assertEqual(
-             int(session["day"].strftime("%s")),
-             self.browser.execute_script("return sixty_bar.series[0].data[%i].x;" % index)
+        # The sixty day line chart is correct
+        self.assertEqual(
+         self.browser.execute_script("return sixty_line.xAxis[0].min;"),
+         int((sixty_days_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return sixty_line.xAxis[0].max;"),
+         int(today.strftime("%s")) * 1000
+        )
+        for index, day in enumerate(last_sixty_days):
+            self.assertEqual(
+             self.browser.execute_script("return sixty_line.series[0].data[%i].x;" % index),
+             int(last_sixty_days[index]["day"].strftime("%s")) * 1000
             )
             self.assertEqual(
-             session["minutes"],
-             self.browser.execute_script("return sixty_bar.series[0].data[%i].y;" % index)
-            )'''
-
-        '''# The sixty day line chart is correct
-        time_sixty_days_ago = sum([s[1] for s in piano_data[:-60]])
-        for index, session in enumerate(last_sixty_days):
-            self.assertEqual(
-             int(session[0].strftime("%s")),
-             self.browser.execute_script("return sixty_line.series[0].data[%i].x;" % index)
+             self.browser.execute_script("return sixty_line.series[0].data[%i].y;" % index),
+             last_sixty_days[index]["cumulative"]
             )
-            self.assertEqual(
-             session[1] + time_sixty_days_ago,
-             self.browser.execute_script("return sixty_line.series[0].data[%i].y;" % index)
-            )'''
 
 
 

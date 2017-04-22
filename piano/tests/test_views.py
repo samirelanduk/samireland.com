@@ -14,7 +14,7 @@ class PianoPageViewTests(ViewTest):
         while day <= today:
             self.piano_data.append({
              "day": day,
-             "minutes": randint(1, 15) * 5 if day.day % 5 and day < today - timedelta(days=5) else 0
+             "minutes": 5
             })
             self.piano_data[-1]["cumulative"] = sum(d["minutes"] for d in self.piano_data)
             day += timedelta(days=1)
@@ -66,11 +66,14 @@ class PianoPageViewTests(ViewTest):
 
     def test_piano_view_sends_last_sixty_minutes(self):
         response = self.client.get("/piano/")
-        today = datetime.now().date()
-        today_minus_59 = today - timedelta(days=59)
-        relevant_sessions = PracticeSession.objects.filter(date__gte=today_minus_59)
-        data = [[int(session.date.strftime("%s")) * 1000, session.minutes] for session in relevant_sessions]
-        self.assertEqual(response.context["last_sixty"], data)
+        for point in response.context["last_sixty"]:
+            self.assertEqual(point[1], 5)
+
+
+    def test_piano_view_sends_last_sixty_minutes_cumulative(self):
+        response = self.client.get("/piano/")
+        for index, point in enumerate(response.context["last_sixty"]):
+            if index: self.assertEqual(point[1], response.context["last_sixty"][index - 1][1])
 
 
     '''def test_piano_view_sends_last_sixty_session_data(self):
