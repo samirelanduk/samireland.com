@@ -15,7 +15,68 @@
 
 <div id="piano-progress">
   <h2>Progress</h2>
-  <p>I've been practicing for {{ practice_time }}.
+  <p>I've been practicing for {{ practice_time }}.</p>
+
+  <div id="sixty-day-charts">
+    <h3>Past Sixty Days</h3>
+    <div id="sixty-day-bar-chart"></div>
+    <div id="sixty-day-line-chart"></div>
+  </div>
+
+  <div id="one-year-charts"></div>
+
+  <div id="all-time-charts"></div>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script>
+    var sixty_bar = Highcharts.chart("sixty-day-bar-chart", {
+      chart: {
+        type: "column"
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        useHTML: true
+      },
+      title: {
+        text: "Past Sixty Days"
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+        title: {
+          "text": "Date",
+          style: {"font-weight": "bold"}
+        },
+        min: {{ minus_59 }},
+        max: {{ today }}
+      },
+      yAxis: {
+        min: 0,
+        max: 90,
+        tickInterval: 30,
+        minorTickInterval: 10,
+        title: {
+          text: 'Time (mins)',
+          style: {"font-weight": "bold"}
+        }
+      },
+      series: [{
+        data: {{ last_sixty }},
+        color: "#4A9586"
+      }]
+    });
+  </script>
+
 </div>
 
 <div id="piano-videos">

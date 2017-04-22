@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.db.utils import IntegrityError
 from home.models import EditableText
@@ -18,9 +18,28 @@ def piano_page(request):
     minutes_text = "%s%i minutes" % (
      " and " if hours else "", minutes
     ) if minutes else ""
+
+    today = datetime.now().date()
+    today_minus_59 = datetime.now().date() - timedelta(days=59)
+    relevant_sessions = PracticeSession.objects.filter(date__gte=today_minus_59)
+    last_sixty = [[int(session.date.strftime("%s")) * 1000, session.minutes] for session in relevant_sessions]
+    '''last_sixty_cumulative = [[sixty_days_ago, 0]]
+    day = sixty_days_ago + timedelta(days=1)
+    while day <= today:
+        session = last_sixty_sessions.filter(date=day).first()
+        if session:
+            last_sixty_cumulative.append([day, session.cumulative_minutes])
+        else:
+            last_sixty_cumulative.append([day, last_sixty_cumulative[-1][1]])
+        day += timedelta(days=1)
+    last_sixty_cumulative = [[int(s[0].strftime("%s")), s[1]] for s in last_sixty_cumulative[1:]]'''
     return render(request, "piano.html", {
      "text": text,
-     "practice_time": hours_text + minutes_text
+     "practice_time": hours_text + minutes_text,
+     "today": int(today.strftime("%s")) * 1000,
+     "minus_59": int(today_minus_59.strftime("%s")) * 1000,
+     "last_sixty": last_sixty
+     # "last_sixty_cumulative": last_sixty_cumulative
     })
 
 

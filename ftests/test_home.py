@@ -1,6 +1,8 @@
 from time import sleep
 import datetime
+from random import randint
 from .base import FunctionalTest
+from piano.models import PracticeSession
 
 class BasePageLayoutTests(FunctionalTest):
 
@@ -643,6 +645,83 @@ class ProjectPageTests(FunctionalTest):
         # There is an error message
         error = self.browser.find_element_by_class_name("error")
         self.assertEqual(error.text, "There is already a session for this date")
+
+
+    def test_piano_charts(self):
+        # Add a bunch of piano data. This goes back two years - there is data on
+        # every seventh day
+        today = datetime.datetime.now().date()
+        day = two_years_ago = today - datetime.timedelta(days=730)
+        piano_data = []
+        while day <= today:
+            piano_data.append({
+             "day": day,
+             "minutes": randint(1, 15) * 5 if not day.day % 7 and day < today - datetime.timedelta(days=5) else 0
+            })
+            piano_data[-1]["cumulative"] = sum(d["minutes"] for d in piano_data)
+            day += datetime.timedelta(days=1)
+        for day in piano_data:
+            if day["minutes"]:
+                PracticeSession.objects.create(date=day["day"], minutes=day["minutes"])
+
+        # The user goes to the piano page
+        self.browser.get(self.live_server_url + "/piano/")
+
+        # There is a progress section with 60 day, one year, and all time divs
+        progress_div = self.browser.find_element_by_id("piano-progress")
+        sixty_div = progress_div.find_element_by_id("sixty-day-charts")
+        year_div = progress_div.find_element_by_id("one-year-charts")
+        all_time_div = progress_div.find_element_by_id("all-time-charts")
+
+        # The sixty day div has a heading and two charts
+        sixty_heading = sixty_div.find_element_by_tag_name("h3")
+        sixty_chart = sixty_div.find_element_by_id("sixty-day-bar-chart")
+        sixty_cumul_chart = sixty_div.find_element_by_id("sixty-day-line-chart")
+
+        # The sixty day bar chart is correct
+        sixty_days_ago = today - datetime.timedelta(days=60)
+        last_sixty_days = [s for s in piano_data if s["day"] > sixty_days_ago]
+        for index, session in enumerate(last_sixty_days):
+            self.assertEqual(
+             self.browser.execute_script("return sixty_bar.xAxis[0].min;"),
+             int((sixty_days_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+            )
+            self.assertEqual(
+             self.browser.execute_script("return sixty_bar.xAxis[0].max;"),
+             int(today.strftime("%s")) * 1000
+            )
+            days_with_minutes = [day for day in last_sixty_days if day["minutes"]]
+            for index, day in enumerate(days_with_minutes):
+                self.assertEqual(
+                 self.browser.execute_script("return sixty_bar.series[0].data[%i].x;" % index),
+                 int(days_with_minutes[index]["day"].strftime("%s")) * 1000
+                )
+                self.assertEqual(
+                 self.browser.execute_script("return sixty_bar.series[0].data[%i].y;" % index),
+                 days_with_minutes[index]["minutes"]
+                )
+
+            ''''''
+            '''self.assertEqual(
+             int(session["day"].strftime("%s")),
+             self.browser.execute_script("return sixty_bar.series[0].data[%i].x;" % index)
+            )
+            self.assertEqual(
+             session["minutes"],
+             self.browser.execute_script("return sixty_bar.series[0].data[%i].y;" % index)
+            )'''
+
+        '''# The sixty day line chart is correct
+        time_sixty_days_ago = sum([s[1] for s in piano_data[:-60]])
+        for index, session in enumerate(last_sixty_days):
+            self.assertEqual(
+             int(session[0].strftime("%s")),
+             self.browser.execute_script("return sixty_line.series[0].data[%i].x;" % index)
+            )
+            self.assertEqual(
+             session[1] + time_sixty_days_ago,
+             self.browser.execute_script("return sixty_line.series[0].data[%i].y;" % index)
+            )'''
 
 
 
