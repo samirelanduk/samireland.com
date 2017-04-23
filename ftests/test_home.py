@@ -716,7 +716,7 @@ class ProjectPageTests(FunctionalTest):
             )
             self.assertEqual(
              self.browser.execute_script("return sixty_line.series[0].data[%i].y;" % index),
-             last_sixty_days[index]["cumulative"]
+             last_sixty_days[index]["cumulative"] / 60
             )
 
         # The year div has a heading and two charts
@@ -762,7 +762,7 @@ class ProjectPageTests(FunctionalTest):
             )
             self.assertEqual(
              self.browser.execute_script("return year_line.series[0].data[%i].y;" % index),
-             last_365_days[index]["cumulative"]
+             last_365_days[index]["cumulative"] / 60
             )
 
 

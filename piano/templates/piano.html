@@ -61,7 +61,7 @@
           "text": "Date",
           style: {"font-weight": "bold"}
         },
-        min: {{ minus_59 }},
+        min: {{ minus_60 }},
         max: {{ today }}
       },
       yAxis: {
@@ -94,7 +94,7 @@
         enabled: false
       },
       tooltip: {
-        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        pointFormat: '<span style="padding:0"><b>{point.y:.2f} hours</b></span>',
         useHTML: true
       },
       title: {
@@ -107,14 +107,15 @@
           "text": "Date",
           style: {"font-weight": "bold"}
         },
-        min: {{ minus_59 }},
+        min: {{ minus_60 }},
         max: {{ today }}
       },
       yAxis: {
         title: {
-          text: 'Time (mins)',
-          style: {"font-weight": "bold"}
-        }
+          text: 'Time (hours)',
+          style: {"font-weight": "bold"},
+        },
+        floor: 0
       },
       plotOptions: {
         area: {
@@ -162,7 +163,7 @@
           "text": "Date",
           style: {"font-weight": "bold"}
         },
-        min: {{ minus_364 }},
+        min: {{ minus_365 }},
         max: {{ today }}
       },
       yAxis: {
@@ -176,7 +177,7 @@
         }
       },
       series: [{
-        data: {{ last_365 }},
+        data: {{ last_year }},
         color: "#4A9586",
         pointPadding: 0.25,
         groupPadding: 0,
@@ -198,7 +199,7 @@
         enabled: false
       },
       tooltip: {
-        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        pointFormat: '<span style="padding:0"><b>{point.y:.2f} hours</b></span>',
         useHTML: true
       },
       title: {
@@ -211,14 +212,15 @@
           "text": "Date",
           style: {"font-weight": "bold"}
         },
-        min: {{ minus_364 }},
+        min: {{ minus_365 }},
         max: {{ today }}
       },
       yAxis: {
         title: {
           text: 'Time (mins)',
           style: {"font-weight": "bold"}
-        }
+        },
+        floor: 0
       },
       plotOptions: {
         area: {
@@ -226,7 +228,7 @@
         }
       },
       series: [{
-        data: {{ last_365_cumulative }},
+        data: {{ last_year_cumulative }},
         color: "#4A9586",
         type: "area",
         marker: {

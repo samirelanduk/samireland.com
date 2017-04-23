@@ -1,27 +1,197 @@
 from datetime import datetime, timedelta
 from random import randint
+from unittest.mock import patch
 from home.models import EditableText
 from piano.models import PracticeSession
+from piano.views import today, get_practice_time
+from piano.views import get_last_sixty, get_last_sixty_cumulative
+from piano.views import get_last_year, get_last_year_cumulative
 from samireland.tests import ViewTest
 
+class TodayFunctionTests(ViewTest):
+
+    def test_can_today_as_date(self):
+        self.assertEqual(today(), datetime.now().date())
+
+
+
+class PracticeTimeStringTests(ViewTest):
+
+    def test_0_hour_string(self):
+        self.assertEqual(get_practice_time(), "0 hours")
+
+
+    def test_10_minutes_string(self):
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
+        self.assertEqual(get_practice_time(), "10 minutes")
+
+
+    def test_1_hour_string(self):
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=60)
+        self.assertEqual(get_practice_time(), "1 hour")
+
+
+    def test_1_hour_10_minutes_string(self):
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=70)
+        self.assertEqual(get_practice_time(), "1 hour and 10 minutes")
+
+
+    def test_2_hours_string(self):
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=120)
+        self.assertEqual(get_practice_time(), "2 hours")
+
+
+    def test_2_hours_10_minutes_string(self):
+        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=130)
+        self.assertEqual(get_practice_time(), "2 hours and 10 minutes")
+
+
+
+class LastSixtyFunctionTests(ViewTest):
+
+    def test_empty_series_when_no_sessions(self):
+        self.assertEqual(get_last_sixty(), [])
+
+
+    @patch("piano.views.today")
+    def test_can_get_sessions_in_last_sixty_days(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2016, 5, 3), minutes=130)
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=10)
+        PracticeSession.objects.create(date=datetime(2016, 7, 1), minutes=20)
+        self.assertEqual(get_last_sixty(), [
+         [1462233600000, 130], [1462665600000, 10], [1467331200000, 20]
+        ])
+
+
+    @patch("piano.views.today")
+    def test_can_get_exclude_sessions_before_sixty_days(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2016, 5, 2), minutes=130)
+        PracticeSession.objects.create(date=datetime(2016, 5, 3), minutes=130)
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=10)
+        PracticeSession.objects.create(date=datetime(2016, 7, 1), minutes=20)
+        PracticeSession.objects.create(date=datetime(2016, 7, 2), minutes=20)
+        self.assertEqual(get_last_sixty(), [
+         [1462233600000, 130], [1462665600000, 10], [1467331200000, 20]
+        ])
+
+
+
+class LastSixtyCumulativeTestsFunctionTests(ViewTest):
+
+    @patch("piano.views.today")
+    def test_no_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        data = get_last_sixty_cumulative()
+        self.assertEqual(len(data), 60)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1462233600000 + (86400000 * i) for i in range(60)])
+        self.assertEqual(minutes, [0 for i in range(60)])
+
+
+    @patch("piano.views.today")
+    def test_contained_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 6, 29), minutes=30)
+        data = get_last_sixty_cumulative()
+        self.assertEqual(len(data), 60)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1462233600000 + (86400000 * i) for i in range(60)])
+        self.assertEqual(minutes, [0] * 5 + [0.25] * 52 + [0.75] * 3)
+
+
+    @patch("piano.views.today")
+    def test_all_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2016, 5, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 6, 29), minutes=30)
+        data = get_last_sixty_cumulative()
+        self.assertEqual(len(data), 60)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1462233600000 + (86400000 * i) for i in range(60)])
+        self.assertEqual(minutes, [2] * 5 + [2.25] * 52 + [2.75] * 3)
+
+
+
+class LastYearFunctionTests(ViewTest):
+
+    def test_empty_series_when_no_sessions(self):
+        self.assertEqual(get_last_year(), [])
+
+
+    @patch("piano.views.today")
+    def test_can_get_sessions_in_last_365_days(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2015, 7, 3), minutes=130)
+        PracticeSession.objects.create(date=datetime(2015, 8, 8), minutes=10)
+        PracticeSession.objects.create(date=datetime(2016, 7, 1), minutes=20)
+        self.assertEqual(get_last_year(), [
+         [1435881600000, 130], [1438992000000, 10], [1467331200000, 20]
+        ])
+
+
+    @patch("piano.views.today")
+    def test_can_get_exclude_sessions_before_365_days(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2015, 7, 2), minutes=130)
+        PracticeSession.objects.create(date=datetime(2015, 7, 3), minutes=130)
+        PracticeSession.objects.create(date=datetime(2015, 8, 8), minutes=10)
+        PracticeSession.objects.create(date=datetime(2016, 7, 1), minutes=20)
+        PracticeSession.objects.create(date=datetime(2016, 7, 2), minutes=20)
+        self.assertEqual(get_last_year(), [
+         [1435881600000, 130], [1438992000000, 10], [1467331200000, 20]
+        ])
+
+
+
+class LastYearCumulativeTestsFunctionTests(ViewTest):
+
+    @patch("piano.views.today")
+    def test_no_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        data = get_last_year_cumulative()
+        self.assertEqual(len(data), 365)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1435881600000 + (86400000 * i) for i in range(365)])
+        self.assertEqual(minutes, [0 for i in range(365)])
+
+
+    @patch("piano.views.today")
+    def test_contained_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2015, 7, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 6, 29), minutes=30)
+        data = get_last_year_cumulative()
+        self.assertEqual(len(data), 365)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1435881600000 + (86400000 * i) for i in range(365)])
+        self.assertEqual(minutes, [0] * 5 + [0.25] * 357 + [0.75] * 3)
+
+
+    @patch("piano.views.today")
+    def test_all_sessions_cumulative(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
+        PracticeSession.objects.create(date=datetime(2016, 7, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2015, 7, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 6, 29), minutes=30)
+        data = get_last_year_cumulative()
+        self.assertEqual(len(data), 365)
+        days = [d[0] for d in data]
+        minutes = [d[1] for d in data]
+        self.assertEqual(days, [1435881600000 + (86400000 * i) for i in range(365)])
+        self.assertEqual(minutes, [0] * 5 + [0.25] * 357 + [0.75] * 3)
+
+
+
 class PianoPageViewTests(ViewTest):
-
-    def setUp(self):
-        ViewTest.setUp(self)
-        today = datetime.now().date()
-        day = two_years_ago = today - timedelta(days=730)
-        self.piano_data = []
-        while day <= today:
-            self.piano_data.append({
-             "day": day,
-             "minutes": 5
-            })
-            self.piano_data[-1]["cumulative"] = sum(d["minutes"] for d in self.piano_data)
-            day += timedelta(days=1)
-        for day in self.piano_data:
-            if day["minutes"]:
-                PracticeSession.objects.create(date=day["day"], minutes=day["minutes"])
-
 
     def test_piano_view_uses_piano_template(self):
         response = self.client.get("/piano/")
@@ -35,62 +205,48 @@ class PianoPageViewTests(ViewTest):
         self.assertEqual(editable_text.name, "piano-long")
 
 
-    def test_piano_view_gives_total_practice_time(self):
-        PracticeSession.objects.all().delete()
+    @patch("piano.views.get_practice_time")
+    def test_piano_view_uses_practice_time_function(self, mock_practice_time):
+        mock_practice_time.return_value = "teststring"
         response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "0 hours")
-        PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
-        response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "10 minutes")
-        PracticeSession.objects.create(date=datetime(2017, 3, 2), minutes=50)
-        response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "1 hour")
-        PracticeSession.objects.create(date=datetime(2017, 3, 3), minutes=10)
-        response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "1 hour and 10 minutes")
-        PracticeSession.objects.create(date=datetime(2017, 3, 4), minutes=50)
-        response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "2 hours")
-        PracticeSession.objects.create(date=datetime(2017, 3, 5), minutes=10)
-        response = self.client.get("/piano/")
-        self.assertEqual(response.context["practice_time"], "2 hours and 10 minutes")
+        self.assertEqual(response.context["practice_time"], "teststring")
 
 
-    def test_piano_view_sends_right_days(self):
+    @patch("piano.views.today")
+    def test_piano_view_sends_correct_dates(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 1).date()
         response = self.client.get("/piano/")
-        today = datetime.now().date()
-        today_minus_59 = today - timedelta(days=59)
-        today_minus_364 = today - timedelta(days=364)
-        self.assertEqual(response.context["today"], int(today.strftime("%s")) * 1000)
-        self.assertEqual(response.context["minus_59"], int(today_minus_59.strftime("%s")) * 1000)
-        self.assertEqual(response.context["minus_364"], int(today_minus_364.strftime("%s")) * 1000)
+        self.assertEqual(response.context["today"], 1467331200000)
+        self.assertEqual(response.context["minus_60"], 1462233600000)
+        self.assertEqual(response.context["minus_365"], 1435881600000)
 
 
-    def test_piano_view_sends_last_sixty_minutes(self):
+    @patch("piano.views.get_last_sixty")
+    def test_piano_view_uses_function_for_last_sixty(self, mock_last_sixty):
+        mock_last_sixty.return_value = "teststring"
         response = self.client.get("/piano/")
-        for point in response.context["last_sixty"]:
-            self.assertEqual(point[1], 5)
+        self.assertEqual(response.context["last_sixty"], "teststring")
 
 
-    def test_piano_view_sends_last_sixty_minutes_cumulative(self):
+    @patch("piano.views.get_last_sixty_cumulative")
+    def test_piano_view_uses_function_for_last_sixty(self, mock_last_sixty_cum):
+        mock_last_sixty_cum.return_value = "teststring"
         response = self.client.get("/piano/")
-        self.assertEqual(len(response.context["last_sixty_cumulative"]), 60)
-        for index, point in enumerate(response.context["last_sixty_cumulative"]):
-            if index: self.assertEqual(point[1], response.context["last_sixty_cumulative"][index - 1][1] + 5)
+        self.assertEqual(response.context["last_sixty_cumulative"], "teststring")
 
 
-    def test_piano_view_sends_last_365_minutes(self):
+    @patch("piano.views.get_last_year")
+    def test_piano_view_uses_function_for_last_sixty(self, mock_last_year):
+        mock_last_year.return_value = "teststring"
         response = self.client.get("/piano/")
-        self.assertEqual(len(response.context["last_365"]), 365)
-        for point in response.context["last_365"]:
-            self.assertEqual(point[1], 5)
+        self.assertEqual(response.context["last_year"], "teststring")
 
 
-    def test_piano_view_sends_last_365_minutes_cumulative(self):
+    @patch("piano.views.get_last_year_cumulative")
+    def test_piano_view_uses_function_for_last_sixty(self, mock_last_year_cum):
+        mock_last_year_cum.return_value = "teststring"
         response = self.client.get("/piano/")
-        self.assertEqual(len(response.context["last_365_cumulative"]), 365)
-        for index, point in enumerate(response.context["last_365_cumulative"]):
-            if index: self.assertEqual(point[1], response.context["last_365_cumulative"][index - 1][1] + 5)
+        self.assertEqual(response.context["last_year_cumulative"], "teststring")
 
 
 
