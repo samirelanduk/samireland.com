@@ -23,6 +23,7 @@ def piano_page(request):
     data = [[first_session.date, first_session.minutes, first_session.cumulative_minutes]]
     today = datetime.now().date()
     today_minus_59 = datetime.now().date() - timedelta(days=59)
+    today_minus_364 = datetime.now().date() - timedelta(days=364)
     while data[-1][0] < today:
         day = data[-1][0] + timedelta(days=1)
         session = PracticeSession.objects.filter(date=day)
@@ -52,8 +53,10 @@ def piano_page(request):
      "practice_time": hours_text + minutes_text,
      "today": int(today.strftime("%s")) * 1000,
      "minus_59": int(today_minus_59.strftime("%s")) * 1000,
+     "minus_364": int(today_minus_364.strftime("%s")) * 1000,
      "last_sixty": [d[:2] for d in data[-60:] if d[1]],
-     "last_sixty_cumulative": [[d[0], d[2]] for d in data[-60:]]
+     "last_sixty_cumulative": [[d[0], d[2]] for d in data[-60:]],
+     "last_365": [d[:2] for d in data[-365:] if d[1]],
     })
 
 

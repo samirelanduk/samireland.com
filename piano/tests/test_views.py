@@ -60,8 +60,10 @@ class PianoPageViewTests(ViewTest):
         response = self.client.get("/piano/")
         today = datetime.now().date()
         today_minus_59 = today - timedelta(days=59)
+        today_minus_364 = today - timedelta(days=364)
         self.assertEqual(response.context["today"], int(today.strftime("%s")) * 1000)
         self.assertEqual(response.context["minus_59"], int(today_minus_59.strftime("%s")) * 1000)
+        self.assertEqual(response.context["minus_364"], int(today_minus_364.strftime("%s")) * 1000)
 
 
     def test_piano_view_sends_last_sixty_minutes(self):
@@ -72,41 +74,16 @@ class PianoPageViewTests(ViewTest):
 
     def test_piano_view_sends_last_sixty_minutes_cumulative(self):
         response = self.client.get("/piano/")
+        self.assertEqual(len(response.context["last_sixty"]), 60)
         for index, point in enumerate(response.context["last_sixty"]):
             if index: self.assertEqual(point[1], response.context["last_sixty"][index - 1][1])
 
 
-    '''def test_piano_view_sends_last_sixty_session_data(self):
+    def test_piano_view_sends_last_365_minutes(self):
         response = self.client.get("/piano/")
-        sixty_days_ago = datetime.now().date() - timedelta(days=60)
-        relevant_data = [day for day in self.piano_data if day["minutes"] and day["day"] > sixty_days_ago]
-        last_sixty = response.context["last_sixty"]
-        for index, session in enumerate(last_sixty):
-            self.assertEqual(session.date, relevant_data[index]["day"])
-            self.assertEqual(session.minutes, relevant_data[index]["minutes"])'''
-
-
-    '''def test_piano_view_sends_last_sixty_session_cumulative_data(self):
-        response = self.client.get("/piano/")
-        day = sixty_days_ago = datetime.now().date() - timedelta(days=60)
-        data = [[sixty_days_ago, 0]]
-        cumulative = 0
-        day += timedelta(days=1)
-        while day <= datetime.now().date():
-            session = PracticeSession.objects.filter(date=day).first()
-            if session:
-                data.append([day, session.cumulative_minutes])
-            else:
-                data.append([day, cumulative])
-            cumulative = data[-1][1]
-            day += timedelta(days=1)
-        data = data[1:]
-        self.assertEqual(len(data), 60)
-        self.assertEqual(len(response.context["last_sixty_cumulative"]), 60)
-        self.assertEqual(
-         response.context["last_sixty_cumulative"],
-         [[int(day.strftime("%s")), minutes] for day, minutes in data]
-        )'''
+        self.assertEqual(len(response.context["last_365"]), 365)
+        for point in response.context["last_365"]:
+            self.assertEqual(point[1], 5)
 
 
 

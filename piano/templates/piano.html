@@ -23,7 +23,11 @@
     <div id="sixty-day-line-chart"></div>
   </div>
 
-  <div id="one-year-charts"></div>
+  <div id="one-year-charts">
+    <h3>Past Year</h3>
+    <div id="one-year-bar-chart"></div>
+    <div id="one-year-line-chart"></div>
+  </div>
 
   <div id="all-time-charts"></div>
 
@@ -129,6 +133,54 @@
             }
           }
         }
+      }]
+    });
+    var year_bar = Highcharts.chart("one-year-bar-chart", {
+      chart: {
+        type: "column"
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        useHTML: true
+      },
+      title: {
+        text: "Past Year"
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+        title: {
+          "text": "Date",
+          style: {"font-weight": "bold"}
+        },
+        min: {{ minus_364 }},
+        max: {{ today }}
+      },
+      yAxis: {
+        min: 0,
+        max: 90,
+        tickInterval: 30,
+        minorTickInterval: 10,
+        title: {
+          text: 'Time (mins)',
+          style: {"font-weight": "bold"}
+        }
+      },
+      series: [{
+        data: {{ last_365 }},
+        color: "#4A9586",
+        pointPadding: 0.25,
+        groupPadding: 0,
+        borderWidth: 0
       }]
     });
   </script>

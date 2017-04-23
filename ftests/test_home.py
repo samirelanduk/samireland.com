@@ -719,6 +719,52 @@ class ProjectPageTests(FunctionalTest):
              last_sixty_days[index]["cumulative"]
             )
 
+        # The year div has a heading and two charts
+        year_heading = year_div.find_element_by_tag_name("h3")
+        year_chart = year_div.find_element_by_id("one-year-bar-chart")
+        year_cumul_chart = year_div.find_element_by_id("one-year-line-chart")
+
+        # The year bar chart is correct
+        year_ago = today - datetime.timedelta(days=365)
+        last_365_days = [s for s in piano_data if s["day"] > year_ago]
+        self.assertEqual(
+         self.browser.execute_script("return year_bar.xAxis[0].min;"),
+         int((year_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return year_bar.xAxis[0].max;"),
+         int(today.strftime("%s")) * 1000
+        )
+        days_with_minutes = [day for day in last_365_days if day["minutes"]]
+        for index, day in enumerate(days_with_minutes):
+            self.assertEqual(
+             self.browser.execute_script("return year_bar.series[0].data[%i].x;" % index),
+             int(days_with_minutes[index]["day"].strftime("%s")) * 1000
+            )
+            self.assertEqual(
+             self.browser.execute_script("return year_bar.series[0].data[%i].y;" % index),
+             days_with_minutes[index]["minutes"]
+            )
+
+        # The year line chart is correct
+        self.assertEqual(
+         self.browser.execute_script("return year_line.xAxis[0].min;"),
+         int((year_ago + datetime.timedelta(days=1)).strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return year_line.xAxis[0].max;"),
+         int(today.strftime("%s")) * 1000
+        )
+        for index, day in enumerate(last_365_days):
+            self.assertEqual(
+             self.browser.execute_script("return year_line.series[0].data[%i].x;" % index),
+             int(last_sixty_days[index]["day"].strftime("%s")) * 1000
+            )
+            self.assertEqual(
+             self.browser.execute_script("return year_line.series[0].data[%i].y;" % index),
+             last_sixty_days[index]["cumulative"]
+            )
+
 
 
 class AuthTests(FunctionalTest):
