@@ -758,11 +758,11 @@ class ProjectPageTests(FunctionalTest):
         for index, day in enumerate(last_365_days):
             self.assertEqual(
              self.browser.execute_script("return year_line.series[0].data[%i].x;" % index),
-             int(last_sixty_days[index]["day"].strftime("%s")) * 1000
+             int(last_365_days[index]["day"].strftime("%s")) * 1000
             )
             self.assertEqual(
              self.browser.execute_script("return year_line.series[0].data[%i].y;" % index),
-             last_sixty_days[index]["cumulative"]
+             last_365_days[index]["cumulative"]
             )
 
 

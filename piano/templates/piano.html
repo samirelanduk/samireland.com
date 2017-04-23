@@ -183,6 +183,62 @@
         borderWidth: 0
       }]
     });
+    var year_line = Highcharts.chart("one-year-line-chart", {
+      chart: {
+        type: "area",
+        zoomType: 'x'
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        useHTML: true
+      },
+      title: {
+        text: "Past Year (Cumulative)"
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+        title: {
+          "text": "Date",
+          style: {"font-weight": "bold"}
+        },
+        min: {{ minus_364 }},
+        max: {{ today }}
+      },
+      yAxis: {
+        title: {
+          text: 'Time (mins)',
+          style: {"font-weight": "bold"}
+        }
+      },
+      plotOptions: {
+        area: {
+          threshold: null
+        }
+      },
+      series: [{
+        data: {{ last_365_cumulative }},
+        color: "#4A9586",
+        type: "area",
+        marker: {
+          enabled: false,
+          states: {
+            hover: {
+              enabled: false
+            }
+          }
+        }
+      }]
+    });
   </script>
 
 </div>

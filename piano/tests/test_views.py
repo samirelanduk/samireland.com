@@ -74,9 +74,9 @@ class PianoPageViewTests(ViewTest):
 
     def test_piano_view_sends_last_sixty_minutes_cumulative(self):
         response = self.client.get("/piano/")
-        self.assertEqual(len(response.context["last_sixty"]), 60)
-        for index, point in enumerate(response.context["last_sixty"]):
-            if index: self.assertEqual(point[1], response.context["last_sixty"][index - 1][1])
+        self.assertEqual(len(response.context["last_sixty_cumulative"]), 60)
+        for index, point in enumerate(response.context["last_sixty_cumulative"]):
+            if index: self.assertEqual(point[1], response.context["last_sixty_cumulative"][index - 1][1] + 5)
 
 
     def test_piano_view_sends_last_365_minutes(self):
@@ -84,6 +84,13 @@ class PianoPageViewTests(ViewTest):
         self.assertEqual(len(response.context["last_365"]), 365)
         for point in response.context["last_365"]:
             self.assertEqual(point[1], 5)
+
+
+    def test_piano_view_sends_last_365_minutes_cumulative(self):
+        response = self.client.get("/piano/")
+        self.assertEqual(len(response.context["last_365_cumulative"]), 365)
+        for index, point in enumerate(response.context["last_365_cumulative"]):
+            if index: self.assertEqual(point[1], response.context["last_365_cumulative"][index - 1][1] + 5)
 
 
 

@@ -34,20 +34,6 @@ def piano_page(request):
             data.append([day, 0, data[-1][-1]])
 
     data = [[int(d[0].strftime("%s")) * 1000, d[1], d[2]] for d in data]
-    '''today = datetime.now().date()
-
-    relevant_sessions = PracticeSession.objects.filter(date__gte=today_minus_59)
-    last_sixty = [[int(session.date.strftime("%s")) * 1000, session.minutes] for session in relevant_sessions]
-
-    last_sixty_dates = [today_minus_59]
-    while last_sixty_dates[-1] < today:
-        last_sixty_dates.append(last_sixty_dates[-1] + timedelta(days=1))
-    last_sixty_cumulative = [[int(last_sixty_dates[0].strftime("%s")) * 1000, relevant_sessions.filter(date=last_sixty_dates[0]).first().cumulative_minutes if relevant_sessions.filter(date=last_sixty_dates[0]) else 0]]
-    for d in last_sixty_dates[1:]:
-        if relevant_sessions.filter(date=d):
-            last_sixty_cumulative.append([int(d.strftime("%s")) * 1000, relevant_sessions.filter(date=d).first().cumulative_minutes])
-        else:
-            last_sixty_cumulative.append([int(d.strftime("%s")) * 1000, last_sixty_cumulative[-1][1]])'''
     return render(request, "piano.html", {
      "text": text,
      "practice_time": hours_text + minutes_text,
@@ -57,6 +43,7 @@ def piano_page(request):
      "last_sixty": [d[:2] for d in data[-60:] if d[1]],
      "last_sixty_cumulative": [[d[0], d[2]] for d in data[-60:]],
      "last_365": [d[:2] for d in data[-365:] if d[1]],
+     "last_365_cumulative": [[d[0], d[2]] for d in data[-365:]],
     })
 
 
