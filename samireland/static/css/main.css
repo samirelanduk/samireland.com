@@ -198,7 +198,16 @@ input {
   box-sizing: border-box;
   border-radius: 10px;
   font-size: 150%;
-  text-align: center;
+}
+
+textarea {
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  font-size: 150%;
+  height: 400px;
+  font-family: 'Open Sans';
+  padding: 15px;
 }
 
 input[type=submit] {
@@ -208,6 +217,7 @@ input[type=submit] {
   background-color: #83bbb0;
   border-color: #59a595;
   color: #FFFFFF;
+  cursor: pointer;
 }
 
 form.one-row  {
@@ -219,6 +229,7 @@ form.one-row input{
   display: block;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 
 form.one-row input[type=submit] {
