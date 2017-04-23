@@ -6,6 +6,7 @@ from piano.models import PracticeSession
 from piano.views import today, get_practice_time
 from piano.views import get_last_sixty, get_last_sixty_cumulative
 from piano.views import get_last_year, get_last_year_cumulative
+from piano.views import get_all
 from samireland.tests import ViewTest
 
 class TodayFunctionTests(ViewTest):
@@ -191,6 +192,28 @@ class LastYearCumulativeTestsFunctionTests(ViewTest):
 
 
 
+class AllSessionFunctionTests(ViewTest):
+
+    def test_no_series_when_no_sessions(self):
+        self.assertEqual(get_all(), [])
+
+
+    @patch("piano.views.today")
+    def test_all_sessions_series(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 15).date()
+        PracticeSession.objects.create(date=datetime(2016, 4, 1), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 4, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2016, 5, 1), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 5, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 7, 10), minutes=30)
+        self.assertEqual(get_all(), [
+         [1459468800000, 135], [1462060800000, 150],
+         [1464739200000, 0], [1467331200000, 30]
+        ])
+
+
+
 class PianoPageViewTests(ViewTest):
 
     def test_piano_view_uses_piano_template(self):
@@ -221,6 +244,16 @@ class PianoPageViewTests(ViewTest):
         self.assertEqual(response.context["minus_365"], 1435881600000)
 
 
+    @patch("piano.views.today")
+    def test_piano_view_sends_correct_months(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 15).date()
+        PracticeSession.objects.create(date=datetime(2015, 7, 8), minutes=15)
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["this_month"], 1467331200000)
+        self.assertEqual(response.context["first_month"], 1435708800000)
+        self.assertEqual(response.context["pre_month"], 1433116800000)
+
+
     @patch("piano.views.get_last_sixty")
     def test_piano_view_uses_function_for_last_sixty(self, mock_last_sixty):
         mock_last_sixty.return_value = "teststring"
@@ -247,6 +280,13 @@ class PianoPageViewTests(ViewTest):
         mock_last_year_cum.return_value = "teststring"
         response = self.client.get("/piano/")
         self.assertEqual(response.context["last_year_cumulative"], "teststring")
+
+
+    @patch("piano.views.get_all")
+    def test_piano_view_uses_function_for_all_sessions(self, mock_all):
+        mock_all.return_value = "teststring"
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["all"], "teststring")
 
 
 

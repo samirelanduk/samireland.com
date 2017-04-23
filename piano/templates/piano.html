@@ -29,7 +29,11 @@
     <div id="one-year-line-chart"></div>
   </div>
 
-  <div id="all-time-charts"></div>
+  <div id="all-time-charts">
+    <h3>All Time</h3>
+    <div id="all-time-bar-chart"></div>
+    <div id="all-time-line-chart"></div>
+  </div>
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -239,6 +243,48 @@
             }
           }
         }
+      }]
+    });
+    var all_bar = Highcharts.chart("all-time-bar-chart", {
+      chart: {
+        type: "column"
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        pointFormat: '<span style="padding:0"><b>{point.y} mins</b></span>',
+        useHTML: true
+      },
+      title: {
+        text: "All Time"
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+        title: {
+          "text": "Date",
+          style: {"font-weight": "bold"}
+        },
+        min: {{ first_month }},
+        max: {{ this_month }}
+      },
+      yAxis: {
+        minorTickInterval: 10,
+        title: {
+          text: 'Time (minutes)',
+          style: {"font-weight": "bold"}
+        }
+      },
+      series: [{
+        data: {{ all }},
+        color: "#4A9586",
       }]
     });
   </script>

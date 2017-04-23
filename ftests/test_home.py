@@ -766,6 +766,47 @@ class ProjectPageTests(FunctionalTest):
             )
 
 
+        # The all time div has a heading and two charts
+        all_time_heading = all_time_div.find_element_by_tag_name("h3")
+        all_time_chart = all_time_div.find_element_by_id("all-time-bar-chart")
+        all_time_cumul_chart = all_time_div.find_element_by_id("all-time-line-chart")
+
+        # The all time bar chart is correct
+        first_month = datetime.datetime(piano_data[0]["day"].year, piano_data[0]["day"].month, 1).date()
+        pre_month = datetime.datetime(
+         piano_data[0]["day"].year if piano_data[0]["day"].month != 1 else piano_data[0]["day"].year - 1,
+         piano_data[0]["day"].month - 1 if piano_data[0]["day"].month != 1 else 12,
+         1
+        ).date()
+        this_month = datetime.datetime(today.year, today.month, 1).date()
+        all_data = [[pre_month, 0]]
+        while all_data[-1][0] < this_month:
+            next_month = datetime.datetime(
+             all_data[-1][0].year if all_data[-1][0].month != 12 else all_data[-1][0].year + 1,
+             all_data[-1][0].month + 1 if all_data[-1][0].month != 12 else 1,
+             1
+            ).date()
+            minutes = sum([d["minutes"] for d in piano_data if d["day"].year == next_month.year and d["day"].month == next_month.month])
+            all_data.append([next_month, minutes])
+        self.assertEqual(
+         self.browser.execute_script("return all_bar.xAxis[0].min;"),
+         int(first_month.strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return all_bar.xAxis[0].max;"),
+         int(this_month.strftime("%s")) * 1000
+        )
+        for index, day in enumerate(all_data[1:], start=1):
+            self.assertEqual(
+             self.browser.execute_script("return all_bar.series[0].data[%i].x;" % (index - 1)),
+             int(all_data[index][0].strftime("%s")) * 1000
+            )
+            self.assertEqual(
+             self.browser.execute_script("return all_bar.series[0].data[%i].y;" % (index - 1)),
+             all_data[index][1]
+            )
+
+
 
 class AuthTests(FunctionalTest):
 

@@ -11,34 +11,32 @@ def piano_page(request):
 
     minus_60 = today() - timedelta(days=59)
     minus_365 = today() - timedelta(days=364)
-    '''today_minus_59 = datetime.now().date() - timedelta(days=59)
-    today_minus_364 = datetime.now().date() - timedelta(days=364)
-    all_sessions = PracticeSession.objects.all().order_by("date")
-    first_session = all_sessions.first()
+    this_month = datetime(today().year, today().month, 1)
+    first_session = PracticeSession.objects.order_by("date").first()
+    pre_month = first_month = this_month
     if first_session:
-        days = (today - first_session.date).days + 1
-        days = [today - timedelta(days=x) for x in range(0, days)]
-        data = [[first_session.date, first_session.minutes, first_session.cumulative_minutes]]
-        for day in days:
-            session = all_sessions.filter(date=day)
-            if session:
-                session = session.first()
-                data.append([session.date, session.minutes, session.cumulative_minutes])
-            else:
-                data.append([day, 0, data[-1][-1]])
-        data = [[int(d[0].strftime("%s")) * 1000, d[1], d[2]] for d in data]
-    else:
-        data = []'''
+        first_date = first_session.date
+        first_month = datetime(first_date.year, first_date.month, 1)
+        pre_month = datetime(
+         first_date.year if first_date.month != 1 else first_date.year - 1,
+         first_date.month - 1 if first_date.month != 1 else 12,
+         1
+        )
+
     return render(request, "piano.html", {
      "text": text,
      "practice_time": get_practice_time(),
      "today": int(today().strftime("%s") + "000"),
      "minus_60": int(minus_60.strftime("%s") + "000"),
      "minus_365": int(minus_365.strftime("%s") + "000"),
+     "this_month": int(this_month.strftime("%s") + "000"),
+     "first_month": int(first_month.strftime("%s") + "000"),
+     "pre_month": int(pre_month.strftime("%s") + "000"),
      "last_sixty": get_last_sixty(),
      "last_sixty_cumulative": get_last_sixty_cumulative(),
      "last_year": get_last_year(),
-     "last_year_cumulative": get_last_year_cumulative()
+     "last_year_cumulative": get_last_year_cumulative(),
+     "all": get_all()
     })
 
 
@@ -150,3 +148,25 @@ def get_last_year_cumulative():
         else:
             data.append([day, data[-1][1]])
     return [[int(day.strftime("%s") + "000"), minutes / 60] for day, minutes in data]
+
+
+def get_all():
+    first_session = PracticeSession.objects.order_by("date").first()
+    if first_session:
+        all_sessions = list(PracticeSession.objects.all().order_by("date"))
+        first_month =  datetime(first_session.date.year, first_session.date.month, 1).date()
+        this_month = datetime(today().year, today().month, 1).date()
+        data = [[first_month, sum([
+         s.minutes for s in all_sessions if s.date.year == first_month.year and s.date.month == first_month.month
+        ])]]
+        while data[-1][0] != this_month:
+            next_month = datetime(
+             data[-1][0].year if data[-1][0].month != 12 else data[-1][0].year + 1,
+             data[-1][0].month + 1 if data[-1][0].month != 12 else 1,
+             1
+            ).date()
+            minutes = sum([s.minutes for s in all_sessions if s.date.year == next_month.year and s.date.month == next_month.month])
+            data.append([next_month, minutes])
+        return [[int(day.strftime("%s") + "000"), minutes] for day, minutes in data]
+    else:
+        return []
