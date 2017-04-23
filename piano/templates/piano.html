@@ -74,7 +74,7 @@
         tickInterval: 30,
         minorTickInterval: 10,
         title: {
-          text: 'Time (mins)',
+          text: 'Time (minutes)',
           style: {"font-weight": "bold"}
         }
       },
@@ -176,7 +176,7 @@
         tickInterval: 30,
         minorTickInterval: 10,
         title: {
-          text: 'Time (mins)',
+          text: 'Time (minutes)',
           style: {"font-weight": "bold"}
         }
       },
@@ -221,7 +221,7 @@
       },
       yAxis: {
         title: {
-          text: 'Time (mins)',
+          text: 'Time (hours)',
           style: {"font-weight": "bold"}
         },
         floor: 0
@@ -285,6 +285,63 @@
       series: [{
         data: {{ all }},
         color: "#4A9586",
+      }]
+    });
+    var all_line = Highcharts.chart("all-time-line-chart", {
+      chart: {
+        type: "area",
+        zoomType: 'x'
+      },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        pointFormat: '<span style="padding:0"><b>{point.y:.2f} hours</b></span>',
+        useHTML: true
+      },
+      title: {
+        text: "All Time (Cumulative)"
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+        title: {
+          "text": "Date",
+          style: {"font-weight": "bold"}
+        },
+        min: {{ pre_month }},
+        max: {{ this_month }}
+      },
+      yAxis: {
+        title: {
+          text: 'Time (hours)',
+          style: {"font-weight": "bold"}
+        },
+        floor: 0
+      },
+      plotOptions: {
+        area: {
+          threshold: null
+        }
+      },
+      series: [{
+        data: {{ all_cumulative }},
+        color: "#4A9586",
+        type: "area",
+        marker: {
+          enabled: false,
+          states: {
+            hover: {
+              enabled: false
+            }
+          }
+        }
       }]
     });
   </script>

@@ -6,7 +6,7 @@ from piano.models import PracticeSession
 from piano.views import today, get_practice_time
 from piano.views import get_last_sixty, get_last_sixty_cumulative
 from piano.views import get_last_year, get_last_year_cumulative
-from piano.views import get_all
+from piano.views import get_all, get_all_cumulative
 from samireland.tests import ViewTest
 
 class TodayFunctionTests(ViewTest):
@@ -214,6 +214,28 @@ class AllSessionFunctionTests(ViewTest):
 
 
 
+class AllSessionCumulativeFunctionTests(ViewTest):
+
+    def test_no_series_when_no_sessions(self):
+        self.assertEqual(get_all_cumulative(), [])
+
+
+    @patch("piano.views.today")
+    def test_all_sessions_series(self, mock_today):
+        mock_today.return_value = datetime(2016, 7, 15).date()
+        PracticeSession.objects.create(date=datetime(2016, 4, 1), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 4, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2016, 5, 1), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 5, 2), minutes=120)
+        PracticeSession.objects.create(date=datetime(2016, 5, 8), minutes=15)
+        PracticeSession.objects.create(date=datetime(2016, 7, 10), minutes=30)
+        self.assertEqual(get_all_cumulative(), [
+         [1456790400000, 0], [1459468800000, 2.25], [1462060800000, 4.75],
+         [1464739200000, 4.75], [1467331200000, 5.25]
+        ])
+
+
+
 class PianoPageViewTests(ViewTest):
 
     def test_piano_view_uses_piano_template(self):
@@ -287,6 +309,13 @@ class PianoPageViewTests(ViewTest):
         mock_all.return_value = "teststring"
         response = self.client.get("/piano/")
         self.assertEqual(response.context["all"], "teststring")
+
+
+    @patch("piano.views.get_all_cumulative")
+    def test_piano_view_uses_function_for_all_sessions_cumulative(self, mock_all_cum):
+        mock_all_cum.return_value = "teststring"
+        response = self.client.get("/piano/")
+        self.assertEqual(response.context["all_cumulative"], "teststring")
 
 
 

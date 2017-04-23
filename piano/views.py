@@ -36,7 +36,8 @@ def piano_page(request):
      "last_sixty_cumulative": get_last_sixty_cumulative(),
      "last_year": get_last_year(),
      "last_year_cumulative": get_last_year_cumulative(),
-     "all": get_all()
+     "all": get_all(),
+     "all_cumulative": get_all_cumulative()
     })
 
 
@@ -168,5 +169,24 @@ def get_all():
             minutes = sum([s.minutes for s in all_sessions if s.date.year == next_month.year and s.date.month == next_month.month])
             data.append([next_month, minutes])
         return [[int(day.strftime("%s") + "000"), minutes] for day, minutes in data]
+    else:
+        return []
+
+
+def get_all_cumulative():
+    first_session = PracticeSession.objects.order_by("date").first()
+    if first_session:
+        all_data = get_all()
+        first_month =  datetime(first_session.date.year, first_session.date.month, 1).date()
+        pre_month = datetime(
+         first_month.year if first_month.month != 1 else first_month.year - 1,
+         first_month.month - 1 if first_month.month != 1 else 12,
+         1
+        ).date()
+        data = [[int(pre_month.strftime("%s") + "000"), 0]] + all_data
+        cum_data = []
+        for index, day in enumerate(data):
+            cum_data.append([day[0], sum([d[1] for d in data[:index + 1]]) / 60])
+        return cum_data
     else:
         return []

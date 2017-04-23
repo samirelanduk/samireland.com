@@ -779,7 +779,7 @@ class ProjectPageTests(FunctionalTest):
          1
         ).date()
         this_month = datetime.datetime(today.year, today.month, 1).date()
-        all_data = [[pre_month, 0]]
+        all_data = [[pre_month, 0, 0]]
         while all_data[-1][0] < this_month:
             next_month = datetime.datetime(
              all_data[-1][0].year if all_data[-1][0].month != 12 else all_data[-1][0].year + 1,
@@ -787,7 +787,8 @@ class ProjectPageTests(FunctionalTest):
              1
             ).date()
             minutes = sum([d["minutes"] for d in piano_data if d["day"].year == next_month.year and d["day"].month == next_month.month])
-            all_data.append([next_month, minutes])
+            cum_minutes = all_data[-1][1] + minutes
+            all_data.append([next_month, minutes, cum_minutes])
         self.assertEqual(
          self.browser.execute_script("return all_bar.xAxis[0].min;"),
          int(first_month.strftime("%s")) * 1000
@@ -804,6 +805,25 @@ class ProjectPageTests(FunctionalTest):
             self.assertEqual(
              self.browser.execute_script("return all_bar.series[0].data[%i].y;" % (index - 1)),
              all_data[index][1]
+            )
+
+        # The all time line chart is correct
+        self.assertEqual(
+         self.browser.execute_script("return all_line.xAxis[0].min;"),
+         int(pre_month.strftime("%s")) * 1000
+        )
+        self.assertEqual(
+         self.browser.execute_script("return all_line.xAxis[0].max;"),
+         int(this_month.strftime("%s")) * 1000
+        )
+        for index, day in enumerate(all_data):
+            self.assertEqual(
+             self.browser.execute_script("return all_line.series[0].data[%i].x;" % index),
+             int(all_data[index][0].strftime("%s")) * 1000
+            )
+            self.assertEqual(
+             self.browser.execute_script("return all_line.series[0].data[%i].y;" % index),
+             all_data[index][2]
             )
 
 
