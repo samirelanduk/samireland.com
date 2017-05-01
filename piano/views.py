@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db.utils import IntegrityError
 from home.models import EditableText
@@ -41,6 +42,7 @@ def piano_page(request):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def piano_update_page(request):
     sessions = list(PracticeSession.objects.all().order_by("date").reverse())
     if request.method == "POST":
@@ -77,6 +79,7 @@ def piano_update_page(request):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def piano_delete_page(request, pk):
     if PracticeSession.objects.filter(pk=pk).count() == 0:
         return redirect("/piano/")

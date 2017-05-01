@@ -321,9 +321,20 @@ class PianoPageViewTests(ViewTest):
 
 class PianoUpdatePageViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.client.login(username="testsam", password="testpassword")
+
+
     def test_piano_update_view_uses_piano_update_template(self):
         response = self.client.get("/piano/update/")
         self.assertTemplateUsed(response, "piano-update.html")
+
+
+    def test_cannot_access_piano_update_view_when_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get("/piano/update/")
+        self.assertRedirects(response, "/")
 
 
     def test_piano_update_view_sends_current_date(self):
@@ -427,12 +438,19 @@ class PianoDeletePageViewTests(ViewTest):
 
     def setUp(self):
         ViewTest.setUp(self)
+        self.client.login(username="testsam", password="testpassword")
         PracticeSession.objects.create(date=datetime(2017, 3, 1), minutes=10)
 
 
     def test_piano_delete_view_uses_piano_delete_template(self):
         response = self.client.get("/piano/delete/1/")
         self.assertTemplateUsed(response, "piano-delete.html")
+
+
+    def test_cannot_access_piano_delete_view_when_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get("/piano/delete/1/")
+        self.assertRedirects(response, "/")
 
 
     def test_piano_delete_view_knows_session(self):
