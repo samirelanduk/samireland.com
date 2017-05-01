@@ -27,9 +27,17 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.refresh()
 
 
+    def get(self, url):
+        self.browser.get(self.live_server_url + url)
+
+
+    def check_page(self, url):
+        self.assertEqual(self.browser.current_url, self.live_server_url + url)
+
+
     def check_can_edit_text(self, url, div_name, text_name):
         self.login()
-        self.browser.get(self.live_server_url + url)
+        self.get(url)
 
         # There is a link to edit text
         main = self.browser.find_element_by_tag_name("main")
@@ -38,10 +46,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         # Clicking it takes you to the edit page
         edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/%s/" % text_name
-        )
+        self.check_page("/edit/%s/" % text_name)
 
         # There is a form for entering the text
         form = self.browser.find_element_by_tag_name("form")
@@ -54,10 +59,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         submit_button.click()
 
         # The research page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + url
-        )
+        self.check_page(url)
         main = self.browser.find_element_by_tag_name("main")
         div = main.find_element_by_id(div_name)
         paragraphs = div.find_elements_by_tag_name("p")
@@ -68,10 +70,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         # Unhappy, they click the edit link again
         edit_link = div.find_element_by_tag_name("a")
         edit_link.click()
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + "/edit/%s/" % text_name
-        )
+        self.check_page("/edit/%s/" % text_name)
 
         # The form has the current text in it
         form = self.browser.find_element_by_tag_name("form")
@@ -88,10 +87,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         submit_button.click()
 
         # The research page has the new text
-        self.assertEqual(
-         self.browser.current_url,
-         self.live_server_url + url
-        )
+        self.check_page(url)
         main = self.browser.find_element_by_tag_name("main")
         div = main.find_element_by_id(div_name)
         paragraphs = div.find_elements_by_tag_name("p")
