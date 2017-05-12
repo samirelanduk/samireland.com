@@ -22,7 +22,7 @@ class MediaPageViewTests(ViewTest):
                     pass
 
 
-    def test_piano_view_uses_piano_template(self):
+    def test_media_view_uses_media_template(self):
         response = self.client.get("/media/")
         self.assertTemplateUsed(response, "media.html")
 
@@ -46,3 +46,13 @@ class MediaPageViewTests(ViewTest):
         )
         self.assertEqual(MediaFile.objects.all().count(), 1)
         self.assertEqual(MediaFile.objects.first().mediatitle, "Test")
+
+
+    def test_media_view_sends_media(self):
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image2 = MediaFile(mediatitle="test2", mediafile=self.media_file)
+        image1.save()
+        image2.save()
+        response = self.client.get("/media/")
+        self.assertEqual(response.context["media"][0], image1)
+        self.assertEqual(response.context["media"][1], image2)

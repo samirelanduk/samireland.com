@@ -1,9 +1,23 @@
 from time import sleep
+import os
 from .base import FunctionalTest
-from samireland.settings import BASE_DIR
+from samireland.settings import BASE_DIR, MEDIA_ROOT
 
 class MediaTest(FunctionalTest):
-    pass
+
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+        FunctionalTest.tearDown(self)
 
 
 
@@ -57,8 +71,7 @@ class MediaUploadTests(MediaTest):
         self.assertEqual(media[0].text, "test-image")
 
         # It has the image as background
-        self.assertTrue(media[0].value_of_css_property("background-url").endswith(".png"))
-
+        self.assertTrue(media[0].value_of_css_property("background-image").endswith(".png\")"))
 
 
 

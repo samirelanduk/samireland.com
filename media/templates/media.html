@@ -3,12 +3,19 @@
 {% block title %}Media{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/media.css">
 {% endblock %}
 
 {% block main %}
 <h1>Media</h1>
 
-<div id="media-grid"></div>
+<div id="media-grid">
+  {% for mediafile in media %}
+  <div class="media-square" style="background-image: url(/{{ mediafile.mediafile.url }});">
+    <div class="image_title">{{ mediafile.mediatitle }}</div>
+  </div>
+  {% endfor %}
+</div>
 
 <form method="POST" enctype="multipart/form-data">
   <input type="file" name="file">

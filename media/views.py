@@ -12,4 +12,5 @@ def media_page(request):
         )
         media.save()
         return redirect("/media/")
-    return render(request, "media.html")
+    media = MediaFile.objects.all()
+    return render(request, "media.html", {"media": media})
