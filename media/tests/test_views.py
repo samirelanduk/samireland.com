@@ -1,3 +1,7 @@
+import os
+from django.core.files.uploadedfile import SimpleUploadedFile
+from samireland.settings import MEDIA_ROOT
+from media.models import MediaFile
 from samireland.tests import ViewTest
 
 class MediaPageViewTests(ViewTest):
@@ -5,6 +9,17 @@ class MediaPageViewTests(ViewTest):
     def setUp(self):
         ViewTest.setUp(self)
         self.client.login(username="testsam", password="testpassword")
+        self.media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
 
 
     def test_piano_view_uses_piano_template(self):
@@ -19,5 +34,15 @@ class MediaPageViewTests(ViewTest):
 
 
     def test_media_view_redirects_on_post(self):
-        response = self.client.post("/media/")
+        response = self.client.post(
+         "/media/", data={"file": self.media_file, "title":"Test"}
+        )
         self.assertRedirects(response, "/media/")
+
+
+    def test_media_view_saves_file(self):
+        response = self.client.post(
+         "/media/", data={"file": self.media_file, "title":"Test"}
+        )
+        self.assertEqual(MediaFile.objects.all().count(), 1)
+        self.assertEqual(MediaFile.objects.first().mediatitle, "Test")
