@@ -6,6 +6,7 @@ class MediaPageViewTests(ViewTest):
         ViewTest.setUp(self)
         self.client.login(username="testsam", password="testpassword")
 
+
     def test_piano_view_uses_piano_template(self):
         response = self.client.get("/media/")
         self.assertTemplateUsed(response, "media.html")
@@ -15,3 +16,8 @@ class MediaPageViewTests(ViewTest):
         self.client.logout()
         response = self.client.get("/media/")
         self.assertRedirects(response, "/")
+
+
+    def test_media_view_redirects_on_post(self):
+        response = self.client.post("/media/")
+        self.assertRedirects(response, "/media/")

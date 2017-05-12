@@ -9,4 +9,11 @@
 <h1>Media</h1>
 
 <div id="media-grid"></div>
+
+<form method="POST">
+  <input type="file" name="file">
+  <input type="text" placeholder="Media title" name="title">
+  {% csrf_token %}
+  <input type="submit">
+</form>
 {% endblock %}
