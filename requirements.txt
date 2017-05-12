@@ -3,3 +3,4 @@ selenium
 samdown
 gunicorn
 psycopg2
+django-cleanup

@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
+    "django_cleanup",
     "home",
     "piano",
     "media"
@@ -73,6 +74,9 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))
 STATICFILES_DIRS = [
  os.path.join(BASE_DIR, "samireland", "static")
 ]
+
+MEDIA_URL = "uploads/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media", "storage")
 
 
 # Internationalization
