@@ -77,3 +77,23 @@ class ModelCreationTest(MediaTest):
          datetime.now().strftime("%Y%m%d%H%M%S") + ".png",
          os.listdir(MEDIA_ROOT)
         )
+
+
+
+class ModelValidationTests(MediaTest):
+
+    def test_cannot_save_image_with_no_title(self):
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(mediatitle="", mediafile=media_file)
+        with self.assertRaises(ValidationError):
+            image.full_clean()
+
+
+    def test_cannot_have_images_with_duplicate_titles(self):
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(mediatitle="name", mediafile=media_file)
+        image.save()
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(mediatitle="name", mediafile=media_file)
+        with self.assertRaises(ValidationError):
+            image.full_clean()

@@ -10,5 +10,5 @@ def create_filename(instance, filename):
 
 class MediaFile(models.Model):
 
-    mediatitle = models.TextField(default="", unique=True)
+    mediatitle = models.TextField(unique=True)
     mediafile = models.FileField(upload_to=create_filename)

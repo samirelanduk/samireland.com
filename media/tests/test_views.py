@@ -48,6 +48,46 @@ class MediaPageViewTests(ViewTest):
         self.assertEqual(MediaFile.objects.first().mediatitle, "Test")
 
 
+    def test_media_view_handles_missing_file(self):
+        response = self.client.post(
+         "/media/", data={"file": None, "title":"Test"}
+        )
+        self.assertEqual(MediaFile.objects.count(), 0)
+        self.assertIn("media", response.context)
+        self.assertEqual(
+         response.context["error_text"],
+         "You must supply a file."
+        )
+
+
+    def test_media_view_handles_missing_title(self):
+        response = self.client.post(
+         "/media/", data={"file": self.media_file, "title":""}
+        )
+        self.assertEqual(MediaFile.objects.count(), 0)
+        self.assertIn("media", response.context)
+        self.assertEqual(
+         response.context["error_text"],
+         "You must supply a title."
+        )
+
+
+    def test_media_view_handles_duplicate_title(self):
+        self.client.post(
+         "/media/", data={"file": self.media_file, "title":"title"}
+        )
+        self.assertEqual(MediaFile.objects.count(), 1)
+        response = self.client.post(
+         "/media/", data={"file": self.media_file, "title":"title"}
+        )
+        self.assertEqual(MediaFile.objects.count(), 1)
+        self.assertIn("media", response.context)
+        self.assertEqual(
+         response.context["error_text"],
+         "There is already a file with title."
+        )
+
+
     def test_media_view_sends_media(self):
         image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
         image2 = MediaFile(mediatitle="test2", mediafile=self.media_file)

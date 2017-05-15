@@ -74,6 +74,119 @@ class MediaUploadTests(MediaTest):
         self.assertTrue(media[0].value_of_css_property("background-image").endswith(".png\")"))
 
 
+    def test_cannot_upload_media_with_no_file(self):
+        self.login()
+        self.get("/media/")
+
+        # There is a form for uploading media
+        form = self.browser.find_element_by_tag_name("form")
+
+        # There is a file input and a name input
+        file_input, name_input = form.find_elements_by_tag_name("input")[:2]
+        self.assertEqual(file_input.get_attribute("type"), "file")
+        self.assertEqual(name_input.get_attribute("type"), "text")
+
+        # They upload no image and call it 'test image'
+        name_input.send_keys("test-image")
+
+        # They click the submit button
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+
+        # They are still on the same page
+        self.check_page("/media/")
+
+        # The grid is still empty
+        grid = self.browser.find_element_by_id("media-grid")
+        self.assertEqual(len(grid.find_elements_by_class_name("media-square")), 0)
+
+        # The form has an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You must supply a file.")
+
+
+    def test_cannot_upload_media_with_no_title(self):
+        self.login()
+        self.get("/media/")
+
+        # There is a form for uploading media
+        form = self.browser.find_element_by_tag_name("form")
+
+        # There is a file input and a name input
+        file_input, name_input = form.find_elements_by_tag_name("input")[:2]
+        self.assertEqual(file_input.get_attribute("type"), "file")
+        self.assertEqual(name_input.get_attribute("type"), "text")
+
+        # They upload am image but no title
+        file_input.send_keys(BASE_DIR + "/samireland/static/images/favicon-96x96.png")
+
+        # They click the submit button
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+
+        # They are still on the same page
+        self.check_page("/media/")
+
+        # The grid is still empty
+        grid = self.browser.find_element_by_id("media-grid")
+        self.assertEqual(len(grid.find_elements_by_class_name("media-square")), 0)
+
+        # The form has an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You must supply a title.")
+
+
+    def test_cannot_upload_media_with_duplicate_title(self):
+        self.login()
+        self.get("/media/")
+
+        # There is a form for uploading media
+        form = self.browser.find_element_by_tag_name("form")
+
+        # There is a file input and a name input
+        file_input, name_input = form.find_elements_by_tag_name("input")[:2]
+        self.assertEqual(file_input.get_attribute("type"), "file")
+        self.assertEqual(name_input.get_attribute("type"), "text")
+
+        # They upload an image correctly
+        file_input.send_keys(BASE_DIR + "/samireland/static/images/favicon-96x96.png")
+        name_input.send_keys("test-image")
+
+        # They click the submit button
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+
+        # They are still on the same page
+        self.check_page("/media/")
+
+        # There is a form for uploading media
+        form = self.browser.find_element_by_tag_name("form")
+
+        # There is a file input and a name input
+        file_input, name_input = form.find_elements_by_tag_name("input")[:2]
+        self.assertEqual(file_input.get_attribute("type"), "file")
+        self.assertEqual(name_input.get_attribute("type"), "text")
+
+        # They upload an image correctly but with the same title
+        file_input.send_keys(BASE_DIR + "/samireland/static/images/favicon-96x96.png")
+        name_input.send_keys("test-image")
+
+        # They click the submit button
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        submit_button.click()
+
+        # The grid still only has one element
+        grid = self.browser.find_element_by_id("media-grid")
+        self.assertEqual(len(grid.find_elements_by_class_name("media-square")), 1)
+
+        # The form has an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "There is already a file with title.")
+
+
 
 class MediaAccessTests(MediaTest):
 

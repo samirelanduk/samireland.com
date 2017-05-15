@@ -20,6 +20,11 @@
 <form method="POST" enctype="multipart/form-data">
   <input type="file" name="file">
   <input type="text" placeholder="Media title" name="title">
+  {% if error_text %}
+    <div class="error">
+      {{ error_text}}
+    </div>
+  {% endif %}
   {% csrf_token %}
   <input type="submit">
 </form>
