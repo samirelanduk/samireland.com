@@ -1,7 +1,9 @@
 from time import sleep
 import os
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .base import FunctionalTest
 from samireland.settings import BASE_DIR, MEDIA_ROOT
+from media.models import MediaFile
 
 class MediaTest(FunctionalTest):
 
@@ -68,7 +70,7 @@ class MediaUploadTests(MediaTest):
         self.assertEqual(len(media), 1)
 
         # The media's text is the title
-        self.assertEqual(media[0].text, "test-image")
+        self.assertIn("test-image", media[0].text)
 
         # It has the image as background
         self.assertTrue(media[0].value_of_css_property("background-image").endswith(".png\")"))
@@ -188,8 +190,55 @@ class MediaUploadTests(MediaTest):
 
 
 
+class MediaDeletionTests(MediaTest):
+
+    def test_can_delete_media(self):
+        # Add three images
+        MediaFile.objects.create(
+         mediatitle="file1", mediafile=SimpleUploadedFile("test.png", b"\x00\x01")
+        )
+        MediaFile.objects.create(
+         mediatitle="file2", mediafile=SimpleUploadedFile("test.png", b"\x00\x01")
+        )
+
+        # They go to the media page
+        self.login()
+        self.get("/media/")
+
+        # There is a header, and a div for the media grid
+        h1 = self.browser.find_element_by_tag_name("h1")
+        self.assertIn("media", h1.text.lower())
+        grid = self.browser.find_element_by_id("media-grid")
+
+        # The grid has two images
+        media = grid.find_elements_by_class_name("media-square")
+        self.assertEqual(len(media), 2)
+        self.assertIn("file1", media[0].find_element_by_class_name("image_title").text)
+        self.assertIn("file2", media[1].find_element_by_class_name("image_title").text)
+
+        # Each image has a delete button
+        button1 = media[0].find_element_by_tag_name("a")
+        button2 = media[1].find_element_by_tag_name("a")
+        self.assertEqual(button1.text, "Delete")
+        self.assertEqual(button2.text, "Delete")
+
+        # They click the first delete button
+        button1.click()
+
+        # They are now on the media delete page
+        self.assertRegex(
+         self.browser.current_url, self.live_server_url + "/media/delete/(.+)/"
+        )
+
+
+
 class MediaAccessTests(MediaTest):
 
     def test_cannot_access_media_page_when_not_logged_in(self):
         self.get("/media/")
+        self.check_page("/")
+
+
+    def test_cannot_access_media_delete_page_when_not_logged_in(self):
+        self.get("/media/delete/file.png/")
         self.check_page("/")

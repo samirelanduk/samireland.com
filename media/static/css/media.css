@@ -9,7 +9,7 @@
   width: 150px;
   height: 150px;
   background-size: cover;
-  background-position: center; 
+  background-position: center;
   margin: 5px;
   cursor: pointer;
 }
@@ -21,4 +21,21 @@
   display: inline-block;
   padding-left: 3px;
   padding-right: 3px;
+}
+
+.media-square a {
+  width: 50px;
+  text-align: center;
+  padding: 0px;
+  display: inline-block;
+  font-size: 50%;
+  position: absolute;
+  bottom: 3px;
+  left: 50px;
+  background-color: #7f0000;
+  color: #FFFFFF;
+}
+
+.media-square a:hover {
+  color: #FFEEEE;
 }

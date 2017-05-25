@@ -30,3 +30,8 @@ def media_page(request):
         return redirect("/media/")
     media = MediaFile.objects.all()
     return render(request, "media.html", {"media": media})
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def media_delete_page(request, media):
+    return render(request, "media-delete.html")

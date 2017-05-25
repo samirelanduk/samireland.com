@@ -96,3 +96,34 @@ class MediaPageViewTests(ViewTest):
         response = self.client.get("/media/")
         self.assertEqual(response.context["media"][0], image1)
         self.assertEqual(response.context["media"][1], image2)
+
+
+
+
+class MediaPageDeleteViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.client.login(username="testsam", password="testpassword")
+        self.media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+
+
+    def test_media_delete_view_uses_media_template(self):
+        response = self.client.get("/media/delete/file.png/")
+        self.assertTemplateUsed(response, "media-delete.html")
+
+
+    def test_cannot_access_media_delete_view_when_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get("/media/delete/file.png/")
+        self.assertRedirects(response, "/")
