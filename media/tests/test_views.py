@@ -119,7 +119,9 @@ class MediaPageDeleteViewTests(ViewTest):
 
 
     def test_media_delete_view_uses_media_template(self):
-        response = self.client.get("/media/delete/file.png/")
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image1.save()
+        response = self.client.get("/media/delete/test1/")
         self.assertTemplateUsed(response, "media-delete.html")
 
 
@@ -127,3 +129,40 @@ class MediaPageDeleteViewTests(ViewTest):
         self.client.logout()
         response = self.client.get("/media/delete/file.png/")
         self.assertRedirects(response, "/")
+
+
+    def test_media_view_sends_media(self):
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image2 = MediaFile(mediatitle="test2", mediafile=self.media_file)
+        image1.save()
+        image2.save()
+        response = self.client.get("/media/delete/{}/".format("test2"))
+        self.assertEqual(response.context["media"], image2)
+
+
+    def test_media_delete_view_handles_incorrect_title(self):
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image2 = MediaFile(mediatitle="test2", mediafile=self.media_file)
+        image1.save()
+        image2.save()
+        response = self.client.get("/media/delete/{}/".format("test3"))
+        self.assertRedirects(response, "/media/")
+
+
+    def test_media_view_redirects_on_post(self):
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image1.save()
+        response = self.client.post("/media/delete/test1/")
+        self.assertRedirects(response, "/media/")
+
+
+    def test_media_delete_view_cam_delete_views(self):
+        image1 = MediaFile(mediatitle="test1", mediafile=self.media_file)
+        image2 = MediaFile(mediatitle="test2", mediafile=self.media_file)
+        image1.save()
+        image2.save()
+        self.client.post("/media/delete/test1/")
+        self.assertEqual(MediaFile.objects.count(), 1)
+        self.assertEqual(MediaFile.objects.first(), image2)
+        self.client.post("/media/delete/test2/")
+        self.assertEqual(MediaFile.objects.count(), 0)

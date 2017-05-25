@@ -230,6 +230,48 @@ class MediaDeletionTests(MediaTest):
          self.browser.current_url, self.live_server_url + "/media/delete/(.+)/"
         )
 
+        # There is a deletion form
+        form = self.browser.find_element_by_tag_name("form")
+        description = form.find_element_by_id("delete-description")
+        self.assertIn("file1", description.text)
+        warning = form.find_element_by_id("delete-warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+        image = form.find_element_by_tag_name("img")
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He goes back to safety
+        back_to_safety.click()
+        self.check_page("/media/")
+        grid = self.browser.find_element_by_id("media-grid")
+        media = grid.find_elements_by_class_name("media-square")
+        button1 = media[0].find_element_by_tag_name("a")
+        button2 = media[1].find_element_by_tag_name("a")
+
+        # He changes his mind and goes back
+        button1.click()
+        self.assertRegex(
+         self.browser.current_url, self.live_server_url + "/media/delete/(.+)/"
+        )
+        form = self.browser.find_element_by_tag_name("form")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+
+        # He deletes, and is taken back to the edit page
+        delete_button.click()
+        self.check_page("/media/")
+
+        # The file has gone
+        grid = self.browser.find_element_by_id("media-grid")
+        media = grid.find_elements_by_class_name("media-square")
+        self.assertEqual(len(media), 1)
+        self.assertIn("file2", media[0].find_element_by_class_name("image_title").text)
+
 
 
 class MediaAccessTests(MediaTest):

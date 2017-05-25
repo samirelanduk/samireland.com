@@ -13,7 +13,7 @@
   {% for mediafile in media %}
   <div class="media-square" style="background-image: url(/{{ mediafile.mediafile.url }});">
     <div class="image_title">{{ mediafile.mediatitle }}</div>
-    <a href="/media/delete/{{ mediafile.mediafile.url}}/">Delete</a>
+    <a href="/media/delete/{{ mediafile.mediatitle }}/">Delete</a>
   </div>
   {% endfor %}
 </div>

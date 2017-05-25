@@ -7,4 +7,12 @@
 {% endblock %}
 
 {% block main %}
+<form method="POST" class="delete-form">
+  <div class="image"><img src="/{{ media.mediafile.url }}"></div>
+  <div id="delete-description">{{ media.mediatitle }}</div>
+  <div id="delete-warning">This will delete the file forever. Are you sure?</div>
+  {% csrf_token %}
+  <input type="submit" value="Delete">
+  <a href="/media/">No - go back</a>
+</form>
 {% endblock %}

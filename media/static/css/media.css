@@ -39,3 +39,8 @@
 .media-square a:hover {
   color: #FFEEEE;
 }
+
+img {
+  width: 50%;
+  height: auto;
+}

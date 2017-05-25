@@ -33,5 +33,12 @@ def media_page(request):
 
 
 @login_required(login_url="/", redirect_field_name=None)
-def media_delete_page(request, media):
-    return render(request, "media-delete.html")
+def media_delete_page(request, title):
+    media = MediaFile.objects.filter(mediatitle=title)
+    if media:
+        if request.method == "POST":
+            media.delete()
+            return redirect("/media/")
+        return render(request, "media-delete.html", {"media": media.first()})
+    else:
+        return redirect("/media/")
