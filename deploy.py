@@ -47,6 +47,18 @@ subprocess.call(
  shell=True
 )
 
+# Change where uploaded files are stored
+if sitename == "samireland.com":
+    subprocess.call(
+     "ssh %s 'sed -i s/\"BASE_DIR, \\\"media\\\", \\\"storage\\\"\"/\"\\\"..\\\", \\\"uploads\\\"\"/g ~/%s/source/samireland/settings.py'" % (sitename, sitename),
+     shell=True
+    )
+else:
+    subprocess.call(
+     "ssh %s 'sed -i s/\"BASE_DIR, \\\"media\\\", \\\"storage\\\"\"/\"\\\"..\\\", \\\"..\\\", \\\"samireland.com\\\", \\\"uploads\\\"\"/g ~/%s/source/samireland/settings.py'" % (sitename, sitename),
+     shell=True
+    )
+
 # Add google analytics
 if sitename == "samireland.com":
     subprocess.call(
