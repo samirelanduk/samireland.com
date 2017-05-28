@@ -7,7 +7,16 @@ from .base import FunctionalTest
 class BlogCreationTests(FunctionalTest):
 
     def test_can_create_blog_post(self):
-        pass
+        self.login()
+        self.get("/")
+
+        # There is a blog link in the header
+        header = self.browser.find_element_by_tag_name("header")
+        blog_link = header.find_element_by_id("blog-link")
+
+        # They click it and are taken to the blog creation page
+        blog_link.click()
+        self.check_page("/blog/new/")
 
 
     def test_blog_post_needs_correct_date(self):
