@@ -504,13 +504,14 @@ class PianoProjectTests(FunctionalTest):
         all_time_cumul_chart = all_time_div.find_element_by_id("all-time-line-chart")
 
         # The all time bar chart is correct
+        first_with_minutes = [day for day in piano_data if day["minutes"]][0]
         first_month = datetime.datetime(
-         piano_data[0]["day"].year, piano_data[0]["day"].month, 1
+         first_with_minutes["day"].year, first_with_minutes["day"].month, 1
         ).date()
         pre_month = datetime.datetime(
-         piano_data[0]["day"].year if
-          piano_data[0]["day"].month != 1 else piano_data[0]["day"].year - 1,
-         piano_data[0]["day"].month - 1 if piano_data[0]["day"].month != 1 else 12,
+         first_with_minutes["day"].year if
+          first_with_minutes["day"].month != 1 else first_with_minutes["day"].year - 1,
+         first_with_minutes["day"].month - 1 if first_with_minutes["day"].month != 1 else 12,
          1
         ).date()
         this_month = datetime.datetime(today.year, today.month, 1).date()
