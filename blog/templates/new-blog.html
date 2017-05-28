@@ -9,9 +9,9 @@
 <h1>New Blog Post</h1>
 
 <form>
-  <input type="date">
-  <input type="text">
-  <textarea></textarea>
-  <input type="checkbox">
+  <input type="date" value="{{ today }}">
+  <input type="text" placeholder="Title">
+  <textarea placeholder="Body"></textarea>
+  <label for="visible">Visible:<input id="viisble" type="checkbox" checked></label>
 </form>
 {% endblock %}

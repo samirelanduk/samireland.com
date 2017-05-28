@@ -29,6 +29,16 @@ class BlogCreationTests(FunctionalTest):
         self.assertEqual(title_input.get_attribute("type"), "text")
         self.assertEqual(visible_input.get_attribute("type"), "checkbox")
 
+        # The form has today's date and visibility is checked
+        today = datetime.now()
+        self.assertEqual(date_input.get_attribute("value"), today.strftime("%Y-%m-%d"))
+        self.assertTrue(visible_input.is_selected())
+
+        # They enter a blog post
+        date_input.send_keys("01-06-2014")
+        title_input.send_keys("My first post")
+        body_input.send_keys("This is my first post!")
+
 
     def test_blog_post_needs_correct_date(self):
         pass
