@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     "django_cleanup",
     "home",
     "piano",
-    "media"
+    "media",
+    "blog"
 )
 
 MIDDLEWARE_CLASSES = (
