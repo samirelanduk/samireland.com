@@ -18,6 +18,17 @@ class BlogCreationTests(FunctionalTest):
         blog_link.click()
         self.check_page("/blog/new/")
 
+        # There is a form for submitting a blog post
+        h1 = self.browser.find_element_by_tag_name("h1")
+        self.assertEqual(h1.text, "New Blog Post")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input, title_input = form.find_elements_by_tag_name("input")[:2]
+        body_input = form.find_element_by_tag_name("textarea")
+        visible_input = form.find_elements_by_tag_name("input")[2]
+        self.assertEqual(date_input.get_attribute("type"), "date")
+        self.assertEqual(title_input.get_attribute("type"), "text")
+        self.assertEqual(visible_input.get_attribute("type"), "checkbox")
+
 
     def test_blog_post_needs_correct_date(self):
         pass
