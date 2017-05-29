@@ -53,6 +53,12 @@ class BlogCreationTests(FunctionalTest):
         posts = posts_section.find_elements_by_class_name("blog-post")
         self.assertEqual(len(posts), 1)
 
+        # The post has the correct details
+        date = posts[0].find_element_by_class_name("post-date")
+        self.assertEqual(date.text, "1 June, 2014")
+        title = posts[0].find_element_by_class_name("post-title")
+        self.assertEqual(title.text, "My first post")
+
 
     def test_blog_post_needs_correct_date(self):
         pass

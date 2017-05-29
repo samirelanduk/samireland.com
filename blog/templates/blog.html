@@ -11,6 +11,8 @@
 <div id="posts">
   {% for post in posts %}
   <div class="blog-post">
+    <div class="post-date">{{ post.date|date:"j F, Y" }}</div>
+    <div class="post-title">{{ post.title }}</div>
   </div>
   {% endfor %}
 </div>
