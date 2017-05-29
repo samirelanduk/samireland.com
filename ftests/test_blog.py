@@ -49,6 +49,10 @@ class BlogCreationTests(FunctionalTest):
         self.assertEqual(h1.text, "Blog Posts")
         posts_section = self.browser.find_element_by_id("posts")
 
+        # There is one blog post there
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+
 
     def test_blog_post_needs_correct_date(self):
         pass
