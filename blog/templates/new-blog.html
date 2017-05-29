@@ -9,10 +9,12 @@
 <h1>New Blog Post</h1>
 
 <form method="POST">
-  <input type="date" value="{{ today }}">
-  <input type="text" placeholder="Title">
-  <textarea placeholder="Body"></textarea>
-  <label for="visible">Visible:<input id="viisble" type="checkbox" checked></label>
+  <input type="date" name="date" value="{{ today }}">
+  <input type="text" name="title" placeholder="Title">
+  <textarea name="body" placeholder="Body"></textarea>
+  <label for="visible">Visible:
+     <input id="viisble" name="visible" type="checkbox" checked>
+  </label>
   {% csrf_token %}
   <input type="submit">
 </form>
