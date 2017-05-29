@@ -8,10 +8,12 @@
 {% block main %}
 <h1>New Blog Post</h1>
 
-<form>
+<form method="POST">
   <input type="date" value="{{ today }}">
   <input type="text" placeholder="Title">
   <textarea placeholder="Body"></textarea>
   <label for="visible">Visible:<input id="viisble" type="checkbox" checked></label>
+  {% csrf_token %}
+  <input type="submit">
 </form>
 {% endblock %}

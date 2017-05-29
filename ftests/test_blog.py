@@ -39,6 +39,16 @@ class BlogCreationTests(FunctionalTest):
         title_input.send_keys("My first post")
         body_input.send_keys("This is my first post!")
 
+        # They submit the blog post
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # They are on the blog posts page
+        self.check_page("/blog/")
+        h1 = self.browser.find_element_by_tag_name("h1")
+        self.assertEqual(h1.text, "Blog Posts")
+        posts_section = self.browser.find_element_by_id("posts")
+
 
     def test_blog_post_needs_correct_date(self):
         pass
