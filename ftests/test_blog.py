@@ -4,20 +4,9 @@ from time import sleep
 from datetime import datetime
 from .base import FunctionalTest
 
-class BlogCreationTests(FunctionalTest):
+class BlogTest(FunctionalTest):
 
-    def test_can_create_blog_post(self):
-        self.login()
-        self.get("/")
-
-        # There is a blog link in the header
-        header = self.browser.find_element_by_tag_name("header")
-        blog_link = header.find_element_by_id("blog-link")
-
-        # They click it and are taken to the blog creation page
-        blog_link.click()
-        self.check_page("/blog/new/")
-
+    def enter_blog_post(self, date, title, body, visible):
         # There is a form for submitting a blog post
         h1 = self.browser.find_element_by_tag_name("h1")
         self.assertEqual(h1.text, "New Blog Post")
@@ -35,13 +24,35 @@ class BlogCreationTests(FunctionalTest):
         self.assertTrue(visible_input.is_selected())
 
         # They enter a blog post
-        date_input.send_keys("01-06-2014")
-        title_input.send_keys("My first post")
-        body_input.send_keys("This is my first post!\n\nIt's super.")
+        date_input.send_keys(date)
+        title_input.send_keys(title)
+        body_input.send_keys(body)
+        if not visible: visible_input.click()
 
         # They submit the blog post
         submit = form.find_elements_by_tag_name("input")[-1]
         submit.click()
+
+
+
+class BlogCreationTests(BlogTest):
+
+    def test_can_create_blog_post(self):
+        self.login()
+        self.get("/")
+
+        # There is a blog link in the header
+        header = self.browser.find_element_by_tag_name("header")
+        blog_link = header.find_element_by_id("blog-link")
+
+        # They click it and are taken to the blog creation page
+        blog_link.click()
+        self.check_page("/blog/new/")
+
+        # They enter a blog post
+        self.enter_blog_post(
+         "01-06-2014", "My first post", "This is my first post!\n\nIt's super.", True
+        )
 
         # They are on the blog posts page
         self.check_page("/blog/")
@@ -78,7 +89,7 @@ class BlogCreationTests(FunctionalTest):
 
 
 
-class BlogReadingTests(FunctionalTest):
+class BlogReadingTests(BlogTest):
 
     def test_can_cycle_between_blog_posts(self):
         pass
@@ -89,7 +100,7 @@ class BlogReadingTests(FunctionalTest):
 
 
 
-class BlogModificationTests(FunctionalTest):
+class BlogModificationTests(BlogTest):
 
     def test_can_modify_blog_post(self):
         pass
@@ -108,14 +119,14 @@ class BlogModificationTests(FunctionalTest):
 
 
 
-class BlogDeletionTests(FunctionalTest):
+class BlogDeletionTests(BlogTest):
 
     def test_can_delete_blog_post(self):
         pass
 
 
 
-class BlogAccessTests(FunctionalTest):
+class BlogAccessTests(BlogTest):
 
     def test_cannot_access_new_blog_page_when_not_logged_in(self):
         pass
