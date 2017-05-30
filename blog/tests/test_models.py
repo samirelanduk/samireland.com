@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.core.exceptions import ValidationError
+from unittest.mock import patch
 from samireland.tests import ModelTest
 from blog.models import BlogPost
 
@@ -16,3 +17,16 @@ class BlogPostTests(ModelTest):
         self.assertEqual(BlogPost.objects.all().count(), 1)
         retrieved_post = BlogPost.objects.first()
         self.assertEqual(retrieved_post, post)
+
+
+
+class PropertyTests(ModelTest):
+
+    @patch("samdown.html_from_markdown")
+    def test_blog_post_has_samdown_property(self, mock_converter):
+        mock_converter.return_value = "test output"
+        blog = BlogPost()
+        blog.title = "Title"
+        blog.body = "Body"
+        self.assertEqual(blog.samdown_body, "test output")
+        mock_converter.assert_called_with("Body")

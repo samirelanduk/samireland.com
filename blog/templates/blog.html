@@ -13,6 +13,7 @@
   <div class="blog-post">
     <div class="post-date">{{ post.date|date:"j F, Y" }}</div>
     <div class="post-title">{{ post.title }}</div>
+    <div class="post-body">{{ post.samdown_body|safe }}</div>
   </div>
   {% endfor %}
 </div>

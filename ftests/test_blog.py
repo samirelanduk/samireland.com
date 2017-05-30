@@ -37,7 +37,7 @@ class BlogCreationTests(FunctionalTest):
         # They enter a blog post
         date_input.send_keys("01-06-2014")
         title_input.send_keys("My first post")
-        body_input.send_keys("This is my first post!")
+        body_input.send_keys("This is my first post!\n\nIt's super.")
 
         # They submit the blog post
         submit = form.find_elements_by_tag_name("input")[-1]
@@ -58,6 +58,11 @@ class BlogCreationTests(FunctionalTest):
         self.assertEqual(date.text, "1 June, 2014")
         title = posts[0].find_element_by_class_name("post-title")
         self.assertEqual(title.text, "My first post")
+        body = posts[0].find_element_by_class_name("post-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "This is my first post!")
+        self.assertEqual(paragraphs[1].text, "It's super.")
 
 
     def test_blog_post_needs_correct_date(self):
