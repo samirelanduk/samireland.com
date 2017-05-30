@@ -1,0 +1,24 @@
+#posts {
+  margin-top: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.blog-post {
+  padding: 30px;
+  background-color: #f0f7f5;
+  border: 3px solid #5CA193;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.post-date {
+  font-style: italic;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.post-title {
+  margin-top: 0px;
+}
