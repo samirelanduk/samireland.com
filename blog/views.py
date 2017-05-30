@@ -9,7 +9,7 @@ def new_blog_page(request):
          date=request.POST["date"],
          title=request.POST["title"],
          body=request.POST["body"],
-         visible=request.POST["visible"]
+         visible="visible" in request.POST
         )
         post.save()
         return redirect("/blog/")
@@ -18,5 +18,5 @@ def new_blog_page(request):
 
 
 def blog_page(request):
-    posts = [post for post in BlogPost.objects.all()]
+    posts = [post for post in BlogPost.objects.all().order_by("date").reverse()]
     return render(request, "blog.html", {"posts": posts})

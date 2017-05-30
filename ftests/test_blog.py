@@ -34,6 +34,22 @@ class BlogTest(FunctionalTest):
         submit.click()
 
 
+    def check_blog_post(self, post, date, title, body, visible):
+        date_div = post.find_element_by_class_name("post-date")
+        self.assertEqual(date_div.text, date)
+        title_div = post.find_element_by_class_name("post-title")
+        self.assertEqual(title_div.text, title)
+        body_div = post.find_element_by_class_name("post-body")
+        paragraphs = body_div.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), len(body))
+        for para_div, para_text in zip(paragraphs, body):
+            self.assertEqual(para_div.text, para_text)
+        if visible:
+            self.assertEqual(float(post.value_of_css_property("opacity")), 1)
+        else:
+            self.assertLess(float(post.value_of_css_property("opacity")), 1)
+
+
 
 class BlogCreationTests(BlogTest):
 
@@ -65,15 +81,45 @@ class BlogCreationTests(BlogTest):
         self.assertEqual(len(posts), 1)
 
         # The post has the correct details
-        date = posts[0].find_element_by_class_name("post-date")
-        self.assertEqual(date.text, "1 June, 2014")
-        title = posts[0].find_element_by_class_name("post-title")
-        self.assertEqual(title.text, "My first post")
-        body = posts[0].find_element_by_class_name("post-body")
-        paragraphs = body.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 2)
-        self.assertEqual(paragraphs[0].text, "This is my first post!")
-        self.assertEqual(paragraphs[1].text, "It's super.")
+        self.check_blog_post(
+         posts[0], "1 June, 2014", "My first post", ["This is my first post!", "It's super."], True
+        )
+
+        # They enter three more blog posts, one of which is not visible
+        self.get("/blog/new/")
+        self.enter_blog_post(
+         "01-06-2015", "Second post", "Year later.", True
+        )
+        self.get("/blog/new/")
+        self.enter_blog_post(
+         "01-03-2015", "Third post", "Shy.", False
+        )
+        self.get("/blog/new/")
+        self.enter_blog_post(
+         "01-06-2012", "Ancient post", "Cool\n\nCool\n\nCool", True
+        )
+
+        # They are on the blog posts page
+        self.check_page("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+
+        # There are four blog posts there (invisible is there because logged in)
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 4)
+
+        # Details are correct and in order
+        self.check_blog_post(
+         posts[0], "1 June, 2015", "Second post", ["Year later."], True
+        )
+        self.check_blog_post(
+         posts[1], "1 March, 2015", "Third post", ["Shy."], False
+        )
+        self.check_blog_post(
+         posts[2], "1 June, 2014", "My first post", ["This is my first post!", "It's super."], True
+        )
+        self.check_blog_post(
+         posts[3], "1 June, 2012", "Ancient post", ["Cool", "Cool", "Cool"], True
+        )
 
 
     def test_blog_post_needs_correct_date(self):

@@ -178,6 +178,10 @@ a {
   height:100%;
 }
 
+.invisible {
+  opacity: 0.2;
+}
+
 /* forms */
 
 form {

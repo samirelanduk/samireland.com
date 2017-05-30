@@ -46,10 +46,26 @@ class BlogPageViewTests(ViewTest):
     def test_blog_view_sends_blog_posts(self):
         for d in range(1, 25):
             BlogPost.objects.create(
-             date="1990-09-{}".format(d), title="t", body="b", visible=True
-            ).save()
+             date="1990-09-{}".format(25 - d), title="t", body="b", visible=True
+            )
         response = self.client.get("/blog/")
         self.assertEqual(
          response.context["posts"],
          [post for post in BlogPost.objects.all()]
         )
+
+
+    def test_blog_view_sends_posts_in_date_order(self):
+        BlogPost.objects.create(
+         date="1990-09-2", title="t", body="b", visible=True
+        )
+        BlogPost.objects.create(
+         date="1990-09-1", title="t", body="b", visible=True
+        )
+        BlogPost.objects.create(
+         date="1990-09-3", title="t", body="b", visible=True
+        )
+        response = self.client.get("/blog/")
+        self.assertEqual(response.context["posts"][0].date.day, 3)
+        self.assertEqual(response.context["posts"][1].date.day, 2)
+        self.assertEqual(response.context["posts"][2].date.day, 1)
