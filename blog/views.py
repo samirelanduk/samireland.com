@@ -4,7 +4,18 @@ from blog.models import BlogPost
 
 # Create your views here.
 def new_blog_page(request):
+    today = datetime.now().strftime("%Y-%m-%d")
     if request.method == "POST":
+        try:
+            date = datetime.strptime(request.POST["date"], "%Y-%m-%d").date()
+        except:
+            return render(request, "new-blog.html", {
+             "today": today, "error": "You cannot submit a post with no date"
+            })
+        if BlogPost.objects.filter(date=date):
+            return render(request, "new-blog.html", {
+             "today": today, "error": "There is already a post with that date"
+            })
         post = BlogPost.objects.create(
          date=request.POST["date"],
          title=request.POST["title"],
@@ -13,7 +24,6 @@ def new_blog_page(request):
         )
         post.save()
         return redirect("/blog/")
-    today = datetime.now().strftime("%Y-%m-%d")
     return render(request, "new-blog.html", {"today": today})
 
 

@@ -25,6 +25,10 @@ class BlogTest(FunctionalTest):
 
         # They enter a blog post
         date_input.send_keys(date)
+        if not date:
+            self.browser.execute_script(
+             "document.getElementById('date').setAttribute('value', '');"
+            )
         title_input.send_keys(title)
         body_input.send_keys(body)
         if not visible: visible_input.click()
@@ -123,7 +127,39 @@ class BlogCreationTests(BlogTest):
 
 
     def test_blog_post_needs_correct_date(self):
-        pass
+        self.login()
+        self.get("/blog/new/")
+
+        # The user leaves the date blank but submits everything else
+        self.enter_blog_post(
+         "", "Post!", "Year later.", True
+        )
+
+        # The user is still on the new blog page
+        self.check_page("/blog/new/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no date")
+
+        # They try entering a post with the same date twice
+        self.get("/blog/new/")
+        self.enter_blog_post(
+         "01-06-2015", "Second post", "Year later.", True
+        )
+        self.get("/blog/new/")
+        self.enter_blog_post(
+         "01-06-2015", "Second post", "Year later.", True
+        )
+
+        # The user is still on the new blog page
+        self.check_page("/blog/new/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "There is already a post with that date")
 
 
     def test_blog_post_needs_correct_title(self):

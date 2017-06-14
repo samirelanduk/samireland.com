@@ -35,6 +35,25 @@ class NewBlogPageViewTests(ViewTest):
         self.assertEqual(post.visible, True)
 
 
+    def test_can_handle_missing_date(self):
+        response = self.client.post("/blog/new/", data={
+         "date": "", "title": "T", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "new-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no date")
+
+
+    def test_can_handle_duplicate_date(self):
+        BlogPost.objects.create(
+         date=datetime(2001, 9, 11).date(), title="T", body="B", visible=True
+        )
+        response = self.client.post("/blog/new/", data={
+         "date": "2001-09-11", "title": "TT", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "new-blog.html")
+        self.assertEqual(response.context["error"], "There is already a post with that date")
+
+
 
 class BlogPageViewTests(ViewTest):
 

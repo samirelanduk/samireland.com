@@ -9,7 +9,10 @@
 <h1>New Blog Post</h1>
 
 <form method="POST">
-  <input type="date" name="date" value="{{ today }}">
+  {% if error %}
+  <div class="error">{{ error}}</div>
+  {% endif %}
+  <input type="date" id="date" name="date" value="{{ today }}">
   <input type="text" name="title" placeholder="Title">
   <textarea name="body" placeholder="Body"></textarea>
   <label for="visible">Visible:

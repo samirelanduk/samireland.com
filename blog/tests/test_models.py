@@ -19,6 +19,14 @@ class BlogPostTests(ModelTest):
         self.assertEqual(retrieved_post, post)
 
 
+    def test_blog_date_has_to_be_unique(self):
+        today = datetime.now().date()
+        BlogPost.objects.create(date=today, title="t", body="B", visible=True)
+        with self.assertRaises(ValidationError):
+            post = BlogPost(date=today, title="tt", body="BN", visible=True)
+            post.full_clean()
+
+
 
 class PropertyTests(ModelTest):
 
