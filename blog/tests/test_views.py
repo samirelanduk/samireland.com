@@ -54,6 +54,14 @@ class NewBlogPageViewTests(ViewTest):
         self.assertEqual(response.context["error"], "There is already a post with that date")
 
 
+    def test_can_handle_missing_title(self):
+        response = self.client.post("/blog/new/", data={
+         "date": "2001-09-11", "title": "", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "new-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no title")
+
+
 
 class BlogPageViewTests(ViewTest):
 

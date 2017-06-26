@@ -16,6 +16,10 @@ def new_blog_page(request):
             return render(request, "new-blog.html", {
              "today": today, "error": "There is already a post with that date"
             })
+        if not request.POST["title"]:
+            return render(request, "new-blog.html", {
+             "today": today, "error": "You cannot submit a post with no title"
+            })
         post = BlogPost.objects.create(
          date=request.POST["date"],
          title=request.POST["title"],

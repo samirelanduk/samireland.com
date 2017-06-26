@@ -14,6 +14,7 @@ class BlogTest(FunctionalTest):
         date_input, title_input = form.find_elements_by_tag_name("input")[:2]
         body_input = form.find_element_by_tag_name("textarea")
         visible_input = form.find_elements_by_tag_name("input")[2]
+        visible_label = form.find_element_by_tag_name("label")
         self.assertEqual(date_input.get_attribute("type"), "date")
         self.assertEqual(title_input.get_attribute("type"), "text")
         self.assertEqual(visible_input.get_attribute("type"), "checkbox")
@@ -31,7 +32,7 @@ class BlogTest(FunctionalTest):
             )
         title_input.send_keys(title)
         body_input.send_keys(body)
-        if not visible: visible_input.click()
+        if not visible: visible_label.click()
 
         # They submit the blog post
         submit = form.find_elements_by_tag_name("input")[-1]
@@ -163,7 +164,21 @@ class BlogCreationTests(BlogTest):
 
 
     def test_blog_post_needs_correct_title(self):
-        pass
+        self.login()
+        self.get("/blog/new/")
+
+        # The user leaves the title blank but submits everything else
+        self.enter_blog_post(
+         "01-06-2015", "", "Year later.", True
+        )
+
+        # The user is still on the new blog page
+        self.check_page("/blog/new/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no title")
 
 
     def test_blog_post_needs_correct_body(self):
