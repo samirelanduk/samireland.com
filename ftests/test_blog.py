@@ -202,8 +202,19 @@ class BlogCreationTests(BlogTest):
 
 class BlogReadingTests(BlogTest):
 
+    def setUp(self):
+        BlogTest.setUp(self)
+
+
     def test_can_cycle_between_blog_posts(self):
-        pass
+        self.browser.set_window_size(800, 600)
+        self.get("/")
+
+        # The user clicks the blog link in the header
+        nav = self.browser.find_element_by_tag_name("nav")
+        nav_links = nav.find_elements_by_tag_name("a")
+        nav_links[4].click()
+        self.check_page("/blog/")
 
 
     def test_can_get_blog_posts_by_period(self):
