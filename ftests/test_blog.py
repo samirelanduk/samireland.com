@@ -182,7 +182,21 @@ class BlogCreationTests(BlogTest):
 
 
     def test_blog_post_needs_correct_body(self):
-        pass
+        self.login()
+        self.get("/blog/new/")
+
+        # The user leaves the body blank but submits everything else
+        self.enter_blog_post(
+         "01-06-2015", "TTT", "", True
+        )
+
+        # The user is still on the new blog page
+        self.check_page("/blog/new/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no body")
 
 
 

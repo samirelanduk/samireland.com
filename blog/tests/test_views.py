@@ -62,6 +62,14 @@ class NewBlogPageViewTests(ViewTest):
         self.assertEqual(response.context["error"], "You cannot submit a post with no title")
 
 
+    def test_can_handle_missing_body(self):
+        response = self.client.post("/blog/new/", data={
+         "date": "2001-09-11", "title": "T", "body": "", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "new-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no body")
+
+
 
 class BlogPageViewTests(ViewTest):
 
