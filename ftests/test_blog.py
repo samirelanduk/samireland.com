@@ -2,6 +2,7 @@
 
 from time import sleep
 from datetime import datetime
+from blog.models import BlogPost
 from .base import FunctionalTest
 
 class BlogTest(FunctionalTest):
@@ -204,6 +205,27 @@ class BlogReadingTests(BlogTest):
 
     def setUp(self):
         BlogTest.setUp(self)
+        BlogPost.objects.create(
+         date=datetime(2009, 5, 22).date(), title="Vanq", body="B\n\nB", visible=False
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 4).date(), title="Com", body="C\n\nC", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 28).date(), title="Fin", body="F\n\nF", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2010, 1, 9).date(), title="Siq", body="B\n\nB", visible=False
+        )
+        BlogPost.objects.create(
+         date=datetime(2010, 1, 11).date(), title="Zed", body="Z\n\nZ", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2010, 2, 10).date(), title="DD", body="D\n\nD", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2010, 5, 23).date(), title="Uty", body="U\n\nU", visible=True
+        )
 
 
     def test_can_cycle_between_blog_posts(self):
@@ -215,6 +237,28 @@ class BlogReadingTests(BlogTest):
         nav_links = nav.find_elements_by_tag_name("a")
         nav_links[4].click()
         self.check_page("/blog/")
+
+        # There are five blog posts there (visible only)
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 5)
+
+        # Details are correct and in order
+        self.check_blog_post(
+         posts[0], "23 May, 2010", "Uty", ["U", "U"], True
+        )
+        self.check_blog_post(
+         posts[1], "10 February, 2010", "DD", ["D", "D"], True
+        )
+        self.check_blog_post(
+         posts[2], "11 January, 2010", "Zed", ["Z", "Z"], True
+        )
+        self.check_blog_post(
+         posts[3], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+        self.check_blog_post(
+         posts[4], "4 April, 2009", "Com", ["C", "C"], True
+        )
 
 
     def test_can_get_blog_posts_by_period(self):

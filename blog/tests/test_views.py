@@ -101,6 +101,24 @@ class BlogPageViewTests(ViewTest):
          date="1990-09-3", title="t", body="b", visible=True
         )
         response = self.client.get("/blog/")
+        self.assertEqual(len(response.context["posts"]), 3)
         self.assertEqual(response.context["posts"][0].date.day, 3)
         self.assertEqual(response.context["posts"][1].date.day, 2)
         self.assertEqual(response.context["posts"][2].date.day, 1)
+
+
+    def test_blog_view_does_not_send_invisible_posts_when_logged_out(self):
+        self.client.logout()
+        BlogPost.objects.create(
+         date="1990-09-2", title="t", body="b", visible=True
+        )
+        BlogPost.objects.create(
+         date="1990-09-1", title="t", body="b", visible=False
+        )
+        BlogPost.objects.create(
+         date="1990-09-3", title="t", body="b", visible=True
+        )
+        response = self.client.get("/blog/")
+        self.assertEqual(len(response.context["posts"]), 2)
+        self.assertEqual(response.context["posts"][0].date.day, 3)
+        self.assertEqual(response.context["posts"][1].date.day, 2)

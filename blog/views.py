@@ -36,5 +36,7 @@ def new_blog_page(request):
 
 
 def blog_page(request):
-    posts = [post for post in BlogPost.objects.all().order_by("date").reverse()]
-    return render(request, "blog.html", {"posts": posts})
+    posts = BlogPost.objects.all().order_by("date").reverse()
+    if request.user.is_authenticated:
+        posts = posts.filter(visible=True)
+    return render(request, "blog.html", {"posts": [p for p in posts]})
