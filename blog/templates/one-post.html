@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Blog Posts{% endblock %}
+{% block title %}{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="/static/css/blog.css">
 {% endblock %}
 
 {% block main %}
-<h1>Blog Posts</h1>
-
 <div id="posts">
-  {% for post in posts %}
   {% include "post.html" %}
-  {% endfor %}
 </div>
 {% endblock %}

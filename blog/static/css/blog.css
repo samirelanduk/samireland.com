@@ -1,6 +1,6 @@
 #posts {
   margin-top: 20px;
-  width: 80%;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -8,7 +8,7 @@
 .blog-post {
   padding: 30px;
   background-color: #f0f7f5;
-  border: 3px solid #5CA193;
+  border: 1px solid #5CA193;
   margin-bottom: 20px;
   border-radius: 10px;
 }
@@ -21,4 +21,8 @@
 
 .post-title {
   margin-top: 0px;
+}
+
+.post-title a {
+  color: inherit;
 }

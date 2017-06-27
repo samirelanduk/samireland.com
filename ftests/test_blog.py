@@ -260,6 +260,19 @@ class BlogReadingTests(BlogTest):
          posts[4], "4 April, 2009", "Com", ["C", "C"], True
         )
 
+        # The user clicks the title of the first post
+        title = posts[0].find_element_by_class_name("post-title")
+        title.find_element_by_tag_name("a").click()
+        self.check_page("/blog/2010/5/23/")
+
+        # There is a single blog post on the page
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "23 May, 2010", "Uty", ["U", "U"], True
+        )
+
 
     def test_can_get_blog_posts_by_period(self):
         pass

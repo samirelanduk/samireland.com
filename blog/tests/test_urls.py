@@ -9,3 +9,7 @@ class BlogUrlTests(UrlTest):
 
     def test_blog_url_resolves_to_blog_view(self):
         self.check_url_returns_view("/blog/", views.blog_page)
+
+
+    def test_blog_post_url_resolves_to_blog_view(self):
+        self.check_url_returns_view("/blog/2000/9/28/", views.one_post_page)

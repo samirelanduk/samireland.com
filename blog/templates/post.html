@@ -1,0 +1,5 @@
+<div class="blog-post{% if not post.visible %} invisible{% endif %}">
+  <div class="post-date">{{ post.date|date:"j F, Y" }}</div>
+  <h2 class="post-title"><a href="/blog/{{post.date.year}}/{{post.date.month}}/{{post.date.day}}/">{{ post.title }}</a></h2>
+  <div class="post-body">{{ post.samdown_body|safe }}</div>
+</div>

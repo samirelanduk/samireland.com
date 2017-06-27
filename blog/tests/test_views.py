@@ -122,3 +122,28 @@ class BlogPageViewTests(ViewTest):
         self.assertEqual(len(response.context["posts"]), 2)
         self.assertEqual(response.context["posts"][0].date.day, 3)
         self.assertEqual(response.context["posts"][1].date.day, 2)
+
+
+
+class OnePostPageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        BlogPost.objects.create(
+         date="1997-05-1", title="Win", body="TB Wins", visible=True
+        )
+
+
+    def test_one_post_view_uses_one_post_template(self):
+        response = self.client.get("/blog/1997/5/1/")
+        self.assertTemplateUsed(response, "one-post.html")
+
+
+    def test_one_post_view_returns_404_if_no_post(self):
+        response = self.client.get("/blog/1997/5/2/")
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_one_post_view_sends_post(self):
+        response = self.client.get("/blog/1997/5/1/")
+        self.assertEqual(response.context["post"], BlogPost.objects.first())

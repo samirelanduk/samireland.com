@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
+from django.http import Http404
 from blog.models import BlogPost
 
 # Create your views here.
@@ -40,3 +41,11 @@ def blog_page(request):
     if request.user.is_authenticated:
         posts = posts.filter(visible=True)
     return render(request, "blog.html", {"posts": [p for p in posts]})
+
+
+def one_post_page(request, year, month, day):
+    date = datetime(int(year), int(month), int(day)).date()
+    post = BlogPost.objects.filter(date=date)
+    if not post.exists():
+        raise Http404
+    return render(request, "one-post.html", {"post": post.first()})
