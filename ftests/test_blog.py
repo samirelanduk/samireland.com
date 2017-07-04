@@ -273,6 +273,65 @@ class BlogReadingTests(BlogTest):
          posts[0], "23 May, 2010", "Uty", ["U", "U"], True
         )
 
+        # There is a link to the previous post but not one to the next
+        previous_link = posts_section.find_element_by_id("previous-post")
+        self.assertEqual(len(posts_section.find_elements_by_id("next-post")), 0)
+
+        # They click through to the end
+        previous_link.click()
+        self.check_page("/blog/2010/2/10/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "10 February, 2010", "DD", ["D", "D"], True
+        )
+        previous_link = posts_section.find_element_by_id("previous-post")
+        next_link = posts_section.find_element_by_id("next-post")
+
+        previous_link.click()
+        self.check_page("/blog/2010/1/11/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "11 January, 2010", "Zed", ["Z", "Z"], True
+        )
+        previous_link = posts_section.find_element_by_id("previous-post")
+        next_link = posts_section.find_element_by_id("next-post")
+
+        previous_link.click()
+        self.check_page("/blog/2009/4/28/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+        previous_link = posts_section.find_element_by_id("previous-post")
+        next_link = posts_section.find_element_by_id("next-post")
+
+        previous_link.click()
+        self.check_page("/blog/2009/4/4/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "4 April, 2009", "Com", ["C", "C"], True
+        )
+        self.assertEqual(len(posts_section.find_elements_by_id("previouss-post")), 0)
+        next_link = posts_section.find_element_by_id("next-post")
+
+        # They can also go back
+        next_link.click()
+        self.check_page("/blog/2009/4/28/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+
 
     def test_can_get_blog_posts_by_period(self):
         pass

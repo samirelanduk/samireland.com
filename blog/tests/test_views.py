@@ -130,7 +130,13 @@ class OnePostPageViewTests(ViewTest):
     def setUp(self):
         ViewTest.setUp(self)
         BlogPost.objects.create(
+         date="1997-04-28", title="Previous", body="PPP", visible=True
+        )
+        BlogPost.objects.create(
          date="1997-05-1", title="Win", body="TB Wins", visible=True
+        )
+        BlogPost.objects.create(
+         date="1997-05-5", title="Next", body="NNN", visible=True
         )
 
 
@@ -144,6 +150,56 @@ class OnePostPageViewTests(ViewTest):
         self.assertEqual(response.status_code, 404)
 
 
+    def test_one_post_view_returns_404_if_invisible_post(self):
+        BlogPost.objects.create(
+         date="1997-04-30", title="Shhh", body="PPP", visible=False
+        )
+        response = self.client.get("/blog/1997/4/30/")
+        self.assertEqual(response.status_code, 404)
+
+
     def test_one_post_view_sends_post(self):
         response = self.client.get("/blog/1997/5/1/")
-        self.assertEqual(response.context["post"], BlogPost.objects.first())
+        self.assertEqual(
+         response.context["post"], BlogPost.objects.filter(title="Win").first()
+        )
+
+
+    def test_one_post_view_sends_surrounding_posts(self):
+        response = self.client.get("/blog/1997/5/1/")
+        self.assertEqual(
+         response.context["previous"], BlogPost.objects.filter(title="Previous").first()
+        )
+        self.assertEqual(
+         response.context["next"], BlogPost.objects.filter(title="Next").first()
+        )
+
+
+    def test_surrounding_posts_ignores_invisible_posts(self):
+        BlogPost.objects.create(
+         date="1997-04-30", title="Shhh", body="PPP", visible=False
+        )
+        response = self.client.get("/blog/1997/5/1/")
+        self.assertEqual(
+         response.context["previous"], BlogPost.objects.filter(title="Previous").first()
+        )
+        self.assertEqual(
+         response.context["next"], BlogPost.objects.filter(title="Next").first()
+        )
+
+
+    def test_one_post_view_sends_surrounding_posts_at_edges(self):
+        response = self.client.get("/blog/1997/5/5/")
+        self.assertEqual(
+         response.context["previous"], BlogPost.objects.filter(title="Win").first()
+        )
+        self.assertEqual(
+         response.context["next"], None
+        )
+        response = self.client.get("/blog/1997/4/28/")
+        self.assertEqual(
+         response.context["previous"], None
+        )
+        self.assertEqual(
+         response.context["next"], BlogPost.objects.filter(title="Win").first()
+        )

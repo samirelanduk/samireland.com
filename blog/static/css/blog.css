@@ -26,3 +26,10 @@
 .post-title a {
   color: inherit;
 }
+
+#next-post, #previous-post {
+  display: inline-block;
+  width: 48%;
+  text-align: center;
+  font-weight: bold;
+}

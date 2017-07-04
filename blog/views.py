@@ -45,7 +45,15 @@ def blog_page(request):
 
 def one_post_page(request, year, month, day):
     date = datetime(int(year), int(month), int(day)).date()
-    post = BlogPost.objects.filter(date=date)
-    if not post.exists():
+    post = BlogPost.objects.filter(date=date).first()
+    if not post or not post.visible:
         raise Http404
-    return render(request, "one-post.html", {"post": post.first()})
+    previous = BlogPost.objects.filter(
+     date__lt=date, visible=True
+    ).order_by("date").last()
+    next_ = BlogPost.objects.filter(
+     date__gt=date, visible=True
+    ).order_by("date").first()
+    return render(request, "one-post.html", {
+     "post": post, "previous": previous, "next": next_
+    })

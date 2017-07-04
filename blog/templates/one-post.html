@@ -9,5 +9,14 @@
 {% block main %}
 <div id="posts">
   {% include "post.html" %}
-</div>
+  <div id="posts-nav">
+    {% if previous %}
+      <a id="previous-post" href="/blog/{{previous.date.year}}/{{previous.date.month}}/{{previous.date.day}}/">&#8592; Previous</a>
+    {% else %}
+      <div id="previous-post"></div>
+    {% endif %}
+    {% if next %}
+      <a id="next-post" href="/blog/{{next.date.year}}/{{next.date.month}}/{{next.date.day}}/">Next &#8594;</a>
+    {% endif %}
+  </div>
 {% endblock %}
