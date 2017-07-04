@@ -332,6 +332,56 @@ class BlogReadingTests(BlogTest):
          posts[0], "28 April, 2009", "Fin", ["F", "F"], True
         )
 
+        # They login and go back to the blog page
+        self.login()
+        self.get("/blog/")
+
+        # There are seven blog posts there (all now)
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 7)
+
+        # The posts are all correct
+        self.check_blog_post(
+         posts[0], "23 May, 2010", "Uty", ["U", "U"], True
+        )
+        self.check_blog_post(
+         posts[1], "10 February, 2010", "DD", ["D", "D"], True
+        )
+        self.check_blog_post(
+         posts[2], "11 January, 2010", "Zed", ["Z", "Z"], True
+        )
+        self.check_blog_post(
+         posts[3], "9 January, 2010", "Siq", ["B", "B"], False
+        )
+        self.check_blog_post(
+         posts[4], "22 May, 2009", "Vanq", ["B", "B"], False
+        )
+        self.check_blog_post(
+         posts[5], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+        self.check_blog_post(
+         posts[6], "4 April, 2009", "Com", ["C", "C"], True
+        )
+
+        # The invisible title are not links
+        title = posts[3].find_element_by_class_name("post-title")
+        self.assertEqual(len(title.find_elements_by_tag_name("a")), 0)
+        title = posts[4].find_element_by_class_name("post-title")
+        self.assertEqual(len(title.find_elements_by_tag_name("a")), 0)
+
+        # The invisible posts are not navigable to
+        title = posts[2].find_element_by_class_name("post-title")
+        title.find_element_by_tag_name("a").click()
+        self.check_page("/blog/2010/1/11/")
+        previous = self.browser.find_element_by_id("previous-post")
+        previous.click()
+        self.check_page("/blog/2009/4/28/")
+        next_ = self.browser.find_element_by_id("next-post")
+        next_.click()
+        self.check_page("/blog/2010/1/11/")
+
+
 
     def test_can_get_blog_posts_by_period(self):
         pass
