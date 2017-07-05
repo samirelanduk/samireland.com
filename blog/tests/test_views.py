@@ -1,6 +1,8 @@
 from datetime import datetime
 from samireland.tests import ViewTest
+from django.http import HttpRequest
 from blog.models import BlogPost
+from blog.processors import years_processor
 
 class NewBlogPageViewTests(ViewTest):
 
@@ -220,3 +222,33 @@ class OnePostPageViewTests(ViewTest):
         self.assertEqual(
          response.context["next"], BlogPost.objects.filter(title="Win").first()
         )
+
+
+
+class BlogtemplateContextProcessorTests(ViewTest):
+
+    def test_processor_adds_relevant_years(self):
+        BlogPost.objects.create(
+         date="1997-04-30", title="Shhh", body="PPP", visible=True
+        )
+        BlogPost.objects.create(
+         date="1999-04-30", title="Shhh", body="PPP", visible=True
+        )
+        request = HttpRequest()
+        context = years_processor(request)
+        self.assertEqual(context, {"blog_years": [1999, 1997]})
+
+
+    def test_processor_ignores_invisible_years(self):
+        BlogPost.objects.create(
+         date="1997-04-30", title="Shhh", body="PPP", visible=True
+        )
+        BlogPost.objects.create(
+         date="1998-04-30", title="Shhh", body="PPP", visible=False
+        )
+        BlogPost.objects.create(
+         date="1999-04-30", title="Shhh", body="PPP", visible=True
+        )
+        request = HttpRequest()
+        context = years_processor(request)
+        self.assertEqual(context, {"blog_years": [1999, 1997]})

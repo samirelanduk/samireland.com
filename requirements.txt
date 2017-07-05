@@ -1,4 +1,4 @@
-django==1.8.17
+django==1.10.7
 selenium
 samdown
 gunicorn

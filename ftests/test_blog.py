@@ -382,9 +382,30 @@ class BlogReadingTests(BlogTest):
         self.check_page("/blog/2010/1/11/")
 
 
-
     def test_can_get_blog_posts_by_period(self):
-        pass
+        # The user goes to the home page and hovers over the blog link
+        self.browser.set_window_size(800, 600)
+        self.get("/")
+        nav = self.browser.find_element_by_tag_name("nav")
+        nav_links = nav.find_elements_by_tag_name("a")
+        self.hover(nav_links[4])
+
+        # There are now links to individual years
+        year_links = nav.find_element_by_id("year-links")
+        years = year_links.find_elements_by_class_name("blog-year")
+        self.assertEqual(years[0].text, "2010")
+        self.assertEqual(years[1].text, "2009")
+        self.assertAlmostEqual(
+         years[0].location["x"], nav_links[4].location["x"], delta=15
+        )
+
+        # The user moves away and they vanish
+        self.hover(nav_links[0])
+
+        # They bring them back
+        self.hover(nav_links[4])
+        year_links = nav.find_element_by_id("year-links")
+        years = year_links.find_elements_by_class_name("blog-year")
 
 
 

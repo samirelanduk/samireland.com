@@ -20,10 +20,9 @@
   {% block css %}{% endblock %}
   <!--analytics-->
 </head>
-
 <body>
   <header>
-    Sam Ire<a href="/authenticate/" id="login-link">l</a>and
+    Sam Ire<a href="/authenticate/" id="login-link">l</a>and{{ test }}
     <div id="navicon">&#9776;</div>
     {% if user.is_authenticated %}
     <div id="quick-links-left">
@@ -42,8 +41,13 @@
     <a href="/projects/">Projects</a>
   </li><li>
     <a href="/">Writing</a>
-  </li><li>
-    <a href="/blog/">Blog</a>
+  </li><li id="blog-nav">
+    <a href="/blog/" id="blog-link">Blog</a>
+    <div id="year-links">
+      {% for year in blog_years %}
+      <a href="#" class="blog-year">{{year}}</a>
+      {% endfor %}
+    </div>
   </li><li>
     <a href="/about/">About</a>
   </li></ul></nav>

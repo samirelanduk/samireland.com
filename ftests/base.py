@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import User
 
@@ -33,6 +34,11 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def check_page(self, url):
         self.assertEqual(self.browser.current_url, self.live_server_url + url)
+
+
+    def hover(self, element):
+        hover = ActionChains(self.browser).move_to_element(element)
+        hover.perform()
 
 
     def check_can_edit_text(self, url, div_name, text_name):
