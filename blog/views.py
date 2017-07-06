@@ -57,3 +57,10 @@ def one_post_page(request, year, month, day):
     return render(request, "one-post.html", {
      "post": post, "previous": previous, "next": next_
     })
+
+
+def year_page(request, year):
+    year = int(year)
+    posts = [post for post in BlogPost.objects.filter(visible=True).order_by("date") if post.date.year == year]
+    if not posts: raise Http404
+    return render(request, "year-posts.html", {"year": year, "posts": posts[::-1]})

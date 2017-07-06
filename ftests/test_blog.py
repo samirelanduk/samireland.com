@@ -383,6 +383,13 @@ class BlogReadingTests(BlogTest):
 
 
     def test_can_get_blog_posts_by_period(self):
+        BlogPost.objects.create(
+         date=datetime(2011, 5, 23).date(), title="Uty", body="U\n\nU", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2012, 5, 23).date(), title="Uty", body="U\n\nU", visible=False
+        )
+
         # The user goes to the home page and hovers over the blog link
         self.browser.set_window_size(800, 600)
         self.get("/")
@@ -393,8 +400,9 @@ class BlogReadingTests(BlogTest):
         # There are now links to individual years
         year_links = nav.find_element_by_id("year-links")
         years = year_links.find_elements_by_class_name("blog-year")
-        self.assertEqual(years[0].text, "2010")
-        self.assertEqual(years[1].text, "2009")
+        self.assertEqual(years[0].text, "2011")
+        self.assertEqual(years[1].text, "2010")
+        self.assertEqual(years[2].text, "2009")
         self.assertAlmostEqual(
          years[0].location["x"], nav_links[4].location["x"], delta=15
         )
@@ -406,6 +414,20 @@ class BlogReadingTests(BlogTest):
         self.hover(nav_links[4])
         year_links = nav.find_element_by_id("year-links")
         years = year_links.find_elements_by_class_name("blog-year")
+
+        # They click on the top link and go to the page for that year
+        years[0].click()
+        self.check_page("/blog/2011/")
+        self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "2011")
+
+        # There is one post here
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "23 May, 2011", "Uty", ["U", "U"], True
+        )
+
 
 
 

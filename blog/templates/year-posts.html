@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{year}}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
+{% endblock %}
+
+{% block main %}
+<h1>{{year}}</h1>
+
+<div id="posts">
+  {% for post in posts %}
+  {% include "post.html" %}
+  {% endfor %}
+</div>
+{% endblock %}

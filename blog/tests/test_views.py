@@ -225,6 +225,68 @@ class OnePostPageViewTests(ViewTest):
 
 
 
+class BlogPageyearViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        BlogPost.objects.create(
+         date="1996-04-28", title="Previous", body="PPP", visible=True
+        )
+        BlogPost.objects.create(
+         date="1997-05-1", title="Win", body="TB Wins", visible=True
+        )
+        BlogPost.objects.create(
+         date="1997-05-5", title="Next", body="NNN", visible=True
+        )
+        BlogPost.objects.create(
+         date="1998-05-5", title="Next Next", body="NNN", visible=True
+        )
+
+
+    def test_blog_year_view_uses_blog_year_template(self):
+        response = self.client.get("/blog/1997/")
+        self.assertTemplateUsed(response, "year-posts.html")
+
+
+    def test_blog_year_view_returns_404_if_no_post(self):
+        response = self.client.get("/blog/1992/")
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_blog_year_view_sends_year(self):
+        response = self.client.get("/blog/1997/")
+        self.assertEqual(response.context["year"], 1997)
+
+
+    def test_blog_year_view_returns_404_if_invisible_post(self):
+        BlogPost.objects.create(
+         date="1993-04-30", title="Shhh", body="PPP", visible=False
+        )
+        response = self.client.get("/blog/1993/")
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_blog_year_view_sends_blog_posts(self):
+        response = self.client.get("/blog/1997/")
+        self.assertEqual(
+         response.context["posts"], [
+          BlogPost.objects.filter(title="Next").first(),
+          BlogPost.objects.filter(title="Win").first()
+         ]
+        )
+
+
+    def test_blog_year_view_does_not_send_invisible_posts(self):
+        BlogPost.objects.create(
+         date="1997-06-5", title="Sh", body="NNN", visible=False
+        )
+        response = self.client.get("/blog/1997/")
+        self.assertEqual(len(response.context["posts"]), 2)
+        self.assertEqual(response.context["posts"][0].date.day, 5)
+        self.assertEqual(response.context["posts"][1].date.day, 1)
+
+
+
 class BlogtemplateContextProcessorTests(ViewTest):
 
     def test_processor_adds_relevant_years(self):
