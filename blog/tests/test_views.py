@@ -286,6 +286,30 @@ class BlogPageyearViewTests(ViewTest):
         self.assertEqual(response.context["posts"][1].date.day, 1)
 
 
+    def test_blog_year_view_sends_surrounding_years(self):
+        response = self.client.get("/blog/1997/")
+        self.assertEqual(response.context["previous"], 1996)
+        self.assertEqual(response.context["next"], 1998)
+
+
+    def test_one_post_view_sends_surrounding_posts_at_edges(self):
+        response = self.client.get("/blog/1998/")
+        self.assertEqual(response.context["previous"], 1997)
+        self.assertEqual(response.context["next"], None)
+        response = self.client.get("/blog/1996/")
+        self.assertEqual(response.context["previous"], None)
+        self.assertEqual(response.context["next"], 1997)
+
+
+    def test_surrounding_posts_ignores_invisible_posts(self):
+        BlogPost.objects.create(
+         date="1999-04-30", title="Shhh", body="PPP", visible=False
+        )
+        response = self.client.get("/blog/1998/")
+        self.assertEqual(response.context["previous"], 1997)
+        self.assertEqual(response.context["next"], None)
+
+
 
 class BlogtemplateContextProcessorTests(ViewTest):
 

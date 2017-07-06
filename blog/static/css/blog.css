@@ -27,7 +27,7 @@
   color: inherit;
 }
 
-#next-post, #previous-post {
+#next-page, #previous-page {
   display: inline-block;
   width: 48%;
   text-align: center;

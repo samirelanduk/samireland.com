@@ -274,8 +274,8 @@ class BlogReadingTests(BlogTest):
         )
 
         # There is a link to the previous post but not one to the next
-        previous_link = posts_section.find_element_by_id("previous-post")
-        self.assertEqual(len(posts_section.find_elements_by_id("next-post")), 0)
+        previous_link = posts_section.find_element_by_id("previous-page")
+        self.assertEqual(len(posts_section.find_elements_by_id("next-page")), 0)
 
         # They click through to the end
         previous_link.click()
@@ -286,8 +286,8 @@ class BlogReadingTests(BlogTest):
         self.check_blog_post(
          posts[0], "10 February, 2010", "DD", ["D", "D"], True
         )
-        previous_link = posts_section.find_element_by_id("previous-post")
-        next_link = posts_section.find_element_by_id("next-post")
+        previous_link = posts_section.find_element_by_id("previous-page")
+        next_link = posts_section.find_element_by_id("next-page")
 
         previous_link.click()
         self.check_page("/blog/2010/1/11/")
@@ -297,8 +297,8 @@ class BlogReadingTests(BlogTest):
         self.check_blog_post(
          posts[0], "11 January, 2010", "Zed", ["Z", "Z"], True
         )
-        previous_link = posts_section.find_element_by_id("previous-post")
-        next_link = posts_section.find_element_by_id("next-post")
+        previous_link = posts_section.find_element_by_id("previous-page")
+        next_link = posts_section.find_element_by_id("next-page")
 
         previous_link.click()
         self.check_page("/blog/2009/4/28/")
@@ -308,8 +308,8 @@ class BlogReadingTests(BlogTest):
         self.check_blog_post(
          posts[0], "28 April, 2009", "Fin", ["F", "F"], True
         )
-        previous_link = posts_section.find_element_by_id("previous-post")
-        next_link = posts_section.find_element_by_id("next-post")
+        previous_link = posts_section.find_element_by_id("previous-page")
+        next_link = posts_section.find_element_by_id("next-page")
 
         previous_link.click()
         self.check_page("/blog/2009/4/4/")
@@ -319,8 +319,8 @@ class BlogReadingTests(BlogTest):
         self.check_blog_post(
          posts[0], "4 April, 2009", "Com", ["C", "C"], True
         )
-        self.assertEqual(len(posts_section.find_elements_by_id("previouss-post")), 0)
-        next_link = posts_section.find_element_by_id("next-post")
+        self.assertEqual(len(posts_section.find_elements_by_id("previous-post")), 0)
+        next_link = posts_section.find_element_by_id("next-page")
 
         # They can also go back
         next_link.click()
@@ -364,7 +364,7 @@ class BlogReadingTests(BlogTest):
          posts[6], "4 April, 2009", "Com", ["C", "C"], True
         )
 
-        # The invisible title are not links
+        # The invisible titles are not links
         title = posts[3].find_element_by_class_name("post-title")
         self.assertEqual(len(title.find_elements_by_tag_name("a")), 0)
         title = posts[4].find_element_by_class_name("post-title")
@@ -374,10 +374,10 @@ class BlogReadingTests(BlogTest):
         title = posts[2].find_element_by_class_name("post-title")
         title.find_element_by_tag_name("a").click()
         self.check_page("/blog/2010/1/11/")
-        previous = self.browser.find_element_by_id("previous-post")
+        previous = self.browser.find_element_by_id("previous-page")
         previous.click()
         self.check_page("/blog/2009/4/28/")
-        next_ = self.browser.find_element_by_id("next-post")
+        next_ = self.browser.find_element_by_id("next-page")
         next_.click()
         self.check_page("/blog/2010/1/11/")
 
@@ -428,6 +428,61 @@ class BlogReadingTests(BlogTest):
          posts[0], "23 May, 2011", "Uty", ["U", "U"], True
         )
 
+        # There is a link to the previous year but not one to the next
+        previous_link = posts_section.find_element_by_id("previous-page")
+        self.assertEqual(len(posts_section.find_elements_by_id("next-page")), 0)
+        self.assertEqual(previous_link.text[-4:], "2010")
+
+        # They click through to the end
+        previous_link.click()
+        self.check_page("/blog/2010/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+        self.check_blog_post(
+         posts[0], "23 May, 2010", "Uty", ["U", "U"], True
+        )
+        self.check_blog_post(
+         posts[1], "10 February, 2010", "DD", ["D", "D"], True
+        )
+        self.check_blog_post(
+         posts[2], "11 January, 2010", "Zed", ["Z", "Z"], True
+        )
+        previous_link = posts_section.find_element_by_id("previous-page")
+        next_link = posts_section.find_element_by_id("next-page")
+        self.assertEqual(previous_link.text[-4:], "2009")
+        self.assertEqual(next_link.text[:4], "2011")
+
+        previous_link.click()
+        self.check_page("/blog/2009/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 2)
+        self.check_blog_post(
+         posts[0], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+        self.check_blog_post(
+         posts[1], "4 April, 2009", "Com", ["C", "C"], True
+        )
+        self.assertEqual(len(posts_section.find_elements_by_id("previous-post")), 0)
+        next_link = posts_section.find_element_by_id("next-page")
+        self.assertEqual(next_link.text[:4], "2010")
+
+        # They can also go back
+        next_link.click()
+        self.check_page("/blog/2010/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+        self.check_blog_post(
+         posts[0], "23 May, 2010", "Uty", ["U", "U"], True
+        )
+        self.check_blog_post(
+         posts[1], "10 February, 2010", "DD", ["D", "D"], True
+        )
+        self.check_blog_post(
+         posts[2], "11 January, 2010", "Zed", ["Z", "Z"], True
+        )
 
 
 

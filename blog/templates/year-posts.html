@@ -13,5 +13,15 @@
   {% for post in posts %}
   {% include "post.html" %}
   {% endfor %}
+  <div id="posts-nav">
+    {% if previous %}
+      <a id="previous-page" href="/blog/{{previous}}/">&#8592; {{previous}}</a>
+    {% else %}
+      <div id="previous-page"></div>
+    {% endif %}
+    {% if next %}
+      <a id="next-page" href="/blog/{{next}}/">{{next}} &#8594;</a>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
