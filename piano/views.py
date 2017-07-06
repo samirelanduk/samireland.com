@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db.utils import IntegrityError
+from django.db import transaction
 from home.models import EditableText
 from piano.models import PracticeSession
 
@@ -62,10 +63,11 @@ def piano_update_page(request):
              "error_text": error_text
             })
         try:
-            PracticeSession.objects.create(
-             date=request.POST["date"],
-             minutes=request.POST["minutes"]
-            )
+            with transaction.atomic():
+                PracticeSession.objects.create(
+                 date=request.POST["date"],
+                 minutes=request.POST["minutes"]
+                )
         except IntegrityError:
             return render(request, "piano-update.html", {
              "today": datetime.now().strftime("%Y-%m-%d"),

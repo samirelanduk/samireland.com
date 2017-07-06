@@ -380,10 +380,7 @@ class PianoUpdatePageViewTests(ViewTest):
 
     def test_date_needs_to_be_unique_in_piano_update_view(self):
         self.assertEqual(PracticeSession.objects.count(), 0)
-        self.client.post("/piano/update/", data={
-         "date": "2010-01-03",
-         "minutes": 45
-        })
+        PracticeSession.objects.create(date=datetime(2010, 1, 3), minutes=45)
         response = self.client.post("/piano/update/", data={
          "date": "2010-01-03",
          "minutes": 10
@@ -432,6 +429,7 @@ class PianoUpdatePageViewTests(ViewTest):
         d3 = PracticeSession.objects.create(date=datetime(2017, 2, 28), minutes=1)
         response = self.client.get("/piano/update/")
         self.assertEqual(response.context["sessions"], [d2, d1, d3])
+
 
 
 class PianoDeletePageViewTests(ViewTest):
