@@ -76,8 +76,16 @@ def year_page(request, year):
 def edit_post_page(request, year, month, day):
     date = datetime(int(year), int(month), int(day)).date()
     post = BlogPost.objects.filter(date=date).first()
-    if not post or not post.visible:
+    if not post:
         raise Http404
+    if request.method == "POST":
+        post.date = datetime.strptime(request.POST["date"], "%Y-%m-%d")
+        post.title = request.POST["title"]
+        post.body = request.POST["body"]
+        post.visible = "visible" in request.POST
+        post.save()
+        if not post.visible: return redirect("/blog/")
+        return redirect(post.date.strftime("/blog/%Y/%-m/%-d/"))
     return render(request, "edit-blog.html", {
      "post": post
     })

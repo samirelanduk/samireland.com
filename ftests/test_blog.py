@@ -540,12 +540,76 @@ class BlogModificationTests(BlogTest):
         self.assertTrue(visible_input.is_selected())
 
         # The user edits the title, date and body of the post
+        date_input.send_keys("29-09-2010")
+        title_input.clear()
+        title_input.send_keys("New Title")
+        body_input.clear()
+        body_input.send_keys("A new body.")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
 
         # The user is now on the post's page, and it looks great
+        self.check_page("/blog/2010/9/29/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "29 September, 2010", "New Title", ["A new body."], True
+        )
 
         # The user goes back to the blog page
+        self.get("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
 
         # The user makes the invisible post visible
+        self.check_blog_post(
+         posts[1], "30 April, 2009", "Com", ["C", "C"], False
+        )
+        posts[1].find_element_by_class_name("edit-post-link").click()
+        self.check_page("/blog/2009/4/30/edit/")
+        form = self.browser.find_element_by_tag_name("form")
+        visible_input = form.find_elements_by_tag_name("input")[2]
+        visible_label = form.find_element_by_tag_name("label")
+        self.assertEqual(visible_input.get_attribute("type"), "checkbox")
+        self.assertFalse(visible_input.is_selected())
+        visible_label.click()
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+        self.check_page("/blog/2009/4/30/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 1)
+        self.check_blog_post(
+         posts[0], "30 April, 2009", "Com", ["C", "C"], True
+        )
+
+        # The user makes the visible post invisible
+        self.get("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+        self.check_blog_post(
+         posts[2], "28 April, 2009", "Fin", ["F", "F"], True
+        )
+        posts[2].find_element_by_class_name("edit-post-link").click()
+        self.check_page("/blog/2009/4/28/edit/")
+        form = self.browser.find_element_by_tag_name("form")
+        visible_input = form.find_elements_by_tag_name("input")[2]
+        visible_label = form.find_element_by_tag_name("label")
+        self.assertEqual(visible_input.get_attribute("type"), "checkbox")
+        self.assertTrue(visible_input.is_selected())
+        visible_label.click()
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+        self.check_page("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+        self.check_blog_post(
+         posts[2], "28 April, 2009", "Fin", ["F", "F"], False
+        )
 
 
     def test_modified_blog_post_needs_correct_date(self):

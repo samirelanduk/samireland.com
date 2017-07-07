@@ -335,6 +335,32 @@ class NewBlogPageViewTests(ViewTest):
         self.assertEqual(response.context["post"], BlogPost.objects.first())
 
 
+    def test_edit_blog_view_redirects_to_post_page_on_post(self):
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1990-09-28", "title": "T", "body": "BBB", "visible":True
+        })
+        self.assertRedirects(response, "/blog/1990/9/28/")
+
+
+    def test_edit_blog_view_redirects_to_blog_page_on_post_if_invisible(self):
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1990-09-28", "title": "T", "body": "BBB"
+        })
+        self.assertRedirects(response, "/blog/")
+
+
+    def test_edit_blog_view_edits_posts(self):
+        self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1990-09-28", "title": "T", "body": "BBB",
+        })
+        self.assertEqual(BlogPost.objects.all().count(), 1)
+        post = BlogPost.objects.first()
+        self.assertEqual(post.date, datetime(1990, 9, 28).date())
+        self.assertEqual(post.title, "T")
+        self.assertEqual(post.body, "BBB")
+        self.assertEqual(post.visible, False)
+
+
 
 class BlogtemplateContextProcessorTests(ViewTest):
 
