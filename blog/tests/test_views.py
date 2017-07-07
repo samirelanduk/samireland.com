@@ -361,6 +361,45 @@ class NewBlogPageViewTests(ViewTest):
         self.assertEqual(post.visible, False)
 
 
+    def test_can_handle_missing_date(self):
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "", "title": "T", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "edit-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no date")
+
+
+    def test_can_handle_duplicate_date(self):
+        BlogPost.objects.create(
+         date=datetime(2001, 9, 11).date(), title="T", body="B", visible=True
+        )
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "2001-09-11", "title": "TT", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "edit-blog.html")
+        self.assertEqual(response.context["error"], "There is already a post with that date")
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1996-04-28", "title": "T", "body": "BBB", "visible": "on"
+        })
+        self.assertRedirects(response, "/blog/1996/4/28/")
+
+
+    def test_can_handle_missing_title(self):
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1996-04-28", "title": "", "body": "BBB", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "edit-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no title")
+
+
+    def test_can_handle_missing_body(self):
+        response = self.client.post("/blog/1996/4/28/edit/", data={
+         "date": "1996-04-28", "title": "T", "body": "", "visible": "on"
+        })
+        self.assertTemplateUsed(response, "edit-blog.html")
+        self.assertEqual(response.context["error"], "You cannot submit a post with no body")
+
+
 
 class BlogtemplateContextProcessorTests(ViewTest):
 

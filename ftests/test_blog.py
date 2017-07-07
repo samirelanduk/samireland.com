@@ -613,15 +613,81 @@ class BlogModificationTests(BlogTest):
 
 
     def test_modified_blog_post_needs_correct_date(self):
-        pass
+        self.login()
+        self.get("/blog/2009/5/22/edit/")
+
+        # The user leaves the date blank but submits everything else
+        form = self.browser.find_element_by_tag_name("form")
+        date_input, title_input = form.find_elements_by_tag_name("input")[:2]
+        self.browser.execute_script(
+         "document.getElementById('date').setAttribute('value', '');"
+        )
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # The user is still on the same page
+        self.check_page("/blog/2009/5/22/edit/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no date")
+
+        # They try entering a post with the same date twice
+        self.get("/blog/2009/5/22/edit/")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input, title_input = form.find_elements_by_tag_name("input")[:2]
+        date_input.send_keys("30-04-2009")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # The user is still on the same page
+        self.check_page("/blog/2009/5/22/edit/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "There is already a post with that date")
 
 
     def test_modified_blog_post_needs_correct_title(self):
-        pass
+        self.login()
+        self.get("/blog/2009/5/22/edit/")
+
+        # The user leaves the title blank but submits everything else
+        form = self.browser.find_element_by_tag_name("form")
+        date_input, title_input = form.find_elements_by_tag_name("input")[:2]
+        title_input.clear()
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # The user is still on the same page
+        self.check_page("/blog/2009/5/22/edit/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no title")
 
 
     def test_modified_blog_post_needs_correct_body(self):
-        pass
+        self.login()
+        self.get("/blog/2009/5/22/edit/")
+
+        # The user leaves the body blank but submits everything else
+        form = self.browser.find_element_by_tag_name("form")
+        body_input = form.find_element_by_tag_name("textarea")
+        body_input.clear()
+        submit = form.find_elements_by_tag_name("input")[-1]
+        submit.click()
+
+        # The user is still on the same page
+        self.check_page("/blog/2009/5/22/edit/")
+
+        # There is an error message
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertEqual(error.text, "You cannot submit a post with no body")
 
 
 

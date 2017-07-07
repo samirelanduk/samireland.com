@@ -79,6 +79,24 @@ def edit_post_page(request, year, month, day):
     if not post:
         raise Http404
     if request.method == "POST":
+        try:
+            date = datetime.strptime(request.POST["date"], "%Y-%m-%d").date()
+        except:
+            return render(request, "edit-blog.html", {
+             "post": post, "error": "You cannot submit a post with no date"
+            })
+        if date != post.date and BlogPost.objects.filter(date=date):
+            return render(request, "edit-blog.html", {
+             "post": post, "error": "There is already a post with that date"
+            })
+        if not request.POST["title"]:
+            return render(request, "edit-blog.html", {
+             "post": post, "error": "You cannot submit a post with no title"
+            })
+        if not request.POST["body"]:
+            return render(request, "edit-blog.html", {
+             "post": post, "error": "You cannot submit a post with no body"
+            })
         post.date = datetime.strptime(request.POST["date"], "%Y-%m-%d")
         post.title = request.POST["title"]
         post.body = request.POST["body"]
