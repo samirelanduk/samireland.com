@@ -17,3 +17,7 @@ class BlogUrlTests(UrlTest):
 
     def test_blog_year_url_resolves_to_blog_year_view(self):
         self.check_url_returns_view("/blog/2000/", views.year_page)
+
+
+    def test_edit_blog_url_resolves_to_edit_blog_view(self):
+        self.check_url_returns_view("/blog/2000/9/28/edit/", views.edit_post_page)

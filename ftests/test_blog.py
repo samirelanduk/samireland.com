@@ -488,8 +488,64 @@ class BlogReadingTests(BlogTest):
 
 class BlogModificationTests(BlogTest):
 
+    def setUp(self):
+        BlogTest.setUp(self)
+        BlogPost.objects.create(
+         date=datetime(2009, 5, 22).date(), title="Vanq", body="B\n\nB", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 30).date(), title="Com", body="C\n\nC", visible=False
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 28).date(), title="Fin", body="F\n\nF", visible=True
+        )
+
+
     def test_can_modify_blog_post(self):
-        pass
+        # The user goes to the blog page
+        self.get("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 2)
+
+        # The posts don't have edit links
+        for post in posts:
+            self.assertFalse(post.find_elements_by_class_name("edit-post-link"))
+
+        # The user logs in and now they do
+        self.login()
+        self.get("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+        for post in posts[::-1]:
+            edit_link = post.find_element_by_class_name("edit-post-link")
+
+        # The user clicks the edit link for the first post
+        edit_link.click()
+        self.check_page("/blog/2009/5/22/edit/")
+        h1 = self.browser.find_element_by_tag_name("h1")
+        self.assertEqual(h1.text, "Edit Blog Post")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input, title_input = form.find_elements_by_tag_name("input")[:2]
+        body_input = form.find_element_by_tag_name("textarea")
+        visible_input = form.find_elements_by_tag_name("input")[2]
+        visible_label = form.find_element_by_tag_name("label")
+        self.assertEqual(date_input.get_attribute("type"), "date")
+        self.assertEqual(date_input.get_attribute("value"), "2009-05-22")
+        self.assertEqual(title_input.get_attribute("type"), "text")
+        self.assertEqual(title_input.get_attribute("value"), "Vanq")
+        self.assertEqual(body_input.get_attribute("value"), "B\n\nB")
+        self.assertEqual(visible_input.get_attribute("type"), "checkbox")
+        self.assertTrue(visible_input.is_selected())
+
+        # The user edits the title, date and body of the post
+
+        # The user is now on the post's page, and it looks great
+
+        # The user goes back to the blog page
+
+        # The user makes the invisible post visible
 
 
     def test_modified_blog_post_needs_correct_date(self):

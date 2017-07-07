@@ -11,6 +11,7 @@
   border: 1px solid #5CA193;
   margin-bottom: 20px;
   border-radius: 10px;
+  position: relative;
 }
 
 .post-date {
@@ -32,4 +33,10 @@
   width: 48%;
   text-align: center;
   font-weight: bold;
+}
+
+.edit-post-link {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }

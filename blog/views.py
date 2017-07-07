@@ -71,3 +71,13 @@ def year_page(request, year):
     return render(request, "year-posts.html", {
      "year": year, "posts": posts[::-1], "previous": prev, "next": next_
     })
+
+
+def edit_post_page(request, year, month, day):
+    date = datetime(int(year), int(month), int(day)).date()
+    post = BlogPost.objects.filter(date=date).first()
+    if not post or not post.visible:
+        raise Http404
+    return render(request, "edit-blog.html", {
+     "post": post
+    })

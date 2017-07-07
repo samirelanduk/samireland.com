@@ -311,6 +311,31 @@ class BlogPageyearViewTests(ViewTest):
 
 
 
+class NewBlogPageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        BlogPost.objects.create(
+         date="1996-04-28", title="Previous", body="PPP", visible=True
+        )
+
+
+    def test_edit_blog_view_uses_edit_blog_template(self):
+        response = self.client.get("/blog/1996/4/28/edit/")
+        self.assertTemplateUsed(response, "edit-blog.html")
+
+
+    def test_edit_blog_view_sends_404_if_no_post(self):
+        response = self.client.get("/blog/1986/4/28/edit/")
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_edit_blog_view_sends_post(self):
+        response = self.client.get("/blog/1996/4/28/edit/")
+        self.assertEqual(response.context["post"], BlogPost.objects.first())
+
+
+
 class BlogtemplateContextProcessorTests(ViewTest):
 
     def test_processor_adds_relevant_years(self):

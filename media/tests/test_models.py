@@ -73,7 +73,7 @@ class ModelCreationTest(MediaTest):
 
         image.delete()
         self.assertEqual(MediaFile.objects.all().count(), 0)
-        time.sleep(0.1)
+        time.sleep(1)
         self.assertNotIn(
          datetime.now().strftime("%Y%m%d%H%M%S") + ".png",
          os.listdir(MEDIA_ROOT)
