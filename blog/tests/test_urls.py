@@ -21,3 +21,7 @@ class BlogUrlTests(UrlTest):
 
     def test_edit_blog_url_resolves_to_edit_blog_view(self):
         self.check_url_returns_view("/blog/2000/9/28/edit/", views.edit_post_page)
+
+
+    def test_delete_blog_url_resolves_to_delete_blog_view(self):
+        self.check_url_returns_view("/blog/2000/9/28/delete/", views.delete_post_page)

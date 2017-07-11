@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Post{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
+{% endblock %}
+
+{% block main %}
+<form method="POST" class="delete-form">
+  <div id="delete-description">{{ post.date|date:"j F, Y" }} - {{post.title}}</div>
+  <div id="delete-warning">This will delete the post forever. Are you sure?</div>
+  {% csrf_token %}
+  <input type="submit" value="Delete">
+  <a href="/blog/{{post.date.year}}/{{post.date.month}}/{{post.date.day}}/">No - go back</a>
+</form>
+{% endblock %}

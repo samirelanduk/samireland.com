@@ -201,6 +201,15 @@ a {
   opacity: 0.2;
 }
 
+.delete-button {
+  background-color: #7F0000;
+  color: #FFFFFF;
+  font-size: 70%;
+  padding: 2px;
+  border-radius: 3px;
+  float: right;
+}
+
 /* forms */
 
 form {

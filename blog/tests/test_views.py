@@ -311,7 +311,7 @@ class BlogPageyearViewTests(ViewTest):
 
 
 
-class NewBlogPageViewTests(ViewTest):
+class EditBlogPageViewTests(ViewTest):
 
     def setUp(self):
         ViewTest.setUp(self)
@@ -398,6 +398,46 @@ class NewBlogPageViewTests(ViewTest):
         })
         self.assertTemplateUsed(response, "edit-blog.html")
         self.assertEqual(response.context["error"], "You cannot submit a post with no body")
+
+
+
+class DeleteBlogPageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        BlogPost.objects.create(
+         date="1996-04-28", title="Previous", body="PPP", visible=True
+        )
+
+
+    def test_delete_blog_view_uses_delete_blog_template(self):
+        response = self.client.get("/blog/1996/4/28/delete/")
+        self.assertTemplateUsed(response, "delete-blog.html")
+
+
+    def test_delete_blog_view_sends_404_if_incorrect_date(self):
+        response = self.client.get("/blog/1996/4/27/delete/")
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_delete_blog_view_sends_post(self):
+        response = self.client.get("/blog/1996/4/28/delete/")
+        self.assertEqual(response.context["post"], BlogPost.objects.first())
+
+
+    def test_delete_blog_view_redirects_on_post(self):
+        response = self.client.post("/blog/1996/4/28/delete/")
+        self.assertRedirects(response, "/blog/")
+
+
+    def test_delete_blog_view_deletes_on_post(self):
+        BlogPost.objects.create(
+         date="1996-04-29", title="Next", body="PPP", visible=True
+        )
+        self.assertEqual(BlogPost.objects.count(), 2)
+        response = self.client.post("/blog/1996/4/28/delete/")
+        self.assertEqual(BlogPost.objects.count(), 1)
+        self.assertEqual(BlogPost.objects.first().title, "Next")
 
 
 

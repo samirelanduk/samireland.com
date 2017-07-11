@@ -694,7 +694,75 @@ class BlogModificationTests(BlogTest):
 class BlogDeletionTests(BlogTest):
 
     def test_can_delete_blog_post(self):
-        pass
+        BlogPost.objects.create(
+         date=datetime(2009, 5, 22).date(), title="Vanq", body="B\n\nB", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 30).date(), title="Com", body="C\n\nC", visible=False
+        )
+        BlogPost.objects.create(
+         date=datetime(2009, 4, 28).date(), title="Fin", body="F\n\nF", visible=True
+        )
+        self.login()
+
+        # User goes to the blog page - there are three posts
+        self.get("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+
+        # User goes to the 28 April page
+        self.get("/blog/2009/4/28/")
+        edit_button = self.browser.find_element_by_class_name("edit-post-link")
+
+        # They click the edit button
+        edit_button.click()
+
+        # There is a button to delete the post - they click it
+        delete_button = self.browser.find_element_by_class_name("delete-button")
+        delete_button.click()
+
+        # They are on the delete post page, which asks them if they are sure
+        self.check_page("/blog/2009/4/28/delete/")
+        form = self.browser.find_element_by_tag_name("form")
+        description = form.find_element_by_id("delete-description")
+        self.assertIn("28 April, 2009", description.text)
+        self.assertIn("Fin", description.text)
+        warning = form.find_element_by_id("delete-warning")
+        self.assertIn(
+         "are you sure?",
+         warning.text.lower()
+        )
+
+        # There is a back to safety link, and a delete button
+        back_to_safety = form.find_element_by_tag_name("a")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # He goes back to safety
+        back_to_safety.click()
+        self.check_page("/blog/2009/4/28/")
+
+        # He changes his mind and goes back
+        edit_button = self.browser.find_element_by_class_name("edit-post-link")
+        edit_button.click()
+        delete_button = self.browser.find_element_by_class_name("delete-button")
+        delete_button.click()
+        self.check_page("/blog/2009/4/28/delete/")
+        form = self.browser.find_element_by_tag_name("form")
+        delete_button = form.find_elements_by_tag_name("input")[-1]
+
+        # This time they say they are sure
+        delete_button.click()
+
+        # They are back on the blog page and the post is gone
+        self.check_page("/blog/")
+        posts_section = self.browser.find_element_by_id("posts")
+        posts = posts_section.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 2)
+        self.assertEqual(
+         ["Vanq", "Com"],
+         [p.find_element_by_class_name("post-title").text for p in posts]
+        )
 
 
 

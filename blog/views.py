@@ -107,3 +107,16 @@ def edit_post_page(request, year, month, day):
     return render(request, "edit-blog.html", {
      "post": post
     })
+
+
+def delete_post_page(request, year, month, day):
+    date = datetime(int(year), int(month), int(day)).date()
+    post = BlogPost.objects.filter(date=date).first()
+    if not post:
+        raise Http404
+    if request.method == "POST":
+        post.delete()
+        return redirect("/blog/")
+    return render(request, "delete-blog.html", {
+     "post": post
+    })

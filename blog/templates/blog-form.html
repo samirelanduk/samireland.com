@@ -1,4 +1,7 @@
 <form method="POST">
+  {% if post %}<div><a class="delete-button"
+   href="/blog/{{post.date.year}}/{{post.date.month}}/{{post.date.day}}/delete/">Delete</a></div>
+  {% endif %}
   {% if error %}
   <div class="error">{{ error}}</div>
   {% endif %}
