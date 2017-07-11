@@ -2,7 +2,7 @@ from time import sleep
 import datetime
 from random import randint
 from .base import FunctionalTest
-from piano.models import PracticeSession
+from blog.models import BlogPost
 
 class BasePageLayoutTests(FunctionalTest):
 
@@ -191,3 +191,26 @@ class HomePageTests(FunctionalTest):
     def test_cannot_access_home_edit_page_when_not_logged_in(self):
         self.get("/edit/home/")
         self.check_page("/")
+
+
+    def test_blog_post_on_main_page(self):
+        BlogPost.objects.create(
+         date=datetime.datetime(2010, 1, 9).date(), title="Siq", body="B\n\nB", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime.datetime(2010, 1, 11).date(), title="Zed", body="Z\n\nZ", visible=True
+        )
+        BlogPost.objects.create(
+         date=datetime.datetime(2010, 2, 10).date(), title="DD", body="D\n\nD", visible=False
+        )
+
+        # They go to the main page
+        self.get("/")
+
+        # The most recent blog post is there
+        latest_news = self.browser.find_element_by_id("latest-news")
+        h2 = latest_news.find_element_by_tag_name("h2")
+        self.assertEqual(h2.text, "Latest News")
+        post = latest_news.find_element_by_class_name("blog-post")
+        self.assertEqual(post.find_element_by_class_name("post-date").text, "11 January, 2010")
+        self.assertEqual(post.find_element_by_class_name("post-title").text, "Zed")

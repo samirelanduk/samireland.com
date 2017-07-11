@@ -3,12 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import Http404
 from home.models import EditableText
+from blog.models import BlogPost
 
 # Create your views here.
 def home_page(request):
     text = EditableText.objects.filter(name="home").first()
     text = text if text else ""
-    return render(request, "home.html", {"text": text})
+    post = BlogPost.objects.filter(visible=True).order_by("date").last()
+    return render(request, "home.html", {"text": text, "post": post})
 
 
 def about_page(request):

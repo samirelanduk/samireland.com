@@ -1,4 +1,5 @@
 from home.models import EditableText
+from blog.models import BlogPost
 from samireland.tests import ViewTest
 
 class HomePageViewTests(ViewTest):
@@ -13,6 +14,20 @@ class HomePageViewTests(ViewTest):
         response = self.client.get("/")
         editable_text = response.context["text"]
         self.assertEqual(editable_text.name, "home")
+
+
+    def test_home_view_sends_most_recent_visible_post(self):
+        BlogPost.objects.create(
+         date="1990-09-2", title="t", body="b1", visible=True
+        )
+        BlogPost.objects.create(
+         date="1990-09-1", title="t", body="b2", visible=True
+        )
+        BlogPost.objects.create(
+         date="1990-09-3", title="t", body="b3", visible=False
+        )
+        response = self.client.get("/")
+        self.assertEqual(response.context["post"].body, "b1")
 
 
 
