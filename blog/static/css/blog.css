@@ -1,15 +1,12 @@
 #posts {
   margin-top: 20px;
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .blog-post {
   padding: 30px;
-  background-color: #f0f7f5;
+  background-color: #f8f9f9;
   border: 1px solid #5CA193;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   border-radius: 10px;
   position: relative;
 }
@@ -28,6 +25,10 @@
   color: inherit;
 }
 
+.post-body {
+  font-size: 85%;
+}
+
 #next-page, #previous-page {
   display: inline-block;
   width: 48%;
@@ -39,4 +40,29 @@
   position: absolute;
   right: 10px;
   top: 10px;
+}
+
+
+@media only screen and (min-width: 568px) {
+  /* iPad down */
+  .post-body {
+    font-size: 90%;
+  }
+
+}
+
+
+@media only screen and (min-width: 769px) {
+  /* Small Desktop screens */
+
+  .post-body {
+    font-size: 100%;
+  }
+
+}
+
+
+@media only screen and (min-width: 1024px) {
+  /* Big Desktop screens */
+
 }
