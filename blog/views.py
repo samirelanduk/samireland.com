@@ -1,9 +1,11 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from blog.models import BlogPost
 
 # Create your views here.
+@login_required(login_url="/", redirect_field_name=None)
 def new_blog_page(request):
     today = datetime.now().strftime("%Y-%m-%d")
     if request.method == "POST":
@@ -73,6 +75,7 @@ def year_page(request, year):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def edit_post_page(request, year, month, day):
     date = datetime(int(year), int(month), int(day)).date()
     post = BlogPost.objects.filter(date=date).first()
@@ -109,6 +112,7 @@ def edit_post_page(request, year, month, day):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
 def delete_post_page(request, year, month, day):
     date = datetime(int(year), int(month), int(day)).date()
     post = BlogPost.objects.filter(date=date).first()

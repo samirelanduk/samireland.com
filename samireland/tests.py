@@ -9,6 +9,7 @@ class SamTest(TestCase):
          username="testsam",
          password="testpassword"
         )
+        self.client.login(username="testsam", password="testpassword")
 
 
 
@@ -22,7 +23,6 @@ class UrlTest(SamTest):
 
 class ViewTest(SamTest):
     pass
-
 
 
 class ModelTest(SamTest):

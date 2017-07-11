@@ -768,13 +768,23 @@ class BlogDeletionTests(BlogTest):
 
 class BlogAccessTests(BlogTest):
 
+    def setUp(self):
+        BlogTest.setUp(self)
+        BlogPost.objects.create(
+         date=datetime(2009, 5, 22).date(), title="Vanq", body="B\n\nB", visible=True
+        )
+
+
     def test_cannot_access_new_blog_page_when_not_logged_in(self):
-        pass
+        self.get("/blog/new/")
+        self.check_page("/")
 
 
     def test_cannot_access_blog_edit_page_when_not_logged_in(self):
-        pass
+        self.get("/blog/2009/5/22/edit/")
+        self.check_page("/")
 
 
     def test_cannot_access_blog_delete_page_when_not_logged_in(self):
-        pass
+        self.get("/blog/2009/5/22/delete/")
+        self.check_page("/")

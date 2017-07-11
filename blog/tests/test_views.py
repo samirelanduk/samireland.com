@@ -11,6 +11,12 @@ class NewBlogPageViewTests(ViewTest):
         self.assertTemplateUsed(response, "new-blog.html")
 
 
+    def test_new_blog_page_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/blog/new/")
+        self.assertRedirects(response, "/")
+
+
     def test_new_blog_view_sends_todays_date(self):
         today = datetime.now()
         response = self.client.get("/blog/new/")
@@ -110,6 +116,7 @@ class BlogPageViewTests(ViewTest):
 
 
     def test_blog_view_does_not_send_invisible_posts_when_logged_out(self):
+        self.client.logout()
         BlogPost.objects.create(
          date="1990-09-2", title="t", body="b", visible=True
         )
@@ -325,6 +332,12 @@ class EditBlogPageViewTests(ViewTest):
         self.assertTemplateUsed(response, "edit-blog.html")
 
 
+    def test_edit_blog_page_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/blog/1996/4/28/edit/")
+        self.assertRedirects(response, "/")
+
+
     def test_edit_blog_view_sends_404_if_no_post(self):
         response = self.client.get("/blog/1986/4/28/edit/")
         self.assertEqual(response.status_code, 404)
@@ -413,6 +426,12 @@ class DeleteBlogPageViewTests(ViewTest):
     def test_delete_blog_view_uses_delete_blog_template(self):
         response = self.client.get("/blog/1996/4/28/delete/")
         self.assertTemplateUsed(response, "delete-blog.html")
+
+
+    def test_delete_blog_page_is_protected(self):
+        self.client.logout()
+        response = self.client.get("/blog/1996/4/28/delete/")
+        self.assertRedirects(response, "/")
 
 
     def test_delete_blog_view_sends_404_if_incorrect_date(self):

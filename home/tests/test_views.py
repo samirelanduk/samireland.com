@@ -84,6 +84,7 @@ class LoginViewTests(ViewTest):
 
 
     def test_login_view_can_login(self):
+        self.client.logout()
         self.assertNotIn("_auth_user_id", self.client.session)
         response = self.client.post("/authenticate/", data={
          "username": "testsam",
