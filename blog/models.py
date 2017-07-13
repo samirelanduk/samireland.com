@@ -1,4 +1,4 @@
-import samdown
+import django_samdown
 from django.db import models
 
 # Create your models here.
@@ -11,4 +11,4 @@ class BlogPost(models.Model):
 
     @property
     def samdown_body(self):
-        return samdown.html_from_markdown(self.body)
+        return django_samdown.html_from_markdown(self.body)

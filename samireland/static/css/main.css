@@ -37,7 +37,7 @@ a#logout-link {
   left: 0;
 }
 
-a.quick-link {
+a.quick-link, a.quick-link:visited {
   display: block;
   color: #FFFFFF;
   display: block;
@@ -90,7 +90,7 @@ nav li {
   line-height: 40px;
 }
 
-nav a {
+nav a, nav a:visited {
   color: #FFFFFF;
   text-decoration: none;
   transition: 0.4s;
@@ -169,6 +169,10 @@ a {
   text-decoration: none;
 }
 
+a:visited {
+  color: #0000FF;
+}
+
 .edit-link {
   position: absolute;
   right: 0;
@@ -178,6 +182,24 @@ a {
   border-radius: 5px;
   line-height: 1.1;
   padding: 3px;
+}
+
+figure {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+video {
+  width: 100%;
+  height: auto;
 }
 
 .youtube {

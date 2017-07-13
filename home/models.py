@@ -1,4 +1,4 @@
-import samdown
+import django_samdown
 from django.db import models
 
 # Create your models here.
@@ -9,4 +9,4 @@ class EditableText(models.Model):
 
     @property
     def samdown_content(self):
-        return samdown.html_from_markdown(self.content)
+        return django_samdown.html_from_markdown(self.content)
