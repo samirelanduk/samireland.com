@@ -14,14 +14,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from home import urls as home_urls
-from piano import urls as piano_urls
 from media import urls as media_urls
 from blog import urls as blog_urls
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
- url(r"^piano/", include(piano_urls)),
  url(r"^media/", include(media_urls)),
  url(r"^blog/", include(blog_urls)),
  url(r"^", include(home_urls)),

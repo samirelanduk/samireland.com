@@ -35,7 +35,6 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django_cleanup",
     "home",
-    "piano",
     "media",
     "blog"
 )

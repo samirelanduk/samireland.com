@@ -18,10 +18,12 @@ class CreationTests(ModelTest):
 
 class PropertyTests(ModelTest):
 
-    @patch("samdown.html_from_markdown")
+    @patch("django_samdown.html_from_markdown")
     def test_editable_text_has_samdown_property(self, mock_converter):
         mock_converter.return_value = "test output"
         text = EditableText()
         text.name = "testsnippet"
         text.content = "CONTENT"
+        output = text.samdown_content
+        mock_converter.assert_called_with("CONTENT")
         self.assertEqual(text.samdown_content, "test output")

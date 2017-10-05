@@ -178,16 +178,6 @@ class EditViewTests(ViewTest):
         self.assertRedirects(response, "/projects/")
 
 
-    def test_edit_piano_brief_view_redirects_to_projects_on_post(self):
-        response = self.client.post("/edit/piano-brief/", data={"content": "some content"})
-        self.assertRedirects(response, "/projects/")
-
-
-    def test_edit_piano_long_view_redirects_to_piano_on_post(self):
-        response = self.client.post("/edit/piano-long/", data={"content": "some content"})
-        self.assertRedirects(response, "/piano/")
-
-
     def test_edit_view_can_create_home_text_record_if_it_doesnt_exist(self):
         self.assertEqual(len(EditableText.objects.filter(name="home")), 0)
         self.client.post("/edit/home/", data={"content": "some content"})

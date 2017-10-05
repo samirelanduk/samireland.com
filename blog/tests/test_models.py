@@ -30,7 +30,7 @@ class BlogPostTests(ModelTest):
 
 class PropertyTests(ModelTest):
 
-    @patch("samdown.html_from_markdown")
+    @patch("django_samdown.html_from_markdown")
     def test_blog_post_has_samdown_property(self, mock_converter):
         mock_converter.return_value = "test output"
         blog = BlogPost()
