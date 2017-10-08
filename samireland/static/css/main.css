@@ -101,20 +101,20 @@ nav a:hover {
   transition: 0.5s;
 }
 
-#blog-nav {
+nav ul li {
   position: relative;
 }
 
-#year-links {
+nav ul li ul {
   display: none;
   position: absolute;
   background-color: #5CA193;
-  min-width: 110px;
+  min-width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
-#year-links a {
+nav ul li ul a {
   margin: 4px;
   display: block;
 }
@@ -398,10 +398,11 @@ form.delete-form a {
     padding-right: 4%;
   }
 
-  #blog-nav:hover #year-links {
+  nav ul li:hover ul {
     display: block;
     top: inherit;
     left: 0px;
+    box-shadow: 0px 8px 3px 6px rgba(0, 0, 0, 0.12);
   }
 
   main {

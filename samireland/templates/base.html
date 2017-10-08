@@ -41,13 +41,13 @@
     <a href="/projects/">Projects</a>
   </li><li>
     <a href="/">Writing</a>
-  </li><li id="blog-nav">
+  </li><li>
     <a href="/blog/" id="blog-link">Blog</a>
-    <div id="year-links">
+    <ul>
       {% for year in blog_years %}
-      <a href="/blog/{{year}}/" class="blog-year">{{year}}</a>
+      <li><a href="/blog/{{year}}/" class="blog-year">{{year}}</a></li>
       {% endfor %}
-    </div>
+    </ul>
   </li><li>
     <a href="/about/">About</a>
   </li></ul></nav>
