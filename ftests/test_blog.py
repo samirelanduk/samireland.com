@@ -398,8 +398,8 @@ class BlogReadingTests(BlogTest):
         self.hover(nav_links[4])
 
         # There are now links to individual years
-        year_links = nav.find_element_by_id("year-links")
-        years = year_links.find_elements_by_class_name("blog-year")
+        year_links = nav.find_element_by_tag_name("ul").find_element_by_tag_name("ul")
+        years = year_links.find_elements_by_tag_name("li")
         self.assertEqual(years[0].text, "2011")
         self.assertEqual(years[1].text, "2010")
         self.assertEqual(years[2].text, "2009")
@@ -412,8 +412,8 @@ class BlogReadingTests(BlogTest):
 
         # They bring them back
         self.hover(nav_links[4])
-        year_links = nav.find_element_by_id("year-links")
-        years = year_links.find_elements_by_class_name("blog-year")
+        year_links = nav.find_element_by_tag_name("ul").find_element_by_tag_name("ul")
+        years = year_links.find_elements_by_tag_name("li")
 
         # They click on the top link and go to the page for that year
         years[0].click()

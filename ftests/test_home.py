@@ -62,28 +62,6 @@ class BasePageLayoutTests(FunctionalTest):
 
 class BasePageStyleTests(FunctionalTest):
 
-    def test_body_detaches_above_1024px(self):
-        # On mobile screens the body has no margins
-        self.browser.get(self.live_server_url + "/")
-        body = self.browser.find_element_by_tag_name("body")
-        self.assertEqual(body.value_of_css_property("margin"), "0px")
-
-        # As high as 1020px, this is still the case
-        self.browser.set_window_size(1020, 800)
-        self.assertEqual(body.value_of_css_property("margin"), "0px")
-
-        # But at 1025px, the body detatches
-        self.browser.set_window_size(1035, 1000) # Subtract 10px for window frame
-        self.assertEqual(body.value_of_css_property("width"), "1024px")
-        self.assertEqual(
-         body.value_of_css_property("margin-left"),
-         body.value_of_css_property("margin-right")
-        )
-        self.assertNotEqual(body.value_of_css_property("margin-left"), "0px")
-        self.assertNotEqual(body.value_of_css_property("margin-top"), "0px")
-        self.assertNotEqual(body.value_of_css_property("margin-bottom"), "0px")
-
-
     def test_header_and_nav_work_on_mobile(self):
         self.browser.get(self.live_server_url + "/")
 
@@ -178,7 +156,7 @@ class BasePageStyleTests(FunctionalTest):
         links = navbar.find_elements_by_tag_name("li")
         first_link_y = links[0].location["y"]
         for link in links[1:]:
-            self.assertEqual(link.location["y"], first_link_y)
+            self.assertAlmostEqual(link.location["y"], first_link_y, delta=4)
 
 
 
