@@ -5,5 +5,5 @@
   <h2 class="post-title">{% if post.visible %}
     <a href="/blog/{{post.date.year}}/{{post.date.month}}/{{post.date.day}}/">{{ post.title }}</a>
   {% else %} {{ post.title }} {% endif %}</h2>
-  <div class="post-body">{{ post.samdown_body|safe }}</div>
+  <div class="post-body">{{ post.markdown|safe }}</div>
 </div>

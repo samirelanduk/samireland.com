@@ -184,6 +184,10 @@ a:visited {
   padding: 3px;
 }
 
+.edit-link:visited {
+  color: #FFFFFF;
+}
+
 figure {
   width: 90%;
   margin-left: auto;

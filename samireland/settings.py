@@ -69,19 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "samireland.wsgi.application"
 
-import samireland.functions as functions
-SAMDOWN_LOOKUP = {
- "inline" : {
-  r"\[(.*?)\]\((.*?)\)": r"<a href='\2'>\1</a>",
-  r"\{(.*?)\}\((.*?)\)": r"<a href='\2' target='_blank'>\1</a>"
- },
- "block": {
-  r"\<IMAGE\>\[(.*?)\]": functions.process_image_block,
-  r"\<VIDEO\>\[(.*?)\]": functions.process_video_block,
-  r"\<YOUTUBE\>\[(.*?)\]": r"<div class='youtube'><iframe src='//www.youtube.com/embed/\1' frameborder='0' allowfullscreen></iframe></div>"
- }
-}
-
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))

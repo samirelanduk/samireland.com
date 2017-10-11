@@ -30,11 +30,14 @@ class BlogPostTests(ModelTest):
 
 class PropertyTests(ModelTest):
 
-    @patch("django_samdown.html_from_markdown")
-    def test_blog_post_has_samdown_property(self, mock_converter):
-        mock_converter.return_value = "test output"
+    @patch("docupy.markdown_to_html")
+    @patch("blog.models.media_url_lookup")
+    def test_blog_post_has_markdown_property(self, mock_url, mock_conv):
+        mock_conv.return_value = "test output"
+        mock_url.return_value = {"url": "lookup"}
         blog = BlogPost()
         blog.title = "Title"
         blog.body = "Body"
-        self.assertEqual(blog.samdown_body, "test output")
-        mock_converter.assert_called_with("Body")
+        output = blog.markdown
+        mock_url.assert_called_with()
+        mock_conv.assert_called_with("Body", {"url": "lookup"})

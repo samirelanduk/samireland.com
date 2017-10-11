@@ -10,7 +10,7 @@
 <h1>About Me</h1>
 
 <div id="about-bio">
-  {{ text.samdown_content|safe }}
+  {{ text.markdown|safe }}
   {% if user.is_authenticated %}<a href="/edit/about/" class="edit-link">Edit</a>{% endif %}
 </div>
 {% endblock %}

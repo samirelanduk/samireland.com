@@ -1,5 +1,6 @@
-import django_samdown
+import docupy
 from django.db import models
+from media.models import media_url_lookup
 
 # Create your models here.
 class BlogPost(models.Model):
@@ -10,5 +11,5 @@ class BlogPost(models.Model):
     visible = models.BooleanField()
 
     @property
-    def samdown_body(self):
-        return django_samdown.html_from_markdown(self.body)
+    def markdown(self):
+        return docupy.markdown_to_html(self.body, media_url_lookup())

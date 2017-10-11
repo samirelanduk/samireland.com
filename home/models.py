@@ -1,5 +1,6 @@
-import django_samdown
+import docupy
 from django.db import models
+from media.models import media_url_lookup
 
 # Create your models here.
 class EditableText(models.Model):
@@ -8,5 +9,5 @@ class EditableText(models.Model):
     content = models.TextField()
 
     @property
-    def samdown_content(self):
-        return django_samdown.html_from_markdown(self.content)
+    def markdown(self):
+        return docupy.markdown_to_html(self.content, media_url_lookup())

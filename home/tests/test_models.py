@@ -18,12 +18,14 @@ class CreationTests(ModelTest):
 
 class PropertyTests(ModelTest):
 
-    @patch("django_samdown.html_from_markdown")
-    def test_editable_text_has_samdown_property(self, mock_converter):
-        mock_converter.return_value = "test output"
+    @patch("docupy.markdown_to_html")
+    @patch("home.models.media_url_lookup")
+    def test_editable_text_has_markdown_property(self, mock_url, mock_conv):
+        mock_conv.return_value = "test output"
+        mock_url.return_value = {"url": "lookup"}
         text = EditableText()
         text.name = "testsnippet"
         text.content = "CONTENT"
-        output = text.samdown_content
-        mock_converter.assert_called_with("CONTENT")
-        self.assertEqual(text.samdown_content, "test output")
+        output = text.markdown
+        mock_url.assert_called_with()
+        mock_conv.assert_called_with("CONTENT", {"url": "lookup"})

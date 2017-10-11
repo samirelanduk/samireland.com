@@ -4,7 +4,7 @@ from datetime import datetime
 from unittest.mock import Mock
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
-from media.models import MediaFile, create_filename
+from media.models import MediaFile, create_filename, media_url_lookup
 from samireland.tests import ModelTest
 from samireland.settings import MEDIA_ROOT
 
@@ -38,6 +38,17 @@ class FileNameCreationTests(MediaTest):
         now = datetime.now()
         name = create_filename(instance, "filename.bmp")
         datetime.strptime(name[:-4], "%Y%m%d%H%M%S")
+
+
+
+class LookupGenerationtests(MediaTest):
+
+    def test_can_get_lookup_dict(self):
+        self.assertEqual(media_url_lookup(), {})
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(mediatitle="test", mediafile=media_file)
+        image.save()
+        self.assertEqual(media_url_lookup(), {"test": "/" + image.mediafile.url})
 
 
 
