@@ -160,17 +160,19 @@ h1 {
   margin: 0px;
 }
 
+p {
+  font-size: 90%;
+}
+
 img {
   width: 100%;
   height: auto;
 }
 
-a {
+a, a:visited {
   text-decoration: none;
-}
-
-a:visited {
-  color: #0000FF;
+  color: #0000C0;
+  font-weight: 200;
 }
 
 .edit-link {
@@ -358,6 +360,10 @@ form.delete-form a {
 
   main {
     padding: 25px 40px;;
+  }
+
+  p {
+    font-size: 110%;
   }
 
   /* form */
