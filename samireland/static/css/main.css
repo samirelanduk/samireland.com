@@ -167,6 +167,7 @@ p {
 img {
   width: 100%;
   height: auto;
+  border-radius: 5px;
 }
 
 a, a:visited {
@@ -194,7 +195,6 @@ figure {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid black;
 }
 
 figure img {

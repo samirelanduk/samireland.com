@@ -94,3 +94,9 @@ subprocess.call(
  "ssh %s 'cd ~/%s/source && ../env/bin/python manage.py collectstatic --noinput'" % (sitename, sitename),
  shell=True
 )
+
+# Delete media storage (only needed on local)
+subprocess.call(
+ "ssh %s 'rm -r ~/%s/source/media/storage'" % (sitename, sitename),
+ shell=True
+)
