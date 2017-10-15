@@ -37,3 +37,8 @@ class ResearchPageTests(FunctionalTest):
     def test_cannot_access_research_edit_page_when_not_logged_in(self):
         self.get("/edit/research/")
         self.check_page("/")
+
+
+
+class PublicationAdditionTests(FunctionalTest):
+    pass

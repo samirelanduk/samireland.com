@@ -177,6 +177,7 @@ class MediaUploadTests(MediaTest):
 
         # They click the submit button
         submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.scroll_to(submit_button)
         submit_button.click()
 
         # The grid still only has one element

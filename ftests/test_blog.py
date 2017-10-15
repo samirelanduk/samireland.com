@@ -33,11 +33,11 @@ class BlogTest(FunctionalTest):
             )
         title_input.send_keys(title)
         body_input.send_keys(body)
-        if not visible: visible_label.click()
+        if not visible: self.click(visible_label)
 
         # They submit the blog post
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
 
     def check_blog_post(self, post, date, title, body, visible):
@@ -68,7 +68,7 @@ class BlogCreationTests(BlogTest):
         blog_link = header.find_element_by_id("blog-link")
 
         # They click it and are taken to the blog creation page
-        blog_link.click()
+        self.click(blog_link)
         self.check_page("/blog/new/")
 
         # They enter a blog post
@@ -235,7 +235,7 @@ class BlogReadingTests(BlogTest):
         # The user clicks the blog link in the header
         nav = self.browser.find_element_by_tag_name("nav")
         nav_links = nav.find_elements_by_tag_name("a")
-        nav_links[4].click()
+        self.click(nav_links[4])
         self.check_page("/blog/")
 
         # There are five blog posts there (visible only)
@@ -262,7 +262,7 @@ class BlogReadingTests(BlogTest):
 
         # The user clicks the title of the first post
         title = posts[0].find_element_by_class_name("post-title")
-        title.find_element_by_tag_name("a").click()
+        self.click(title.find_element_by_tag_name("a"))
         self.check_page("/blog/2010/5/23/")
 
         # There is a single blog post on the page
@@ -278,7 +278,7 @@ class BlogReadingTests(BlogTest):
         self.assertEqual(len(posts_section.find_elements_by_id("next-page")), 0)
 
         # They click through to the end
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2010/2/10/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -289,7 +289,7 @@ class BlogReadingTests(BlogTest):
         previous_link = posts_section.find_element_by_id("previous-page")
         next_link = posts_section.find_element_by_id("next-page")
 
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2010/1/11/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -300,7 +300,7 @@ class BlogReadingTests(BlogTest):
         previous_link = posts_section.find_element_by_id("previous-page")
         next_link = posts_section.find_element_by_id("next-page")
 
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2009/4/28/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -311,7 +311,7 @@ class BlogReadingTests(BlogTest):
         previous_link = posts_section.find_element_by_id("previous-page")
         next_link = posts_section.find_element_by_id("next-page")
 
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2009/4/4/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -323,7 +323,7 @@ class BlogReadingTests(BlogTest):
         next_link = posts_section.find_element_by_id("next-page")
 
         # They can also go back
-        next_link.click()
+        self.click(next_link)
         self.check_page("/blog/2009/4/28/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -372,13 +372,13 @@ class BlogReadingTests(BlogTest):
 
         # The invisible posts are not navigable to
         title = posts[2].find_element_by_class_name("post-title")
-        title.find_element_by_tag_name("a").click()
+        self.click(title.find_element_by_tag_name("a"))
         self.check_page("/blog/2010/1/11/")
         previous = self.browser.find_element_by_id("previous-page")
-        previous.click()
+        self.click(previous)
         self.check_page("/blog/2009/4/28/")
         next_ = self.browser.find_element_by_id("next-page")
-        next_.click()
+        self.click(next_)
         self.check_page("/blog/2010/1/11/")
 
 
@@ -416,7 +416,7 @@ class BlogReadingTests(BlogTest):
         years = year_links.find_elements_by_tag_name("li")
 
         # They click on the top link and go to the page for that year
-        years[0].click()
+        self.click(years[0])
         self.check_page("/blog/2011/")
         self.assertEqual(self.browser.find_element_by_tag_name("h1").text, "2011")
 
@@ -434,7 +434,7 @@ class BlogReadingTests(BlogTest):
         self.assertEqual(previous_link.text[-4:], "2010")
 
         # They click through to the end
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2010/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -453,7 +453,7 @@ class BlogReadingTests(BlogTest):
         self.assertEqual(previous_link.text[-4:], "2009")
         self.assertEqual(next_link.text[:4], "2011")
 
-        previous_link.click()
+        self.click(previous_link)
         self.check_page("/blog/2009/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -469,7 +469,7 @@ class BlogReadingTests(BlogTest):
         self.assertEqual(next_link.text[:4], "2010")
 
         # They can also go back
-        next_link.click()
+        self.click(next_link)
         self.check_page("/blog/2010/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -522,7 +522,7 @@ class BlogModificationTests(BlogTest):
             edit_link = post.find_element_by_class_name("edit-post-link")
 
         # The user clicks the edit link for the first post
-        edit_link.click()
+        self.click(edit_link)
         self.check_page("/blog/2009/5/22/edit/")
         h1 = self.browser.find_element_by_tag_name("h1")
         self.assertEqual(h1.text, "Edit Blog Post")
@@ -546,7 +546,7 @@ class BlogModificationTests(BlogTest):
         body_input.clear()
         body_input.send_keys("A new body.")
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
         # The user is now on the post's page, and it looks great
         self.check_page("/blog/2010/9/29/")
@@ -567,16 +567,16 @@ class BlogModificationTests(BlogTest):
         self.check_blog_post(
          posts[1], "30 April, 2009", "Com", ["C", "C"], False
         )
-        posts[1].find_element_by_class_name("edit-post-link").click()
+        self.click(posts[1].find_element_by_class_name("edit-post-link"))
         self.check_page("/blog/2009/4/30/edit/")
         form = self.browser.find_element_by_tag_name("form")
         visible_input = form.find_elements_by_tag_name("input")[2]
         visible_label = form.find_element_by_tag_name("label")
         self.assertEqual(visible_input.get_attribute("type"), "checkbox")
         self.assertFalse(visible_input.is_selected())
-        visible_label.click()
+        self.click(visible_label)
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
         self.check_page("/blog/2009/4/30/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -593,16 +593,16 @@ class BlogModificationTests(BlogTest):
         self.check_blog_post(
          posts[2], "28 April, 2009", "Fin", ["F", "F"], True
         )
-        posts[2].find_element_by_class_name("edit-post-link").click()
+        self.click(posts[2].find_element_by_class_name("edit-post-link"))
         self.check_page("/blog/2009/4/28/edit/")
         form = self.browser.find_element_by_tag_name("form")
         visible_input = form.find_elements_by_tag_name("input")[2]
         visible_label = form.find_element_by_tag_name("label")
         self.assertEqual(visible_input.get_attribute("type"), "checkbox")
         self.assertTrue(visible_input.is_selected())
-        visible_label.click()
+        self.click(visible_label)
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
         self.check_page("/blog/")
         posts_section = self.browser.find_element_by_id("posts")
         posts = posts_section.find_elements_by_class_name("blog-post")
@@ -623,7 +623,7 @@ class BlogModificationTests(BlogTest):
          "document.getElementById('date').setAttribute('value', '');"
         )
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
         # The user is still on the same page
         self.check_page("/blog/2009/5/22/edit/")
@@ -639,7 +639,7 @@ class BlogModificationTests(BlogTest):
         date_input, title_input = form.find_elements_by_tag_name("input")[:2]
         date_input.send_keys("30-04-2009")
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
         # The user is still on the same page
         self.check_page("/blog/2009/5/22/edit/")
@@ -659,7 +659,7 @@ class BlogModificationTests(BlogTest):
         date_input, title_input = form.find_elements_by_tag_name("input")[:2]
         title_input.clear()
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
         # The user is still on the same page
         self.check_page("/blog/2009/5/22/edit/")
@@ -679,7 +679,7 @@ class BlogModificationTests(BlogTest):
         body_input = form.find_element_by_tag_name("textarea")
         body_input.clear()
         submit = form.find_elements_by_tag_name("input")[-1]
-        submit.click()
+        self.click(submit)
 
         # The user is still on the same page
         self.check_page("/blog/2009/5/22/edit/")
@@ -716,11 +716,11 @@ class BlogDeletionTests(BlogTest):
         edit_button = self.browser.find_element_by_class_name("edit-post-link")
 
         # They click the edit button
-        edit_button.click()
+        self.click(edit_button)
 
         # There is a button to delete the post - they click it
         delete_button = self.browser.find_element_by_class_name("delete-button")
-        delete_button.click()
+        self.click(delete_button)
 
         # They are on the delete post page, which asks them if they are sure
         self.check_page("/blog/2009/4/28/delete/")
@@ -739,20 +739,20 @@ class BlogDeletionTests(BlogTest):
         delete_button = form.find_elements_by_tag_name("input")[-1]
 
         # He goes back to safety
-        back_to_safety.click()
+        self.click(back_to_safety)
         self.check_page("/blog/2009/4/28/")
 
         # He changes his mind and goes back
         edit_button = self.browser.find_element_by_class_name("edit-post-link")
-        edit_button.click()
+        self.click(edit_button)
         delete_button = self.browser.find_element_by_class_name("delete-button")
-        delete_button.click()
+        self.click(delete_button)
         self.check_page("/blog/2009/4/28/delete/")
         form = self.browser.find_element_by_tag_name("form")
         delete_button = form.find_elements_by_tag_name("input")[-1]
 
         # This time they say they are sure
-        delete_button.click()
+        self.click(delete_button)
 
         # They are back on the blog page and the post is gone
         self.check_page("/blog/")

@@ -41,6 +41,15 @@ class FunctionalTest(StaticLiveServerTestCase):
         hover.perform()
 
 
+    def scroll_to(self, element):
+        self.browser.execute_script("arguments[0].scrollIntoView();", element)
+
+
+    def click(self, element):
+        self.scroll_to(element)
+        element.click()
+
+
     def check_can_edit_text(self, url, div_name, text_name):
         self.login()
         self.get(url)
@@ -62,6 +71,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         # Text is entered and submitted
         textarea.send_keys("Paragraph 1.\n\nParagraph 2.")
+        self.scroll_to(submit_button)
         submit_button.click()
 
         # The research page has the new text
@@ -90,6 +100,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         # The user changes the text
         textarea.clear()
         textarea.send_keys("Number 1.\n\nNumber 2.\n\nNumber 3.")
+        self.scroll_to(submit_button)
         submit_button.click()
 
         # The research page has the new text
