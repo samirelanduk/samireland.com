@@ -25,12 +25,15 @@ def research_page(request):
     return render(request, "research.html", {"text": text})
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def new_research_page(request):
+    return render(request, "new-research.html")
+
+
 def projects_page(request):
     projects_text = EditableText.objects.filter(name="projects").first()
     projects_text = projects_text if projects_text else ""
-    piano_text = EditableText.objects.filter(name="piano-brief").first()
-    piano_text = piano_text if piano_text else ""
-    return render(request, "projects.html", {"projects_text": projects_text, "piano_text": piano_text})
+    return render(request, "projects.html", {"projects_text": projects_text})
 
 
 def login_page(request):

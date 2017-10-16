@@ -61,3 +61,10 @@ class PublicationAdditionTests(FunctionalTest):
         link = new.find_element_by_tag_name("a")
         self.click(link)
         self.check_page("/research/new/")
+        self.check_title("New Publication")
+        self.check_h1("New Publication")
+
+
+    def test_cannot_access_new_research_page_when_not_logged_in(self):
+        self.get("/research/new/")
+        self.check_page("/")

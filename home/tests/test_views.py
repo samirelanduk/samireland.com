@@ -61,6 +61,20 @@ class ResearchPageViewTests(ViewTest):
 
 
 
+class NewResearchPageViewTests(ViewTest):
+
+    def test_new_research_view_uses_new_research_template(self):
+        response = self.client.get("/research/new/")
+        self.assertTemplateUsed(response, "new-research.html")
+
+
+    def test_new_research_view_denies_entry_when_not_logged_in(self):
+        self.client.logout()
+        response = self.client.get("/research/new/")
+        self.assertRedirects(response, "/")
+
+
+
 class ProjectPageViewTests(ViewTest):
 
     def test_project_view_uses_project_template(self):
@@ -73,13 +87,6 @@ class ProjectPageViewTests(ViewTest):
         response = self.client.get("/projects/")
         editable_text = response.context["projects_text"]
         self.assertEqual(editable_text.name, "projects")
-
-
-    def test_project_view_uses_piano_summary_editable_text(self):
-        EditableText.objects.create(name="piano-brief", content="some content")
-        response = self.client.get("/projects/")
-        editable_text = response.context["piano_text"]
-        self.assertEqual(editable_text.name, "piano-brief")
 
 
 
