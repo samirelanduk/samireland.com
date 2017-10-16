@@ -27,7 +27,7 @@ class ResearchPageTests(FunctionalTest):
         # There is a div for publications
         publications = main.find_element_by_id("publications")
         h2 = publications.find_elements_by_tag_name("h2")
-        no_publications = publications.find_element_by_tag_name("p")
+        no_publications = publications.find_element_by_class_name("no-pub")
 
 
     def test_can_change_research_page_text(self):
@@ -41,4 +41,23 @@ class ResearchPageTests(FunctionalTest):
 
 
 class PublicationAdditionTests(FunctionalTest):
-    pass
+
+    def test_publication_addition(self):
+        # User goes to research page
+        self.get("/research/")
+
+        # Publications div has no section for adding new pub
+        publications = self.browser.find_element_by_id("publications")
+        new = publications.find_elements_by_class_name("new-publication")
+        self.assertEqual(len(new), 0)
+
+        # They log in, and now there is
+        self.login()
+        self.get("/research/")
+        publications = self.browser.find_element_by_id("publications")
+        new = publications.find_element_by_class_name("new-publication")
+
+        # They click it, and are taken to the new publication page
+        link = new.find_element_by_tag_name("a")
+        self.click(link)
+        self.check_page("/research/new/")

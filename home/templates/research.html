@@ -17,6 +17,9 @@
 
 <div id="publications">
   <h2>Publications</h2>
-  <p>Currently no publications.</p>
+  {% if user.is_authenticated %}
+  <div class="new-publication"><a href="/research/new/">New Publication</a></div>
+  {% endif %}
+  <p class="no-pub">Currently no publications.</p>
 </div>
 {% endblock %}

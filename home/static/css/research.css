@@ -1,3 +1,7 @@
 #research-summary {
   position: relative;
 }
+
+.new-publication a {
+  font-weight: bold;
+}
