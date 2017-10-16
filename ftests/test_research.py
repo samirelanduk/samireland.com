@@ -64,6 +64,30 @@ class PublicationAdditionTests(FunctionalTest):
         self.check_title("New Publication")
         self.check_h1("New Publication")
 
+        # There is a form
+        form = self.browser.find_element_by_tag_name("form")
+        title_input = form.find_elements_by_tag_name("input")[0]
+        date_input = form.find_elements_by_tag_name("input")[1]
+        url_input = form.find_elements_by_tag_name("input")[2]
+        doi_input = form.find_elements_by_tag_name("input")[3]
+        authors_input = form.find_elements_by_tag_name("input")[4]
+        abstract_input = form.find_elements_by_tag_name("textarea")[0]
+        body_input = form.find_elements_by_tag_name("textarea")[1]
+
+        # They submit a publication
+        title_input.send_keys("The isolation of a novel dank meme")
+        date_input.send_keys("28-09-1990")
+        url_input.send_keys("http://journal-of-memology/12345/")
+        doi_input.send_keys("10.1002/bip.23067")
+        authors_input.send_keys("Marvin Goodwright, Tony **Blair**, Sam Ireland")
+        abstract_input.send_keys("We report here the isolation of a new meme.")
+        body_input.send_keys("Line 1\n\nLine2\n\nLine 3")
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit_button)
+
+        # They are on the page for that publication
+        self.check_page("/research/the-isolation-of-a-novel-dank-meme/")
+
 
     def test_cannot_access_new_research_page_when_not_logged_in(self):
         self.get("/research/new/")

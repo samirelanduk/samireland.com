@@ -268,6 +268,7 @@ textarea {
   height: 400px;
   font-family: 'Open Sans';
   padding: 15px;
+  margin-bottom: 10px;
 }
 
 input[type=submit] {

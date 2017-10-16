@@ -8,4 +8,19 @@
 
 {% block main %}
 <h1>New Publication</h1>
+
+<form method="POST">
+  {% if error %}
+  <div class="error">{{ error}}</div>
+  {% endif %}
+  <input type="text" name="title" value="" placeholder="Title">
+  <input type="date" id="date" name="date">
+  <input type="text" name="url" value="" placeholder="URL">
+  <input type="text" name="doi" value="" placeholder="DOI">
+  <input type="text" name="authors" value="" placeholder="Author 1, Author 2...">
+  <textarea name="abstract" placeholder="Abstract"></textarea>
+  <textarea name="body" placeholder="Body"></textarea>
+  {% csrf_token %}
+  <input type="submit" value="Send">
+</form>
 {% endblock %}
