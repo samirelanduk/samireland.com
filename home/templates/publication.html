@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ publication.title }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/research.css">
+{% endblock %}
+
+{% block main %}
+<h1>{{ publication.title }}</h1>
+
+{% endblock %}

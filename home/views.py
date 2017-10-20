@@ -1,8 +1,9 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import Http404
-from home.models import EditableText
+from home.models import EditableText, Publication
 from blog.models import BlogPost
 
 # Create your views here.
@@ -27,7 +28,22 @@ def research_page(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def new_research_page(request):
+    if request.method == "POST":
+        Publication.objects.create(
+         pk=request.POST["id"], title=request.POST["title"],
+         date=request.POST["date"], url=request.POST["url"],
+         doi=request.POST["doi"], authors=request.POST["authors"],
+         abstract=request.POST["abstract"], body=request.POST["body"]
+        )
+        return redirect("/research/{}/".format(request.POST["id"]))
     return render(request, "new-research.html")
+
+
+def publication_page(request, pk):
+    pub = Publication.objects.filter(pk=pk).first()
+    if not pub:
+        raise Http404
+    return render(request, "publication.html", {"publication": pub})
 
 
 def projects_page(request):
@@ -65,9 +81,7 @@ def edit_page(request, name):
      "home": "/",
      "about": "/about/",
      "research": "/research/",
-     "projects": "/projects/",
-     "piano-brief": "/projects/",
-     "piano-long": "/piano/"
+     "projects": "/projects/"
     }
     if name not in ALLOWED_NAMES:
         raise Http404("Not a valid name")

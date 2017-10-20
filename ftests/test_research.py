@@ -66,15 +66,17 @@ class PublicationAdditionTests(FunctionalTest):
 
         # There is a form
         form = self.browser.find_element_by_tag_name("form")
-        title_input = form.find_elements_by_tag_name("input")[0]
-        date_input = form.find_elements_by_tag_name("input")[1]
-        url_input = form.find_elements_by_tag_name("input")[2]
-        doi_input = form.find_elements_by_tag_name("input")[3]
-        authors_input = form.find_elements_by_tag_name("input")[4]
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
         abstract_input = form.find_elements_by_tag_name("textarea")[0]
         body_input = form.find_elements_by_tag_name("textarea")[1]
 
         # They submit a publication
+        id_input.send_keys("novel-dank-meme")
         title_input.send_keys("The isolation of a novel dank meme")
         date_input.send_keys("28-09-1990")
         url_input.send_keys("http://journal-of-memology/12345/")
@@ -86,7 +88,9 @@ class PublicationAdditionTests(FunctionalTest):
         self.click(submit_button)
 
         # They are on the page for that publication
-        self.check_page("/research/the-isolation-of-a-novel-dank-meme/")
+        self.check_page("/research/novel-dank-meme/")
+        self.check_title("The isolation of a novel dank meme")
+        self.check_h1("The isolation of a novel dank meme")
 
 
     def test_cannot_access_new_research_page_when_not_logged_in(self):

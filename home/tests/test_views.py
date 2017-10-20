@@ -1,4 +1,5 @@
-from home.models import EditableText
+from datetime import datetime
+from home.models import EditableText, Publication
 from blog.models import BlogPost
 from samireland.tests import ViewTest
 
@@ -63,6 +64,15 @@ class ResearchPageViewTests(ViewTest):
 
 class NewResearchPageViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.data = {
+         "id": "page-id", "title": "TITLE", "date": "2014-06-01",
+         "url": "bob.com", "doi": "xxyyd-", "authors": "p1, p2",
+         "abstract": "AAAA", "body": "BBBBBBBBB"
+        }
+
+
     def test_new_research_view_uses_new_research_template(self):
         response = self.client.get("/research/new/")
         self.assertTemplateUsed(response, "new-research.html")
@@ -72,6 +82,51 @@ class NewResearchPageViewTests(ViewTest):
         self.client.logout()
         response = self.client.get("/research/new/")
         self.assertRedirects(response, "/")
+
+
+    def test_new_research_view_redirects_on_post(self):
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertRedirects(response, "/research/page-id/")
+
+
+    def test_can_create_publication_on_post(self):
+        self.assertEqual(Publication.objects.all().count(), 0)
+        self.client.post("/research/new/", data=self.data)
+        self.assertEqual(Publication.objects.all().count(), 1)
+        pub = Publication.objects.first()
+        self.assertEqual(pub.id, "page-id")
+        self.assertEqual(pub.title, "TITLE")
+        self.assertEqual(pub.date, datetime(2014, 6, 1).date())
+        self.assertEqual(pub.url, "bob.com")
+        self.assertEqual(pub.doi, "xxyyd-")
+        self.assertEqual(pub.authors, "p1, p2")
+        self.assertEqual(pub.abstract, "AAAA")
+        self.assertEqual(pub.body, "BBBBBBBBB")
+
+
+
+class PublicationPageViewTests(ViewTest):
+
+    def setUp(self):
+        Publication.objects.create(
+         pk="pub-description-here", title="T", date=datetime.now().date(),
+         url="U", doi="d", authors="a", abstract="A", body="B"
+        )
+
+
+    def test_publication_view_uses_publication_template(self):
+        response = self.client.get("/research/pub-description-here/")
+        self.assertTemplateUsed(response, "publication.html")
+
+
+    def test_publication_view_sends_publication(self):
+        response = self.client.get("/research/pub-description-here/")
+        self.assertEqual(response.context["publication"], Publication.objects.first())
+
+
+    def test_publication_view_can_send_404(self):
+        response = self.client.get("/research/-here/")
+        self.assertEqual(response.status_code, 404)
 
 
 
@@ -213,10 +268,6 @@ class EditViewTests(ViewTest):
         response = self.client.get("/edit/research/")
         self.assertEqual(response.status_code, 200)
         response = self.client.get("/edit/projects/")
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get("/edit/piano-brief/")
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get("/edit/piano-long/")
         self.assertEqual(response.status_code, 200)
 
 
