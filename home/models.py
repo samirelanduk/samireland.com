@@ -8,6 +8,7 @@ class EditableText(models.Model):
     name = models.CharField(max_length=30)
     content = models.TextField()
 
+
     @property
     def markdown(self):
         return docupy.markdown_to_html(self.content, media_url_lookup())
@@ -24,3 +25,13 @@ class Publication(models.Model):
     authors = models.TextField()
     abstract = models.TextField()
     body = models.TextField()
+
+
+    @property
+    def markdown_authors(self):
+        return docupy.markdown_to_html(self.authors)[3:-4]
+
+
+    @property
+    def markdown_body(self):
+        return docupy.markdown_to_html(self.body, media_url_lookup())

@@ -5,3 +5,18 @@
 .new-publication a {
   font-weight: bold;
 }
+
+#pub-about {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  margin-left: 25px;
+  font-size: 90%;
+}
+
+#date {
+  font-style: italic;
+}
+
+#authors {
+  font-style: italic;
+}

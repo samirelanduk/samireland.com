@@ -27,6 +27,7 @@ class EditableTextTests(ModelTest):
         output = text.markdown
         mock_url.assert_called_with()
         mock_conv.assert_called_with("CONTENT", {"url": "lookup"})
+        self.assertEqual(output, "test output")
 
 
 
@@ -48,3 +49,30 @@ class PublicationTests(ModelTest):
         self.assertEqual(Publication.objects.all().count(), 1)
         retrieved_pub = Publication.objects.first()
         self.assertEqual(retrieved_pub, pub)
+
+
+    @patch("docupy.markdown_to_html")
+    def test_publication_has_markdown_authors(self, mock_conv):
+        mock_conv.return_value = "<p>test output</p>"
+        pub = Publication.objects.create(
+         pk="pub-description-here", title="T", date=datetime.now().date(),
+         url="U", doi="d", authors="a", abstract="A", body="B"
+        )
+        output = pub.markdown_authors
+        mock_conv.assert_called_with("a")
+        self.assertEqual(output, "test output")
+
+
+    @patch("docupy.markdown_to_html")
+    @patch("home.models.media_url_lookup")
+    def test_publication_has_markdown_body(self, mock_url, mock_conv):
+        mock_conv.return_value = "<p>test output</p>"
+        mock_url.return_value = {"url": "lookup"}
+        pub = Publication.objects.create(
+         pk="pub-description-here", title="T", date=datetime.now().date(),
+         url="U", doi="d", authors="a", abstract="A", body="B"
+        )
+        output = pub.markdown_body
+        mock_url.assert_called_with()
+        mock_conv.assert_called_with("B", {"url": "lookup"})
+        self.assertEqual(output, "<p>test output</p>")

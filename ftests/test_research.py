@@ -83,7 +83,7 @@ class PublicationAdditionTests(FunctionalTest):
         doi_input.send_keys("10.1002/bip.23067")
         authors_input.send_keys("Marvin Goodwright, Tony **Blair**, Sam Ireland")
         abstract_input.send_keys("We report here the isolation of a new meme.")
-        body_input.send_keys("Line 1\n\nLine2\n\nLine 3")
+        body_input.send_keys("Line 1\n\nLine 2\n\nLine 3")
         submit_button = form.find_elements_by_tag_name("input")[-1]
         self.click(submit_button)
 
@@ -91,6 +91,21 @@ class PublicationAdditionTests(FunctionalTest):
         self.check_page("/research/novel-dank-meme/")
         self.check_title("The isolation of a novel dank meme")
         self.check_h1("The isolation of a novel dank meme")
+
+        # The Publication looks fine
+        date_div = self.browser.find_element_by_id("date")
+        external_div = self.browser.find_element_by_id("external-link")
+        authors_div = self.browser.find_element_by_id("authors")
+        body_div = self.browser.find_element_by_id("pub-body")
+
+        self.assertEqual(date_div.text, "28 September, 1990")
+        self.assertEqual(external_div.text, "Full Publication | DOI: 10.1002/bip.23067")
+        self.assertEqual(authors_div.text, "Marvin Goodwright, Tony Blair, Sam Ireland")
+        paragraphs = body_div.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 3)
+        self.assertEqual(paragraphs[0].text, "Line 1")
+        self.assertEqual(paragraphs[1].text, "Line 2")
+        self.assertEqual(paragraphs[2].text, "Line 3")
 
 
     def test_cannot_access_new_research_page_when_not_logged_in(self):
