@@ -30,6 +30,21 @@ class ResearchTest(FunctionalTest):
         self.click(submit_button)
 
 
+    def check_publication(self, date, external, authors, paragraphs):
+        date_div = self.browser.find_element_by_id("date")
+        external_div = self.browser.find_element_by_id("external-link")
+        authors_div = self.browser.find_element_by_id("authors")
+        body_div = self.browser.find_element_by_id("pub-body")
+
+        self.assertEqual(date_div.text, date)
+        self.assertEqual(external_div.text, external)
+        self.assertEqual(authors_div.text, authors)
+        paragraph_divs = body_div.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraph_divs), len(paragraphs))
+        for paragraph_div, paragraph_div_text in zip(paragraph_divs, paragraphs):
+            self.assertEqual(paragraph_div.text, paragraph_div_text)
+
+
 
 class ResearchPageTests(ResearchTest):
 
@@ -107,19 +122,12 @@ class PublicationAdditionTests(ResearchTest):
         self.check_h1("The isolation of a novel dank meme")
 
         # The Publication looks fine
-        date_div = self.browser.find_element_by_id("date")
-        external_div = self.browser.find_element_by_id("external-link")
-        authors_div = self.browser.find_element_by_id("authors")
-        body_div = self.browser.find_element_by_id("pub-body")
+        self.check_publication(
+         "28 September, 1990", "Full Publication | DOI: 10.1002/bip.23067",
+         "Marvin Goodwright, Tony Blair, Sam Ireland",
+         ["Line 1", "Line 2", "Line 3"]
+        )
 
-        self.assertEqual(date_div.text, "28 September, 1990")
-        self.assertEqual(external_div.text, "Full Publication | DOI: 10.1002/bip.23067")
-        self.assertEqual(authors_div.text, "Marvin Goodwright, Tony Blair, Sam Ireland")
-        paragraphs = body_div.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 3)
-        self.assertEqual(paragraphs[0].text, "Line 1")
-        self.assertEqual(paragraphs[1].text, "Line 2")
-        self.assertEqual(paragraphs[2].text, "Line 3")
 
 
     def test_cannot_have_missing_id(self):
