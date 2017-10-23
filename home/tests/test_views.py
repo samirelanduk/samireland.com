@@ -61,6 +61,28 @@ class ResearchPageViewTests(ViewTest):
         self.assertEqual(editable_text.name, "research")
 
 
+    def test_research_page_sends_all_publications(self):
+        p1 = Publication.objects.create(
+         pk="publication-1", title="Title1", date=datetime(2014, 1, 6).date(),
+         url="http://cat.com", doi="d.1", authors="Bob, Joe",
+         abstract="Line 1\n\nLine 2", body="L1\nL2\nL3"
+        )
+        p2 = Publication.objects.create(
+         pk="publication-2", title="Title2", date=datetime(2015, 1, 6).date(),
+         url="http://dog.com", doi="d.5", authors="Bob, Joe2",
+         abstract="Line1\n\nLine2", body="L1\nL2\nL3\nL4"
+        )
+        p3 = Publication.objects.create(
+         pk="publication-3", title="Title3", date=datetime(2011, 1, 6).date(),
+         url="http://fox.com", doi="d.2", authors="Bob, Joe, **Frank**",
+         abstract="Line A\n\nLine B", body="L11\nL21\nL31"
+        )
+        response = self.client.get("/research/")
+        self.assertEqual(response.context["publications"][0], p2)
+        self.assertEqual(response.context["publications"][1], p1)
+        self.assertEqual(response.context["publications"][2], p3)
+
+
 
 class NewResearchPageViewTests(ViewTest):
 

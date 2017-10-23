@@ -1,7 +1,9 @@
 """Contains tests for the research section."""
 
 from time import sleep
+from datetime import datetime
 from .base import FunctionalTest
+from home.models import Publication
 
 class ResearchTest(FunctionalTest):
 
@@ -372,3 +374,52 @@ class PublicationAdditionTests(ResearchTest):
     def test_cannot_access_new_research_page_when_not_logged_in(self):
         self.get("/research/new/")
         self.check_page("/")
+
+
+
+class PublicationReadingTests(ResearchTest):
+
+    def setUp(self):
+        ResearchTest.setUp(self)
+        Publication.objects.create(
+         pk="publication-1", title="Title1", date=datetime(2014, 1, 6).date(),
+         url="http://cat.com", doi="d.1", authors="Bob, Joe",
+         abstract="Line 1\n\nLine 2", body="L1\nL2\nL3"
+        )
+        Publication.objects.create(
+         pk="publication-2", title="Title2", date=datetime(2015, 1, 6).date(),
+         url="http://dog.com", doi="d.5", authors="Bob, Joe2",
+         abstract="Line1\n\nLine2", body="L1\nL2\nL3\nL4"
+        )
+        Publication.objects.create(
+         pk="publication-3", title="Title3", date=datetime(2011, 1, 6).date(),
+         url="http://fox.com", doi="d.2", authors="Bob, Joe, **Frank**",
+         abstract="Line A\n\nLine B", body="L11\nL21\nL31"
+        )
+
+
+    def test_publications_on_research_page(self):
+        self.get("/research/")
+
+        # There is a div for publications
+        publications = self.browser.find_element_by_id("publications")
+        h2 = publications.find_elements_by_tag_name("h2")
+
+        # There is no div for no publications
+        no_pub = self.browser.find_elements_by_class_name("no-pub")
+        self.assertFalse(no_pub)
+
+        # There are publications
+        publication_divs = self.browser.find_elements_by_class_name("publication")
+        self.assertEqual(len(publication_divs), 3)
+
+        # The first one is the most recent
+        title = publication_divs[0].find_element_by_class_name("publication-title")
+        self.assertEqual(title.text, "Title2")
+        date = publication_divs[0].find_element_by_class_name("publication-date")
+        self.assertEqual(date.text, "6 January, 2015")
+        authors = publication_divs[0].find_element_by_class_name("publication-authors")
+        self.assertEqual(authors.text, "Bob, Joe2")
+        summary = publication_divs[0].find_element_by_class_name("publication-summary")
+        self.assertEqual(summary.text, "Read Summary")
+        self.assertEqual(summary.get_attribute("href"), self.live_server_url + "/research/publication-2/")

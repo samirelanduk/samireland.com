@@ -24,7 +24,9 @@ def about_page(request):
 def research_page(request):
     text = EditableText.objects.filter(name="research").first()
     text = text if text else ""
-    return render(request, "research.html", {"text": text})
+    return render(request, "research.html", {
+     "text": text, "publications": Publication.objects.all().order_by("date").reverse()
+    })
 
 
 @login_required(login_url="/", redirect_field_name=None)
