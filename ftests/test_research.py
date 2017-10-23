@@ -3,7 +3,35 @@
 from time import sleep
 from .base import FunctionalTest
 
-class ResearchPageTests(FunctionalTest):
+class ResearchTest(FunctionalTest):
+
+    def enter_publication(self, id_, title, date, url, doi, authors, abstract, body):
+        # There is a form
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        abstract_input = form.find_elements_by_tag_name("textarea")[0]
+        body_input = form.find_elements_by_tag_name("textarea")[1]
+
+        # They submit a publication
+        id_input.send_keys(id_)
+        title_input.send_keys(title)
+        date_input.send_keys(date)
+        url_input.send_keys(url)
+        doi_input.send_keys(doi)
+        authors_input.send_keys(authors)
+        abstract_input.send_keys(abstract)
+        body_input.send_keys(body)
+        submit_button = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit_button)
+
+
+
+class ResearchPageTests(ResearchTest):
 
     def test_research_page_structure(self):
         self.browser.set_window_size(800, 600)
@@ -40,7 +68,7 @@ class ResearchPageTests(FunctionalTest):
 
 
 
-class PublicationAdditionTests(FunctionalTest):
+class PublicationAdditionTests(ResearchTest):
 
     def test_publication_addition(self):
         # User goes to research page
@@ -64,28 +92,14 @@ class PublicationAdditionTests(FunctionalTest):
         self.check_title("New Publication")
         self.check_h1("New Publication")
 
-        # There is a form
-        form = self.browser.find_element_by_tag_name("form")
-        id_input = form.find_elements_by_tag_name("input")[0]
-        title_input = form.find_elements_by_tag_name("input")[1]
-        date_input = form.find_elements_by_tag_name("input")[2]
-        url_input = form.find_elements_by_tag_name("input")[3]
-        doi_input = form.find_elements_by_tag_name("input")[4]
-        authors_input = form.find_elements_by_tag_name("input")[5]
-        abstract_input = form.find_elements_by_tag_name("textarea")[0]
-        body_input = form.find_elements_by_tag_name("textarea")[1]
-
-        # They submit a publication
-        id_input.send_keys("novel-dank-meme")
-        title_input.send_keys("The isolation of a novel dank meme")
-        date_input.send_keys("28-09-1990")
-        url_input.send_keys("http://journal-of-memology/12345/")
-        doi_input.send_keys("10.1002/bip.23067")
-        authors_input.send_keys("Marvin Goodwright, Tony **Blair**, Sam Ireland")
-        abstract_input.send_keys("We report here the isolation of a new meme.")
-        body_input.send_keys("Line 1\n\nLine 2\n\nLine 3")
-        submit_button = form.find_elements_by_tag_name("input")[-1]
-        self.click(submit_button)
+        # They enter a publication
+        self.enter_publication(
+         "novel-dank-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
 
         # They are on the page for that publication
         self.check_page("/research/novel-dank-meme/")
@@ -106,6 +120,84 @@ class PublicationAdditionTests(FunctionalTest):
         self.assertEqual(paragraphs[0].text, "Line 1")
         self.assertEqual(paragraphs[1].text, "Line 2")
         self.assertEqual(paragraphs[2].text, "Line 3")
+
+
+    def test_cannot_have_missing_id(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no ID
+        self.enter_publication(
+         "", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no id", error.text.lower())
+
+
+    def test_cannot_have_invalid_id(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with wrong ID
+        self.enter_publication(
+         "novel-Meme£", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("£", error.text.lower())
+
+
+    def test_cannot_have_duplicate_id(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with the ID twice
+        self.enter_publication(
+         "novel-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+        self.check_page("/research/novel-meme/")
+        self.get("/research/new/")
+        self.enter_publication(
+         "novel-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("already", error.text.lower())
 
 
     def test_cannot_access_new_research_page_when_not_logged_in(self):

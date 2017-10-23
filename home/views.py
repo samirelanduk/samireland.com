@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import Http404
+from django.db.utils import IntegrityError
 from home.models import EditableText, Publication
 from blog.models import BlogPost
 
@@ -29,6 +30,19 @@ def research_page(request):
 @login_required(login_url="/", redirect_field_name=None)
 def new_research_page(request):
     if request.method == "POST":
+        if not request.POST["id"]:
+            return render(request, "new-research.html", {
+             "error": "No ID supplied"
+            })
+        for char in request.POST["id"]:
+            if not char.isalpha() and char != "-":
+                return render(request, "new-research.html", {
+                 "error": "Character '{}' in ID is invalid".format(char)
+                })
+        if Publication.objects.filter(pk=request.POST["id"]):
+            return render(request, "new-research.html", {
+             "error": "Already a publication '{}'".format(request.POST["id"])
+            })
         Publication.objects.create(
          pk=request.POST["id"], title=request.POST["title"],
          date=request.POST["date"], url=request.POST["url"],

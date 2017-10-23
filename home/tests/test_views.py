@@ -104,6 +104,30 @@ class NewResearchPageViewTests(ViewTest):
         self.assertEqual(pub.body, "BBBBBBBBB")
 
 
+    def test_publication_id_needed(self):
+        self.data["id"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no id", response.context["error"].lower())
+
+
+    def test_publication_id_must_be_valid(self):
+        self.data["id"] = "hhhh^"
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("^", response.context["error"].lower())
+
+
+    def test_publication_id_must_be_unique(self):
+        Publication.objects.create(
+         pk="page-id", title="T", date=datetime.now().date(),
+         url="U", doi="d", authors="a", abstract="A", body="B"
+        )
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("already", response.context["error"].lower())
+
+
 
 class PublicationPageViewTests(ViewTest):
 
