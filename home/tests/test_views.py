@@ -128,6 +128,55 @@ class NewResearchPageViewTests(ViewTest):
         self.assertIn("already", response.context["error"].lower())
 
 
+    def test_publication_title_needed(self):
+        self.data["title"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no title", response.context["error"].lower())
+
+
+    def test_publication_date_needed(self):
+        self.data["date"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no date", response.context["error"].lower())
+
+
+    def test_publication_url_needed(self):
+        self.data["url"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no url", response.context["error"].lower())
+
+
+    def test_publication_doi_needed(self):
+        self.data["doi"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no doi", response.context["error"].lower())
+
+
+    def test_publication_authors_needed(self):
+        self.data["authors"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no authors", response.context["error"].lower())
+
+
+    def test_publication_abstract_needed(self):
+        self.data["abstract"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no abstract", response.context["error"].lower())
+
+
+    def test_publication_body_needed(self):
+        self.data["body"] = ""
+        response = self.client.post("/research/new/", data=self.data)
+        self.assertTemplateUsed(response, "new-research.html")
+        self.assertIn("no body", response.context["error"].lower())
+
+
 
 class PublicationPageViewTests(ViewTest):
 

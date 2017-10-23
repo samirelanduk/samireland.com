@@ -20,7 +20,7 @@ class ResearchTest(FunctionalTest):
         # They submit a publication
         id_input.send_keys(id_)
         title_input.send_keys(title)
-        date_input.send_keys(date)
+        if date: date_input.send_keys(date)
         url_input.send_keys(url)
         doi_input.send_keys(doi)
         authors_input.send_keys(authors)
@@ -198,6 +198,167 @@ class PublicationAdditionTests(ResearchTest):
         form = self.browser.find_element_by_tag_name("form")
         error = form.find_element_by_class_name("error")
         self.assertIn("already", error.text.lower())
+
+
+    def test_cannot_have_missing_title(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no title
+        self.enter_publication(
+         "new-meme", "", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no title", error.text.lower())
+
+
+    def test_cannot_have_missing_date(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no date
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", None,
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no date", error.text.lower())
+
+
+    def test_cannot_have_missing_url(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no url
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no url", error.text.lower())
+
+
+    def test_cannot_have_missing_doi(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no doi
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no doi", error.text.lower())
+
+
+    def test_cannot_have_missing_authors(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no authors
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "",
+         "We report here the isolation of a new meme.",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no authors", error.text.lower())
+
+
+    def test_cannot_have_missing_abstract(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no abstract
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "",
+         "Line 1\n\nLine 2\n\nLine 3"
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no abstract", error.text.lower())
+
+
+    def test_cannot_have_missing_body(self):
+        # User goes to enter new publication
+        self.login()
+        self.get("/research/new/")
+
+        # They enter a pub with no body
+        self.enter_publication(
+         "new-meme", "The isolation of a novel dank meme", "28-09-1990",
+         "http://journal-of-memology/12345/", "10.1002/bip.23067",
+         "Marvin Goodwright, Tony **Blair**, Sam Ireland",
+         "We report here the isolation of a new meme.",
+         ""
+        )
+
+        # They are still on the same page
+        self.check_page("/research/new/")
+
+        # There is an error
+        form = self.browser.find_element_by_tag_name("form")
+        error = form.find_element_by_class_name("error")
+        self.assertIn("no body", error.text.lower())
 
 
     def test_cannot_access_new_research_page_when_not_logged_in(self):

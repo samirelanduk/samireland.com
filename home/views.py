@@ -43,6 +43,34 @@ def new_research_page(request):
             return render(request, "new-research.html", {
              "error": "Already a publication '{}'".format(request.POST["id"])
             })
+        if not request.POST["title"]:
+            return render(request, "new-research.html", {
+             "error": "No Title supplied"
+            })
+        if not request.POST["date"]:
+            return render(request, "new-research.html", {
+             "error": "No Date supplied"
+            })
+        if not request.POST["url"]:
+            return render(request, "new-research.html", {
+             "error": "No URL supplied"
+            })
+        if not request.POST["doi"]:
+            return render(request, "new-research.html", {
+             "error": "No DOI supplied"
+            })
+        if not request.POST["authors"]:
+            return render(request, "new-research.html", {
+             "error": "No Authors supplied"
+            })
+        if not request.POST["abstract"]:
+            return render(request, "new-research.html", {
+             "error": "No Abstract supplied"
+            })
+        if not request.POST["body"]:
+            return render(request, "new-research.html", {
+             "error": "No Body supplied"
+            })
         Publication.objects.create(
          pk=request.POST["id"], title=request.POST["title"],
          date=request.POST["date"], url=request.POST["url"],
