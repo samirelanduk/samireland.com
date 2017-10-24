@@ -23,7 +23,7 @@
   {% if publications %}
     {% for pub in publications %}
     <div class="publication">
-      <h3 class="publication-title">{{ pub.title }}</div>
+      <h3 class="publication-title">{{ pub.title }}</h3>
       <div class="publication-date">{{ pub.date|date:"j F, Y" }}</div>
       <div class="publication-authors">{{ pub.markdown_authors|safe }}</div>
       <a class="publication-summary" href="/research/{{ pub.id }}/">Read Summary</a>

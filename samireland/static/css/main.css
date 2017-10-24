@@ -238,6 +238,11 @@ video {
   float: right;
 }
 
+article h1 {
+  font-size: 150%;
+  text-align: center;
+}
+
 /* forms */
 
 form {
@@ -372,6 +377,11 @@ form.delete-form a {
     width: 50%;
   }
 
+  article {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
 
 }
 
@@ -425,6 +435,11 @@ form.delete-form a {
     margin-right: 5px;
   }
 
+  article {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+
   /* form */
 
   input {
@@ -468,6 +483,15 @@ form.delete-form a {
 
   input {
     width: 45%;
+  }
+
+  article {
+    margin-left: 45px;
+    margin-right: 45px;
+  }
+
+  article p {
+    font-size: 90%;
   }
 
 }
