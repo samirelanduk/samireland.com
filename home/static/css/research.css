@@ -20,3 +20,7 @@
 #authors {
   font-style: italic;
 }
+
+.publication {
+  margin-top: 1px solid silver;
+}

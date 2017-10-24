@@ -37,7 +37,7 @@ def new_research_page(request):
              "error": "No ID supplied"
             })
         for char in request.POST["id"]:
-            if not char.isalpha() and char != "-":
+            if not char.isalpha() and not char.isdigit() and char != "-":
                 return render(request, "new-research.html", {
                  "error": "Character '{}' in ID is invalid".format(char)
                 })

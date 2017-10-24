@@ -89,7 +89,7 @@ class NewResearchPageViewTests(ViewTest):
     def setUp(self):
         ViewTest.setUp(self)
         self.data = {
-         "id": "page-id", "title": "TITLE", "date": "2014-06-01",
+         "id": "page-id-2", "title": "TITLE", "date": "2014-06-01",
          "url": "bob.com", "doi": "xxyyd-", "authors": "p1, p2",
          "abstract": "AAAA", "body": "BBBBBBBBB"
         }
@@ -108,7 +108,7 @@ class NewResearchPageViewTests(ViewTest):
 
     def test_new_research_view_redirects_on_post(self):
         response = self.client.post("/research/new/", data=self.data)
-        self.assertRedirects(response, "/research/page-id/")
+        self.assertRedirects(response, "/research/page-id-2/")
 
 
     def test_can_create_publication_on_post(self):
@@ -116,7 +116,7 @@ class NewResearchPageViewTests(ViewTest):
         self.client.post("/research/new/", data=self.data)
         self.assertEqual(Publication.objects.all().count(), 1)
         pub = Publication.objects.first()
-        self.assertEqual(pub.id, "page-id")
+        self.assertEqual(pub.id, "page-id-2")
         self.assertEqual(pub.title, "TITLE")
         self.assertEqual(pub.date, datetime(2014, 6, 1).date())
         self.assertEqual(pub.url, "bob.com")
@@ -142,7 +142,7 @@ class NewResearchPageViewTests(ViewTest):
 
     def test_publication_id_must_be_unique(self):
         Publication.objects.create(
-         pk="page-id", title="T", date=datetime.now().date(),
+         pk="page-id-2", title="T", date=datetime.now().date(),
          url="U", doi="d", authors="a", abstract="A", body="B"
         )
         response = self.client.post("/research/new/", data=self.data)
