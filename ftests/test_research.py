@@ -423,3 +423,31 @@ class PublicationReadingTests(ResearchTest):
         summary = publication_divs[0].find_element_by_class_name("publication-summary")
         self.assertEqual(summary.text, "Read Summary")
         self.assertEqual(summary.get_attribute("href"), self.live_server_url + "/research/publication-2/")
+
+
+
+class PublicationModificationTests(ResearchTest):
+
+    def setUp(self):
+        ResearchTest.setUp(self)
+        Publication.objects.create(
+         pk="publication-1", title="Title1", date=datetime(2014, 1, 6).date(),
+         url="http://cat.com", doi="d.1", authors="Bob, Joe",
+         abstract="Line 1\n\nLine 2", body="L1\nL2\nL3"
+        )
+
+
+    def test_can_edit_publication(self):
+        # There are no edit links on a pub page usually
+        self.get("/research/publication-1/")
+        links = self.browser.find_elements_by_class_name("edit-link")
+        self.assertFalse(links)
+
+        # They login and now there is one to follow
+        self.login()
+        self.get("/research/publication-1/")
+        link = self.browser.find_element_by_class_name("edit-link")
+        self.click(link)
+        self.check_page("/research/publication-1/edit/")
+        self.check_title("Edit")
+        self.check_h1("Edit")

@@ -19,8 +19,12 @@ class HomeUrlTests(UrlTest):
         self.check_url_returns_view("/research/new/", views.new_research_page)
 
 
-    def test_new_publication_url_resolves_to_publication_page_view(self):
+    def test_publication_url_resolves_to_publication_page_view(self):
         self.check_url_returns_view("/research/pub-id/", views.publication_page)
+
+
+    def test_edit_publication_url_resolves_to_edit_publication_page_view(self):
+        self.check_url_returns_view("/research/pub-id/edit/", views.edit_publication_page)
 
 
     def test_project_page_url_resolves_to_project_page_view(self):

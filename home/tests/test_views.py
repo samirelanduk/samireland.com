@@ -97,7 +97,7 @@ class NewResearchPageViewTests(ViewTest):
 
     def test_new_research_view_uses_new_research_template(self):
         response = self.client.get("/research/new/")
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
 
 
     def test_new_research_view_denies_entry_when_not_logged_in(self):
@@ -129,14 +129,14 @@ class NewResearchPageViewTests(ViewTest):
     def test_publication_id_needed(self):
         self.data["id"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no id", response.context["error"].lower())
 
 
     def test_publication_id_must_be_valid(self):
         self.data["id"] = "hhhh^"
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("^", response.context["error"].lower())
 
 
@@ -146,56 +146,56 @@ class NewResearchPageViewTests(ViewTest):
          url="U", doi="d", authors="a", abstract="A", body="B"
         )
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("already", response.context["error"].lower())
 
 
     def test_publication_title_needed(self):
         self.data["title"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no title", response.context["error"].lower())
 
 
     def test_publication_date_needed(self):
         self.data["date"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no date", response.context["error"].lower())
 
 
     def test_publication_url_needed(self):
         self.data["url"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no url", response.context["error"].lower())
 
 
     def test_publication_doi_needed(self):
         self.data["doi"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no doi", response.context["error"].lower())
 
 
     def test_publication_authors_needed(self):
         self.data["authors"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no authors", response.context["error"].lower())
 
 
     def test_publication_abstract_needed(self):
         self.data["abstract"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no abstract", response.context["error"].lower())
 
 
     def test_publication_body_needed(self):
         self.data["body"] = ""
         response = self.client.post("/research/new/", data=self.data)
-        self.assertTemplateUsed(response, "new-research.html")
+        self.assertTemplateUsed(response, "new-publication.html")
         self.assertIn("no body", response.context["error"].lower())
 
 
@@ -222,6 +222,27 @@ class PublicationPageViewTests(ViewTest):
     def test_publication_view_can_send_404(self):
         response = self.client.get("/research/-here/")
         self.assertEqual(response.status_code, 404)
+
+
+
+class EditResearchPageViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        Publication.objects.create(
+         pk="pub-description-here", title="T", date=datetime.now().date(),
+         url="U", doi="d", authors="a", abstract="A", body="B"
+        )
+        self.data = {
+         "title": "TITLE", "date": "2014-06-01",
+         "url": "bob.com", "doi": "xxyyd-", "authors": "p1, p2",
+         "abstract": "AAAA", "body": "BBBBBBBBB"
+        }
+
+
+    def test_edit_research_view_uses_edit_research_template(self):
+        response = self.client.get("/research/pub-description-here/edit/")
+        self.assertTemplateUsed(response, "edit-publication.html")
 
 
 

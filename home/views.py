@@ -33,44 +33,44 @@ def research_page(request):
 def new_research_page(request):
     if request.method == "POST":
         if not request.POST["id"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No ID supplied"
             })
         for char in request.POST["id"]:
             if not char.isalpha() and not char.isdigit() and char != "-":
-                return render(request, "new-research.html", {
+                return render(request, "new-publication.html", {
                  "error": "Character '{}' in ID is invalid".format(char)
                 })
         if Publication.objects.filter(pk=request.POST["id"]):
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "Already a publication '{}'".format(request.POST["id"])
             })
         if not request.POST["title"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No Title supplied"
             })
         if not request.POST["date"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No Date supplied"
             })
         if not request.POST["url"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No URL supplied"
             })
         if not request.POST["doi"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No DOI supplied"
             })
         if not request.POST["authors"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No Authors supplied"
             })
         if not request.POST["abstract"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No Abstract supplied"
             })
         if not request.POST["body"]:
-            return render(request, "new-research.html", {
+            return render(request, "new-publication.html", {
              "error": "No Body supplied"
             })
         Publication.objects.create(
@@ -80,7 +80,7 @@ def new_research_page(request):
          abstract=request.POST["abstract"], body=request.POST["body"]
         )
         return redirect("/research/{}/".format(request.POST["id"]))
-    return render(request, "new-research.html")
+    return render(request, "new-publication.html")
 
 
 def publication_page(request, pk):
@@ -88,6 +88,10 @@ def publication_page(request, pk):
     if not pub:
         raise Http404
     return render(request, "publication.html", {"publication": pub})
+
+
+def edit_publication_page(request, pk):
+    return render(request, "edit-publication.html")
 
 
 def projects_page(request):

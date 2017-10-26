@@ -238,6 +238,10 @@ video {
   float: right;
 }
 
+article {
+  position: relative;
+}
+
 article h1 {
   font-size: 150%;
   text-align: center;
