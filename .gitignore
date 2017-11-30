@@ -4,3 +4,4 @@ __pycache__
 secrets.py
 *env
 media/storage
+*.log

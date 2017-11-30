@@ -1,6 +1,1 @@
-django==1.10.7
-selenium
-django-samdown
-gunicorn
-psycopg2
-django-cleanup
+django==1.11.7
