@@ -30,3 +30,16 @@ class SiteLayoutTests(FunctionalTest):
         footer = self.browser.find_element_by_tag_name("footer")
         icons = footer.find_elements_by_class_name("social-icon")
         self.assertGreaterEqual(len(icons), 4)
+
+
+
+class HomePageTests(FunctionalTest):
+
+    def test_home_page_structure(self):
+        # The user goes to the home page
+        self.get("/")
+
+        # There is an introductory section
+        intro = self.browser.find_element_by_class_name("intro")
+        with self.assertRaises(self.NoElement):
+            intro.find_element_by_tag_name("a")
