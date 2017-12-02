@@ -15,7 +15,7 @@ body {
 
 
 header, nav, h1, h2, h3, h4, h5 {
-  font-family: 'Roboto Slab';
+  font-family: "Roboto Slab";
 }
 
 
@@ -25,6 +25,26 @@ header {
   color: #FFFFFF;
   padding-left: 5%;
   line-height: 50px;
+}
+
+
+#login-link {
+  color: inherit;
+  text-decoration: inherit;
+  cursor: text;
+}
+
+
+#logout-link {
+  font-size: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  background-color: #3B5998;
+  line-height: 1;
+  text-decoration: none;
+  color: #FFFFFF;
 }
 
 
@@ -131,6 +151,13 @@ footer img:hover {
 }
 
 
+form {
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */
@@ -161,6 +188,11 @@ footer img:hover {
     line-height: 170px;
     font-size: 500%;
     padding: 0px;
+  }
+
+
+  #logout-link {
+    font-size: 30%;
   }
 
 
@@ -206,6 +238,37 @@ footer img:hover {
     margin-right: 5px;
   }
 
+
+
+
+  input {
+    width: 60%;
+    margin-right: 50%;
+    box-sizing: border-box;
+  }
+
+
+  input {
+    width: 100%;
+    margin-bottom: 15px;
+    line-height: 150%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 150%;
+  }
+
+
+  input[type=submit] {
+    display: inline;
+    margin-top: 30px;
+    width: auto;
+    background-color: #83bbb0;
+    border-color: #59a595;
+    color: #FFFFFF;
+    cursor: pointer;
+  }
+
 }
 
 
@@ -240,6 +303,11 @@ footer img:hover {
 
   main {
     padding: 40px 60px;
+  }
+
+
+  input {
+    width: 45%;
   }
 
 }

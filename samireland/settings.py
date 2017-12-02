@@ -11,12 +11,27 @@ ROOT_URLCONF = "samireland.urls"
 INSTALLED_APPS = [
  "django.contrib.contenttypes",
  "django.contrib.staticfiles",
+ "django.contrib.auth",
+ "django.contrib.sessions",
  "samireland"
+]
+
+MIDDLEWARE = [
+ "django.contrib.sessions.middleware.SessionMiddleware",
+ "django.middleware.common.CommonMiddleware",
+ "django.middleware.csrf.CsrfViewMiddleware",
+ "django.contrib.auth.middleware.AuthenticationMiddleware",
+ "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
 ]
 
 STATIC_URL = "/static/"
 
 TEMPLATES = [{
  "BACKEND": "django.template.backends.django.DjangoTemplates",
- "APP_DIRS": True
+ "APP_DIRS": True,
+ "OPTIONS": {
+  "context_processors": [
+   "django.contrib.auth.context_processors.auth",
+  ],
+ },
 }]

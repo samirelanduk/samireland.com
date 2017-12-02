@@ -22,7 +22,13 @@
 </head>
 
 <body>
-    <header>Sam Ireland<div id="navicon">&#9776;</div></header>
+    <header>
+        Sam Ire<a href="/authenticate/" id="login-link">l</a>and
+        <div id="navicon">&#9776;</div>{{ request.user }}
+        {% if user.is_authenticated %}
+            <a href="/logout/" id="logout-link">L</a>
+        {% endif %}
+    </header>
 
     <nav><ul><li>
         <a href="/">Home</a>
