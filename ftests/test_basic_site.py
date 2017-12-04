@@ -99,3 +99,22 @@ class AuthTests(FunctionalTest):
         login_form = self.browser.find_element_by_tag_name("form")
         error = login_form.find_element_by_class_name("error-message")
         self.assertEqual(error.text, "Nope!")
+        
+
+    def test_can_logout(self):
+        self.login()
+        self.get("/")
+
+        # There is a logout link
+        header = self.browser.find_element_by_tag_name("header")
+        logout_link = header.find_elements_by_tag_name("a")[-1]
+
+        # They click it
+        logout_link.click()
+
+        # They are back on the home page
+        self.check_page("/")
+
+        # There is only one link in the header
+        header = self.browser.find_element_by_tag_name("header")
+        self.assertEqual(len(header.find_elements_by_tag_name("a")), 1)

@@ -57,3 +57,19 @@ class LoginViewTests(TestCase, TestCaseX):
         self.mock_auth.assert_called_with(username="sam", password="pass")
         self.assertFalse(self.mock_login.called)
         self.check_view_uses_template(login, request, "login.html")
+
+
+
+class LogoutViewTests(TestCase, TestCaseX):
+
+    @patch("django.contrib.auth.logout")
+    def test_logout_view_redirects_home(self, mock_logout):
+        request = self.get_request("---")
+        self.check_view_redirects(logout, request, "/")
+
+
+    @patch("django.contrib.auth.logout")
+    def test_logout_view_logs_out(self, mock_logout):
+        request = self.get_request("---")
+        logout(request)
+        mock_logout.assert_called()

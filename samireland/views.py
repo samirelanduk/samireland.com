@@ -18,3 +18,8 @@ def login(request):
             return shortcuts.redirect("/")
         return shortcuts.render(request, "login.html", {"error": "Nope!"})
     return shortcuts.render(request, "login.html")
+
+
+def logout(request):
+    auth.logout(request)
+    return shortcuts.redirect("/")
