@@ -82,3 +82,20 @@ class AuthTests(FunctionalTest):
         # There is a logout button
         header = self.browser.find_element_by_tag_name("header")
         logout_link = header.find_elements_by_tag_name("a")[-1]
+
+
+    def test_can_prevent_login(self):
+        self.get("/authenticate/")
+        login_form = self.browser.find_element_by_tag_name("form")
+        name_entry = login_form.find_elements_by_tag_name("input")[0]
+        password_entry = login_form.find_elements_by_tag_name("input")[1]
+        submit_button = login_form.find_elements_by_tag_name("input")[-1]
+        name_entry.send_keys("badguy1337")
+        password_entry.send_keys("h4ck0r")
+        submit_button.click()
+
+        # The attempt fails.
+        self.check_page("/authenticate/")
+        login_form = self.browser.find_element_by_tag_name("form")
+        error = login_form.find_element_by_class_name("error-message")
+        self.assertEqual(error.text, "Nope!")

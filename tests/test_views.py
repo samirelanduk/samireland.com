@@ -46,3 +46,14 @@ class LoginViewTests(TestCase, TestCaseX):
         login(request)
         self.mock_auth.assert_called_with(username="sam", password="pass")
         self.mock_login.assert_called_with(request, "USER")
+
+
+    def test_login_view_sends_error_on_auth_failure(self):
+        request = self.get_request(
+         "---", method="post", data={"username": "sam", "password": "pass"}
+        )
+        self.mock_auth.return_value = None
+        login(request)
+        self.mock_auth.assert_called_with(username="sam", password="pass")
+        self.assertFalse(self.mock_login.called)
+        self.check_view_uses_template(login, request, "login.html")

@@ -6,6 +6,7 @@
 <h1>Log In</h1>
 
 <form method="POST">
+    {% if error %}<div class="error-message">{{ error }}</div>{% endif %}
     <input type="text" name="username" placeholder="Username">
     <input type="password" name="password" placeholder="Password">
     {% csrf_token %}

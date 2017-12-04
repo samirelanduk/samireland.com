@@ -10,11 +10,11 @@ def home(request):
 def login(request):
     if request.method == "POST":
         user = auth.authenticate(
-         request,
          username=request.POST["username"],
          password=request.POST["password"]
         )
         if user:
             auth.login(request, user)
             return shortcuts.redirect("/")
+        return shortcuts.render(request, "login.html", {"error": "Nope!"})
     return shortcuts.render(request, "login.html")

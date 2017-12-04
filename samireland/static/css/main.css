@@ -180,6 +180,18 @@ input[type=submit] {
 }
 
 
+.error-message {
+  background-color: #FFBABA;
+  color: #D8000C;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 2px;
+  line-height: 1.1;
+  padding: 3px;
+  margin-bottom: 15px;
+}
+
+
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */
