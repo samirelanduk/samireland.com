@@ -158,6 +158,28 @@ form {
 }
 
 
+input {
+  width: 100%;
+  margin-bottom: 15px;
+  line-height: 150%;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 150%;
+}
+
+
+input[type=submit] {
+  display: inline;
+  margin-top: 30px;
+  width: auto;
+  background-color: #83bbb0;
+  border-color: #59a595;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */
@@ -245,28 +267,6 @@ form {
     width: 60%;
     margin-right: 50%;
     box-sizing: border-box;
-  }
-
-
-  input {
-    width: 100%;
-    margin-bottom: 15px;
-    line-height: 150%;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    font-size: 150%;
-  }
-
-
-  input[type=submit] {
-    display: inline;
-    margin-top: 30px;
-    width: auto;
-    background-color: #83bbb0;
-    border-color: #59a595;
-    color: #FFFFFF;
-    cursor: pointer;
   }
 
 }
