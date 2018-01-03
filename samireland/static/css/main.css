@@ -180,6 +180,17 @@ input[type=submit] {
 }
 
 
+.hidden-form {
+    display: none;
+}
+
+
+textarea {
+    width: 100%;
+    height: 400px;
+}
+
+
 .error-message {
   background-color: #FFBABA;
   color: #D8000C;

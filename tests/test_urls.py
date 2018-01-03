@@ -14,3 +14,7 @@ class UrlTests(TestCase, TestCaseX):
 
     def test_logout_url(self):
         self.check_url_returns_view("/logout/", views.logout)
+
+
+    def test_edit_url(self):
+        self.check_url_returns_view("/edit/abc/", views.edit)

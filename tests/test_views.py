@@ -2,13 +2,42 @@ from unittest.mock import patch, Mock
 from seleniumx import TestCaseX
 from django.http import Http404
 from django.test import TestCase
+from samireland.models import EditableText
 from samireland.views import *
 
 class HomeViewTests(TestCase, TestCaseX):
 
+    def setUp(self):
+        self.patcher1 = patch("samireland.views.EditableText.objects.create")
+        self.patcher2 = patch("samireland.views.EditableText.objects.get")
+        self.mock_create = self.patcher1.start()
+        self.mock_get = self.patcher2.start()
+        self.mock_create.return_value = "EDTEXT"
+        self.mock_get.side_effect = EditableText.DoesNotExist
+
+
+    def tearDown(self):
+        self.patcher1.stop()
+        self.patcher2.stop()
+
+
     def test_home_view_uses_home_template(self):
-        request = self.get_request("---")
+        request = self.make_request("---")
         self.check_view_uses_template(home, request, "home.html")
+
+
+    def test_home_view_can_create_and_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(home, request, {"text": "EDTEXT"})
+        self.mock_create.assert_called_with(name="home", body="")
+
+
+    def test_home_view_can_obtain_and_send_text(self):
+        request = self.make_request("---")
+        self.mock_get.side_effect = ["EDTEXT"]
+        self.check_view_has_context(home, request, {"text": "EDTEXT"})
+        self.assertFalse(self.mock_create.called)
+        self.mock_get.assert_called_with(name="home")
 
 
 
@@ -28,19 +57,19 @@ class LoginViewTests(TestCase, TestCaseX):
 
 
     def test_login_view_uses_login_template(self):
-        request = self.get_request("---")
+        request = self.make_request("---")
         self.check_view_uses_template(login, request, "login.html")
 
 
     def test_login_view_redirects_on_post(self):
-        request = self.get_request(
+        request = self.make_request(
          "---", method="post", data={"username": "sam", "password": "pass"}
         )
         self.check_view_redirects(login, request, "/")
 
 
     def test_login_view_logs_in(self):
-        request = self.get_request(
+        request = self.make_request(
          "---", method="post", data={"username": "sam", "password": "pass"}
         )
         login(request)
@@ -49,7 +78,7 @@ class LoginViewTests(TestCase, TestCaseX):
 
 
     def test_login_view_sends_error_on_auth_failure(self):
-        request = self.get_request(
+        request = self.make_request(
          "---", method="post", data={"username": "sam", "password": "pass"}
         )
         self.mock_auth.return_value = None
@@ -64,12 +93,56 @@ class LogoutViewTests(TestCase, TestCaseX):
 
     @patch("django.contrib.auth.logout")
     def test_logout_view_redirects_home(self, mock_logout):
-        request = self.get_request("---")
+        request = self.make_request("---")
         self.check_view_redirects(logout, request, "/")
 
 
     @patch("django.contrib.auth.logout")
     def test_logout_view_logs_out(self, mock_logout):
-        request = self.get_request("---")
+        request = self.make_request("---")
         logout(request)
         mock_logout.assert_called()
+
+
+
+class EditViewTests(TestCase, TestCaseX):
+
+    def setUp(self):
+        self.patcher1 = patch("samireland.views.EditableText.objects.get")
+        self.mock_get = self.patcher1.start()
+        self.mock_text = Mock()
+        self.mock_text.body = "---"
+        self.mock_get.return_value = self.mock_text
+
+
+    def tearDown(self):
+        self.patcher1.stop()
+
+
+    def test_edit_view_returns_404_with_get(self):
+        request = self.make_request("---", loggedin=True)
+        with self.assertRaises(Http404):
+            edit(request, "home")
+
+
+    def test_edit_view_returns_404_with_unauthorised_post(self):
+        request = self.make_request("---", method="post")
+        with self.assertRaises(Http404):
+            edit(request, "home")
+
+
+    def test_redirects_to_specified_url(self):
+        request = self.make_request("---", method="post", data={
+         "redirect": "/login/", "body": "..."
+        }, loggedin=True)
+        self.check_view_redirects(edit, request, "/login/", "home")
+
+
+    def test_can_update_editable_text(self):
+        request = self.make_request("---", method="post", data={
+         "redirect": "/login/", "body": "..."
+        }, loggedin=True)
+        edit(request, "home")
+        self.mock_get.assert_called_with(name="home")
+        self.assertEqual(self.mock_text.body, "...")
+        self.mock_text.save.assert_called()

@@ -1,10 +1,11 @@
 """URL redirects for samireland.com"""
 
-from django.conf.urls import url
+from django.urls import path
 import samireland.views as views
 
 urlpatterns = [
- url(r"^authenticate/$", views.login),
- url(r"^logout/$", views.logout),
- url(r"^$", views.home)
+ path(r"authenticate/", views.login),
+ path(r"logout/", views.logout),
+ path(r"edit/<slug:name>/", views.edit),
+ path(r"", views.home)
 ]
