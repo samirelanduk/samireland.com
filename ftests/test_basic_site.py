@@ -90,6 +90,10 @@ class HomePageTests(FunctionalTest):
         # They decide to edit it again
         edit = intro.find_element_by_tag_name("button")
         edit.click()
+
+        # There are no paragraphs
+        with self.assertRaises(self.NoElement):
+            intro.find_element_by_tag_name("p")
         textarea = intro.find_element_by_tag_name("textarea")
         self.assertEqual(
          textarea.get_attribute("value"), "Home text 1.\n\nHome text 2."
