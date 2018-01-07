@@ -41,6 +41,28 @@ class HomeViewTests(TestCase, TestCaseX):
 
 
 
+class HomeViewTests(TestCase, TestCaseX):
+
+    def setUp(self):
+        self.patcher1 = patch("samireland.views.EditableText.objects.create")
+        self.patcher2 = patch("samireland.views.EditableText.objects.get")
+        self.mock_create = self.patcher1.start()
+        self.mock_get = self.patcher2.start()
+        self.mock_create.return_value = "EDTEXT"
+        self.mock_get.side_effect = EditableText.DoesNotExist
+
+
+    def tearDown(self):
+        self.patcher1.stop()
+        self.patcher2.stop()
+
+
+    def test_about_view_uses_about_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(about, request, "about.html")
+
+
+
 class LoginViewTests(TestCase, TestCaseX):
 
     def setUp(self):

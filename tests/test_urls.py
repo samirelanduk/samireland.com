@@ -8,6 +8,10 @@ class UrlTests(TestCase, TestCaseX):
         self.check_url_returns_view("/", views.home)
 
 
+    def test_about_url(self):
+        self.check_url_returns_view("/about/", views.about)
+
+
     def test_login_url(self):
         self.check_url_returns_view("/authenticate/", views.login)
 

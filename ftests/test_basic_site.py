@@ -113,6 +113,27 @@ class HomePageTests(FunctionalTest):
 
 
 
+class AboutPageTests(FunctionalTest):
+
+    def test_about_page_structure(self):
+        # The user goes to the home page
+        self.get("/")
+        nav = self.browser.find_element_by_tag_name("nav")
+        nav_links = nav.find_elements_by_tag_name("a")
+        self.click(nav_links[-1])
+        self.check_title("About")
+
+
+        # There's a heading and some about text
+        self.check_h1("About Me")
+        about = self.browser.find_element_by_class_name("about")
+        with self.assertRaises(self.NoElement):
+            about.find_element_by_tag_name("button")
+        with self.assertRaises(self.NoElement):
+            about.find_element_by_tag_name("form")
+
+
+
 class AuthTests(FunctionalTest):
 
     def test_can_log_in(self):

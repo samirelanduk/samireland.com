@@ -13,6 +13,10 @@ def home(request):
     return shortcuts.render(request, "home.html", {"text": text})
 
 
+def about(request):
+    return shortcuts.render(request, "about.html")
+
+
 def login(request):
     if request.method == "POST":
         user = auth.authenticate(
