@@ -12,3 +12,14 @@ $(window).on("resize", function() {
 		$("nav").hide();
 	}
 });
+
+
+function editText(button, csrf) {
+    var paragraphs = $(button).parent().find("p");
+    paragraphs.each(function(index, p) {
+        p.remove();
+    })
+    button.remove();
+    var form = $(".hidden-form");
+    form.show();
+}

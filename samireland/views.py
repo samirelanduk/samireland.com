@@ -14,7 +14,11 @@ def home(request):
 
 
 def about(request):
-    return shortcuts.render(request, "about.html")
+    try:
+        text = EditableText.objects.get(name="about")
+    except EditableText.DoesNotExist:
+        text = EditableText.objects.create(name="about", body="")
+    return shortcuts.render(request, "about.html", {"text": text})
 
 
 def login(request):

@@ -50,66 +50,7 @@ class HomePageTests(FunctionalTest):
 
 
     def test_can_change_home_page_text(self):
-        # The user goes to the home page
-        self.login()
-        self.get("/")
-        intro = self.browser.find_element_by_class_name("intro")
-        self.assertEqual(len(intro.find_elements_by_tag_name("p")), 0)
-
-        # There is an edit button and hidden textarea
-        edit = intro.find_element_by_tag_name("button")
-        self.assertEqual(edit.text, "Edit")
-        form = intro.find_element_by_tag_name("form")
-        self.check_invisible(form)
-
-
-        # They click it and there is now a textarea
-        edit.click()
-        with self.assertRaises(self.NoElement):
-            intro.find_element_by_tag_name("button")
-        self.check_visible(form)
-        textarea = form.find_element_by_tag_name("textarea")
-
-        # They enter some text and submit
-        textarea.send_keys("Home text 1.\n\nHome text 2.")
-        submit = intro.find_elements_by_tag_name("input")[-1]
-        submit.click()
-
-        # They are on the same page
-        self.check_page("/")
-
-        # The text has been saved
-        intro = self.browser.find_element_by_class_name("intro")
-        paragraphs = intro.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 2)
-        self.assertEqual(paragraphs[0].text, "Home text 1.")
-        self.assertEqual(paragraphs[1].text, "Home text 2.")
-        form = intro.find_element_by_tag_name("form")
-        self.check_invisible(form)
-
-        # They decide to edit it again
-        edit = intro.find_element_by_tag_name("button")
-        edit.click()
-
-        # There are no paragraphs
-        with self.assertRaises(self.NoElement):
-            intro.find_element_by_tag_name("p")
-        textarea = intro.find_element_by_tag_name("textarea")
-        self.assertEqual(
-         textarea.get_attribute("value"), "Home text 1.\n\nHome text 2."
-        )
-        textarea.send_keys("\n\nHome text 3.")
-        submit = intro.find_elements_by_tag_name("input")[-1]
-        submit.click()
-
-        # It worked
-        self.check_page("/")
-        intro = self.browser.find_element_by_class_name("intro")
-        paragraphs = intro.find_elements_by_tag_name("p")
-        self.assertEqual(len(paragraphs), 3)
-        self.assertEqual(paragraphs[0].text, "Home text 1.")
-        self.assertEqual(paragraphs[1].text, "Home text 2.")
-        self.assertEqual(paragraphs[2].text, "Home text 3.")
+        self.check_editable_text("/", "intro")
 
 
 
@@ -123,7 +64,6 @@ class AboutPageTests(FunctionalTest):
         self.click(nav_links[-1])
         self.check_title("About")
 
-
         # There's a heading and some about text
         self.check_h1("About Me")
         about = self.browser.find_element_by_class_name("about")
@@ -131,6 +71,10 @@ class AboutPageTests(FunctionalTest):
             about.find_element_by_tag_name("button")
         with self.assertRaises(self.NoElement):
             about.find_element_by_tag_name("form")
+
+
+    def test_can_change_edit_page_text(self):
+        self.check_editable_text("/about/", "about")
 
 
 

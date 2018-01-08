@@ -62,6 +62,20 @@ class HomeViewTests(TestCase, TestCaseX):
         self.check_view_uses_template(about, request, "about.html")
 
 
+    def test_about_view_can_create_and_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(about, request, {"text": "EDTEXT"})
+        self.mock_create.assert_called_with(name="about", body="")
+
+
+    def test_about_view_can_obtain_and_send_text(self):
+        request = self.make_request("---")
+        self.mock_get.side_effect = ["EDTEXT"]
+        self.check_view_has_context(about, request, {"text": "EDTEXT"})
+        self.assertFalse(self.mock_create.called)
+        self.mock_get.assert_called_with(name="about")
+
+
 
 class LoginViewTests(TestCase, TestCaseX):
 

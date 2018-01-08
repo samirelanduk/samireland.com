@@ -7,17 +7,6 @@
 {% endblock %}
 
 {% block main %}
-<script>
-function editText(button, csrf) {
-    var paragraphs = $(button).parent().find("p");
-    paragraphs.each(function(index, p) {
-        p.remove();
-    })
-    button.remove();
-    var form = $(".hidden-form");
-    form.show();
-}
-</script>
 
 <div class="intro big editable">
     {{ text.html|safe }}
