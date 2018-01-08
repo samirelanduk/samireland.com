@@ -1,7 +1,7 @@
 html {
   background-color: #EEEEEE;
   color: #444444;
-  font-family: "Open Sans";
+  font-family: "Montserrat";
   font-size: large;
   line-height: 1.85;
 }
@@ -318,6 +318,10 @@ textarea {
     width: 60%;
     margin-right: 50%;
     box-sizing: border-box;
+  }
+
+  .big {
+    font-size: 140%;
   }
 
 }
