@@ -13,6 +13,10 @@ def home(request):
     return shortcuts.render(request, "home.html", {"text": text})
 
 
+def research(request):
+    return shortcuts.render(request, "research.html")
+
+
 def about(request):
     try:
         text = EditableText.objects.get(name="about")

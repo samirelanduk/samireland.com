@@ -5,7 +5,7 @@ from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
 
-class HomeViewTests(TestCase, TestCaseX):
+class ViewTest(TestCase, TestCaseX):
 
     def setUp(self):
         self.patcher1 = patch("samireland.views.EditableText.objects.create")
@@ -20,6 +20,9 @@ class HomeViewTests(TestCase, TestCaseX):
         self.patcher1.stop()
         self.patcher2.stop()
 
+
+
+class HomeViewTests(ViewTest):
 
     def test_home_view_uses_home_template(self):
         request = self.make_request("---")
@@ -41,21 +44,7 @@ class HomeViewTests(TestCase, TestCaseX):
 
 
 
-class HomeViewTests(TestCase, TestCaseX):
-
-    def setUp(self):
-        self.patcher1 = patch("samireland.views.EditableText.objects.create")
-        self.patcher2 = patch("samireland.views.EditableText.objects.get")
-        self.mock_create = self.patcher1.start()
-        self.mock_get = self.patcher2.start()
-        self.mock_create.return_value = "EDTEXT"
-        self.mock_get.side_effect = EditableText.DoesNotExist
-
-
-    def tearDown(self):
-        self.patcher1.stop()
-        self.patcher2.stop()
-
+class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):
         request = self.make_request("---")
@@ -74,6 +63,14 @@ class HomeViewTests(TestCase, TestCaseX):
         self.check_view_has_context(about, request, {"text": "EDTEXT"})
         self.assertFalse(self.mock_create.called)
         self.mock_get.assert_called_with(name="about")
+
+
+
+class ResearchViewTests(ViewTest):
+
+    def test_research_view_uses_research_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(research, request, "research.html")
 
 
 
