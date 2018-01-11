@@ -14,7 +14,11 @@ def home(request):
 
 
 def research(request):
-    return shortcuts.render(request, "research.html")
+    try:
+        text = EditableText.objects.get(name="research")
+    except EditableText.DoesNotExist:
+        text = EditableText.objects.create(name="research", body="")
+    return shortcuts.render(request, "research.html", {"text": text})
 
 
 def about(request):

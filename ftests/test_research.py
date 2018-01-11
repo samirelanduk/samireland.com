@@ -19,3 +19,7 @@ class ResearchPageTests(FunctionalTest):
             summary.find_element_by_tag_name("button")
         with self.assertRaises(self.NoElement):
             summary.find_element_by_tag_name("form")
+
+
+    def test_can_change_research_page_text(self):
+        self.check_editable_text("/research/", "summary")

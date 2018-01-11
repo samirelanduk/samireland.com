@@ -73,6 +73,20 @@ class ResearchViewTests(ViewTest):
         self.check_view_uses_template(research, request, "research.html")
 
 
+    def test_research_view_can_create_and_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(research, request, {"text": "EDTEXT"})
+        self.mock_create.assert_called_with(name="research", body="")
+
+
+    def test_research_view_can_obtain_and_send_text(self):
+        request = self.make_request("---")
+        self.mock_get.side_effect = ["EDTEXT"]
+        self.check_view_has_context(research, request, {"text": "EDTEXT"})
+        self.assertFalse(self.mock_create.called)
+        self.mock_get.assert_called_with(name="research")
+
+        
 
 class LoginViewTests(TestCase, TestCaseX):
 
