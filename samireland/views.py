@@ -5,6 +5,7 @@ from django.http import Http404
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 from .models import EditableText
+from .forms import PublicationForm
 
 def home(request):
     text = grab_editable_text("home")
@@ -18,7 +19,8 @@ def research(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def new_pub(request):
-    return shortcuts.render(request, "new-pub.html")
+    form = PublicationForm()
+    return shortcuts.render(request, "new-pub.html", {"form": form})
 
 
 def about(request):

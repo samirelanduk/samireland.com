@@ -91,6 +91,7 @@ nav a, nav a:visited {
 nav a:hover {
   color: #111111;
   transition: 0.5s;
+  text-decoration: none;
 }
 
 

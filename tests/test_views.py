@@ -45,7 +45,19 @@ class ResearchViewTests(ViewTest):
         self.mock_grab.assert_called_with("research")
 
 
+
 class NewPublicationViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.PublicationForm")
+        self.mock_form = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
 
     def test_new_pub_view_uses_new_pub_template(self):
         request = self.make_request("---", loggedin=True)
@@ -55,6 +67,13 @@ class NewPublicationViewTests(ViewTest):
     def test_new_pub_page_is_protected(self):
         request = self.make_request("---")
         self.check_view_redirects(new_pub, request, "/")
+
+
+    def test_new_pub_sends_fresh_form(self):
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(new_pub, request, {"form": "FORM"})
+        self.mock_form.assert_called_with()
 
 
 

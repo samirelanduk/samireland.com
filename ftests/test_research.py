@@ -58,4 +58,18 @@ class PublicationAdditionTests(FunctionalTest):
         url_input = form.find_elements_by_tag_name("input")[3]
         doi_input = form.find_elements_by_tag_name("input")[4]
         authors_input = form.find_elements_by_tag_name("input")[5]
-        body_input = form.find_elements_by_tag_name("textarea")[1]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+
+        # They enter some data and submit
+        id_input.send_keys("my-first-paper")
+        title_input.send_keys("My First Paper")
+        date_input.send_keys("01-06-2017")
+        url_input.send_keys("https://papers.com/23/")
+        doi_input.send_keys("10.1038/171737a0")
+        authors_input.send_keys("S Ireland, M Goodwright")
+        body_input.send_keys("Line 1\n\nLine 2")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the page for the new publication
+        self.check_page("/research/my-first-paper/")
