@@ -14,7 +14,9 @@ def home(request):
 
 def research(request):
     text = grab_editable_text("research")
-    return shortcuts.render(request, "research.html", {"text": text})
+    return shortcuts.render(request, "research.html", {
+     "text": text, "publications": Publication.objects.all().order_by("date")
+    })
 
 
 @login_required(login_url="/", redirect_field_name=None)

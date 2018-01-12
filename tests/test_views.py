@@ -34,6 +34,17 @@ class HomeViewTests(ViewTest):
 
 class ResearchViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Publication.objects.all")
+        self.mock_all = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
     def test_research_view_uses_research_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(research, request, "research.html")
@@ -43,6 +54,18 @@ class ResearchViewTests(ViewTest):
         request = self.make_request("---")
         self.check_view_has_context(research, request, {"text": "EDTEXT"})
         self.mock_grab.assert_called_with("research")
+
+
+    def test_research_view_sends_publications(self):
+        request = self.make_request("---")
+        all_pubs = Mock()
+        self.mock_all.return_value = all_pubs
+        ordered_pubs = Mock()
+        all_pubs.order_by.return_value = ordered_pubs
+        self.check_view_has_context(
+         research, request, {"publications": ordered_pubs}
+        )
+        all_pubs.order_by.assert_called_with("date")
 
 
 

@@ -29,6 +29,17 @@
     <a class="new" href="/research/new/">Add publication</a>
     {% endif %}
 
-    <p>Currently no publications.</p>
+    {% if publications %}
+        {% for pub in publications %}
+            <div class="publication">
+                <h3 class="pub-title">{{ pub.title }}</h3>
+                <div class="pub-date">{{ pub.date|date:"j F, Y" }}</div>
+                <div class="pub-authors">{{ pub.html_authors|safe }}</div>
+                <a class="pub-summary" href="/research/{{ pub.id }}/">Read Summary</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-pub">Currently no publications.</p>
+    {% endif %}
 
 {% endblock %}

@@ -91,3 +91,28 @@ class PublicationAdditionTests(FunctionalTest):
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Line 1")
         self.assertEqual(paragraphs[1].text, "Line 2")
+
+        # They go back to the research page and the publication is there too
+        self.get("/research/")
+        publications = self.browser.find_element_by_id("publications")
+        self.assertNotIn("no publications", publications.text)
+        publications = publications.find_elements_by_class_name("publication")
+        self.assertEqual(len(publications), 1)
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-title").text,
+         "My First Paper"
+        )
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-date").text,
+         "1 June, 2017"
+        )
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-authors").text,
+         "S Ireland, M Goodwright"
+        )
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-summary").text,
+         "Read Summary"
+        )
+        self.click(publications[0].find_element_by_tag_name("a"))
+        self.check_page("/research/my-first-paper/")
