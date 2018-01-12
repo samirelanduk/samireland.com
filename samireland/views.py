@@ -4,7 +4,7 @@ import django.shortcuts as shortcuts
 from django.http import Http404
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
-from .models import EditableText
+from .models import EditableText, Publication
 from .forms import PublicationForm
 
 def home(request):
@@ -19,8 +19,21 @@ def research(request):
 
 @login_required(login_url="/", redirect_field_name=None)
 def new_pub(request):
+    if request.method == "POST":
+        form = PublicationForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/research/{}/".format(request.POST["id"]))
     form = PublicationForm()
     return shortcuts.render(request, "new-pub.html", {"form": form})
+
+
+def publication(request, id):
+    try:
+        publication = Publication.objects.get(id=id)
+    except Publication.DoesNotExist:
+        raise Http404
+    return shortcuts.render(request, "publication.html", {"publication": publication})
 
 
 def about(request):

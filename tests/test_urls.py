@@ -16,6 +16,10 @@ class UrlTests(TestCase, TestCaseX):
         self.check_url_returns_view("/research/new/", views.new_pub)
 
 
+    def test_publication_url(self):
+        self.check_url_returns_view("/research/ab-cd/", views.publication)
+
+
     def test_about_url(self):
         self.check_url_returns_view("/about/", views.about)
 

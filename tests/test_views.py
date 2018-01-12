@@ -1,6 +1,6 @@
 from unittest.mock import patch, Mock
 from seleniumx import TestCaseX
-from django.http import Http404
+from django.http import Http404, QueryDict
 from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
@@ -74,6 +74,63 @@ class NewPublicationViewTests(ViewTest):
         request = self.make_request("---", loggedin=True)
         self.check_view_has_context(new_pub, request, {"form": "FORM"})
         self.mock_form.assert_called_with()
+
+
+    def test_new_pub_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx"}, loggedin=True
+        )
+        self.check_view_redirects(new_pub, request, "/research/xxx/")
+
+
+    def test_new_pub_can_create_publication(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx", "b": "C"}, loggedin=True
+        )
+        new_pub(request)
+        self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
+class PublicationViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Publication.objects.get")
+        self.mock_get = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+    def test_pub_view_uses_pub_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(
+         publication, request, "publication.html", "abc"
+        )
+
+
+    def test_pub_view_can_get_publication(self):
+        self.mock_get.return_value = "PUB"
+        request = self.make_request("---")
+        self.check_view_has_context(
+         publication, request, {"publication": "PUB"}, "abc"
+        )
+        self.mock_get.assert_called_with(id="abc")
+
+
+    def test_can_get_404_publication(self):
+        self.mock_get.side_effect = Publication.DoesNotExist
+        request = self.make_request("---")
+        with self.assertRaises(Http404):
+            publication(request, "abc")
+        self.mock_get.assert_called_with(id="abc")
 
 
 

@@ -73,3 +73,5 @@ class PublicationAdditionTests(FunctionalTest):
 
         # They are on the page for the new publication
         self.check_page("/research/my-first-paper/")
+        self.check_title("My First Paper")
+        self.check_h1("My First Paper")
