@@ -20,6 +20,12 @@ class ResearchPageTests(FunctionalTest):
         with self.assertRaises(self.NoElement):
             summary.find_element_by_tag_name("form")
 
+        # There is a publications section
+        publications = self.browser.find_element_by_class_name("publications")
+        h2 = publications.find_element_by_tag_name("h2")
+        self.assertEqual(h2.text, "Publications")
+        self.assertIn("no publications", publications.text)
+
 
     def test_can_change_research_page_text(self):
         self.check_editable_text("/research/", "summary")
