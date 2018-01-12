@@ -7,6 +7,20 @@
 {% endblock %}
 
 {% block main %}
-<h1>{{ publication.title }}</h1>
+<article>
+    <h1>{{ publication.title }}</h1>
+
+    <div class="pub-about">
+        <div class="date">{{ publication.date|date:"j F, Y" }}</div>
+        <div class="external-link">
+            <a href="{{ publication.url }}" target="_blank">Full Publication</a> | DOI: {{ publication.doi }}</a>
+        </div>
+        <div class="authors">{{ publication.html_authors|safe }}</div>
+    </div>
+
+    <div class="pub-body">
+    {{ publication.html|safe }}
+    </div>
+</article>
 
 {% endblock %}

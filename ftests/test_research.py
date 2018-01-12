@@ -66,7 +66,7 @@ class PublicationAdditionTests(FunctionalTest):
         date_input.send_keys("01-06-2017")
         url_input.send_keys("https://papers.com/23/")
         doi_input.send_keys("10.1038/171737a0")
-        authors_input.send_keys("S Ireland, M Goodwright")
+        authors_input.send_keys("S Ireland, M *Good*wright")
         body_input.send_keys("Line 1\n\nLine 2")
         submit = form.find_elements_by_tag_name("input")[-1]
         self.click(submit)
@@ -75,3 +75,19 @@ class PublicationAdditionTests(FunctionalTest):
         self.check_page("/research/my-first-paper/")
         self.check_title("My First Paper")
         self.check_h1("My First Paper")
+
+        # There is an about section
+        about = self.browser.find_element_by_class_name("pub-about")
+        date = about.find_element_by_class_name("date")
+        link = about.find_element_by_class_name("external-link")
+        authors = about.find_element_by_class_name("authors")
+        self.assertEqual(date.text, "1 June, 2017")
+        self.assertEqual(link.text, "Full Publication | DOI: 10.1038/171737a0")
+        self.assertEqual(authors.text, "S Ireland, M Goodwright")
+
+        # There is a body
+        body = self.browser.find_element_by_class_name("pub-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Line 1")
+        self.assertEqual(paragraphs[1].text, "Line 2")
