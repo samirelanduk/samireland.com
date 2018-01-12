@@ -116,3 +116,73 @@ class PublicationAdditionTests(FunctionalTest):
         )
         self.click(publications[0].find_element_by_tag_name("a"))
         self.check_page("/research/my-first-paper/")
+
+
+    def test_publication_id_must_be_unique(self):
+        self.login()
+        self.get("/research/new/")
+
+        # There is a form
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+
+        # They enter some data and submit
+        id_input.send_keys("my-first-paper")
+        title_input.send_keys("My First Paper")
+        date_input.send_keys("01-06-2017")
+        url_input.send_keys("https://papers.com/23/")
+        doi_input.send_keys("10.1038/171737a0")
+        authors_input.send_keys("S Ireland, M *Good*wright")
+        body_input.send_keys("Line 1\n\nLine 2")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They do it again
+        self.get("/research/new/")
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        id_input.send_keys("my-first-paper")
+        title_input.send_keys("My First Paper")
+        date_input.send_keys("01-06-2017")
+        url_input.send_keys("https://papers.com/23/")
+        doi_input.send_keys("10.1038/171737a0")
+        authors_input.send_keys("S Ireland, M *Good*wright")
+        body_input.send_keys("Line 1\n\nLine 2")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the same page
+        self.check_page("/research/new/")
+
+        # The form is still filled in
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        self.assertEqual(id_input.get_attribute("value"), "my-first-paper")
+        self.assertEqual(title_input.get_attribute("value"), "My First Paper")
+        self.assertEqual(date_input.get_attribute("value"), "2017-06-01")
+        self.assertEqual(url_input.get_attribute("value"), "https://papers.com/23/")
+        self.assertEqual(doi_input.get_attribute("value"), "10.1038/171737a0")
+        self.assertEqual(authors_input.get_attribute("value"), "S Ireland, M *Good*wright")
+        self.assertEqual(body_input.get_attribute("value"), "Line 1\n\nLine 2")
+
+        # There is an error message
+        error = form.find_element_by_class_name("error-message")
+        self.assertIn("already", error.text)

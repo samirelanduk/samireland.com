@@ -13,11 +13,21 @@ class PublicationForm(forms.ModelForm):
         exclude = []
 
         widgets = {
-            "id": forms.TextInput(attrs={"placeholder": "ID"}),
-            "title": forms.TextInput(attrs={"placeholder": "Title"}),
-            "date": DateInput(),
-            "url": forms.TextInput(attrs={"placeholder": "URL"}),
-            "doi": forms.TextInput(attrs={"placeholder": "DOI"}),
-            "authors": forms.TextInput(attrs={"placeholder": "Authors"}),
-            "body": forms.Textarea(attrs={"placeholder": "Body"}),
+         "id": forms.TextInput(attrs={
+          "placeholder": "ID", "autocomplete": "off"
+         }),
+         "title": forms.TextInput(attrs={
+          "placeholder": "Title", "autocomplete": "off"
+         }),
+         "date": DateInput(),
+         "url": forms.TextInput(attrs={
+          "placeholder": "URL", "autocomplete": "off"
+         }),
+         "doi": forms.TextInput(attrs={
+          "placeholder": "DOI", "autocomplete": "off"
+         }),
+         "authors": forms.TextInput(attrs={
+          "placeholder": "Authors", "autocomplete": "off"
+         }),
+         "body": forms.Textarea(attrs={"placeholder": "Body"}),
         }

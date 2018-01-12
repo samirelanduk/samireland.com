@@ -25,7 +25,9 @@ def new_pub(request):
         form = PublicationForm(request.POST)
         if form.is_valid():
             form.save()
-        return shortcuts.redirect("/research/{}/".format(request.POST["id"]))
+            return shortcuts.redirect("/research/{}/".format(request.POST["id"]))
+        else:
+            return shortcuts.render(request, "new-pub.html", {"form": form})
     form = PublicationForm()
     return shortcuts.render(request, "new-pub.html", {"form": form})
 

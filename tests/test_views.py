@@ -119,6 +119,19 @@ class NewPublicationViewTests(ViewTest):
         form.save.assert_called_with()
 
 
+    def test_new_pub_validation(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = False
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx", "b": "C"}, loggedin=True
+        )
+        self.check_view_uses_template(new_pub, request, "new-pub.html")
+        self.check_view_has_context(new_pub, request, {"form": form})
+        form.is_valid.assert_called_with()
+
+
+
 
 class PublicationViewTests(ViewTest):
 
