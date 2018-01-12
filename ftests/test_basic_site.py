@@ -148,3 +148,10 @@ class AuthTests(FunctionalTest):
         # There is only one link in the header
         header = self.browser.find_element_by_tag_name("header")
         self.assertEqual(len(header.find_elements_by_tag_name("a")), 1)
+
+
+    def test_protected_pages_are_protected(self):
+        pages = ["/research/new/"]
+        for page in pages:
+            self.get(page)
+            self.check_page("/")

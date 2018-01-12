@@ -204,6 +204,20 @@ button {
     color: #FFFFFF;
 }
 
+a, a:visited {
+    color: #0074D9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.new {
+    font-weight: bold;
+    font-style: italic;
+}
+
 
 textarea {
     width: 100%;

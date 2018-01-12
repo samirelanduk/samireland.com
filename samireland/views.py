@@ -3,6 +3,7 @@
 import django.shortcuts as shortcuts
 from django.http import Http404
 import django.contrib.auth as auth
+from django.contrib.auth.decorators import login_required
 from .models import EditableText
 
 def home(request):
@@ -13,6 +14,11 @@ def home(request):
 def research(request):
     text = grab_editable_text("research")
     return shortcuts.render(request, "research.html", {"text": text})
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def new_pub(request):
+    return shortcuts.render(request, "new-pub.html")
 
 
 def about(request):

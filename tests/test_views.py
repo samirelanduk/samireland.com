@@ -45,6 +45,18 @@ class ResearchViewTests(ViewTest):
         self.mock_grab.assert_called_with("research")
 
 
+class NewPublicationViewTests(ViewTest):
+
+    def test_new_pub_view_uses_new_pub_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(new_pub, request, "new-pub.html")
+
+
+    def test_new_pub_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(new_pub, request, "/")
+
+
 
 class AboutViewTests(ViewTest):
 

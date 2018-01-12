@@ -2,6 +2,10 @@
 
 {% block title %}Research{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/research.css">
+{% endblock %}
+
 {% block main %}
 <h1>Research</h1>
 
@@ -18,8 +22,13 @@
     {% endif %}
 </div>
 
-<div class="publications">
+<div id="publications">
     <h2>Publications</h2>
 
+    {% if user.is_authenticated %}
+    <a class="new" href="/research/new/">Add publication</a>
+    {% endif %}
+
     <p>Currently no publications.</p>
+
 {% endblock %}
