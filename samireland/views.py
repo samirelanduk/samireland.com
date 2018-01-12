@@ -6,26 +6,17 @@ import django.contrib.auth as auth
 from .models import EditableText
 
 def home(request):
-    try:
-        text = EditableText.objects.get(name="home")
-    except EditableText.DoesNotExist:
-        text = EditableText.objects.create(name="home", body="")
+    text = grab_editable_text("home")
     return shortcuts.render(request, "home.html", {"text": text})
 
 
 def research(request):
-    try:
-        text = EditableText.objects.get(name="research")
-    except EditableText.DoesNotExist:
-        text = EditableText.objects.create(name="research", body="")
+    text = grab_editable_text("research")
     return shortcuts.render(request, "research.html", {"text": text})
 
 
 def about(request):
-    try:
-        text = EditableText.objects.get(name="about")
-    except EditableText.DoesNotExist:
-        text = EditableText.objects.create(name="about", body="")
+    text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})
 
 
@@ -55,3 +46,10 @@ def edit(request, name):
             text.save()
             return shortcuts.redirect(request.POST["redirect"])
     raise Http404
+
+
+def grab_editable_text(name):
+    try:
+        return EditableText.objects.get(name=name)
+    except EditableText.DoesNotExist:
+        return EditableText.objects.create(name=name, body="")

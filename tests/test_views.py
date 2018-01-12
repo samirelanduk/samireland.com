@@ -8,17 +8,13 @@ from samireland.views import *
 class ViewTest(TestCase, TestCaseX):
 
     def setUp(self):
-        self.patcher1 = patch("samireland.views.EditableText.objects.create")
-        self.patcher2 = patch("samireland.views.EditableText.objects.get")
-        self.mock_create = self.patcher1.start()
-        self.mock_get = self.patcher2.start()
-        self.mock_create.return_value = "EDTEXT"
-        self.mock_get.side_effect = EditableText.DoesNotExist
+        self.patcher1 = patch("samireland.views.grab_editable_text")
+        self.mock_grab = self.patcher1.start()
+        self.mock_grab.return_value = "EDTEXT"
 
 
     def tearDown(self):
         self.patcher1.stop()
-        self.patcher2.stop()
 
 
 
@@ -29,40 +25,10 @@ class HomeViewTests(ViewTest):
         self.check_view_uses_template(home, request, "home.html")
 
 
-    def test_home_view_can_create_and_send_text(self):
+    def test_home_view_can_send_text(self):
         request = self.make_request("---")
         self.check_view_has_context(home, request, {"text": "EDTEXT"})
-        self.mock_create.assert_called_with(name="home", body="")
-
-
-    def test_home_view_can_obtain_and_send_text(self):
-        request = self.make_request("---")
-        self.mock_get.side_effect = ["EDTEXT"]
-        self.check_view_has_context(home, request, {"text": "EDTEXT"})
-        self.assertFalse(self.mock_create.called)
-        self.mock_get.assert_called_with(name="home")
-
-
-
-class AboutViewTests(ViewTest):
-
-    def test_about_view_uses_about_template(self):
-        request = self.make_request("---")
-        self.check_view_uses_template(about, request, "about.html")
-
-
-    def test_about_view_can_create_and_send_text(self):
-        request = self.make_request("---")
-        self.check_view_has_context(about, request, {"text": "EDTEXT"})
-        self.mock_create.assert_called_with(name="about", body="")
-
-
-    def test_about_view_can_obtain_and_send_text(self):
-        request = self.make_request("---")
-        self.mock_get.side_effect = ["EDTEXT"]
-        self.check_view_has_context(about, request, {"text": "EDTEXT"})
-        self.assertFalse(self.mock_create.called)
-        self.mock_get.assert_called_with(name="about")
+        self.mock_grab.assert_called_with("home")
 
 
 
@@ -73,20 +39,26 @@ class ResearchViewTests(ViewTest):
         self.check_view_uses_template(research, request, "research.html")
 
 
-    def test_research_view_can_create_and_send_text(self):
+    def test_research_view_can_send_text(self):
         request = self.make_request("---")
         self.check_view_has_context(research, request, {"text": "EDTEXT"})
-        self.mock_create.assert_called_with(name="research", body="")
+        self.mock_grab.assert_called_with("research")
 
 
-    def test_research_view_can_obtain_and_send_text(self):
+
+class AboutViewTests(ViewTest):
+
+    def test_about_view_uses_about_template(self):
         request = self.make_request("---")
-        self.mock_get.side_effect = ["EDTEXT"]
-        self.check_view_has_context(research, request, {"text": "EDTEXT"})
-        self.assertFalse(self.mock_create.called)
-        self.mock_get.assert_called_with(name="research")
+        self.check_view_uses_template(about, request, "about.html")
 
-        
+
+    def test_about_view_can_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(about, request, {"text": "EDTEXT"})
+        self.mock_grab.assert_called_with("about")
+
+
 
 class LoginViewTests(TestCase, TestCaseX):
 
@@ -193,3 +165,34 @@ class EditViewTests(TestCase, TestCaseX):
         self.mock_get.assert_called_with(name="home")
         self.assertEqual(self.mock_text.body, "...")
         self.mock_text.save.assert_called()
+
+
+
+class EditableTextGrabberTests(TestCase):
+
+    def setUp(self):
+        self.patcher1 = patch("samireland.views.EditableText.objects.create")
+        self.patcher2 = patch("samireland.views.EditableText.objects.get")
+        self.mock_create = self.patcher1.start()
+        self.mock_get = self.patcher2.start()
+        self.mock_create.return_value = "EDTEXT"
+        self.mock_get.side_effect = EditableText.DoesNotExist
+
+
+    def tearDown(self):
+        self.patcher1.stop()
+        self.patcher2.stop()
+
+
+    def test_grabber_can_create_and_return_text(self):
+        text = grab_editable_text("xxx")
+        self.assertEqual(text, "EDTEXT")
+        self.mock_create.assert_called_with(name="xxx", body="")
+
+
+    def test_home_view_can_obtain_and_send_text(self):
+        self.mock_get.side_effect = ["EDTEXT"]
+        text = grab_editable_text("xxx")
+        self.assertEqual(text, "EDTEXT")
+        self.assertFalse(self.mock_create.called)
+        self.mock_get.assert_called_with(name="xxx")
