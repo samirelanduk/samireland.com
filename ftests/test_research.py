@@ -49,3 +49,13 @@ class PublicationAdditionTests(FunctionalTest):
         self.check_page("/research/new/")
         self.check_title("New Publication")
         self.check_h1("New Publication")
+
+        # There is a form
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        body_input = form.find_elements_by_tag_name("textarea")[1]
