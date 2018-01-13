@@ -10,6 +10,7 @@ urlpatterns = [
  path(r"research/", views.research),
  path(r"research/new/", views.new_pub),
  path(r"research/<slug:id>/", views.publication),
+ path(r"research/<slug:id>/edit/", views.edit_pub),
  path(r"about/", views.about),
  path(r"", views.home)
 ]

@@ -40,6 +40,24 @@ def publication(request, id):
     return shortcuts.render(request, "publication.html", {"publication": publication})
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def edit_pub(request, id):
+    try:
+        publication = Publication.objects.get(id=id)
+    except Publication.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        request.POST = request.POST.copy()
+        request.POST["id"] = id
+        form = PublicationForm(request.POST, instance=publication)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/research/{}/".format(id))
+
+    form = PublicationForm(instance=publication)
+    return shortcuts.render(request, "edit-pub.html", {"form": form})
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})

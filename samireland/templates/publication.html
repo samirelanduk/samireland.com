@@ -8,6 +8,7 @@
 
 {% block main %}
 <article>
+    {% if user.is_authenticated %}<a class="edit" href="/research/{{ publication.id }}/edit/">Edit</a>{% endif %}
     <h1>{{ publication.title }}</h1>
 
     <div class="pub-about">

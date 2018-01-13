@@ -237,3 +237,76 @@ class PublicationAdditionTests(FunctionalTest):
         # There is an error message
         error = form.find_element_by_class_name("error-message")
         self.assertIn("already", error.text)
+
+
+
+class PublicationEditingTests(FunctionalTest):
+
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        Publication.objects.create(
+         id="paper-1", title="The First Paper", date="2016-01-01",
+         url="www.com", doi="DDD", authors="Jack, Jill",
+         body="Line 1\n\nLine 2"
+        )
+
+
+    def test_can_edit_paper(self):
+        self.login()
+
+        # The user goes to the publication page
+        self.get("/research/paper-1/")
+
+        # There is an edit link
+        edit = self.browser.find_element_by_class_name("edit")
+        self.click(edit)
+
+        # They are on the edit page, and there is a filled in form
+        self.check_page("/research/paper-1/edit/")
+        self.check_title("Edit Publication")
+        self.check_h1("Edit Publication")
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        url_input = form.find_elements_by_tag_name("input")[3]
+        doi_input = form.find_elements_by_tag_name("input")[4]
+        authors_input = form.find_elements_by_tag_name("input")[5]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        self.assertEqual(id_input.get_attribute("value"), "paper-1")
+        self.assertFalse(id_input.is_enabled())
+        self.assertEqual(title_input.get_attribute("value"), "The First Paper")
+        self.assertEqual(date_input.get_attribute("value"), "2016-01-01")
+        self.assertEqual(url_input.get_attribute("value"), "www.com")
+        self.assertEqual(doi_input.get_attribute("value"), "DDD")
+        self.assertEqual(authors_input.get_attribute("value"), "Jack, Jill")
+        self.assertEqual(body_input.get_attribute("value"), "Line 1\n\nLine 2")
+
+        # They make a bunch of edits and save
+        title_input.send_keys("T")
+        date_input.send_keys("2")
+        url_input.send_keys("U")
+        doi_input.send_keys("D")
+        authors_input.send_keys("A")
+        body_input.send_keys("B")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the publication page and it is changed
+        self.check_page("/research/paper-1/")
+        self.check_title("The First PaperT")
+        self.check_h1("The First PaperT")
+        about = self.browser.find_element_by_class_name("pub-about")
+        date = about.find_element_by_class_name("date")
+        link = about.find_element_by_class_name("external-link")
+        authors = about.find_element_by_class_name("authors")
+        self.assertEqual(date.text, "2 January, 2016")
+        self.assertEqual(link.text, "Full Publication | DOI: DDDD")
+        self.assertEqual(authors.text, "Jack, JillA")
+
+        # There is a body
+        body = self.browser.find_element_by_class_name("pub-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Line 1")
+        self.assertEqual(paragraphs[1].text, "Line 2B")

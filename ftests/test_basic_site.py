@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+from samireland.models import Publication
 
 class SiteLayoutTests(FunctionalTest):
 
@@ -151,7 +152,12 @@ class AuthTests(FunctionalTest):
 
 
     def test_protected_pages_are_protected(self):
-        pages = ["/research/new/"]
+        Publication.objects.create(
+         id="paper-1", title="The First Paper", date="2016-01-01",
+         url="www.com", doi="DDD", authors="Jack, Jill",
+         body="Line 1\n\nLine 2"
+        )
+        pages = ["/research/new/", "/research/paper-1/edit/"]
         for page in pages:
             self.get(page)
             self.check_page("/")

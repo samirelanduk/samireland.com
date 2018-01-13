@@ -193,7 +193,7 @@ button {
     position: relative;
 }
 
-.edit {
+button.edit, a.edit, a:visited.edit {
     position: absolute;
     top: -20px;
     right: 0;

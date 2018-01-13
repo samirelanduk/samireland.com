@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Publication{% endblock %}
+
+{% block main %}
+<h1>Edit Publication</h1>
+<form method="POST">
+    <input type="text" name="id" value="{{ form.id.value }}" disabled>
+    {{ form.title }}
+    {{ form.date }}
+    {{ form.url }}
+    {{ form.doi }}
+    {{ form.authors }}
+    {{ form.body }}
+    {% csrf_token %}
+    <input type="submit" value="Save">
+</form>
+{% endblock %}
