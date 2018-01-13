@@ -15,4 +15,13 @@
     {% csrf_token %}
     <input type="submit" value="Save">
 </form>
+
+<button class="delete" onclick="makeDeletionAppear(this);">Delete</button>
+<form class="hidden-form deletion" method="POST">
+    <p>Are you sure you want to delete this publication?</p>
+    <button type="button" onclick="hideDeletion(this);">No, go back</button>
+    <input type="hidden" name="delete" value="yes">
+    {% csrf_token %}
+    <input type="submit" class="delete-button" value="Yes, delete">
+</form>
 {% endblock %}

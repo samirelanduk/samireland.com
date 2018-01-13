@@ -47,6 +47,9 @@ def edit_pub(request, id):
     except Publication.DoesNotExist:
         raise Http404
     if request.method == "POST":
+        if "delete" in request.POST:
+            publication.delete()
+            return shortcuts.redirect("/research/")
         request.POST = request.POST.copy()
         request.POST["id"] = id
         form = PublicationForm(request.POST, instance=publication)

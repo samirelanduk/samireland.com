@@ -23,3 +23,15 @@ function editText(button, csrf) {
     var form = $(".hidden-form");
     form.show();
 }
+
+
+function makeDeletionAppear(button) {
+    var form = $(".hidden-form");
+    form.show();
+}
+
+
+function hideDeletion(button) {
+    var form = $(".hidden-form");
+    form.hide();
+}

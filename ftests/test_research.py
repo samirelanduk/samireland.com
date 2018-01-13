@@ -11,6 +11,7 @@ class ResearchPageTests(FunctionalTest):
         self.click(nav_links[1])
 
         # The page has the correct heading
+        self.check_page("/research/")
         self.check_title("Research")
         self.check_h1("Research")
 
@@ -310,3 +311,41 @@ class PublicationEditingTests(FunctionalTest):
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Line 1")
         self.assertEqual(paragraphs[1].text, "Line 2B")
+
+
+    def test_publication_deletion(self):
+        # User goes to edit the publication
+        self.login()
+        self.get("/research/paper-1/")
+        edit = self.browser.find_element_by_class_name("edit")
+        self.click(edit)
+        self.check_page("/research/paper-1/edit/")
+
+        # There is a deletion button
+        delete_button = self.browser.find_element_by_tag_name("button")
+        self.assertIn("Delete", delete_button.text)
+
+        # They click it and a form appears
+        deletion_form = self.browser.find_elements_by_tag_name("form")[1]
+        self.check_invisible(deletion_form)
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+
+        # The form asks them if they really want to delete and they back down
+        self.assertIn("sure", deletion_form.text)
+        no = deletion_form.find_element_by_tag_name("button")
+        self.assertIn("No", no.text)
+        self.click(no)
+        self.check_invisible(deletion_form)
+
+        # They change their mind and delete
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+        yes = deletion_form.find_elements_by_tag_name("input")[-1]
+        self.assertIn("Yes", yes.get_attribute("value"))
+        self.click(yes)
+
+        # They are back on the research page and the publication is gone
+        self.check_page("/research/")
+        publications = self.browser.find_element_by_id("publications")
+        self.assertIn("no publications", publications.text)

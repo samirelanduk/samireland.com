@@ -205,6 +205,44 @@ button.edit, a.edit, a:visited.edit {
     color: #FFFFFF;
 }
 
+.delete {
+    background-color: #EE4136;
+    color: #FFFFFF;
+    padding: 5px;
+    border-width: 0px;
+    border-radius: 3px;
+    margin-top: 20px;
+}
+
+.deletion {
+    border: 2px solid #EE4136;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.deletion p {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.delete-button, .deletion button {
+    font-size: 100%;
+    padding: 5px;
+    border-width: 0px;
+    border-radius: 3px;
+    line-height: 1.2;
+    color: #FFFFFF;
+}
+
+.deletion button {
+    background-color: #2ECC40;
+}
+
+.deletion .delete-button {
+    background-color: #85144b;
+}
+
 a, a:visited {
     color: #0074D9;
     text-decoration: none;
