@@ -65,7 +65,7 @@ class ResearchViewTests(ViewTest):
         self.check_view_has_context(
          research, request, {"publications": ordered_pubs}
         )
-        all_pubs.order_by.assert_called_with("date")
+        all_pubs.order_by.assert_called_with("-date")
 
 
 

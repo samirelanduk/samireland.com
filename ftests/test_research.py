@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+from samireland.models import Publication
 
 class ResearchPageTests(FunctionalTest):
 
@@ -31,6 +32,56 @@ class ResearchPageTests(FunctionalTest):
 
     def test_can_change_research_page_text(self):
         self.check_editable_text("/research/", "summary")
+
+
+    def test_research_page_publications(self):
+        Publication.objects.create(
+         id="paper-1", title="The First Paper", date="2016-01-01",
+         url="www.com", doi="DDD", authors="Jack, Jill",
+         body="Line 1\n\nLine 2"
+        )
+        Publication.objects.create(
+         id="paper-2", title="The Recent Paper", date="2016-08-09",
+         url="www.com", doi="DDD2", authors="Jack, Jill, Bob",
+         body="Line 1\n\nLine 2"
+        )
+        Publication.objects.create(
+         id="paper-3", title="The Middle Paper", date="2016-04-12",
+         url="www.com", doi="DDD3", authors="Jack, Sally",
+         body="Line 1\n\nLine 2"
+        )
+
+        # They go to the page and look at the publications - there are 3
+        self.get("/research/")
+        publications = self.browser.find_element_by_id("publications")
+        publications = publications.find_elements_by_class_name("publication")
+        self.assertEqual(len(publications), 3)
+
+        # They are in the correct order
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-title").text,
+         "The Recent Paper"
+        )
+        self.assertEqual(
+         publications[0].find_element_by_class_name("pub-date").text,
+         "9 August, 2016"
+        )
+        self.assertEqual(
+         publications[1].find_element_by_class_name("pub-title").text,
+         "The Middle Paper"
+        )
+        self.assertEqual(
+         publications[1].find_element_by_class_name("pub-date").text,
+         "12 April, 2016"
+        )
+        self.assertEqual(
+         publications[2].find_element_by_class_name("pub-title").text,
+         "The First Paper"
+        )
+        self.assertEqual(
+         publications[2].find_element_by_class_name("pub-date").text,
+         "1 January, 2016"
+        )
 
 
 

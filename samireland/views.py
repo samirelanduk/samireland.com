@@ -15,7 +15,7 @@ def home(request):
 def research(request):
     text = grab_editable_text("research")
     return shortcuts.render(request, "research.html", {
-     "text": text, "publications": Publication.objects.all().order_by("date")
+     "text": text, "publications": Publication.objects.all().order_by("-date")
     })
 
 
