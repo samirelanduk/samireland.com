@@ -2,6 +2,7 @@
 
 import django.shortcuts as shortcuts
 from django.http import Http404
+from django.db import IntegrityError
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -69,9 +70,15 @@ def about(request):
 @login_required(login_url="/", redirect_field_name=None)
 def media(request):
     if request.method == "POST":
-        MediaFile.objects.create(
-         name=request.POST["name"], mediafile=request.FILES["file"]
-        )
+        try:
+            MediaFile.objects.create(
+             name=request.POST["name"], mediafile=request.FILES["file"]
+            )
+        except IntegrityError:
+            return shortcuts.render(request, "media.html", {
+             "error": "There is already media with that name",
+             "media": MediaFile.objects.all()
+            })
         return shortcuts.redirect("/media/")
     return shortcuts.render(request, "media.html", {
      "media": MediaFile.objects.all()

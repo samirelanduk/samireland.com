@@ -10,6 +10,7 @@
 <h1>Media</h1>
 
 <form method="POST" enctype="multipart/form-data">
+    {% if error %}<div class="error-message">{{ error }}</div>{% endif %}
     <input type="file" name="file" required>
     <input type="text" placeholder="Media name" name="name" required>
     {% csrf_token %}

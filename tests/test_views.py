@@ -2,6 +2,7 @@ from unittest.mock import patch, Mock
 from seleniumx import TestCaseX
 from django.http import Http404, QueryDict
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import IntegrityError
 from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
@@ -318,6 +319,18 @@ class MediaViewTests(ViewTest):
         request = self.make_request("---", loggedin=True)
         self.check_view_has_context(media, request, {"media": [1, 2, 3]})
         self.mock_all.assert_called_with()
+
+
+    def test_media_view_can_reject_duplicate_media_name(self):
+        self.mock_create.side_effect = IntegrityError
+        self.mock_all.return_value = [1, 2, 3]
+        request = self.make_request("---", method="post", loggedin=True, data={
+         "file": self.media_file, "name":"Test"
+        })
+        self.check_view_uses_template(media, request, "media.html")
+        self.check_view_has_context(media, request, {
+         "media": [1, 2, 3], "error": "There is already media with that name"
+        })
 
 
 
