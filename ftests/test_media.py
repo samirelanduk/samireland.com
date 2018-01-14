@@ -1,7 +1,26 @@
+import os
 from .base import FunctionalTest
-from samireland.settings import BASE_DIR
+from samireland.settings import BASE_DIR, MEDIA_ROOT
 
-class MediaUploadPageTests(FunctionalTest):
+class MediaTest(FunctionalTest):
+
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+        FunctionalTest.tearDown(self)
+
+
+
+class MediaUploadPageTests(MediaTest):
 
     def test_can_upload_images(self):
         self.login()
