@@ -1,7 +1,9 @@
 """URL redirects for samireland.com"""
 
 from django.urls import path, include
+from django.conf.urls.static import static
 import samireland.views as views
+from django.conf import settings
 
 urlpatterns = [
  path(r"authenticate/", views.login),
@@ -14,4 +16,7 @@ urlpatterns = [
  path(r"about/", views.about),
  path(r"media/", views.media),
  path(r"", views.home)
-]
+] + static(
+ settings.MEDIA_URL,
+ document_root=settings.MEDIA_ROOT
+)

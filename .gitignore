@@ -5,3 +5,4 @@ secrets.py
 *env
 media/storage
 *.log
+uploads/*

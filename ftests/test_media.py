@@ -65,3 +65,9 @@ class MediaUploadPageTests(MediaTest):
         grid = self.browser.find_element_by_id("media-grid")
         media = grid.find_elements_by_class_name("media-square")
         self.assertEqual(len(media), 1)
+
+        # The media's text is the title
+        self.assertIn("test-image", media[0].text)
+
+        # It has the image as background
+        self.assertTrue(media[0].value_of_css_property("background-image").endswith(".png\")"))
