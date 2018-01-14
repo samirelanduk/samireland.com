@@ -257,10 +257,15 @@ class EditPublicationViewTests(ViewTest):
 
 class ProjectsViewTests(ViewTest):
 
-
     def test_projects_view_uses_projects_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(projects, request, "projects.html")
+
+
+    def test_projects_view_can_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(projects, request, {"text": "EDTEXT"})
+        self.mock_grab.assert_called_with("projects")
 
 
 

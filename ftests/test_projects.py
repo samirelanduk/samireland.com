@@ -44,3 +44,7 @@ class ProjectPageTests(FunctionalTest):
         self.assertIn("no other projects", other.text)
         with self.assertRaises(self.NoElement):
             other.find_element_by_tag_name("a")
+
+
+    def test_can_change_projects_page_text(self):
+        self.check_editable_text("/projects/", "summary")
