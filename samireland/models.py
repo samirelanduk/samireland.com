@@ -1,6 +1,7 @@
 """Views for samireland.com"""
 
 import docupy
+from datetime import datetime
 from django.db import models
 
 class EditableText(models.Model):
@@ -32,3 +33,15 @@ class Publication(models.Model):
     @property
     def html_authors(self):
         return docupy.markdown_to_html(self.authors)
+
+
+
+class MediaFile(models.Model):
+
+    def create_filename(instance, filename):
+        extension = "." + filename.split(".")[-1] if "." in filename else ""
+        return datetime.strftime(datetime.now(), "%Y%m%d-%H%M%S") + extension
+
+
+    name = models.TextField(primary_key=True)
+    mediafile = models.FileField(upload_to=create_filename)

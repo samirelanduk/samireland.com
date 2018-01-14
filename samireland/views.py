@@ -4,7 +4,7 @@ import django.shortcuts as shortcuts
 from django.http import Http404
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
-from .models import EditableText, Publication
+from .models import *
 from .forms import PublicationForm
 
 def home(request):
@@ -64,6 +64,18 @@ def edit_pub(request, id):
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def media(request):
+    if request.method == "POST":
+        MediaFile.objects.create(
+         name=request.POST["name"], mediafile=request.FILES["file"]
+        )
+        return shortcuts.redirect("/media/")
+    return shortcuts.render(request, "media.html", {
+     "media": MediaFile.objects.all()
+    })
 
 
 def login(request):

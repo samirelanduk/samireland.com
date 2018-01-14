@@ -1,8 +1,11 @@
+import os
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import patch, Mock, MagicMock
 from seleniumx import TestCaseX
 from django.test import TestCase
-from samireland.models import EditableText, Publication
+from samireland.models import *
+from samireland.settings import MEDIA_ROOT
 
 class EditableTextTests(TestCase, TestCaseX):
 
@@ -113,3 +116,38 @@ class PublicationTests(TestCase, TestCaseX):
         output = pub.html_authors
         mock_html.assert_called_with("S, B")
         self.assertEqual(output, "test output")
+
+
+
+class MediaFileTests(TestCase, TestCaseX):
+
+    def setUp(self):
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+
+
+    def test_can_generate_filename(self):
+        instance = Mock()
+        name = MediaFile.create_filename(instance, "filename.bmp")
+        self.assertEqual(name[-4:], ".bmp")
+        datetime.strptime(name[:-4], "%Y%m%d-%H%M%S")
+
+
+    def test_can_create_media_files(self):
+        self.assertNotIn("123456.png", os.listdir(MEDIA_ROOT))
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(name="test", mediafile=media_file)
+        image.full_clean()
+        image.save()
+        self.assertIn(
+         datetime.now().strftime("%Y%m%d-%H%M%S") + ".png",
+         os.listdir(MEDIA_ROOT)
+        )

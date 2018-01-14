@@ -157,7 +157,7 @@ class AuthTests(FunctionalTest):
          url="www.com", doi="DDD", authors="Jack, Jill",
          body="Line 1\n\nLine 2"
         )
-        pages = ["/research/new/", "/research/paper-1/edit/"]
+        pages = ["/research/new/", "/research/paper-1/edit/", "/media/"]
         for page in pages:
             self.get(page)
             self.check_page("/")

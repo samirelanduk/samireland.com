@@ -1,7 +1,6 @@
 from seleniumx import TestCaseX
 from django.test import TestCase
 import samireland.views as views
-import media.views as media_views
 
 class UrlTests(TestCase, TestCaseX):
 
@@ -30,7 +29,7 @@ class UrlTests(TestCase, TestCaseX):
 
 
     def test_media_url(self):
-        self.check_url_returns_view("/media/", media_views.media)
+        self.check_url_returns_view("/media/", views.media)
 
 
     def test_login_url(self):

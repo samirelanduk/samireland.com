@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Media{% endblock %}
+
+{% block main %}
+<h1>Media</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="text" placeholder="Media name" name="name">
+    {% csrf_token %}
+    <input type="submit">
+</form>
+<div id="media-grid">
+    {% for mediafile in media %}
+        <div class="media-square" style="background-image: url(/{{ mediafile.mediafile.url }});">
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

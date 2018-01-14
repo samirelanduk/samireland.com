@@ -2,7 +2,6 @@
 
 from django.urls import path, include
 import samireland.views as views
-from media import urls as media_urls
 
 urlpatterns = [
  path(r"authenticate/", views.login),
@@ -13,6 +12,6 @@ urlpatterns = [
  path(r"research/<slug:id>/", views.publication),
  path(r"research/<slug:id>/edit/", views.edit_pub),
  path(r"about/", views.about),
- path(r"media/", include(media_urls)),
+ path(r"media/", views.media),
  path(r"", views.home)
 ]

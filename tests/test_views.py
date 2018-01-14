@@ -1,10 +1,10 @@
 from unittest.mock import patch, Mock
 from seleniumx import TestCaseX
 from django.http import Http404, QueryDict
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
-from media.views import *
 
 class ViewTest(TestCase, TestCaseX):
 
@@ -270,9 +270,54 @@ class AboutViewTests(ViewTest):
 
 class MediaViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.MediaFile.objects.create")
+        self.patcher3 = patch("samireland.views.MediaFile.objects.all")
+        self.mock_create = self.patcher2.start()
+        self.mock_all = self.patcher3.start()
+        self.media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        self.patcher3.stop()
+        ViewTest.tearDown(self)
+
+
     def test_media_view_uses_media_template(self):
-        request = self.make_request("---")
+        request = self.make_request("---", loggedin=True)
         self.check_view_uses_template(media, request, "media.html")
+
+
+    def test_media_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(media, request, "/")
+
+
+    def test_media_view_redirects_on_post(self):
+        request = self.make_request("---", method="post", loggedin=True, data={
+         "file": self.media_file, "name":"Test"
+        })
+        self.check_view_redirects(media, request, "/media/")
+
+
+    def test_media_view_can_create_media(self):
+        request = self.make_request("---", method="post", loggedin=True, data={
+         "file": self.media_file, "name":"Test"
+        })
+        media(request)
+        args, kwargs = self.mock_create.call_args_list[0]
+        self.assertEqual(len(kwargs), 2)
+        self.assertEqual(kwargs["name"], "Test")
+        self.assertEqual(str(kwargs["mediafile"]), "test.png")
+
+
+    def test_media_view_can_send_media(self):
+        self.mock_all.return_value = [1, 2, 3]
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(media, request, {"media": [1, 2, 3]})
+        self.mock_all.assert_called_with()
 
 
 

@@ -1,5 +1,6 @@
 # Settings for samireland.com
 
+import os
 from .secrets import SECRET_KEY, BASE_DIR, DATABASES
 
 ALLOWED_HOSTS = []
@@ -13,8 +14,7 @@ INSTALLED_APPS = [
  "django.contrib.staticfiles",
  "django.contrib.auth",
  "django.contrib.sessions",
- "samireland",
- "media"
+ "samireland"
 ]
 
 MIDDLEWARE = [
@@ -24,7 +24,8 @@ MIDDLEWARE = [
  "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
 
-STATIC_URL = "/static/"
+STATIC_URL = "/static/" # URL root for static files
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
 TEMPLATES = [{
  "BACKEND": "django.template.backends.django.DjangoTemplates",
