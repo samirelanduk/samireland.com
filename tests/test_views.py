@@ -4,6 +4,7 @@ from django.http import Http404, QueryDict
 from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
+from media.views import *
 
 class ViewTest(TestCase, TestCaseX):
 
@@ -253,8 +254,6 @@ class EditPublicationViewTests(ViewTest):
 
 
 
-
-
 class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):
@@ -266,6 +265,14 @@ class AboutViewTests(ViewTest):
         request = self.make_request("---")
         self.check_view_has_context(about, request, {"text": "EDTEXT"})
         self.mock_grab.assert_called_with("about")
+
+
+
+class MediaViewTests(ViewTest):
+
+    def test_media_view_uses_media_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(media, request, "media.html")
 
 
 

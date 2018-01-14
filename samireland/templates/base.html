@@ -26,6 +26,7 @@
         Sam Ire<a href="/authenticate/" id="login-link">l</a>and
         <div id="navicon">&#9776;</div>{{ request.user }}
         {% if user.is_authenticated %}
+            <a href="/media/" id="media-link">M</a>
             <a href="/logout/" id="logout-link">L</a>
         {% endif %}
     </header>

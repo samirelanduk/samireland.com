@@ -35,16 +35,24 @@ header {
 }
 
 
-#logout-link {
+#logout-link, #media-link {
   font-size: 50%;
   position: absolute;
   top: 0;
-  right: 0;
   display: block;
   background-color: #3B5998;
   line-height: 1;
   text-decoration: none;
   color: #FFFFFF;
+}
+
+#logout-link {
+  right: 0;
+}
+
+
+#media-link {
+  left: 0;
 }
 
 
@@ -317,7 +325,7 @@ textarea {
   }
 
 
-  #logout-link {
+  #logout-link, #media-link {
     font-size: 30%;
   }
 
