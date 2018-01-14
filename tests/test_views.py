@@ -269,6 +269,19 @@ class ProjectsViewTests(ViewTest):
 
 
 
+class NewProjectViewTests(ViewTest):
+
+    def test_new_project_view_uses_new_project_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(new_project, request, "new-project.html")
+
+
+    def test_new_project_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(new_project, request, "/")
+
+
+
 class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):

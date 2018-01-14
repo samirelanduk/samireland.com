@@ -21,6 +21,10 @@ class ProjectPageTests(FunctionalTest):
         with self.assertRaises(self.NoElement):
             summary.find_element_by_tag_name("form")
 
+        # There's no new project link
+        with self.assertRaises(self.NoElement):
+            self.browser.find_element_by_id("new-project")
+
         # There is a web projects section
         web = self.browser.find_element_by_id("web-projects")
         h2 = web.find_element_by_tag_name("h2")
@@ -48,3 +52,21 @@ class ProjectPageTests(FunctionalTest):
 
     def test_can_change_projects_page_text(self):
         self.check_editable_text("/projects/", "summary")
+
+
+
+class ProjectAdditionTests(FunctionalTest):
+
+    def test_can_add_project(self):
+        self.login()
+        self.get("/projects/")
+
+        # There is a link to create a new publication
+        new_project = self.browser.find_element_by_id("new-project")
+        link = new_project.find_element_by_tag_name("a")
+        self.click(link)
+
+        # They are on the new publication page
+        self.check_page("/projects/new/")
+        self.check_title("New Project")
+        self.check_h1("New Project")

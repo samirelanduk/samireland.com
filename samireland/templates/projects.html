@@ -22,6 +22,10 @@
     {% endif %}
 </div>
 
+{% if user.is_authenticated %}
+<div id="new-project"><a href="/projects/new/" class="new">New Project</a></div>
+{% endif %}
+
 <div id="web-projects">
     <h2>Web Projects</h2>
     <p>Currently no web projects.</p>

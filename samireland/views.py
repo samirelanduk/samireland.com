@@ -70,6 +70,11 @@ def projects(request):
     })
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def new_project(request):
+    return shortcuts.render(request, "new-project.html")
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})
