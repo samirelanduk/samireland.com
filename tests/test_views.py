@@ -255,6 +255,15 @@ class EditPublicationViewTests(ViewTest):
 
 
 
+class ProjectsViewTests(ViewTest):
+
+
+    def test_projects_view_uses_projects_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(projects, request, "projects.html")
+
+
+
 class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):

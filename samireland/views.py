@@ -63,6 +63,10 @@ def edit_pub(request, id):
     return shortcuts.render(request, "edit-pub.html", {"form": form})
 
 
+def projects(request):
+    return shortcuts.render(request, "projects.html")
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})
