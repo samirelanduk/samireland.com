@@ -275,14 +275,17 @@ class MediaViewTests(ViewTest):
         ViewTest.setUp(self)
         self.patcher2 = patch("samireland.views.MediaFile.objects.create")
         self.patcher3 = patch("samireland.views.MediaFile.objects.all")
+        self.patcher4 = patch("samireland.views.MediaFile.objects.get")
         self.mock_create = self.patcher2.start()
         self.mock_all = self.patcher3.start()
+        self.mock_get = self.patcher4.start()
         self.media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
 
 
     def tearDown(self):
         self.patcher2.stop()
         self.patcher3.stop()
+        self.patcher4.stop()
         ViewTest.tearDown(self)
 
 
@@ -332,6 +335,29 @@ class MediaViewTests(ViewTest):
          "media": [1, 2, 3], "error": "There is already media with that name"
         })
 
+
+    @patch("os.remove")
+    def test_media_view_redirects_on_deletion(self, mock_remove):
+        request = self.make_request("---", method="post", loggedin=True, data={
+         "delete": "yes", "name": "media-name"
+        })
+        self.check_view_redirects(media, request, "/media/")
+
+
+    @patch("os.remove")
+    def test_media_view_can_delete_media(self, mock_remove):
+        image = Mock()
+        image_file = Mock()
+        image.mediafile = image_file
+        image_file.path = "PATH"
+        self.mock_get.return_value = image
+        request = self.make_request("---", method="post", loggedin=True, data={
+         "delete": "yes", "name": "media-name"
+        })
+        media(request)
+        self.mock_get.assert_called_with(name="media-name")
+        image.delete.assert_called_with()
+        mock_remove.assert_called_with("PATH")
 
 
 class LoginViewTests(TestCase, TestCaseX):

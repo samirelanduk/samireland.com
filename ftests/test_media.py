@@ -1,5 +1,7 @@
 import os
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .base import FunctionalTest
+from samireland.models import MediaFile
 from samireland.settings import BASE_DIR, MEDIA_ROOT
 
 class MediaTest(FunctionalTest):
@@ -20,7 +22,7 @@ class MediaTest(FunctionalTest):
 
 
 
-class MediaUploadPageTests(MediaTest):
+class MediaUploadTests(MediaTest):
 
     def test_can_upload_images(self):
         self.login()
@@ -109,4 +111,63 @@ class MediaUploadPageTests(MediaTest):
         # The form has an error message
         form = self.browser.find_element_by_tag_name("form")
         error = form.find_element_by_class_name("error-message")
-        self.assertEqual(error.text, "There is already a file with title.")
+        self.assertEqual(error.text, "There is already media with that name")
+
+
+
+class MediaDeletionTests(MediaTest):
+
+    def test_can_delete_media(self):
+        # Add three images
+        MediaFile.objects.create(
+         name="file1", mediafile=SimpleUploadedFile("test1.png", b"\x00\x01")
+        )
+        MediaFile.objects.create(
+         name="file2", mediafile=SimpleUploadedFile("test2.png", b"\x01\x02")
+        )
+
+        # They go to the media page
+        self.login()
+        self.get("/media/")
+
+        # The grid has two images
+        grid = self.browser.find_element_by_id("media-grid")
+        media = grid.find_elements_by_class_name("media-square")
+        self.assertEqual(len(media), 2)
+        self.assertIn("file1", media[0].find_element_by_class_name("image_title").text)
+        self.assertIn("file2", media[1].find_element_by_class_name("image_title").text)
+
+        # Each image has a delete button
+        button1 = media[0].find_element_by_tag_name("button")
+        button2 = media[1].find_element_by_tag_name("button")
+        self.assertEqual(button1.text, "Delete")
+        self.assertEqual(button2.text, "Delete")
+
+        # There is a hidden form in the first one
+        form = media[0].find_element_by_tag_name("form")
+        self.check_invisible(form)
+
+        # They click delete and the form appears
+        self.click(button1)
+        self.check_visible(form)
+
+        # The form asks them if they really want to delete and they back down
+        self.assertIn("sure", form.text)
+        no = form.find_element_by_tag_name("button")
+        self.assertIn("No", no.text)
+        self.click(no)
+        self.check_invisible(form)
+
+        # They change their mind and delete
+        self.click(button1)
+        self.check_visible(form)
+        yes = form.find_elements_by_tag_name("input")[-1]
+        self.assertIn("Yes", yes.get_attribute("value"))
+        self.click(yes)
+
+        # They are still on the same page and the image is gone
+        self.check_page("/media/")
+        grid = self.browser.find_element_by_id("media-grid")
+        media = grid.find_elements_by_class_name("media-square")
+        self.assertEqual(len(media), 1)
+        self.assertIn("file2", media[0].find_element_by_class_name("image_title").text)

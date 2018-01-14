@@ -26,8 +26,9 @@ function editText(button, csrf) {
 
 
 function makeDeletionAppear(button) {
-    var form = $(".hidden-form");
-    form.show();
+    var form = $(button).parent().find(".hidden-form")[0];
+    console.log(form)
+    $(form).show();
 }
 
 

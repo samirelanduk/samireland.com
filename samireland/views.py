@@ -1,5 +1,6 @@
 """Views for samireland.com"""
 
+import os
 import django.shortcuts as shortcuts
 from django.http import Http404
 from django.db import IntegrityError
@@ -70,6 +71,13 @@ def about(request):
 @login_required(login_url="/", redirect_field_name=None)
 def media(request):
     if request.method == "POST":
+        if "delete" in request.POST:
+            media = MediaFile.objects.get(name=request.POST["name"])
+            try:
+                os.remove(media.mediafile.path)
+            except FileNotFoundError: pass
+            media.delete()
+            return shortcuts.redirect("/media/")
         try:
             MediaFile.objects.create(
              name=request.POST["name"], mediafile=request.FILES["file"]
