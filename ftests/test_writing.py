@@ -26,3 +26,7 @@ class WritingPageTests(FunctionalTest):
         self.assertIn("no articles", articles.text)
         with self.assertRaises(self.NoElement):
             articles.find_element_by_tag_name("a")
+
+
+    def test_can_change_writing_page_text(self):
+        self.check_editable_text("/writing/", "summary")

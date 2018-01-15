@@ -102,7 +102,8 @@ def edit_project(request, id):
 
 
 def writing(request):
-    return shortcuts.render(request, "writing.html")
+    text = grab_editable_text("writing")
+    return shortcuts.render(request, "writing.html", {"text": text})
 
 
 def about(request):

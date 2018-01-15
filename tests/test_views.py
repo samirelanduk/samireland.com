@@ -453,6 +453,12 @@ class WritingViewTests(ViewTest):
         self.check_view_uses_template(writing, request, "writing.html")
 
 
+    def test_writing_view_can_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(writing, request, {"text": "EDTEXT"})
+        self.mock_grab.assert_called_with("writing")
+
+
 
 class AboutViewTests(ViewTest):
 

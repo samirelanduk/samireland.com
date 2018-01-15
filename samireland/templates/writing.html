@@ -9,7 +9,17 @@
 {% block main %}
 <h1>Writing</h1>
 
-<div class="summary">
+<div class="summary editable">
+    {{ text.html|safe }}
+    {% if user.is_authenticated %}
+    <button class="edit" onclick="editText(this);">Edit</button>
+    <form class="hidden-form" method='POST' action='/edit/writing/'>
+        <textarea name="body">{{ text.body }}</textarea>
+        <input type="hidden" name="redirect" value="/writing/">
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+    {% endif %}
 </div>
 
 <div id="articles">
