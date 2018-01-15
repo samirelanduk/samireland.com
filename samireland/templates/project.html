@@ -1,0 +1,9 @@
+<div class="project">
+    <img class="project-image" src="/{{ project.image_url }}"></img>
+    <div class="project-body">
+        <h3>{{ project.name }}</h3>
+        <div class="project-description">
+        {{ project.html|safe }}
+    </div>
+    </div>
+</div>

@@ -36,6 +36,33 @@ class Publication(models.Model):
 
 
 
+class Project(models.Model):
+
+    CATEGORIES = [
+     ["web", "web"], ["python", "python"], ["other", "other"],
+    ]
+
+    name = models.CharField(max_length=128)
+    image = models.CharField(max_length=128)
+    description = models.TextField()
+    category = models.CharField(max_length=64, choices=CATEGORIES, default="web")
+
+    @property
+    def image_url(self):
+        try:
+            image = MediaFile.objects.get(name=self.image)
+            return image.mediafile.url
+        except MediaFile.DoesNotExist:
+            return ""
+
+
+    @property
+    def html(self):
+        return docupy.markdown_to_html(self.description)
+
+
+
+
 class MediaFile(models.Model):
 
     def create_filename(instance, filename):

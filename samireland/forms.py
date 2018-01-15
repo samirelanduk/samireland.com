@@ -1,5 +1,5 @@
 from django import forms
-from .models import Publication
+from .models import Publication, Project
 
 class DateInput(forms.DateInput):
     input_type = "date"
@@ -30,4 +30,22 @@ class PublicationForm(forms.ModelForm):
           "placeholder": "Authors", "autocomplete": "off"
          }),
          "body": forms.Textarea(attrs={"placeholder": "Body"}),
+        }
+
+
+
+class ProjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        exclude = []
+
+        widgets = {
+         "name": forms.TextInput(attrs={
+          "placeholder": "Name", "autocomplete": "off"
+         }),
+         "image": forms.TextInput(attrs={
+          "placeholder": "Image Name", "autocomplete": "off"
+         }),
+         "description": forms.Textarea(attrs={"placeholder": "Description"}),
         }

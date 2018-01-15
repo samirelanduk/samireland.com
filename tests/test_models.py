@@ -119,6 +119,85 @@ class PublicationTests(TestCase, TestCaseX):
 
 
 
+class ProjectTests(TestCase, TestCaseX):
+
+    def test_can_create_project(self):
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+         category="python"
+        )
+        project.full_clean()
+
+
+    def test_project_name_is_required(self):
+        project = Project(
+         image="palladium-icon", description="1\n\n2", category="python"
+        )
+        with self.assertRaises(ValidationError):
+            project.full_clean()
+
+
+    def test_project_image_is_required(self):
+        project = Project(
+         name="palladium", description="1\n\n2", category="python"
+        )
+        with self.assertRaises(ValidationError):
+            project.full_clean()
+
+
+    def test_project_description_is_required(self):
+        project = Project(
+         name="palladium", image="palladium-icon", category="python"
+        )
+        with self.assertRaises(ValidationError):
+            project.full_clean()
+
+
+    def test_project_category_default(self):
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+        )
+        self.assertEqual(project.category, "web")
+
+
+    @patch("samireland.models.MediaFile.objects.get")
+    def test_project_image_fetching(self, mock_get):
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+         category="python"
+        )
+        image = Mock()
+        image.mediafile = Mock()
+        image.mediafile.url = "URL"
+        mock_get.return_value = image
+        self.assertEqual(project.image_url, "URL")
+        mock_get.assert_called_with(name="palladium-icon")
+
+
+    @patch("samireland.models.MediaFile.objects.get")
+    def test_project_image_fetching_no_image(self, mock_get):
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+         category="python"
+        )
+        mock_get.side_effect = MediaFile.DoesNotExist
+        self.assertEqual(project.image_url, "")
+        mock_get.assert_called_with(name="palladium-icon")
+
+
+    @patch("docupy.markdown_to_html")
+    def test_project_has_markdown_property(self, mock_html):
+        mock_html.return_value = "test output"
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+         category="python"
+        )
+        output = project.html
+        mock_html.assert_called_with("1\n\n2")
+        self.assertEqual(output, "test output")
+
+
+
 class MediaFileTests(TestCase, TestCaseX):
 
     def setUp(self):

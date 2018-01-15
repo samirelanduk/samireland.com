@@ -4,4 +4,13 @@
 
 {% block main %}
 <h1>New Project</h1>
+
+<form method="POST">
+    {{ form.name }}
+    {{ form.image }}
+    {{ form.description }}
+    {{ form.category }}
+    {% csrf_token %}
+    <input type="submit" value="Save">
+</form>
 {% endblock %}

@@ -7,7 +7,7 @@ from django.db import IntegrityError
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import PublicationForm
+from .forms import PublicationForm, ProjectForm
 
 def home(request):
     text = grab_editable_text("home")
@@ -58,7 +58,6 @@ def edit_pub(request, id):
         if form.is_valid():
             form.save()
         return shortcuts.redirect("/research/{}/".format(id))
-
     form = PublicationForm(instance=publication)
     return shortcuts.render(request, "edit-pub.html", {"form": form})
 
@@ -67,12 +66,21 @@ def projects(request):
     text = grab_editable_text("projects")
     return shortcuts.render(request, "projects.html", {
      "text": text,
+     "web_projects": Project.objects.filter(category="web").order_by("name"),
+     "python_projects": Project.objects.filter(category="python").order_by("name"),
+     "other_projects": Project.objects.filter(category="other").order_by("name")
     })
 
 
 @login_required(login_url="/", redirect_field_name=None)
 def new_project(request):
-    return shortcuts.render(request, "new-project.html")
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/projects/")
+    form = ProjectForm()
+    return shortcuts.render(request, "new-project.html", {"form": form})
 
 
 def about(request):

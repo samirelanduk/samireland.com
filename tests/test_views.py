@@ -257,6 +257,17 @@ class EditPublicationViewTests(ViewTest):
 
 class ProjectsViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Project.objects.filter")
+        self.mock_filter = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
     def test_projects_view_uses_projects_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(projects, request, "projects.html")
@@ -268,8 +279,59 @@ class ProjectsViewTests(ViewTest):
         self.mock_grab.assert_called_with("projects")
 
 
+    def test_projects_view_sends_web_projects(self):
+        request = self.make_request("---")
+        web_projects = Mock()
+        self.mock_filter.return_value = web_projects
+        ordered_projects = Mock()
+        web_projects.order_by.return_value = ordered_projects
+        self.check_view_has_context(
+         projects, request, {"web_projects": ordered_projects}
+        )
+        self.mock_filter.assert_any_call(category="web")
+        web_projects.order_by.assert_called_with("name")
+
+
+    def test_projects_view_sends_python_projects(self):
+        request = self.make_request("---")
+        python_projects = Mock()
+        self.mock_filter.return_value = python_projects
+        ordered_projects = Mock()
+        python_projects.order_by.return_value = ordered_projects
+        self.check_view_has_context(
+         projects, request, {"python_projects": ordered_projects}
+        )
+        self.mock_filter.assert_any_call(category="python")
+        python_projects.order_by.assert_called_with("name")
+
+
+    def test_projects_view_sends_other_projects(self):
+        request = self.make_request("---")
+        other_projects = Mock()
+        self.mock_filter.return_value = other_projects
+        ordered_projects = Mock()
+        other_projects.order_by.return_value = ordered_projects
+        self.check_view_has_context(
+         projects, request, {"other_projects": ordered_projects}
+        )
+        self.mock_filter.assert_any_call(category="other")
+        other_projects.order_by.assert_called_with("name")
+
+
+
 
 class NewProjectViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.ProjectForm")
+        self.mock_form = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
 
     def test_new_project_view_uses_new_project_template(self):
         request = self.make_request("---", loggedin=True)
@@ -279,6 +341,31 @@ class NewProjectViewTests(ViewTest):
     def test_new_project_page_is_protected(self):
         request = self.make_request("---")
         self.check_view_redirects(new_project, request, "/")
+
+
+    def test_new_project_sends_fresh_form(self):
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(new_project, request, {"form": "FORM"})
+        self.mock_form.assert_called_with()
+
+
+    def test_new_project_redirects_on_post(self):
+        request = self.make_request("---", method="post", loggedin=True)
+        self.check_view_redirects(new_project, request, "/projects/")
+
+
+    def test_new_project_can_create_project(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx", "b": "C"}, loggedin=True
+        )
+        new_project(request)
+        self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
 
 
 
@@ -385,6 +472,7 @@ class MediaViewTests(ViewTest):
         self.mock_get.assert_called_with(name="media-name")
         image.delete.assert_called_with()
         mock_remove.assert_called_with("PATH")
+
 
 
 class LoginViewTests(TestCase, TestCaseX):

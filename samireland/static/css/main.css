@@ -167,7 +167,7 @@ form {
 }
 
 
-input {
+input, select {
   width: 100%;
   margin-bottom: 15px;
   line-height: 150%;
@@ -375,7 +375,7 @@ textarea {
 
 
 
-  input {
+  input, select {
     width: 60%;
     margin-right: 50%;
     box-sizing: border-box;

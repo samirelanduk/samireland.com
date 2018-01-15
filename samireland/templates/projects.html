@@ -3,7 +3,7 @@
 {% block title %}Projects{% endblock %}
 
 {% block css %}
-
+<link rel="stylesheet" type="text/css" href="/static/css/projects.css">
 {% endblock %}
 
 {% block main %}
@@ -28,17 +28,35 @@
 
 <div id="web-projects">
     <h2>Web Projects</h2>
-    <p>Currently no web projects.</p>
+    {% if web_projects %}
+        {% for project in web_projects %}
+            {% include "project.html" %}
+        {% endfor %}
+    {% else %}
+        <p class="no-pub">Currently no web projects.</p>
+    {% endif %}
 </div>
 
 <div id="python-projects">
     <h2>Python Projects</h2>
-    <p>Currently no python projects.</p>
+    {% if python_projects %}
+        {% for project in python_projects %}
+            {% include "project.html" %}
+        {% endfor %}
+    {% else %}
+        <p class="no-pub">Currently no python projects.</p>
+    {% endif %}
 </div>
 
 <div id="other-projects">
     <h2>Other Projects</h2>
-    <p>Currently no other projects.</p>
+    {% if other_projects %}
+        {% for project in other_projects %}
+            {% include "project.html" %}
+        {% endfor %}
+    {% else %}
+        <p class="no-pub">Currently no other projects.</p>
+    {% endif %}
 </div>
 
 {% endblock %}
