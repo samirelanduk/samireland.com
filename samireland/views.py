@@ -101,6 +101,10 @@ def edit_project(request, id):
     return shortcuts.render(request, "edit-project.html", {"form": form})
 
 
+def writing(request):
+    return shortcuts.render(request, "writing.html")
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})

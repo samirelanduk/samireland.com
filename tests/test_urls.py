@@ -36,6 +36,10 @@ class UrlTests(TestCase, TestCaseX):
         self.check_url_returns_view("/projects/23/edit/", views.edit_project)
 
 
+    def test_writing_url(self):
+        self.check_url_returns_view("/writing/", views.writing)
+
+
     def test_about_url(self):
         self.check_url_returns_view("/about/", views.about)
 
