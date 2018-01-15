@@ -319,7 +319,6 @@ class ProjectsViewTests(ViewTest):
 
 
 
-
 class NewProjectViewTests(ViewTest):
 
     def setUp(self):
@@ -364,6 +363,72 @@ class NewProjectViewTests(ViewTest):
         )
         new_project(request)
         self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
+class EditProjectViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Project.objects.get")
+        self.patcher3 = patch("samireland.views.ProjectForm")
+        self.mock_get = self.patcher2.start()
+        self.mock_form = self.patcher3.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        self.patcher3.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_edit_project_view_uses_edit_project_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(edit_project, request, "edit-project.html", "1")
+
+
+    def test_edit_project_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(edit_project, request, "/", "id")
+
+
+    def test_edit_project_page_can_send_correct_form(self):
+        self.mock_get.return_value = "PUB"
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(edit_project, request, {"form": "FORM"}, "id")
+        self.mock_get.assert_called_with(id="id")
+        self.mock_form.assert_called_with(instance="PUB")
+
+
+    def test_can_raise_404_project(self):
+        self.mock_get.side_effect = Project.DoesNotExist
+        request = self.make_request("---", loggedin=True)
+        with self.assertRaises(Http404):
+            edit_project(request, "abc")
+        self.mock_get.assert_called_with(id="abc")
+
+
+    def test_edit_project_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        self.check_view_redirects(edit_project, request, "/projects/", "xxx")
+
+
+    def test_edit_project_can_edit_project(self):
+        self.mock_get.return_value = "PUB"
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        edit_project(request, "23")
+        self.mock_get.assert_called_with(id="23")
+        self.mock_form.assert_called_with(QueryDict("z=a"), instance="PUB")
         form.is_valid.assert_called_with()
         form.save.assert_called_with()
 

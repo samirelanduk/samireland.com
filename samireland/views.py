@@ -83,6 +83,21 @@ def new_project(request):
     return shortcuts.render(request, "new-project.html", {"form": form})
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def edit_project(request, id):
+    try:
+        project = Project.objects.get(id=id)
+    except Project.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/projects/")
+    form = ProjectForm(instance=project)
+    return shortcuts.render(request, "edit-project.html", {"form": form})
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})

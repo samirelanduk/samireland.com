@@ -1,5 +1,6 @@
 .project {
     margin-bottom: 75px;
+    position: relative;
 }
 
 .project img.project-image {

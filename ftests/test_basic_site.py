@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from samireland.models import Publication
+from samireland.models import Publication, Project
 
 class SiteLayoutTests(FunctionalTest):
 
@@ -157,9 +157,13 @@ class AuthTests(FunctionalTest):
          url="www.com", doi="DDD", authors="Jack, Jill",
          body="Line 1\n\nLine 2"
         )
+        Project.objects.create(
+         name="palladium", image="palladium-image",
+         description="Line 1\n\nLine 2", category="python"
+        )
         pages = [
          "/research/new/", "/research/paper-1/edit/",
-         "/projects/new/",
+         "/projects/new/", "/projects/1/edit/",
          "/media/"]
         for page in pages:
             self.get(page)
