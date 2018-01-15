@@ -90,9 +90,12 @@ def edit_project(request, id):
     except Project.DoesNotExist:
         raise Http404
     if request.method == "POST":
-        form = ProjectForm(request.POST, instance=project)
-        if form.is_valid():
-            form.save()
+        if "delete" in request.POST:
+            project.delete()
+        else:
+            form = ProjectForm(request.POST, instance=project)
+            if form.is_valid():
+                form.save()
         return shortcuts.redirect("/projects/")
     form = ProjectForm(instance=project)
     return shortcuts.render(request, "edit-project.html", {"form": form})

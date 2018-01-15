@@ -237,13 +237,6 @@ class EditPublicationViewTests(ViewTest):
         form.save.assert_called_with()
 
 
-    def test_edit_pub_redirects_on_deletion_post(self):
-        request = self.make_request(
-         "---", method="post", data={"delete": "yes"}, loggedin=True
-        )
-        self.check_view_redirects(edit_pub, request, "/research/", "xxx")
-
-
     def test_edit_pub_view_can_delete_publication(self):
         request = self.make_request(
          "---", method="post", data={"delete": "yes"}, loggedin=True
@@ -252,6 +245,7 @@ class EditPublicationViewTests(ViewTest):
         self.mock_get.return_value = pub
         edit_pub(request, "abc")
         pub.delete.assert_called_with()
+        self.mock_get.assert_called_with(id="abc")
 
 
 
@@ -431,6 +425,24 @@ class EditProjectViewTests(ViewTest):
         self.mock_form.assert_called_with(QueryDict("z=a"), instance="PUB")
         form.is_valid.assert_called_with()
         form.save.assert_called_with()
+
+
+    def test_edit_project_redirects_on_deletion_post(self):
+        request = self.make_request(
+         "---", method="post", data={"delete": "yes"}, loggedin=True
+        )
+        self.check_view_redirects(edit_project, request, "/projects/", "xxx")
+
+
+    def test_edit_project_view_can_delete_project(self):
+        request = self.make_request(
+         "---", method="post", data={"delete": "yes"}, loggedin=True
+        )
+        project = Mock()
+        self.mock_get.return_value = project
+        edit_project(request, "23")
+        project.delete.assert_called_with()
+        self.mock_get.assert_called_with(id="23")
 
 
 

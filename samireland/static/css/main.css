@@ -251,6 +251,10 @@ button.edit, a.edit, a:visited.edit {
     background-color: #85144b;
 }
 
+.deletion input[type=submit] {
+    margin: 0px;
+}
+
 a, a:visited {
     color: #0074D9;
     text-decoration: none;

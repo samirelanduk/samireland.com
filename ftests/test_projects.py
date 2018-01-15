@@ -232,3 +232,43 @@ class ProjectEditingTests(FunctionalTest):
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Line 1")
         self.assertEqual(paragraphs[1].text, "Line 2D")
+
+
+    def test_project_deletion(self):
+        # User goes to edit the publication
+        self.login()
+        self.get("/projects/")
+        python = self.browser.find_element_by_id("python-projects")
+        project = python.find_element_by_class_name("project")
+        edit = project.find_element_by_class_name("edit")
+        self.click(edit)
+        self.assertRegex(self.browser.current_url, "(.+?)/projects/(.+?)/edit/")
+
+        # There is a deletion button
+        delete_button = self.browser.find_element_by_tag_name("button")
+        self.assertIn("Delete", delete_button.text)
+
+        # They click it and a form appears
+        deletion_form = self.browser.find_elements_by_tag_name("form")[1]
+        self.check_invisible(deletion_form)
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+
+        # The form asks them if they really want to delete and they back down
+        self.assertIn("sure", deletion_form.text)
+        no = deletion_form.find_element_by_tag_name("button")
+        self.assertIn("No", no.text)
+        self.click(no)
+        self.check_invisible(deletion_form)
+
+        # They change their mind and delete
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+        yes = deletion_form.find_elements_by_tag_name("input")[-1]
+        self.assertIn("Yes", yes.get_attribute("value"))
+        self.click(yes)
+
+        # They are back on the research page and the project is gone
+        self.check_page("/projects/")
+        with self.assertRaises(self.NoElement):
+            self.browser.find_element_by_class_name("project")
