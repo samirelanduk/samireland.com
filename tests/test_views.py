@@ -448,6 +448,17 @@ class EditProjectViewTests(ViewTest):
 
 class WritingViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Article.objects.all")
+        self.mock_all = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
     def test_writing_view_uses_writing_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(writing, request, "writing.html")
@@ -457,6 +468,107 @@ class WritingViewTests(ViewTest):
         request = self.make_request("---")
         self.check_view_has_context(writing, request, {"text": "EDTEXT"})
         self.mock_grab.assert_called_with("writing")
+
+
+    def test_writing_view_sends_articles(self):
+        request = self.make_request("---")
+        all_articles = Mock()
+        self.mock_all.return_value = all_articles
+        ordered_articles = Mock()
+        all_articles.order_by.return_value = ordered_articles
+        self.check_view_has_context(
+         writing, request, {"articles": ordered_articles}
+        )
+        all_articles.order_by.assert_called_with("-date")
+
+
+
+class NewArticleViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.ArticleForm")
+        self.mock_form = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_new_article_view_uses_new_article_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(new_article, request, "new-article.html")
+
+
+    def test_new_article_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(new_article, request, "/")
+
+
+    def test_new_article_sends_fresh_form(self):
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(new_article, request, {"form": "FORM"})
+        self.mock_form.assert_called_with()
+
+
+    def test_new_article_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx"}, loggedin=True
+        )
+        self.check_view_redirects(new_article, request, "/writing/xxx/")
+
+
+    def test_new_article_can_create_article(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx", "b": "C"}, loggedin=True
+        )
+        new_article(request)
+        self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
+class ArticleViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Article.objects.get")
+        self.mock_get = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_article_view_uses_article_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(
+         article, request, "article.html", "abc"
+        )
+
+
+    def test_article_view_can_get_article(self):
+        self.mock_get.return_value = "ARTICLE"
+        request = self.make_request("---")
+        self.check_view_has_context(
+         article, request, {"article": "ARTICLE"}, "abc"
+        )
+        self.mock_get.assert_called_with(id="abc")
+
+
+    def test_can_get_404_publication(self):
+        self.mock_get.side_effect = Article.DoesNotExist
+        request = self.make_request("---")
+        with self.assertRaises(Http404):
+            article(request, "abc")
+        self.mock_get.assert_called_with(id="abc")
 
 
 

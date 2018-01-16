@@ -9,21 +9,9 @@
   text-align: center;
 }
 
-.date {
-  font-style: italic;
-}
 
 .authors {
   font-style: italic;
-}
-
-article {
-  position: relative;
-}
-
-article h1 {
-  font-size: 150%;
-  text-align: center;
 }
 
 .publication {

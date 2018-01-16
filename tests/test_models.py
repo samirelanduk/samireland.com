@@ -198,6 +198,51 @@ class ProjectTests(TestCase, TestCaseX):
 
 
 
+class ArticleTests(TestCase, TestCaseX):
+
+    def test_can_create_article(self):
+        article = Article(
+         id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
+        )
+        article.full_clean()
+
+
+    def test_title_is_required(self):
+        article = Article(
+         id="article-1", date="2017-01-02", body="1\n\n2"
+        )
+        with self.assertRaises(ValidationError):
+            article.full_clean()
+
+
+    def test_date_is_required(self):
+        article = Article(
+         id="article-1", title="PT", body="1\n\n2"
+        )
+        with self.assertRaises(ValidationError):
+            article.full_clean()
+
+
+    def test_body_is_required(self):
+        article = Article(
+         id="article-1", title="PT", date="2017-01-02"
+        )
+        with self.assertRaises(ValidationError):
+            article.full_clean()
+
+
+    @patch("docupy.markdown_to_html")
+    def test_article_has_markdown_property(self, mock_html):
+        mock_html.return_value = "test output"
+        article = Article(
+         id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
+        )
+        output = article.html
+        mock_html.assert_called_with("1\n\n2")
+        self.assertEqual(output, "test output")
+
+
+
 class MediaFileTests(TestCase, TestCaseX):
 
     def setUp(self):

@@ -3,7 +3,7 @@
 {% block title %}Writing{% endblock %}
 
 {% block css %}
-
+<link rel="stylesheet" type="text/css" href="/static/css/writing.css">
 {% endblock %}
 
 {% block main %}
@@ -22,8 +22,25 @@
     {% endif %}
 </div>
 
+
 <div id="articles">
-    <p class="no-pub">Currently no articles.</p>
+    <h2>Publications</h2>
+
+    {% if user.is_authenticated %}
+    <a class="new" href="/writing/new/">Add Article</a>
+    {% endif %}
+
+    {% if articles %}
+        {% for article in articles %}
+            <div class="article">
+                <h3 class="article-title">{{ article.title }}</h3>
+                <div class="article-date">{{ article.date|date:"j F, Y" }}</div>
+                <a class="article-link" href="/writing/{{ article.id }}/">Read More</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-pub">Currently no articles.</p>
+    {% endif %}
 </div>
 
 {% endblock %}

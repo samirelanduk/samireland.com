@@ -1,0 +1,36 @@
+.date {
+    text-align: center;
+}
+
+.article {
+  padding-top: 40px;
+  font-size: 90%;
+}
+
+.article:first-of-type {
+  padding-top: 0px;
+}
+
+.article h3 {
+  margin-bottom: 10px;
+}
+
+.article .article-date {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.article:after {
+  content:"";
+  background: silver;
+  position: absolute;
+  margin-top: 30px;
+  height: 1px;
+  width: 50%;
+  left: 25%;
+}
+
+.article a.article-summary {
+  margin-top: 20px;
+  display: block;
+}

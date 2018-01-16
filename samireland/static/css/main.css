@@ -296,6 +296,20 @@ textarea {
 }
 
 
+article {
+  position: relative;
+}
+
+article h1 {
+  font-size: 150%;
+  text-align: center;
+}
+
+.date {
+  font-style: italic;
+}
+
+
 
 @media only screen and (min-width: 568px) {
   /* iPad and up */

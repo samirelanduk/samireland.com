@@ -7,7 +7,7 @@ from django.db import IntegrityError
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import PublicationForm, ProjectForm
+from .forms import PublicationForm, ProjectForm, ArticleForm
 
 def home(request):
     text = grab_editable_text("home")
@@ -103,7 +103,28 @@ def edit_project(request, id):
 
 def writing(request):
     text = grab_editable_text("writing")
-    return shortcuts.render(request, "writing.html", {"text": text})
+    return shortcuts.render(request, "writing.html", {
+     "text": text, "articles": Article.objects.all().order_by("-date")
+    })
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def new_article(request):
+    if request.method == "POST":
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return shortcuts.redirect("/writing/{}/".format(request.POST["id"]))
+    form = ArticleForm()
+    return shortcuts.render(request, "new-article.html", {"form": form})
+
+
+def article(request, id):
+    try:
+        article = Article.objects.get(id=id)
+    except Article.DoesNotExist:
+        raise Http404
+    return shortcuts.render(request, "article.html", {"article": article})
 
 
 def about(request):

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/writing.css">
+{% endblock %}
+
+{% block main %}
+<article>
+    <h1>{{ article.title }}</h1>
+    <div class="date">{{ article.date|date:"j F, Y" }}</div>
+
+    <div class="article-body">
+    {{ article.html|safe }}
+    </div>
+</article>
+
+{% endblock %}
