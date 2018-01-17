@@ -23,6 +23,7 @@ urlpatterns = [
  path(r"blog/", views.blog),
  path(r"blog/new/", views.new_blog),
  path(r"blog/<int:year>/<int:month>/<int:day>/", views.blog_post),
+ path(r"blog/<int:year>/<int:month>/<int:day>/edit/", views.edit_blog),
  path(r"about/", views.about),
  path(r"media/", views.media),
  path(r"", views.home)

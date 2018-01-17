@@ -225,7 +225,7 @@ class ArticleEditingTests(FunctionalTest):
         )
 
 
-    def test_can_edit_paper(self):
+    def test_can_edit_article(self):
         self.login()
 
         # The user goes to the article page

@@ -153,3 +153,52 @@ class BlogPostAdditionTests(FunctionalTest):
         # There is an error message
         error = form.find_element_by_class_name("error-message")
         self.assertIn("already", error.text)
+
+
+
+class BlogPostEditingTests(FunctionalTest):
+
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        BlogPost.objects.create(date="2011-01-01", title="T1", body="1\n\n2")
+
+
+    def test_can_edit_blog_post(self):
+        self.login()
+
+        # The user goes to the article page
+        self.get("/blog/2011/1/1/")
+
+        # There is an edit link
+        edit = self.browser.find_element_by_class_name("edit")
+        self.click(edit)
+
+        # They are on the edit page, and there is a filled in form
+        self.check_page("/blog/2011/1/1/edit/")
+        self.check_title("Edit Blog Post")
+        self.check_h1("Edit Blog Post")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        self.assertEqual(date_input.get_attribute("value"), "2011-01-01")
+        self.assertFalse(date_input.is_enabled())
+        self.assertEqual(title_input.get_attribute("value"), "T1")
+        self.assertEqual(body_input.get_attribute("value"), "1\n\n2")
+
+        # They make a bunch of edits and save
+        title_input.send_keys("T")
+        body_input.send_keys("B")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the blog page and it is changed
+        self.check_page("/blog/2011/1/1/")
+        self.check_title("T1T")
+        date = self.browser.find_element_by_class_name("date")
+        self.assertEqual(date.text, "1 January, 2011")
+        body = self.browser.find_element_by_class_name("blog-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "1")
+        self.assertEqual(paragraphs[1].text, "2B")

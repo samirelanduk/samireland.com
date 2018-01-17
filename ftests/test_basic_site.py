@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from samireland.models import Publication, Project, Article
+from samireland.models import Publication, Project, Article, BlogPost
 
 class SiteLayoutTests(FunctionalTest):
 
@@ -165,11 +165,12 @@ class AuthTests(FunctionalTest):
          id="article-1", title="The First Article", date="2016-01-01",
          summary="summary1", body="Line 1\n\nLine 2"
         )
+        BlogPost.objects.create(date="2017-01-01", title="T1", body="1\n\n2")
         pages = [
          "/research/new/", "/research/paper-1/edit/",
          "/projects/new/", "/projects/1/edit/",
          "/writing/new/",  "/writing/article-1/edit/",
-         "/blog/new/",
+         "/blog/new/", "/blog/2017/1/1/edit/"
          "/media/"]
         for page in pages:
             self.get(page)

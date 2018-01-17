@@ -178,6 +178,24 @@ def blog_post(request, year, month, day):
     return shortcuts.render(request, "blog-post.html", {"post": post})
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def edit_blog(request, year, month, day):
+    date_string = "{}-{}-{}".format(year, month, day)
+    try:
+        post = BlogPost.objects.get(date=date_string)
+    except BlogPost.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        request.POST = request.POST.copy()
+        request.POST["date"] = date_string
+        form = BlogPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/blog/{}/{}/{}/".format(year, month, day))
+    form = BlogPostForm(instance=post)
+    return shortcuts.render(request, "edit-blog.html", {"form": form})
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})

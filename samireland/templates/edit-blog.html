@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Blog Post{% endblock %}
+
+{% block main %}
+<h1>Edit Blog Post</h1>
+<form method="POST">
+    <input type="date" name="date" value="{{ form.date.value|date:"Y-m-d" }}" disabled>
+    {{ form.title }}
+    {{ form.body }}
+    {% csrf_token %}
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}

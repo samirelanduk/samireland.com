@@ -796,6 +796,78 @@ class BlogPostViewTests(ViewTest):
 
 
 
+class EditBlogPostViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.BlogPost.objects.get")
+        self.patcher3 = patch("samireland.views.BlogPostForm")
+        self.mock_get = self.patcher2.start()
+        self.mock_form = self.patcher3.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        self.patcher3.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_edit_blog_view_uses_edit_article_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(
+         edit_blog, request, "edit-blog.html", "1000", "20", "30"
+        )
+
+
+    def test_edit_blog_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(edit_blog, request, "/", "1000", "2", "30")
+
+
+    def test_edit_blog_page_can_send_correct_form(self):
+        self.mock_get.return_value = "BLOG"
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(edit_blog, request, {"form": "FORM"}, "1000", "2", "30")
+        self.mock_get.assert_called_with(date="1000-2-30")
+        self.mock_form.assert_called_with(instance="BLOG")
+
+
+    def test_can_raise_404_blog(self):
+        self.mock_get.side_effect = BlogPost.DoesNotExist
+        request = self.make_request("---", loggedin=True)
+        with self.assertRaises(Http404):
+            edit_blog(request, "1000", "2", "30")
+        self.mock_get.assert_called_with(date="1000-2-30")
+
+
+    def test_edit_blog_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        self.check_view_redirects(
+         edit_blog, request, "/blog/1000/2/30/", "1000", "2", "30"
+        )
+
+
+    def test_edit_blog_can_edit_blog_post(self):
+        self.mock_get.return_value = "BLOG"
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        edit_blog(request, "1000", "2", "30")
+        self.mock_get.assert_called_with(date="1000-2-30")
+        self.mock_form.assert_called_with(
+         QueryDict("z=a&date=1000-2-30"), instance="BLOG"
+        )
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
 class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):
