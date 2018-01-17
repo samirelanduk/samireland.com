@@ -130,6 +130,7 @@ class NewPublicationViewTests(ViewTest):
         )
         self.check_view_uses_template(new_pub, request, "new-pub.html")
         self.check_view_has_context(new_pub, request, {"form": form})
+        self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
         form.is_valid.assert_called_with()
 
 
@@ -531,6 +532,19 @@ class NewArticleViewTests(ViewTest):
         self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
         form.is_valid.assert_called_with()
         form.save.assert_called_with()
+
+
+    def test_new_article_validation(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = False
+        request = self.make_request(
+         "---", method="post", data={"id": "xxx", "b": "C"}, loggedin=True
+        )
+        self.check_view_uses_template(new_article, request, "new-article.html")
+        self.check_view_has_context(new_article, request, {"form": form})
+        self.mock_form.assert_called_with(QueryDict("id=xxx&b=C"))
+        form.is_valid.assert_called_with()
 
 
 

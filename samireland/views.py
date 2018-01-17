@@ -115,6 +115,8 @@ def new_article(request):
         if form.is_valid():
             form.save()
             return shortcuts.redirect("/writing/{}/".format(request.POST["id"]))
+        else:
+            return shortcuts.render(request, "new-article.html", {"form": form})
     form = ArticleForm()
     return shortcuts.render(request, "new-article.html", {"form": form})
 
