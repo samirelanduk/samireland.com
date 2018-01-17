@@ -48,6 +48,10 @@ class UrlTests(TestCase, TestCaseX):
         self.check_url_returns_view("/writing/ab-cd/", views.article)
 
 
+    def test_article_edit_url(self):
+        self.check_url_returns_view("/writing/ab-cd/edit/", views.edit_article)
+
+
     def test_about_url(self):
         self.check_url_returns_view("/about/", views.about)
 

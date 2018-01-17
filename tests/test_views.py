@@ -586,6 +586,73 @@ class ArticleViewTests(ViewTest):
 
 
 
+class EditArticleViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.Article.objects.get")
+        self.patcher3 = patch("samireland.views.ArticleForm")
+        self.mock_get = self.patcher2.start()
+        self.mock_form = self.patcher3.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        self.patcher3.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_edit_article_view_uses_edit_article_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(edit_article, request, "edit-article.html", "id")
+
+
+    def test_edit_article_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(edit_article, request, "/", "id")
+
+
+    def test_edit_article_page_can_send_correct_form(self):
+        self.mock_get.return_value = "ARTICLE"
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(edit_article, request, {"form": "FORM"}, "id")
+        self.mock_get.assert_called_with(id="id")
+        self.mock_form.assert_called_with(instance="ARTICLE")
+
+
+    def test_can_raise_404_article(self):
+        self.mock_get.side_effect = Article.DoesNotExist
+        request = self.make_request("---", loggedin=True)
+        with self.assertRaises(Http404):
+            edit_article(request, "abc")
+        self.mock_get.assert_called_with(id="abc")
+
+
+    def test_edit_article_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        self.check_view_redirects(edit_article, request, "/writing/xxx/", "xxx")
+
+
+    def test_edit_article_can_edit_article(self):
+        self.mock_get.return_value = "ARTICLE"
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"z": "a"}, loggedin=True
+        )
+        edit_article(request, "abc")
+        self.mock_get.assert_called_with(id="abc")
+        self.mock_form.assert_called_with(QueryDict("z=a&id=abc"), instance="ARTICLE")
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
+
 class AboutViewTests(ViewTest):
 
     def test_about_view_uses_about_template(self):

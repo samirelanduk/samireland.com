@@ -212,3 +212,63 @@ class ArticleAdditionTests(FunctionalTest):
         # There is an error message
         error = form.find_element_by_class_name("error-message")
         self.assertIn("already", error.text)
+
+
+
+class ArticleEditingTests(FunctionalTest):
+
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        Article.objects.create(
+         id="my-first-article", title="My First Article", date="2017-06-01",
+         summary="summary", body="Line 1\n\nLine 2"
+        )
+
+
+    def test_can_edit_paper(self):
+        self.login()
+
+        # The user goes to the article page
+        self.get("/writing/my-first-article/")
+
+        # There is an edit link
+        edit = self.browser.find_element_by_class_name("edit")
+        self.click(edit)
+
+        # They are on the edit page, and there is a filled in form
+        self.check_page("/writing/my-first-article/edit/")
+        self.check_title("Edit Article")
+        self.check_h1("Edit Article")
+        form = self.browser.find_element_by_tag_name("form")
+        id_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        date_input = form.find_elements_by_tag_name("input")[2]
+        summary_input = form.find_elements_by_tag_name("textarea")[0]
+        body_input = form.find_elements_by_tag_name("textarea")[1]
+        self.assertEqual(id_input.get_attribute("value"), "my-first-article")
+        self.assertFalse(id_input.is_enabled())
+        self.assertEqual(title_input.get_attribute("value"), "My First Article")
+        self.assertEqual(date_input.get_attribute("value"), "2017-06-01")
+        self.assertEqual(summary_input.get_attribute("value"), "summary")
+        self.assertEqual(body_input.get_attribute("value"), "Line 1\n\nLine 2")
+
+        # They make a bunch of edits and save
+        title_input.send_keys("T")
+        date_input.send_keys("2")
+        summary_input.send_keys("S")
+        body_input.send_keys("B")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the article page and it is changed
+        self.check_page("/writing/my-first-article/")
+        self.check_title("My First ArticleT")
+        self.check_h1("My First ArticleT")
+
+        date = self.browser.find_element_by_class_name("date")
+        self.assertEqual(date.text, "2 June, 2017")
+        body = self.browser.find_element_by_class_name("article-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "Line 1")
+        self.assertEqual(paragraphs[1].text, "Line 2B")

@@ -161,10 +161,14 @@ class AuthTests(FunctionalTest):
          name="palladium", image="palladium-image",
          description="Line 1\n\nLine 2", category="python"
         )
+        Article.objects.create(
+         id="article-1", title="The First Article", date="2016-01-01",
+         summary="summary1", body="Line 1\n\nLine 2"
+        )
         pages = [
          "/research/new/", "/research/paper-1/edit/",
          "/projects/new/", "/projects/1/edit/",
-         "/writing/new/",
+         "/writing/new/",  "/writing/article-1/edit/",
          "/media/"]
         for page in pages:
             self.get(page)

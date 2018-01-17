@@ -129,6 +129,26 @@ def article(request, id):
     return shortcuts.render(request, "article.html", {"article": article})
 
 
+@login_required(login_url="/", redirect_field_name=None)
+def edit_article(request, id):
+    try:
+        article = Article.objects.get(id=id)
+    except Article.DoesNotExist:
+        raise Http404
+    if request.method == "POST":
+        '''if "delete" in request.POST:
+            publication.delete()
+            return shortcuts.redirect("/research/")'''
+        request.POST = request.POST.copy()
+        request.POST["id"] = id
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+        return shortcuts.redirect("/writing/{}/".format(id))
+    form = ArticleForm(instance=article)
+    return shortcuts.render(request, "edit-article.html", {"form": form})
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})
