@@ -6,6 +6,9 @@
 <h1>New Blog Post</h1>
 
 <form method="POST">
+    {% if form.date.errors %}
+        <div class="error-message">{{ form.date.errors.0 }}</div>
+    {% endif %}
     {{ form.date }}
     {{ form.title }}
     {{ form.body }}

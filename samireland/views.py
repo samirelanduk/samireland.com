@@ -164,6 +164,8 @@ def new_blog(request):
             return shortcuts.redirect(
              "/blog/{}/".format(request.POST["date"].replace("-", "/"))
             )
+        else:
+            return shortcuts.render(request, "new-blog.html", {"form": form})
     form = BlogPostForm()
     return shortcuts.render(request, "new-blog.html", {"form": form})
 

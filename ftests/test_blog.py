@@ -83,3 +83,49 @@ class BlogPostAdditionTests(FunctionalTest):
         )
         self.click(posts[0].find_element_by_tag_name("a"))
         self.check_page("/blog/2017/6/1/")
+
+
+    def test_blog_date_must_be_unique(self):
+        self.login()
+        self.get("/blog/new/")
+
+        # There is a form
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+
+        # They enter some data and submit
+        date_input.send_keys("01-06-2017")
+        title_input.send_keys("My First Post")
+        body_input.send_keys("Line 1\n\nLine 2")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They do it again
+        self.get("/blog/new/")
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        date_input.send_keys("01-06-2017")
+        title_input.send_keys("My First Post")
+        body_input.send_keys("Line 1\n\nLine 2")
+        submit = form.find_elements_by_tag_name("input")[-1]
+        self.click(submit)
+
+        # They are on the same page
+        self.check_page("/blog/new/")
+
+        # The form is still filled in
+        form = self.browser.find_element_by_tag_name("form")
+        date_input = form.find_elements_by_tag_name("input")[0]
+        title_input = form.find_elements_by_tag_name("input")[1]
+        body_input = form.find_elements_by_tag_name("textarea")[0]
+        self.assertEqual(date_input.get_attribute("value"), "2017-06-01")
+        self.assertEqual(title_input.get_attribute("value"), "My First Post")
+        self.assertEqual(body_input.get_attribute("value"), "Line 1\n\nLine 2")
+
+        # There is an error message
+        error = form.find_element_by_class_name("error-message")
+        self.assertIn("already", error.text)

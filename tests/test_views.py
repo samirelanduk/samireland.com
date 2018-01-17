@@ -744,6 +744,19 @@ class NewBlogPostViewTests(ViewTest):
         form.save.assert_called_with()
 
 
+    def test_new_blog_post_validation(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = False
+        request = self.make_request(
+         "---", method="post", data={"date": "x-x-x", "b": "C"}, loggedin=True
+        )
+        self.check_view_uses_template(new_blog, request, "new-blog.html")
+        self.check_view_has_context(new_blog, request, {"form": form})
+        self.mock_form.assert_called_with(QueryDict("date=x-x-x&b=C"))
+        form.is_valid.assert_called_with()
+
+
 
 class BlogPostViewTests(ViewTest):
 
