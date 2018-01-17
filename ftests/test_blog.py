@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+from samireland.models import BlogPost
 
 class BlogPageTests(FunctionalTest):
 
@@ -19,6 +20,29 @@ class BlogPageTests(FunctionalTest):
         self.assertIn("no blog posts", posts.text)
         with self.assertRaises(self.NoElement):
             posts.find_element_by_tag_name("a")
+
+
+    def test_blog_posts_order(self):
+        BlogPost.objects.create(date="2017-01-01", title="T1", body="1\n\n2")
+        BlogPost.objects.create(date="2017-01-03", title="T2", body="1\n\n2")
+        BlogPost.objects.create(date="2017-01-02", title="T3", body="1\n\n2")
+
+        # They go to the page and look at the posts - there are 3
+        self.get("/blog/")
+        posts = self.browser.find_element_by_id("blog-posts")
+        posts = posts.find_elements_by_class_name("blog-post")
+        self.assertEqual(len(posts), 3)
+
+        # They are in the correct order
+        self.assertEqual(
+         posts[0].find_element_by_tag_name("h2").text, "T2"
+        )
+        self.assertEqual(
+         posts[1].find_element_by_tag_name("h2").text, "T3"
+        )
+        self.assertEqual(
+         posts[2].find_element_by_tag_name("h2").text, "T1"
+        )
 
 
 
