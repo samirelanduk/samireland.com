@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from samireland.models import Publication, Project
+from samireland.models import Publication, Project, Article
 
 class SiteLayoutTests(FunctionalTest):
 

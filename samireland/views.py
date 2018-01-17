@@ -136,9 +136,9 @@ def edit_article(request, id):
     except Article.DoesNotExist:
         raise Http404
     if request.method == "POST":
-        '''if "delete" in request.POST:
-            publication.delete()
-            return shortcuts.redirect("/research/")'''
+        if "delete" in request.POST:
+            article.delete()
+            return shortcuts.redirect("/writing/")
         request.POST = request.POST.copy()
         request.POST["id"] = id
         form = ArticleForm(request.POST, instance=article)

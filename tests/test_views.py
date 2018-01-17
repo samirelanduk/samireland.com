@@ -244,7 +244,7 @@ class EditPublicationViewTests(ViewTest):
         )
         pub = Mock()
         self.mock_get.return_value = pub
-        edit_pub(request, "abc")
+        self.check_view_redirects(edit_pub, request, "/research/", "abc")
         pub.delete.assert_called_with()
         self.mock_get.assert_called_with(id="abc")
 
@@ -649,6 +649,17 @@ class EditArticleViewTests(ViewTest):
         self.mock_form.assert_called_with(QueryDict("z=a&id=abc"), instance="ARTICLE")
         form.is_valid.assert_called_with()
         form.save.assert_called_with()
+
+
+    def test_edit_article_view_can_delete_article(self):
+        request = self.make_request(
+         "---", method="post", data={"delete": "yes"}, loggedin=True
+        )
+        pub = Mock()
+        self.mock_get.return_value = pub
+        self.check_view_redirects(edit_article, request, "/writing/", "xxx")
+        pub.delete.assert_called_with()
+        self.mock_get.assert_called_with(id="xxx")
 
 
 

@@ -272,3 +272,41 @@ class ArticleEditingTests(FunctionalTest):
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "Line 1")
         self.assertEqual(paragraphs[1].text, "Line 2B")
+
+
+    def test_article_deletion(self):
+        # User goes to edit the article
+        self.login()
+        self.get("/writing/my-first-article/")
+        edit = self.browser.find_element_by_class_name("edit")
+        self.click(edit)
+        self.check_page("/writing/my-first-article/edit/")
+
+        # There is a deletion button
+        delete_button = self.browser.find_element_by_tag_name("button")
+        self.assertIn("Delete", delete_button.text)
+
+        # They click it and a form appears
+        deletion_form = self.browser.find_elements_by_tag_name("form")[1]
+        self.check_invisible(deletion_form)
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+
+        # The form asks them if they really want to delete and they back down
+        self.assertIn("sure", deletion_form.text)
+        no = deletion_form.find_element_by_tag_name("button")
+        self.assertIn("No", no.text)
+        self.click(no)
+        self.check_invisible(deletion_form)
+
+        # They change their mind and delete
+        self.click(delete_button)
+        self.check_visible(deletion_form)
+        yes = deletion_form.find_elements_by_tag_name("input")[-1]
+        self.assertIn("Yes", yes.get_attribute("value"))
+        self.click(yes)
+
+        # They are back on the research page and the publication is gone
+        self.check_page("/writing/")
+        articles = self.browser.find_element_by_id("articles")
+        self.assertIn("no articles", articles.text)
