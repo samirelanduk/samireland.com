@@ -20,6 +20,10 @@
   font-weight: bold;
 }
 
+.article .article-summary {
+    font-style: italic;
+}
+
 .article:after {
   content:"";
   background: silver;
