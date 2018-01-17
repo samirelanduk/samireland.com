@@ -655,10 +655,10 @@ class EditArticleViewTests(ViewTest):
         request = self.make_request(
          "---", method="post", data={"delete": "yes"}, loggedin=True
         )
-        pub = Mock()
-        self.mock_get.return_value = pub
+        article = Mock()
+        self.mock_get.return_value = article
         self.check_view_redirects(edit_article, request, "/writing/", "xxx")
-        pub.delete.assert_called_with()
+        article.delete.assert_called_with()
         self.mock_get.assert_called_with(id="xxx")
 
 
@@ -865,6 +865,17 @@ class EditBlogPostViewTests(ViewTest):
         )
         form.is_valid.assert_called_with()
         form.save.assert_called_with()
+
+
+    def test_edit_blog_view_can_delete_blog_post(self):
+        request = self.make_request(
+         "---", method="post", data={"delete": "yes"}, loggedin=True
+        )
+        post = Mock()
+        self.mock_get.return_value = post
+        self.check_view_redirects(edit_blog, request, "/blog/", "1000", "2", "30")
+        post.delete.assert_called_with()
+        self.mock_get.assert_called_with(date="1000-2-30")
 
 
 

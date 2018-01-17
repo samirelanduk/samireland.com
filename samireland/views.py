@@ -186,6 +186,9 @@ def edit_blog(request, year, month, day):
     except BlogPost.DoesNotExist:
         raise Http404
     if request.method == "POST":
+        if "delete" in request.POST:
+            post.delete()
+            return shortcuts.redirect("/blog/")
         request.POST = request.POST.copy()
         request.POST["date"] = date_string
         form = BlogPostForm(request.POST, instance=post)

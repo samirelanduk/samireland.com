@@ -306,7 +306,7 @@ class ArticleEditingTests(FunctionalTest):
         self.assertIn("Yes", yes.get_attribute("value"))
         self.click(yes)
 
-        # They are back on the research page and the publication is gone
+        # They are back on the writing page and the article is gone
         self.check_page("/writing/")
         articles = self.browser.find_element_by_id("articles")
         self.assertIn("no articles", articles.text)

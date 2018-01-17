@@ -281,7 +281,7 @@ class ProjectEditingTests(FunctionalTest):
         self.assertIn("Yes", yes.get_attribute("value"))
         self.click(yes)
 
-        # They are back on the research page and the project is gone
+        # They are back on the projects page and the project is gone
         self.check_page("/projects/")
         with self.assertRaises(self.NoElement):
             self.browser.find_element_by_class_name("project")
