@@ -7,7 +7,7 @@ from django.db import IntegrityError
 import django.contrib.auth as auth
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .forms import PublicationForm, ProjectForm, ArticleForm
+from .forms import PublicationForm, ProjectForm, ArticleForm, BlogPostForm
 
 def home(request):
     text = grab_editable_text("home")
@@ -150,7 +150,30 @@ def edit_article(request, id):
 
 
 def blog(request):
-    return shortcuts.render(request, "blog.html")
+    return shortcuts.render(
+     request, "blog.html", {"posts": BlogPost.objects.all().order_by("-date")}
+    )
+
+
+@login_required(login_url="/", redirect_field_name=None)
+def new_blog(request):
+    if request.method == "POST":
+        form = BlogPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return shortcuts.redirect(
+             "/blog/{}/".format(request.POST["date"].replace("-", "/"))
+            )
+    form = BlogPostForm()
+    return shortcuts.render(request, "new-blog.html", {"form": form})
+
+
+def blog_post(request, year, month, day):
+    try:
+        post = BlogPost.objects.get(date="{}-{}-{}".format(year, month, day))
+    except BlogPost.DoesNotExist:
+        raise Http404
+    return shortcuts.render(request, "blog-post.html", {"post": post})
 
 
 def about(request):

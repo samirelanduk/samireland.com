@@ -76,6 +76,18 @@ class Article(models.Model):
 
 
 
+class BlogPost(models.Model):
+
+    date = models.DateField(primary_key=True)
+    title = models.TextField()
+    body = models.TextField()
+
+    @property
+    def html(self):
+        return docupy.markdown_to_html(self.body)
+
+
+
 class MediaFile(models.Model):
 
     def create_filename(instance, filename):

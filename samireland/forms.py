@@ -1,5 +1,5 @@
 from django import forms
-from .models import Publication, Project, Article
+from .models import Publication, Project, Article, BlogPost
 
 class DateInput(forms.DateInput):
     input_type = "date"
@@ -66,9 +66,22 @@ class ArticleForm(forms.ModelForm):
           "placeholder": "Title", "autocomplete": "off"
          }),
          "date": DateInput(),
-         "url": forms.TextInput(attrs={
-          "placeholder": "URL", "autocomplete": "off"
-         }),
          "summary": forms.Textarea(attrs={"placeholder": "Summary"}),
+         "body": forms.Textarea(attrs={"placeholder": "Body"}),
+        }
+
+
+
+class BlogPostForm(forms.ModelForm):
+
+    class Meta:
+        model = BlogPost
+        exclude = []
+
+        widgets = {
+         "date": DateInput(),
+         "title": forms.TextInput(attrs={
+          "placeholder": "Title", "autocomplete": "off"
+         }),
          "body": forms.Textarea(attrs={"placeholder": "Body"}),
         }

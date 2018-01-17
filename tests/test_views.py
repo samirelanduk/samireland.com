@@ -665,9 +665,121 @@ class EditArticleViewTests(ViewTest):
 
 class BlogViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.BlogPost.objects.all")
+        self.mock_all = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
     def test_blog_view_uses_blog_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(blog, request, "blog.html")
+
+
+    def test_blog_view_sends_blog_posts(self):
+        request = self.make_request("---")
+        all_posts = Mock()
+        self.mock_all.return_value = all_posts
+        ordered_posts = Mock()
+        all_posts.order_by.return_value = ordered_posts
+        self.check_view_has_context(
+         blog, request, {"posts": ordered_posts}
+        )
+        all_posts.order_by.assert_called_with("-date")
+
+
+
+class NewBlogPostViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.BlogPostForm")
+        self.mock_form = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_new_blog_view_uses_new_blog_template(self):
+        request = self.make_request("---", loggedin=True)
+        self.check_view_uses_template(new_blog, request, "new-blog.html")
+
+
+    def test_new_blog_page_is_protected(self):
+        request = self.make_request("---")
+        self.check_view_redirects(new_blog, request, "/")
+
+
+    def test_new_blog_sends_fresh_form(self):
+        self.mock_form.return_value = "FORM"
+        request = self.make_request("---", loggedin=True)
+        self.check_view_has_context(new_blog, request, {"form": "FORM"})
+        self.mock_form.assert_called_with()
+
+
+    def test_new_blog_redirects_on_post(self):
+        request = self.make_request(
+         "---", method="post", data={"date": "2001-02-03"}, loggedin=True
+        )
+        self.check_view_redirects(new_blog, request, "/blog/2001/02/03/")
+
+
+    def test_new_blog_can_create_blog_post(self):
+        form = Mock()
+        self.mock_form.return_value = form
+        form.is_valid.return_value = True
+        request = self.make_request(
+         "---", method="post", data={"date": "x-x-x", "b": "C"}, loggedin=True
+        )
+        new_blog(request)
+        self.mock_form.assert_called_with(QueryDict("date=x-x-x&b=C"))
+        form.is_valid.assert_called_with()
+        form.save.assert_called_with()
+
+
+
+class BlogPostViewTests(ViewTest):
+
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.BlogPost.objects.get")
+        self.mock_get = self.patcher2.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        ViewTest.tearDown(self)
+
+
+    def test_blog_post_view_uses_blog_post_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(
+         blog_post, request, "blog-post.html", "1000", "20", "30"
+        )
+
+
+    def test_blog_post_view_can_get_blog_post(self):
+        self.mock_get.return_value = "POST"
+        request = self.make_request("---")
+        self.check_view_has_context(
+         blog_post, request, {"post": "POST"}, "1000", "20", "30"
+        )
+        self.mock_get.assert_called_with(date="1000-20-30")
+
+
+    def test_can_get_404_blog_post(self):
+        self.mock_get.side_effect = BlogPost.DoesNotExist
+        request = self.make_request("---")
+        with self.assertRaises(Http404):
+            blog_post(request, "1000", "20", "30")
+        self.mock_get.assert_called_with(date="1000-20-30")
 
 
 

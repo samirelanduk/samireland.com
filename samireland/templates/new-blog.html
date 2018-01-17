@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}New Blog Post{% endblock %}
+
+{% block main %}
+<h1>New Blog Post</h1>
+
+<form method="POST">
+    {{ form.date }}
+    {{ form.title }}
+    {{ form.body }}
+    {% csrf_token %}
+    <input type="submit" value="Save">
+</form>
+{% endblock %}

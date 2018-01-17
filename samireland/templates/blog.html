@@ -9,6 +9,15 @@
 {% block main %}
 <h1>Blog</h1>
 <div id="blog-posts">
-    <p>Currently no blog posts.</p>
+    {% if user.is_authenticated %}
+    <a class="new" href="/blog/new/">Add Blog Post</a>
+    {% endif %}
+    {% if posts %}
+        {% for post in posts %}
+            {% include "single-blog-post.html" %}
+        {% endfor %}
+    {% else %}
+        <p>Currently no blog posts.</p>
+    {% endif %}
 </div>
 {% endblock %}

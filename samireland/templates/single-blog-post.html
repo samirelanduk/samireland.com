@@ -1,0 +1,7 @@
+<div class="blog-post">
+    <div class="date">{{ post.date|date:"j F, Y"}}</div>
+    <h2><a href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}">{{ post.title }}</a></h2>
+    <div class="blog-body">
+    {{ post.html|safe }}
+    </div>
+</div>
