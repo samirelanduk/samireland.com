@@ -663,6 +663,13 @@ class EditArticleViewTests(ViewTest):
 
 
 
+class BlogViewTests(ViewTest):
+
+    def test_blog_view_uses_blog_template(self):
+        request = self.make_request("---")
+        self.check_view_uses_template(blog, request, "blog.html")
+
+
 
 class AboutViewTests(ViewTest):
 

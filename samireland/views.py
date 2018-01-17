@@ -149,6 +149,10 @@ def edit_article(request, id):
     return shortcuts.render(request, "edit-article.html", {"form": form})
 
 
+def blog(request):
+    return shortcuts.render(request, "blog.html")
+
+
 def about(request):
     text = grab_editable_text("about")
     return shortcuts.render(request, "about.html", {"text": text})

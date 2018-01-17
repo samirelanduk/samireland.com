@@ -20,6 +20,7 @@ urlpatterns = [
  path(r"writing/new/", views.new_article),
  path(r"writing/<slug:id>/", views.article),
  path(r"writing/<slug:id>/edit/", views.edit_article),
+ path(r"blog/", views.blog),
  path(r"about/", views.about),
  path(r"media/", views.media),
  path(r"", views.home)
