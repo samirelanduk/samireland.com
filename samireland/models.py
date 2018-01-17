@@ -67,6 +67,7 @@ class Article(models.Model):
     id = models.SlugField(primary_key=True)
     title = models.TextField()
     date = models.DateField()
+    summary = models.TextField()
     body = models.TextField()
 
     @property

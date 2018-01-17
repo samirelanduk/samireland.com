@@ -54,12 +54,14 @@ class ArticleAdditionTests(FunctionalTest):
         id_input = form.find_elements_by_tag_name("input")[0]
         title_input = form.find_elements_by_tag_name("input")[1]
         date_input = form.find_elements_by_tag_name("input")[2]
-        body_input = form.find_elements_by_tag_name("textarea")[0]
+        summary_input = form.find_elements_by_tag_name("textarea")[0]
+        body_input = form.find_elements_by_tag_name("textarea")[1]
 
         # They enter some data and submit
         id_input.send_keys("my-first-article")
         title_input.send_keys("My First Article")
         date_input.send_keys("01-06-2017")
+        summary_input.send_keys("summary")
         body_input.send_keys("Line 1\n\nLine 2")
         submit = form.find_elements_by_tag_name("input")[-1]
         self.click(submit)
@@ -93,6 +95,10 @@ class ArticleAdditionTests(FunctionalTest):
         self.assertEqual(
          articles[0].find_element_by_class_name("article-date").text,
          "1 June, 2017"
+        )
+        self.assertEqual(
+         articles[0].find_element_by_class_name("article-summary").text,
+         "summary"
         )
         self.assertEqual(
          articles[0].find_element_by_class_name("article-link").text,

@@ -33,6 +33,7 @@
             <div class="article">
                 <h3 class="article-title">{{ article.title }}</h3>
                 <div class="article-date">{{ article.date|date:"j F, Y" }}</div>
+                <div class="article-summary">{{ article.summary }}</div>
                 <a class="article-link" href="/writing/{{ article.id }}/">Read More</a>
             </div>
         {% endfor %}

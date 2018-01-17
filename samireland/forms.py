@@ -69,5 +69,6 @@ class ArticleForm(forms.ModelForm):
          "url": forms.TextInput(attrs={
           "placeholder": "URL", "autocomplete": "off"
          }),
+         "summary": forms.Textarea(attrs={"placeholder": "Summary"}),
          "body": forms.Textarea(attrs={"placeholder": "Body"}),
         }

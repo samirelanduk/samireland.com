@@ -202,14 +202,14 @@ class ArticleTests(TestCase, TestCaseX):
 
     def test_can_create_article(self):
         article = Article(
-         id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
+         id="article-1", title="PT", date="2017-01-02", summary="S", body="1\n\n2"
         )
         article.full_clean()
 
 
     def test_title_is_required(self):
         article = Article(
-         id="article-1", date="2017-01-02", body="1\n\n2"
+         id="article-1", date="2017-01-02", summary="S", body="1\n\n2"
         )
         with self.assertRaises(ValidationError):
             article.full_clean()
@@ -217,7 +217,15 @@ class ArticleTests(TestCase, TestCaseX):
 
     def test_date_is_required(self):
         article = Article(
-         id="article-1", title="PT", body="1\n\n2"
+         id="article-1", title="PT", summary="S", body="1\n\n2"
+        )
+        with self.assertRaises(ValidationError):
+            article.full_clean()
+
+
+    def test_summary_is_required(self):
+        article = Article(
+         id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
         )
         with self.assertRaises(ValidationError):
             article.full_clean()
@@ -225,7 +233,7 @@ class ArticleTests(TestCase, TestCaseX):
 
     def test_body_is_required(self):
         article = Article(
-         id="article-1", title="PT", date="2017-01-02"
+         id="article-1", title="PT", date="2017-01-02", summary="S"
         )
         with self.assertRaises(ValidationError):
             article.full_clean()
