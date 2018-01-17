@@ -1,6 +1,8 @@
+import os
 from django.core.files.uploadedfile import SimpleUploadedFile
 from .base import FunctionalTest
 from samireland.models import MediaFile, Project
+from samireland.settings import MEDIA_ROOT
 
 class ProjectPageTests(FunctionalTest):
 
@@ -61,9 +63,20 @@ class ProjectAdditionTests(FunctionalTest):
 
     def setUp(self):
         FunctionalTest.setUp(self)
+        self.files_at_start = os.listdir(MEDIA_ROOT)
         MediaFile.objects.create(
          name="bogo-icon", mediafile=SimpleUploadedFile("test1.png", b"\x00\x01")
         )
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+        FunctionalTest.tearDown(self)
 
 
     def test_can_add_project(self):
