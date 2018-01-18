@@ -86,6 +86,14 @@ class BlogPost(models.Model):
     def html(self):
         return docupy.markdown_to_html(self.body)
 
+    @property
+    def next(self):
+        return BlogPost.objects.filter(date__gt=self.date).order_by("date").first() or None
+
+
+    @property
+    def previous(self):
+        return BlogPost.objects.filter(date__lt=self.date).order_by("-date").first() or None
 
 
 class MediaFile(models.Model):

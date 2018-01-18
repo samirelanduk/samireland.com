@@ -6,3 +6,18 @@
     {{ post.html|safe }}
     </div>
 </div>
+
+{% with next=post.next %}{% with previous=post.previous %}
+{% if not posts %}{% if previous or next %}
+<div id="posts-nav">
+    {% if previous %}
+    <a class="previous-page" href="/blog/{{ previous.date.year }}/{{ previous.date.month }}/{{ previous.date.day }}">&#8592; Previous</a>
+    {% else %}
+    <div class="previous-page"></div>
+    {% endif %}
+    {% if next %}
+    <a class="next-page" href="/blog/{{ next.date.year }}/{{ next.date.month }}/{{ next.date.day }}">Next &#8594;</a>
+    {% endif %}
+</div>
+{% endif %}{% endif %}
+{% endwith %}{% endwith %}

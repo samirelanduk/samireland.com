@@ -277,12 +277,30 @@ class BlogPostTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_article_has_markdown_property(self, mock_html):
+    def test_blog_post_has_markdown_property(self, mock_html):
         mock_html.return_value = "test output"
         post = BlogPost(date="2017-01-02", title="PT", body="1\n\n2")
         output = post.html
         mock_html.assert_called_with("1\n\n2")
         self.assertEqual(output, "test output")
+
+
+    def test_blog_post_next(self):
+        post1 = BlogPost.objects.create(date="2017-1-01", title="PT1", body="1")
+        post2 = BlogPost.objects.create(date="2017-1-02", title="PT2", body="1")
+        post3 = BlogPost.objects.create(date="2017-1-03", title="PT3", body="1")
+        self.assertEqual(post1.next.title, "PT2")
+        self.assertEqual(post2.next.title, "PT3")
+        self.assertIsNone(post3.next)
+
+
+    def test_blog_post_previous(self):
+        post1 = BlogPost.objects.create(date="2017-1-01", title="PT1", body="1")
+        post2 = BlogPost.objects.create(date="2017-1-02", title="PT2", body="1")
+        post3 = BlogPost.objects.create(date="2017-1-03", title="PT3", body="1")
+        self.assertEqual(post3.previous.title, "PT2")
+        self.assertEqual(post2.previous.title, "PT1")
+        self.assertIsNone(post1.previous)
 
 
 

@@ -28,7 +28,7 @@
   font-size: 85%;
 }
 
-#next-page, #previous-page {
+.next-page, .previous-page {
   display: inline-block;
   width: 48%;
   text-align: center;

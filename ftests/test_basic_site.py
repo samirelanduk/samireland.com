@@ -170,7 +170,7 @@ class AuthTests(FunctionalTest):
          "/research/new/", "/research/paper-1/edit/",
          "/projects/new/", "/projects/1/edit/",
          "/writing/new/",  "/writing/article-1/edit/",
-         "/blog/new/", "/blog/2017/1/1/edit/"
+         "/blog/new/", "/blog/2017/1/1/edit/",
          "/media/"]
         for page in pages:
             self.get(page)
