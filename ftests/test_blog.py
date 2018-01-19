@@ -95,9 +95,6 @@ class BlogPageTests(FunctionalTest):
 
 
 
-
-
-
 class BlogPostAdditionTests(FunctionalTest):
 
     def test_can_add_blog_post(self):
@@ -134,7 +131,7 @@ class BlogPostAdditionTests(FunctionalTest):
         # The blog post is there
         post = self.browser.find_element_by_class_name("blog-post")
         date = post.find_element_by_class_name("date")
-        title = post.find_element_by_tag_name("h2")
+        title = post.find_element_by_tag_name("h1")
         self.assertEqual(date.text, "1 June, 2017")
         self.assertEqual(title.text, "My First Post")
         body = post.find_element_by_class_name("blog-body")

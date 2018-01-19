@@ -11,7 +11,12 @@ from .forms import PublicationForm, ProjectForm, ArticleForm, BlogPostForm
 
 def home(request):
     text = grab_editable_text("home")
-    return shortcuts.render(request, "home.html", {"text": text})
+    blog = BlogPost.objects.order_by("date").last()
+    article = Article.objects.order_by("date").last()
+    pub = Publication.objects.order_by("date").last()
+    return shortcuts.render(request, "home.html", {
+     "text": text, "post": blog, "article": article, "publication": pub
+    })
 
 
 def research(request):

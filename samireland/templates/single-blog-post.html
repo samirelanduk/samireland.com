@@ -1,14 +1,14 @@
 <div class="blog-post">
     {% if user.is_authenticated %}<a class="edit" href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}/edit/">Edit</a>{% endif %}
     <div class="date">{{ post.date|date:"j F, Y"}}</div>
-    <h2><a href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}">{{ post.title }}</a></h2>
+    <h{% if text %}3{% elif not posts %}1{% else %}2{% endif %}><a href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}">{{ post.title }}</a></h{% if text %}3{% elif not posts %}1{% else %}2{% endif %}>
     <div class="blog-body">
     {{ post.html|safe }}
     </div>
 </div>
 
 {% with next=post.next %}{% with previous=post.previous %}
-{% if not posts %}{% if previous or next %}
+{% if not posts and not text %}{% if previous or next %}
 <div id="posts-nav">
     {% if previous %}
     <a class="previous-page" href="/blog/{{ previous.date.year }}/{{ previous.date.month }}/{{ previous.date.day }}">&#8592; Previous</a>

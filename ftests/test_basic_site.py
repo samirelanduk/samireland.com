@@ -49,9 +49,111 @@ class HomePageTests(FunctionalTest):
         with self.assertRaises(self.NoElement):
             intro.find_element_by_tag_name("form")
 
+        # There are latest sections
+        blog = self.browser.find_element_by_id("latest-blog")
+        article = self.browser.find_element_by_id("latest-article")
+        pub = self.browser.find_element_by_id("latest-pub")
+        self.assertIn("no blog posts", blog.text)
+        self.assertIn("no articles", article.text)
+        self.assertIn("no publications", pub.text)
+
 
     def test_can_change_home_page_text(self):
         self.check_editable_text("/", "intro")
+
+
+    def test_latest_entries(self):
+        BlogPost.objects.create(date="2017-01-01", title="T1", body="1\n\n2")
+        BlogPost.objects.create(date="2017-01-03", title="T2", body="1\n\n2")
+        BlogPost.objects.create(date="2017-01-02", title="T3", body="1\n\n2")
+        Article.objects.create(
+         id="article-1", title="The First Article", date="2016-01-01",
+         summary="summary1", body="Line 1\n\nLine 2"
+        )
+        Article.objects.create(
+         id="article-2", title="The Recent Article", date="2016-08-09",
+         summary="summary2", body="Line 1\n\nLine 2"
+        )
+        Article.objects.create(
+         id="article-3", title="The Middle Article", date="2016-04-12",
+         summary="summary3", body="Line 1\n\nLine 2"
+        )
+        Publication.objects.create(
+         id="paper-1", title="The First Paper", date="2016-01-01",
+         url="www.com", doi="DDD", authors="Jack, Jill",
+         body="Line 1\n\nLine 2"
+        )
+        Publication.objects.create(
+         id="paper-2", title="The Recent Paper", date="2016-08-09",
+         url="www.com", doi="DDD2", authors="Jack, Jill, Bob",
+         body="Line 1\n\nLine 2"
+        )
+        Publication.objects.create(
+         id="paper-3", title="The Middle Paper", date="2016-04-12",
+         url="www.com", doi="DDD3", authors="Jack, Sally",
+         body="Line 1\n\nLine 2"
+        )
+
+        # There are latest sections on the home page
+        self.get("/")
+        blog = self.browser.find_element_by_id("latest-blog")
+        article = self.browser.find_element_by_id("latest-article")
+        pub = self.browser.find_element_by_id("latest-pub")
+
+        # The latest blog post is there
+        post = blog.find_element_by_class_name("blog-post")
+        self.assertNotIn("no blog posts", blog.text)
+        date = post.find_element_by_class_name("date")
+        title = post.find_element_by_tag_name("h3")
+        self.assertEqual(date.text, "3 January, 2017")
+        self.assertEqual(title.text, "T2")
+        body = post.find_element_by_class_name("blog-body")
+        paragraphs = body.find_elements_by_tag_name("p")
+        self.assertEqual(len(paragraphs), 2)
+        self.assertEqual(paragraphs[0].text, "1")
+        self.assertEqual(paragraphs[1].text, "2")
+        with self.assertRaises(self.NoElement):
+            post.find_element_by_id("posts-nav")
+
+        # The latest article is there
+        article = article.find_element_by_class_name("blog-post")
+        self.assertNotIn("no articles", article.text)
+        self.assertEqual(
+         article.find_element_by_class_name("article-title").text,
+         "The Recent Article"
+        )
+        self.assertEqual(
+         article.find_element_by_class_name("date").text,
+         "9 August, 2016"
+        )
+        self.assertEqual(
+         article.find_element_by_class_name("article-summary").text,
+         "summary2"
+        )
+        self.assertEqual(
+         article.find_element_by_class_name("article-link").text,
+         "Read More"
+        )
+
+        # The latest publication is there
+        pub = pub.find_element_by_class_name("blog-post")
+        self.assertNotIn("no publications", pub.text)
+        self.assertEqual(
+         pub.find_element_by_tag_name("h3").text,
+         "The Recent Paper"
+        )
+        self.assertEqual(
+         pub.find_element_by_class_name("date").text,
+         "9 August, 2016"
+        )
+        self.assertEqual(
+         pub.find_element_by_class_name("pub-authors").text,
+         "Jack, Jill, Bob"
+        )
+        self.assertEqual(
+         pub.find_element_by_class_name("pub-summary").text,
+         "Read Summary"
+        )
 
 
 

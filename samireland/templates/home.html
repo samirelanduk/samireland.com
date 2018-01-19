@@ -3,6 +3,9 @@
 {% block title %}Home{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
+<link rel="stylesheet" type="text/css" href="/static/css/writing.css">
+<link rel="stylesheet" type="text/css" href="/static/css/research.css">
 <link rel="stylesheet" type="text/css" href="/static/css/home.css">
 {% endblock %}
 
@@ -18,6 +21,43 @@
         {% csrf_token %}
         <input type="submit" value="Save">
     </form>
+    {% endif %}
+</div>
+
+<div id="latest-blog">
+    <h2>Latest Blog Post</h2>
+    {% if post %}
+        {% include "single-blog-post.html" %}
+    {% else %}
+        <p>Currently no blog posts.</p>
+    {% endif %}
+</div>
+
+<div id="latest-article">
+    <h2>Latest Writing</h2>
+    {% if article %}
+    <div class="blog-post">
+        <h3 class="article-title">{{ article.title }}</h3>
+        <div class="date">{{ article.date|date:"j F, Y" }}</div>
+        <div class="article-summary">{{ article.summary }}</div>
+        <a class="article-link" href="/writing/{{ article.id }}/">Read More</a>
+    </div>
+    {% else %}
+        <p>Currently no articles.</p>
+    {% endif %}
+</div>
+
+<div id="latest-pub">
+    <h2>Latest Publication</h2>
+    {% if publication %}
+    <div class="blog-post">
+        <h3>{{ publication.title }}</h3>
+        <div class="date">{{ publication.date|date:"j F, Y" }}</div>
+        <div class="pub-authors">{{ publication.html_authors|safe }}</div>
+        <a class="pub-summary" href="/research/{{ pub.id }}/">Read Summary</a>
+    </div>
+    {% else %}
+        <p>Currently no publications.</p>
     {% endif %}
 </div>
 {% endblock %}

@@ -16,12 +16,16 @@
   font-weight: bold;
 }
 
-.blog-post h2 {
+.blog-post h1, .blog-post h2, .blog-post h3 {
   margin-top: 0px;
 }
 
-.blog-post h2 a {
+.blog-post h1 a, .blog-post h2 a, .blog-post h3 a {
   color: inherit;
+}
+
+.blog-post h3 {
+    font-size: 140%;
 }
 
 .post-body {

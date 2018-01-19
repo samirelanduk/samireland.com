@@ -22,6 +22,23 @@ class ViewTest(TestCase, TestCaseX):
 
 class HomeViewTests(ViewTest):
 
+    def setUp(self):
+        ViewTest.setUp(self)
+        self.patcher2 = patch("samireland.views.BlogPost.objects.order_by")
+        self.patcher3 = patch("samireland.views.Article.objects.order_by")
+        self.patcher4 = patch("samireland.views.Publication.objects.order_by")
+        self.mock_blog = self.patcher2.start()
+        self.mock_article = self.patcher3.start()
+        self.mock_pub = self.patcher4.start()
+
+
+    def tearDown(self):
+        self.patcher2.stop()
+        self.patcher3.stop()
+        self.patcher4.stop()
+        ViewTest.tearDown(self)
+
+
     def test_home_view_uses_home_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(home, request, "home.html")
@@ -31,6 +48,23 @@ class HomeViewTests(ViewTest):
         request = self.make_request("---")
         self.check_view_has_context(home, request, {"text": "EDTEXT"})
         self.mock_grab.assert_called_with("home")
+
+
+    def test_home_view_can_send_latest_items(self):
+        blogs, articles, pubs = Mock(), Mock(), Mock()
+        blogs.last.return_value = "B"
+        articles.last.return_value = "A"
+        pubs.last.return_value = "P"
+        self.mock_blog.return_value = blogs
+        self.mock_article.return_value = articles
+        self.mock_pub.return_value = pubs
+        request = self.make_request("---")
+        self.check_view_has_context(home, request, {"post": "B"})
+        self.check_view_has_context(home, request, {"article": "A"})
+        self.check_view_has_context(home, request, {"publication": "P"})
+        self.mock_blog.assert_called_with("date")
+        self.mock_article.assert_called_with("date")
+        self.mock_pub.assert_called_with("date")
 
 
 
