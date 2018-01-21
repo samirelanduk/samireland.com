@@ -21,11 +21,13 @@ class EditableTextTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_editable_text_has_markdown_property(self, mock_html):
+    @patch("samireland.models.MediaFile.media_lookup")
+    def test_editable_text_has_markdown_property(self, mock_lookup, mock_html):
         mock_html.return_value = "test output"
+        mock_lookup.return_value = "LOOKUP"
         text = EditableText(name="home", body="1\n\n2")
         output = text.html
-        mock_html.assert_called_with("1\n\n2")
+        mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
 
 
@@ -95,14 +97,16 @@ class PublicationTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_publication_has_markdown_property(self, mock_html):
+    @patch("samireland.models.MediaFile.media_lookup")
+    def test_publication_has_markdown_property(self, mock_lookup, mock_html):
         mock_html.return_value = "test output"
+        mock_lookup.return_value = "LOOKUP"
         pub = Publication(
          id="paper-1", title="PT", date="2017-01-02",
          url="12/34", doi="12.34", authors="S, B", body="1\n\n2"
         )
         output = pub.html
-        mock_html.assert_called_with("1\n\n2")
+        mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
 
 
@@ -186,14 +190,16 @@ class ProjectTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_project_has_markdown_property(self, mock_html):
+    @patch("samireland.models.MediaFile.media_lookup")
+    def test_project_has_markdown_property(self, mock_lookup, mock_html):
         mock_html.return_value = "test output"
+        mock_lookup.return_value = "LOOKUP"
         project = Project(
          name="palladium", image="palladium-icon", description="1\n\n2",
          category="python"
         )
         output = project.html
-        mock_html.assert_called_with("1\n\n2")
+        mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
 
 
@@ -240,13 +246,15 @@ class ArticleTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_article_has_markdown_property(self, mock_html):
+    @patch("samireland.models.MediaFile.media_lookup")
+    def test_article_has_markdown_property(self, mock_lookup, mock_html):
         mock_html.return_value = "test output"
+        mock_lookup.return_value = "LOOKUP"
         article = Article(
          id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
         )
         output = article.html
-        mock_html.assert_called_with("1\n\n2")
+        mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
 
 
@@ -277,11 +285,13 @@ class BlogPostTests(TestCase, TestCaseX):
 
 
     @patch("docupy.markdown_to_html")
-    def test_blog_post_has_markdown_property(self, mock_html):
+    @patch("samireland.models.MediaFile.media_lookup")
+    def test_blog_post_has_markdown_property(self, mock_lookup, mock_html):
         mock_html.return_value = "test output"
+        mock_lookup.return_value = "LOOKUP"
         post = BlogPost(date="2017-01-02", title="PT", body="1\n\n2")
         output = post.html
-        mock_html.assert_called_with("1\n\n2")
+        mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
 
 
@@ -336,3 +346,12 @@ class MediaFileTests(TestCase, TestCaseX):
          datetime.now().strftime("%Y%m%d-%H%M%S") + ".png",
          os.listdir(MEDIA_ROOT)
         )
+
+    def test_can_get_media_dict(self):
+        media_file1 = SimpleUploadedFile("test1.png", b"\x00\x01\x02\x03")
+        media_file2 = SimpleUploadedFile("test2.png", b"\x00\x01\x02\x03")
+        image1 = MediaFile.objects.create(name="t1", mediafile=media_file1)
+        image2 = MediaFile.objects.create(name="t2", mediafile=media_file1)
+        self.assertEqual(MediaFile.media_lookup(), {
+         "t1": "/" + image1.mediafile.url, "t2": "/" + image2.mediafile.url
+        })

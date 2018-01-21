@@ -1,5 +1,8 @@
+import os
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .base import FunctionalTest
-from samireland.models import Publication, Project, Article, BlogPost
+from samireland.settings import MEDIA_ROOT
+from samireland.models import *
 
 class SiteLayoutTests(FunctionalTest):
 
@@ -159,6 +162,21 @@ class HomePageTests(FunctionalTest):
 
 class AboutPageTests(FunctionalTest):
 
+    def setUp(self):
+        FunctionalTest.setUp(self)
+        self.files_at_start = os.listdir(MEDIA_ROOT)
+
+
+    def tearDown(self):
+        for f in os.listdir(MEDIA_ROOT):
+            if f not in self.files_at_start:
+                try:
+                    os.remove(MEDIA_ROOT + "/" + f)
+                except OSError:
+                    pass
+        FunctionalTest.tearDown(self)
+
+
     def test_about_page_structure(self):
         # The user goes to the home page
         self.get("/")
@@ -178,6 +196,21 @@ class AboutPageTests(FunctionalTest):
 
     def test_can_change_edit_page_text(self):
         self.check_editable_text("/about/", "about")
+
+
+    def test_image_in_editable_text(self):
+        mediafile = MediaFile.objects.create(
+         name="test-image", mediafile=SimpleUploadedFile("test.png", b"\x00\x01")
+        )
+        EditableText.objects.create(name="about", body="![abc](test-image)")
+        self.get("/about/")
+        about = self.browser.find_element_by_class_name("about")
+        image = about.find_element_by_tag_name("img")
+        self.assertEqual(
+         image.get_attribute("src"),
+         self.live_server_url + "/" + mediafile.mediafile.url
+        )
+
 
 
 

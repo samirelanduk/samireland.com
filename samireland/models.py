@@ -11,7 +11,7 @@ class EditableText(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body)
+        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
 
 
 
@@ -27,7 +27,7 @@ class Publication(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body)
+        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
 
 
     @property
@@ -58,7 +58,7 @@ class Project(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.description)
+        return docupy.markdown_to_html(self.description, MediaFile.media_lookup())
 
 
 
@@ -72,7 +72,7 @@ class Article(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body)
+        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
 
 
 
@@ -84,7 +84,8 @@ class BlogPost(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body)
+        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
+
 
     @property
     def next(self):
@@ -101,6 +102,13 @@ class MediaFile(models.Model):
     def create_filename(instance, filename):
         extension = "." + filename.split(".")[-1] if "." in filename else ""
         return datetime.strftime(datetime.now(), "%Y%m%d-%H%M%S") + extension
+
+
+    def media_lookup():
+        return {
+         media.name: "/" + media.mediafile.url
+          for media in MediaFile.objects.all()
+        }
 
 
     name = models.TextField(primary_key=True)

@@ -159,6 +159,16 @@ footer img:hover {
   opacity: 1;
 }
 
+figure {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+}
 
 form {
   width: 100%;
@@ -388,6 +398,10 @@ article h1 {
   footer img {
     margin-left: 5px;
     margin-right: 5px;
+  }
+
+  figure {
+    width: 70%;
   }
 
 
