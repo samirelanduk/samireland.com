@@ -1,4 +1,4 @@
 django==2.0
 seleniumx==0.1
 selenium==3.6
-docupy==0.1
+docupy==0.2
