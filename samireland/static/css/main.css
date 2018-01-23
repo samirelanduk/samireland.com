@@ -154,27 +154,6 @@ footer img {
   transition: 0.5s;
 }
 
-
-footer img:hover {
-  opacity: 1;
-}
-
-figure {
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-figure img {
-    width: 100%;
-    height: auto;
-}
-
-figcaption {
-    text-align: center;
-    font-style: italic;
-}
-
 form {
   width: 100%;
   margin-top: 30px;
@@ -313,6 +292,7 @@ textarea {
 
 article {
   position: relative;
+  font-size: 90%;
 }
 
 article h1 {
@@ -322,6 +302,31 @@ article h1 {
 
 .date {
   font-style: italic;
+}
+
+
+footer img:hover {
+  opacity: 1;
+}
+
+figure {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 55px;
+    margin-bottom: 55px;
+}
+
+figure img {
+    width: 100%;
+    height: auto;
+}
+
+figcaption {
+    font-size: 80%;
+    margin-top: 20px;
+    text-align: center;
+    font-style: italic;
 }
 
 
@@ -418,6 +423,12 @@ article h1 {
 
   .big {
     font-size: 140%;
+  }
+
+  article {
+      font-size: 95%;
+      padding-left: 2%;
+      padding-right: 2%;
   }
 
 }

@@ -1,4 +1,4 @@
-.article .date, article .date {
+article .date {
     text-align: center;
 }
 
@@ -15,7 +15,7 @@
   margin-bottom: 10px;
 }
 
-.article .article-date {
+.article .date {
   margin-bottom: 10px;
   font-weight: bold;
 }

@@ -31,7 +31,7 @@ h3 {
 
   .project-body {
       display: inline-block;
-      width: calc(100%-100px);
+      width: calc(100% - 100px);
       padding-left: 50px;
       flex-grow: 5;
   }

@@ -12,6 +12,10 @@
     margin-bottom: 15px;
 }
 
+h3.post-body {
+    font-size: 125%;
+}
+
 .article:after, .publication:after {
   content:"";
   background: silver;

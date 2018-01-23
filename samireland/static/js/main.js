@@ -15,7 +15,7 @@ $(window).on("resize", function() {
 
 
 function editText(button, csrf) {
-    var paragraphs = $(button).parent().find("p, figure");
+    var paragraphs = $(button).parent().find("p, figure, ol, ul");
     paragraphs.each(function(index, p) {
         p.remove();
     })
