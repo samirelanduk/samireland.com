@@ -64,7 +64,7 @@ class ResearchPageTests(FunctionalTest):
          "The Recent Paper"
         )
         self.assertEqual(
-         publications[0].find_element_by_class_name("pub-date").text,
+         publications[0].find_element_by_class_name("date").text,
          "9 August, 2016"
         )
         self.assertEqual(
@@ -72,7 +72,7 @@ class ResearchPageTests(FunctionalTest):
          "The Middle Paper"
         )
         self.assertEqual(
-         publications[1].find_element_by_class_name("pub-date").text,
+         publications[1].find_element_by_class_name("date").text,
          "12 April, 2016"
         )
         self.assertEqual(
@@ -80,7 +80,7 @@ class ResearchPageTests(FunctionalTest):
          "The First Paper"
         )
         self.assertEqual(
-         publications[2].find_element_by_class_name("pub-date").text,
+         publications[2].find_element_by_class_name("date").text,
          "1 January, 2016"
         )
 
@@ -155,7 +155,7 @@ class PublicationAdditionTests(FunctionalTest):
          "My First Paper"
         )
         self.assertEqual(
-         publications[0].find_element_by_class_name("pub-date").text,
+         publications[0].find_element_by_class_name("date").text,
          "1 June, 2017"
         )
         self.assertEqual(

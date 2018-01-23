@@ -59,7 +59,7 @@ class WritingPageTests(FunctionalTest):
          "The Recent Article"
         )
         self.assertEqual(
-         articles[0].find_element_by_class_name("article-date").text,
+         articles[0].find_element_by_class_name("date").text,
          "9 August, 2016"
         )
         self.assertEqual(
@@ -67,7 +67,7 @@ class WritingPageTests(FunctionalTest):
          "The Middle Article"
         )
         self.assertEqual(
-         articles[1].find_element_by_class_name("article-date").text,
+         articles[1].find_element_by_class_name("date").text,
          "12 April, 2016"
         )
         self.assertEqual(
@@ -75,7 +75,7 @@ class WritingPageTests(FunctionalTest):
          "The First Article"
         )
         self.assertEqual(
-         articles[2].find_element_by_class_name("article-date").text,
+         articles[2].find_element_by_class_name("date").text,
          "1 January, 2016"
         )
 
@@ -141,7 +141,7 @@ class ArticleAdditionTests(FunctionalTest):
          "My First Article"
         )
         self.assertEqual(
-         articles[0].find_element_by_class_name("article-date").text,
+         articles[0].find_element_by_class_name("date").text,
          "1 June, 2017"
         )
         self.assertEqual(

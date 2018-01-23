@@ -1,13 +1,12 @@
 from unittest.mock import patch, Mock
-from seleniumx import TestCaseX
+from testarsenal import DjangoTest
 from django.http import Http404, QueryDict
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError
-from django.test import TestCase
 from samireland.models import EditableText
 from samireland.views import *
 
-class ViewTest(TestCase, TestCaseX):
+class ViewTest(DjangoTest):
 
     def setUp(self):
         self.patcher1 = patch("samireland.views.grab_editable_text")
@@ -1019,7 +1018,7 @@ class MediaViewTests(ViewTest):
 
 
 
-class LoginViewTests(TestCase, TestCaseX):
+class LoginViewTests(DjangoTest):
 
     def setUp(self):
         self.patcher1 = patch("django.contrib.auth.authenticate")
@@ -1067,7 +1066,7 @@ class LoginViewTests(TestCase, TestCaseX):
 
 
 
-class LogoutViewTests(TestCase, TestCaseX):
+class LogoutViewTests(DjangoTest):
 
     @patch("django.contrib.auth.logout")
     def test_logout_view_redirects_home(self, mock_logout):
@@ -1083,7 +1082,7 @@ class LogoutViewTests(TestCase, TestCaseX):
 
 
 
-class EditViewTests(TestCase, TestCaseX):
+class EditViewTests(DjangoTest):
 
     def setUp(self):
         self.patcher1 = patch("samireland.views.EditableText.objects.get")
@@ -1127,7 +1126,7 @@ class EditViewTests(TestCase, TestCaseX):
 
 
 
-class EditableTextGrabberTests(TestCase):
+class EditableTextGrabberTests(DjangoTest):
 
     def setUp(self):
         self.patcher1 = patch("samireland.views.EditableText.objects.create")

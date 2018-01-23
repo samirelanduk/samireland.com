@@ -110,7 +110,7 @@ class HomePageTests(FunctionalTest):
         title = post.find_element_by_tag_name("h3")
         self.assertEqual(date.text, "3 January, 2017")
         self.assertEqual(title.text, "T2")
-        body = post.find_element_by_class_name("blog-body")
+        body = post.find_element_by_class_name("post-body")
         paragraphs = body.find_elements_by_tag_name("p")
         self.assertEqual(len(paragraphs), 2)
         self.assertEqual(paragraphs[0].text, "1")

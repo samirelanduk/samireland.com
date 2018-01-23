@@ -1,8 +1,7 @@
-from seleniumx import TestCaseX
-from django.test import TestCase
+from testarsenal import DjangoTest
 import samireland.views as views
 
-class UrlTests(TestCase, TestCaseX):
+class UrlTests(DjangoTest):
 
     def test_home_url(self):
         self.check_url_returns_view("/", views.home)

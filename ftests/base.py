@@ -1,9 +1,9 @@
 from selenium import webdriver
-from seleniumx import TestCaseX
+from testarsenal import BrowserTest
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import User
 
-class FunctionalTest(StaticLiveServerTestCase, TestCaseX):
+class FunctionalTest(StaticLiveServerTestCase, BrowserTest):
 
     def setUp(self):
         self.browser = webdriver.Chrome()

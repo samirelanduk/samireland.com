@@ -2,12 +2,11 @@ import os
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import patch, Mock, MagicMock
-from seleniumx import TestCaseX
-from django.test import TestCase
+from testarsenal import DjangoTest
 from samireland.models import *
 from samireland.settings import MEDIA_ROOT
 
-class EditableTextTests(TestCase, TestCaseX):
+class EditableTextTests(DjangoTest):
 
     def test_can_create_editable_text(self):
         text = EditableText(name="home", body="1\n\n2")
@@ -32,7 +31,7 @@ class EditableTextTests(TestCase, TestCaseX):
 
 
 
-class PublicationTests(TestCase, TestCaseX):
+class PublicationTests(DjangoTest):
 
     def test_can_create_publication(self):
         pub = Publication(
@@ -123,7 +122,7 @@ class PublicationTests(TestCase, TestCaseX):
 
 
 
-class ProjectTests(TestCase, TestCaseX):
+class ProjectTests(DjangoTest):
 
     def test_can_create_project(self):
         project = Project(
@@ -204,7 +203,7 @@ class ProjectTests(TestCase, TestCaseX):
 
 
 
-class ArticleTests(TestCase, TestCaseX):
+class ArticleTests(DjangoTest):
 
     def test_can_create_article(self):
         article = Article(
@@ -259,7 +258,7 @@ class ArticleTests(TestCase, TestCaseX):
 
 
 
-class BlogPostTests(TestCase, TestCaseX):
+class BlogPostTests(DjangoTest):
 
     def test_can_create_blog_post(self):
         post = BlogPost(date="2017-01-02", title="PT", body="1\n\n2")
@@ -314,7 +313,7 @@ class BlogPostTests(TestCase, TestCaseX):
 
 
 
-class MediaFileTests(TestCase, TestCaseX):
+class MediaFileTests(DjangoTest):
 
     def setUp(self):
         self.files_at_start = os.listdir(MEDIA_ROOT)
