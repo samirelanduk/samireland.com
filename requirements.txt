@@ -2,3 +2,5 @@ django==2.0
 testarsenal==0.1
 selenium==3.6
 docupy==0.2
+psycopg2
+gunicorn

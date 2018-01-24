@@ -3,6 +3,5 @@ __pycache__
 *.sqlite3
 secrets.py
 *env
-media/storage
 *.log
 uploads/*
