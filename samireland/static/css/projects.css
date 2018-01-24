@@ -12,7 +12,7 @@
     margin-right: auto;
 }
 
-h3 {
+h1, h2, h3, .summary {
     text-align: center;
 }
 
@@ -36,8 +36,12 @@ h3 {
       flex-grow: 5;
   }
 
-  h3 {
+  h1, h2, h3 {
       margin-top: 0px;
+      text-align: left;
+  }
+
+  .summary {
       text-align: left;
   }
 
