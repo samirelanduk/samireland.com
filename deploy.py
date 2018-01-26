@@ -13,7 +13,7 @@ subprocess.call(
  "ssh {} 'rm -r ~/{}/source/* >& /dev/null'".format(sitename, sitename), shell=True
 )
 
-# What files is git tracking?
+# What files are being tracked by git?
 tracked_files = subprocess.check_output("git ls-files", shell=True).decode()
 tracked_files = list(filter(bool, tracked_files.split("\n")))
 
