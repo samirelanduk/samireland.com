@@ -55,6 +55,13 @@ else:
      shell=True
     )
 
+# Add google analytics
+if sitename == "samireland.com":
+    subprocess.call(
+     "ssh {} 'sed -i s/\"<!--analytics-->\"/\"\{{% include \\\"analytics.html\\\" %\}}\"/g ~/{}/source/samireland/templates/base.html'".format(sitename, sitename),
+     shell=True
+    )
+
 # Upload the secret settings
 subprocess.call(
  "scp -r ./samireland/secrets.py {}:~/{}/source/samireland/secrets.py".format(sitename, sitename), shell=True

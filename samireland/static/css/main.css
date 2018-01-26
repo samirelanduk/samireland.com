@@ -304,6 +304,28 @@ article h1 {
   font-style: italic;
 }
 
+.youtube {
+  position:relative;
+  padding-bottom:56.25%;
+  padding-top:30px;
+  margin-bottom: 15px;
+  height:0;
+  overflow:hidden;
+}
+
+.youtube iframe {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+video {
+  width: 100%;
+  height: auto;
+}
+
 
 footer img:hover {
   opacity: 1;
