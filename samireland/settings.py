@@ -14,6 +14,8 @@ INSTALLED_APPS = [
  "django.contrib.staticfiles",
  "django.contrib.auth",
  "django.contrib.sessions",
+ "django.contrib.messages",
+ "django.contrib.admin",
  "samireland"
 ]
 
@@ -22,6 +24,7 @@ MIDDLEWARE = [
  "django.middleware.common.CommonMiddleware",
  "django.middleware.csrf.CsrfViewMiddleware",
  "django.contrib.auth.middleware.AuthenticationMiddleware",
+ "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
 STATIC_URL = "/static/" # URL root for static files

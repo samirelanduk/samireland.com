@@ -2,6 +2,7 @@
 
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.contrib import admin
 import samireland.views as views
 from django.conf import settings
 
@@ -26,6 +27,7 @@ urlpatterns = [
  path(r"blog/<int:year>/<int:month>/<int:day>/edit/", views.edit_blog),
  path(r"about/", views.about),
  path(r"media/", views.media),
+ path(r"admin/", admin.site.urls),
  path(r"", views.home)
 ] + static(
  settings.MEDIA_URL,
