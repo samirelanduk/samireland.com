@@ -11,60 +11,28 @@ class UrlTests(DjangoTest):
         self.check_url_returns_view("/research/", views.research)
 
 
-    def test_new_publication_url(self):
-        self.check_url_returns_view("/research/new/", views.new_pub)
-
-
     def test_publication_url(self):
         self.check_url_returns_view("/research/ab-cd/", views.publication)
-
-
-    def test_publication_edit_url(self):
-        self.check_url_returns_view("/research/ab-cd/edit/", views.edit_pub)
 
 
     def test_projects_url(self):
         self.check_url_returns_view("/projects/", views.projects)
 
 
-    def test_new_project_url(self):
-        self.check_url_returns_view("/projects/new/", views.new_project)
-
-
-    def test_project_edit_url(self):
-        self.check_url_returns_view("/projects/23/edit/", views.edit_project)
-
-
     def test_writing_url(self):
         self.check_url_returns_view("/writing/", views.writing)
-
-
-    def test_new_article_url(self):
-        self.check_url_returns_view("/writing/new/", views.new_article)
 
 
     def test_article_url(self):
         self.check_url_returns_view("/writing/ab-cd/", views.article)
 
 
-    def test_article_edit_url(self):
-        self.check_url_returns_view("/writing/ab-cd/edit/", views.edit_article)
-
-
     def test_blog_url(self):
         self.check_url_returns_view("/blog/", views.blog)
 
 
-    def test_new_blog_url(self):
-        self.check_url_returns_view("/blog/new/", views.new_blog)
-
-
     def test_blog_post_url(self):
         self.check_url_returns_view("/blog/1111/22/33/", views.blog_post)
-
-
-    def test_blog_post_edit_url(self):
-        self.check_url_returns_view("/blog/1111/22/33/edit/", views.edit_blog)
 
 
     def test_about_url(self):
@@ -73,15 +41,3 @@ class UrlTests(DjangoTest):
 
     def test_media_url(self):
         self.check_url_returns_view("/media/", views.media)
-
-
-    def test_login_url(self):
-        self.check_url_returns_view("/authenticate/", views.login)
-
-
-    def test_logout_url(self):
-        self.check_url_returns_view("/logout/", views.logout)
-
-
-    def test_edit_url(self):
-        self.check_url_returns_view("/edit/abc/", views.edit)

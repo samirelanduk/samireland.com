@@ -9,9 +9,6 @@
 {% block main %}
 <h1>Blog</h1>
 <div id="blog-posts">
-    {% if user.is_authenticated %}
-    <a class="new" href="/blog/new/">Add Blog Post</a>
-    {% endif %}
     {% if posts %}
         {% for post in posts %}
             {% include "single-blog-post.html" %}

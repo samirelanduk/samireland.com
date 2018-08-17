@@ -7,14 +7,5 @@
 
 <div class="about editable">
     {{ text.html|safe }}
-    {% if user.is_authenticated %}
-    <button class="edit" onclick="editText(this);">Edit</button>
-    <form class="hidden-form" method='POST' action='/edit/about/'>
-        <textarea name="body">{{ text.body }}</textarea>
-        <input type="hidden" name="redirect" value="/about/">
-        {% csrf_token %}
-        <input type="submit" value="Save">
-    </form>
-    {% endif %}
 </div>
 {% endblock %}

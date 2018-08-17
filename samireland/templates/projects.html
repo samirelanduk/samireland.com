@@ -11,20 +11,7 @@
 
 <div class="summary editable">
     {{ text.html|safe }}
-    {% if user.is_authenticated %}
-    <button class="edit" onclick="editText(this);">Edit</button>
-    <form class="hidden-form" method='POST' action='/edit/projects/'>
-        <textarea name="body">{{ text.body }}</textarea>
-        <input type="hidden" name="redirect" value="/projects/">
-        {% csrf_token %}
-        <input type="submit" value="Save">
-    </form>
-    {% endif %}
 </div>
-
-{% if user.is_authenticated %}
-<div id="new-project"><a href="/projects/new/" class="new">New Project</a></div>
-{% endif %}
 
 <div id="web-projects">
     <h2>Web Projects</h2>

@@ -9,27 +9,10 @@
 {% block main %}
 <h1>Media</h1>
 
-<form method="POST" enctype="multipart/form-data">
-    {% if error %}<div class="error-message">{{ error }}</div>{% endif %}
-    <input type="file" name="file" required>
-    <input type="text" placeholder="Media name" name="name" required>
-    {% csrf_token %}
-    <input type="submit">
-</form>
-
 <div id="media-grid">
     {% for mediafile in media %}
         <div class="media-square" style="background-image: url(/{{ mediafile.mediafile.url }});">
             <div class="image_title">{{ mediafile.name }}</div>
-            <button onclick="makeDeletionAppear(this);">Delete</button>
-            <form class="hidden-form" method="POST">
-                <p>Are you sure you want to delete this image?</p>
-                <button type="button" onclick="hideDeletion(this);">No, go back</button>
-                <input type="hidden" name="delete" value="yes">
-                <input type="hidden" name="name" value="{{ mediafile.name }}">
-                {% csrf_token %}
-                <input type="submit" class="delete-button" value="Yes, delete">
-            </form>
         </div>
     {% endfor %}
 </div>

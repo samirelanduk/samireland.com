@@ -1,5 +1,4 @@
 <div class="blog-post">
-    {% if user.is_authenticated %}<a class="edit" href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}/edit/">Edit</a>{% endif %}
     <div class="date">{{ post.date|date:"j F, Y"}}</div>
     <h{% if text %}3{% elif not posts %}1{% else %}2{% endif %}><a href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}">{{ post.title }}</a></h{% if text %}3{% elif not posts %}1{% else %}2{% endif %}>
     <div class="post-body">

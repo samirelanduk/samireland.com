@@ -28,7 +28,7 @@ header {
 }
 
 
-#login-link {
+header a, header a:visited, header a:hover {
   color: inherit;
   text-decoration: inherit;
   cursor: text;

@@ -11,23 +11,10 @@
 
 <div class="summary editable">
     {{ text.html|safe }}
-    {% if user.is_authenticated %}
-    <button class="edit" onclick="editText(this);">Edit</button>
-    <form class="hidden-form" method='POST' action='/edit/research/'>
-        <textarea name="body">{{ text.body }}</textarea>
-        <input type="hidden" name="redirect" value="/research/">
-        {% csrf_token %}
-        <input type="submit" value="Save">
-    </form>
-    {% endif %}
 </div>
 
 <div id="publications">
     <h2>Publications</h2>
-
-    {% if user.is_authenticated %}
-    <a class="new" href="/research/new/">Add publication</a>
-    {% endif %}
 
     {% if publications %}
         {% for pub in publications %}

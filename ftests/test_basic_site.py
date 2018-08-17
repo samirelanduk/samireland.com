@@ -61,10 +61,6 @@ class HomePageTests(FunctionalTest):
         self.assertIn("no publications", pub.text)
 
 
-    def test_can_change_home_page_text(self):
-        self.check_editable_text("/", "intro")
-
-
     def test_latest_entries(self):
         BlogPost.objects.create(date="2017-01-01", title="T1", body="1\n\n2")
         BlogPost.objects.create(date="2017-01-03", title="T2", body="1\n\n2")
@@ -194,10 +190,6 @@ class AboutPageTests(FunctionalTest):
             about.find_element_by_tag_name("form")
 
 
-    def test_can_change_edit_page_text(self):
-        self.check_editable_text("/about/", "about")
-
-
     def test_image_in_editable_text(self):
         mediafile = MediaFile.objects.create(
          name="test-image", mediafile=SimpleUploadedFile("test.png", b"\x00\x01")
@@ -210,103 +202,3 @@ class AboutPageTests(FunctionalTest):
          image.get_attribute("src"),
          self.live_server_url + "/" + mediafile.mediafile.url
         )
-
-
-
-
-class AuthTests(FunctionalTest):
-
-    def test_can_log_in(self):
-        self.get("/")
-
-        # The 'l' is a link and it is the only one
-        header = self.browser.find_element_by_tag_name("header")
-        links = header.find_elements_by_tag_name("a")
-        self.assertEqual(links[0].text, "l")
-        self.assertEqual(len(links), 1)
-
-        # Clicking it goes to the login page
-        self.click(links[0])
-        self.check_page("/authenticate/")
-        self.check_title("Log In")
-        self.check_h1("Log In")
-
-        # There is a login form
-        login_form = self.browser.find_element_by_tag_name("form")
-        name_entry = login_form.find_elements_by_tag_name("input")[0]
-        password_entry = login_form.find_elements_by_tag_name("input")[1]
-        submit_button = login_form.find_elements_by_tag_name("input")[-1]
-
-        # They login
-        name_entry.send_keys("testsam")
-        password_entry.send_keys("testpassword")
-        submit_button.click()
-
-        # They are on the home page
-        self.check_page("/")
-
-        # There is a logout button
-        header = self.browser.find_element_by_tag_name("header")
-        logout_link = header.find_elements_by_tag_name("a")[-1]
-
-
-    def test_can_prevent_login(self):
-        self.get("/authenticate/")
-        login_form = self.browser.find_element_by_tag_name("form")
-        name_entry = login_form.find_elements_by_tag_name("input")[0]
-        password_entry = login_form.find_elements_by_tag_name("input")[1]
-        submit_button = login_form.find_elements_by_tag_name("input")[-1]
-        name_entry.send_keys("badguy1337")
-        password_entry.send_keys("h4ck0r")
-        submit_button.click()
-
-        # The attempt fails.
-        self.check_page("/authenticate/")
-        login_form = self.browser.find_element_by_tag_name("form")
-        error = login_form.find_element_by_class_name("error-message")
-        self.assertEqual(error.text, "Nope!")
-
-
-    def test_can_logout(self):
-        self.login()
-        self.get("/")
-
-        # There is a logout link
-        header = self.browser.find_element_by_tag_name("header")
-        logout_link = header.find_elements_by_tag_name("a")[-1]
-
-        # They click it
-        logout_link.click()
-
-        # They are back on the home page
-        self.check_page("/")
-
-        # There is only one link in the header
-        header = self.browser.find_element_by_tag_name("header")
-        self.assertEqual(len(header.find_elements_by_tag_name("a")), 1)
-
-
-    def test_protected_pages_are_protected(self):
-        Publication.objects.create(
-         id="paper-1", title="The First Paper", date="2016-01-01",
-         url="www.com", doi="DDD", authors="Jack, Jill",
-         body="Line 1\n\nLine 2"
-        )
-        Project.objects.create(
-         name="palladium", image="palladium-image",
-         description="Line 1\n\nLine 2", category="python"
-        )
-        Article.objects.create(
-         id="article-1", title="The First Article", date="2016-01-01",
-         summary="summary1", body="Line 1\n\nLine 2"
-        )
-        BlogPost.objects.create(date="2017-01-01", title="T1", body="1\n\n2")
-        pages = [
-         "/research/new/", "/research/paper-1/edit/",
-         "/projects/new/", "/projects/1/edit/",
-         "/writing/new/",  "/writing/article-1/edit/",
-         "/blog/new/", "/blog/2017/1/1/edit/",
-         "/media/"]
-        for page in pages:
-            self.get(page)
-            self.check_page("/")
