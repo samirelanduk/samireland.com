@@ -2,53 +2,36 @@
 
 {% block title %}Home{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
-<link rel="stylesheet" type="text/css" href="/static/css/writing.css">
-<link rel="stylesheet" type="text/css" href="/static/css/research.css">
-<link rel="stylesheet" type="text/css" href="/static/css/home.css">
-{% endblock %}
-
 {% block main %}
 
-<div class="intro big editable">
+<div class="home-summary">
     {{ text.html|safe }}
 </div>
 
-<div id="latest-blog">
-    <h2>Latest Blog Post</h2>
-    {% if post %}
-        {% include "single-blog-post.html" %}
-    {% else %}
-        <p>Currently no blog posts.</p>
-    {% endif %}
-</div>
-
-<div id="latest-article">
-    <h2>Latest Writing</h2>
-    {% if article %}
-    <div class="blog-post">
-        <h3 class="article-title">{{ article.title }}</h3>
-        <div class="date">{{ article.date|date:"j F, Y" }}</div>
-        <div class="article-summary post-body">{{ article.summary }}</div>
-        <a class="article-link post-body" href="/writing/{{ article.id }}/">Read More</a>
+<div class="home-grid">
+    <div class="home-cell" id="latest-blog">
+        <h2>Latest Blog Post</h2>
+        {% if post %}
+            {% include "blog-card.html" %}
+        {% else %}
+            <p>Currently no blog posts.</p>
+        {% endif %}
     </div>
-    {% else %}
-        <p>Currently no articles.</p>
-    {% endif %}
-</div>
-
-<div id="latest-pub">
-    <h2>Latest Publication</h2>
-    {% if publication %}
-    <div class="blog-post">
-        <h3 class="post-body">{{ publication.title }}</h3>
-        <div class="date">{{ publication.date|date:"j F, Y" }}</div>
-        <div class="pub-authors post-body">{{ publication.html_authors|safe }}</div>
-        <a class="pub-summary post-body" href="/research/{{ pub.id }}/">Read Summary</a>
+    <div class="home-cell" id="latest-article">
+        <h2>Latest Writing</h2>
+        {% if article %}
+            {% include "article-card.html" %}
+        {% else %}
+            <p>Currently no articles.</p>
+        {% endif %}
     </div>
-    {% else %}
-        <p>Currently no publications.</p>
-    {% endif %}
+    <div class="home-cell" id="latest-pub">
+        <h2>Latest Publication</h2>
+        {% if pub %}
+            {% include "publication-card.html" %}
+        {% else %}
+            <p>Currently no publications.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

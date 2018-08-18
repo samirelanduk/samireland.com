@@ -13,7 +13,7 @@ def home(request):
     article = Article.objects.order_by("date").last()
     pub = Publication.objects.order_by("date").last()
     return render(request, "home.html", {
-     "text": text, "post": blog, "article": article, "publication": pub
+     "text": text, "post": blog, "article": article, "pub": pub
     })
 
 
@@ -52,9 +52,10 @@ def article(request, id):
 
 
 def blog(request):
-    return render(
-     request, "blog.html", {"posts": BlogPost.objects.all().order_by("-date")}
-    )
+    text = grab_editable_text("blog")
+    return render(request, "blog.html", {
+     "posts": BlogPost.objects.all().order_by("-date"), "text": text
+    })
 
 
 def blog_post(request, year, month, day):

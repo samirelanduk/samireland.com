@@ -2,11 +2,24 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="/static/css/blog.css">
-{% endblock %}
-
 {% block main %}
-{% include "single-blog-post.html" %}
+<article class="card">
+    <div class="date">{{ post.date|date:"j F, Y"}}</div>
+    <h1>{{ post.title }}</h1>
+    <div class="post-body">
+    {{ post.html|safe }}
+    </div>
+</atricle>
+
+<div id="posts-nav">
+    {% if post.previous %}
+    <a class="previous-page" href="/blog/{{ post.previous.date.year }}/{{ post.previous.date.month }}/{{ post.previous.date.day }}">&#8592; Previous</a>
+    {% else %}
+    <div class="previous-page"></div>
+    {% endif %}
+    {% if post.next %}
+    <a class="next-page" href="/blog/{{ post.next.date.year }}/{{ post.next.date.month }}/{{ post.next.date.day }}">Next &#8594;</a>
+    {% endif %}
+</div>
 
 {% endblock %}

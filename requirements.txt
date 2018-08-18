@@ -2,5 +2,9 @@ django==2.0
 testarsenal==0.1
 selenium==3.6
 docupy==0.2
-psycopg2
 gunicorn
+rjsmin==1.0.12 --install-option="--without-c-extensions"
+rcssmin==1.0.6 --install-option="--without-c-extensions"
+libsass==0.14.5
+django-compressor==2.2
+django-sass-processor==0.7

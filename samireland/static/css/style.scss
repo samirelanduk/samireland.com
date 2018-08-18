@@ -1,0 +1,46 @@
+$font: Montserrat;
+$title-font: "Roboto Slab";
+
+$green: #4A9586;
+$light-green: #5CA193;
+$hyperlink-blue: #0074D9;
+$back-gray: #EEEEEE;
+$black: #444444;
+$border-gray: #dddbef;
+
+$padding: 1.5rem;
+$curvature: 0.4rem;
+
+$tablet-width: 500px;
+$laptop-width: 700px;
+$desktop-width: 1000px;
+
+@mixin margin-side($val) {
+    margin: {left: $val; right: $val;}
+}
+
+@mixin non-left-margin($val) {
+    margin: $val;
+    margin-left: 0px;
+}
+
+@import "base";
+@import "core";
+@import "components";
+
+
+@media (min-width: $tablet-width) {
+    @include base--tablet();
+    @include components--tablet();
+}
+
+@media (min-width: $laptop-width) {
+    @include base--laptop();
+    @include core--laptop();
+    @include components--laptop();
+}
+
+@media (min-width: $desktop-width) {
+    @include base--desktop();
+    @include components--desktop();
+}

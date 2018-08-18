@@ -1,4 +1,5 @@
 <!doctype html>
+{% load sass_tags %}
 <html>
 
 <head>
@@ -16,7 +17,7 @@
    rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Montserrat'
    rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+  <link href="{% sass_src 'css/style.scss' %}" rel="stylesheet" type="text/css">
   {% block css %}{% endblock %}
   <!--analytics-->
 </head>

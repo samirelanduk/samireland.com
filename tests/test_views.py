@@ -60,7 +60,7 @@ class HomeViewTests(ViewTest):
         request = self.make_request("---")
         self.check_view_has_context(home, request, {"post": "B"})
         self.check_view_has_context(home, request, {"article": "A"})
-        self.check_view_has_context(home, request, {"publication": "P"})
+        self.check_view_has_context(home, request, {"pub": "P"})
         self.mock_blog.assert_called_with("date")
         self.mock_article.assert_called_with("date")
         self.mock_pub.assert_called_with("date")
@@ -281,6 +281,12 @@ class BlogViewTests(ViewTest):
     def test_blog_view_uses_blog_template(self):
         request = self.make_request("---")
         self.check_view_uses_template(blog, request, "blog.html")
+
+
+    def test_blog_view_can_send_text(self):
+        request = self.make_request("---")
+        self.check_view_has_context(blog, request, {"text": "EDTEXT"})
+        self.mock_grab.assert_called_with("blog")
 
 
     def test_blog_view_sends_blog_posts(self):
