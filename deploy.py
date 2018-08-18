@@ -87,6 +87,10 @@ subprocess.call(
 
 # Deploy static files
 subprocess.call(
+ "ssh {} 'cd ~/{}/source && ../env/bin/python manage.py compilescss'".format(sitename, sitename),
+ shell=True
+)
+subprocess.call(
  "ssh {} 'cd ~/{}/source && ../env/bin/python manage.py collectstatic --noinput'".format(sitename, sitename),
  shell=True
 )
