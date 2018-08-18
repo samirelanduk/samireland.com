@@ -22,6 +22,10 @@ a {
     color: $hyperlink-blue;
 }
 
+a.card-link {
+    color: inherit;
+}
+
 .youtube {
     position:relative;
     padding-bottom: 56.25%;

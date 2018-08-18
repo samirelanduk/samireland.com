@@ -1,5 +1,5 @@
-<div class="card"><a class="card-link" href="/research/{{ pub.id }}/">
+<a class="card-link" href="/research/{{ pub.id }}/"><div class="card">
     <h3 class="card-title">{{ pub.title }}</h3>
     <div class="card-date">{{ pub.date|date:"j F, Y" }}</div>
-    <div class="card-summary">{{ pub.html_authors|safe }}</div>
-</a></div>
+    <div class="card-summary">{{ pub.html_authors|safe|truncatewords_html:25 }}</div>
+</div></a>
