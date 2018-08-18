@@ -30,6 +30,11 @@ class EditableTextTests(DjangoTest):
         self.assertEqual(output, "test output")
 
 
+    def test_text_str(self):
+        text = EditableText(name="home")
+        self.assertEqual(str(text), "EditableText (home)")
+
+
 
 class PublicationTests(DjangoTest):
 
@@ -121,6 +126,14 @@ class PublicationTests(DjangoTest):
         self.assertEqual(output, "test output")
 
 
+    def test_publication_str(self):
+        pub = Publication(
+         id="paper-1", title="PT", date="2017-01-02",
+         url="12/34", doi="12.34", authors="S, B", body="1\n\n2"
+        )
+        self.assertEqual(str(pub), "Publication (PT)")
+
+
 
 class ProjectTests(DjangoTest):
 
@@ -202,6 +215,14 @@ class ProjectTests(DjangoTest):
         self.assertEqual(output, "test output")
 
 
+    def test_project_str(self):
+        project = Project(
+         name="palladium", image="palladium-icon", description="1\n\n2",
+         category="python"
+        )
+        self.assertEqual(str(project), "Python Project (palladium)")
+
+
 
 class ArticleTests(DjangoTest):
 
@@ -255,6 +276,13 @@ class ArticleTests(DjangoTest):
         output = article.html
         mock_html.assert_called_with("1\n\n2", "LOOKUP")
         self.assertEqual(output, "test output")
+
+
+    def test_article_str(self):
+        article = Article(
+         id="article-1", title="PT", date="2017-01-02", body="1\n\n2"
+        )
+        self.assertEqual(str(article), "Article (PT)")
 
 
 
@@ -312,6 +340,11 @@ class BlogPostTests(DjangoTest):
         self.assertIsNone(post1.previous)
 
 
+    def test_blog_str(self):
+        post = BlogPost(date="2017-01-02", title="PT", body="1\n\n2")
+        self.assertEqual(str(post), "BlogPost (2017-01-02 - PT)")
+
+
 
 class MediaFileTests(DjangoTest):
 
@@ -354,3 +387,9 @@ class MediaFileTests(DjangoTest):
         self.assertEqual(MediaFile.media_lookup(), {
          "t1": "/" + image1.mediafile.url, "t2": "/" + image2.mediafile.url
         })
+
+
+    def test_media_str(self):
+        media_file = SimpleUploadedFile("test.png", b"\x00\x01\x02\x03")
+        image = MediaFile(name="test", mediafile=media_file)
+        self.assertEqual(str(image), "MediaFile (test)")

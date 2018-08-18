@@ -1,12 +1,10 @@
 """Views for samireland.com"""
 
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
-import django.contrib.auth as auth
-from django.contrib.auth.decorators import login_required
 from .models import *
 
 def home(request):

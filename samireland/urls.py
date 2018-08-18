@@ -7,7 +7,6 @@ import samireland.views as views
 from django.conf import settings
 
 urlpatterns = [
-
  path(r"research/", views.research),
  path(r"research/<slug:id>/", views.publication),
  path(r"projects/", views.projects),

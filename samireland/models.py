@@ -9,6 +9,10 @@ class EditableText(models.Model):
     name = models.CharField(primary_key=True, max_length=64)
     body = models.TextField()
 
+    def __str__(self):
+        return "EditableText ({})".format(self.name)
+
+
     @property
     def html(self):
         return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
@@ -33,6 +37,10 @@ class Publication(models.Model):
     @property
     def html_authors(self):
         return docupy.markdown_to_html(self.authors)
+
+
+    def __str__(self):
+        return "Publication ({})".format(self.title)
 
 
 
@@ -61,6 +69,10 @@ class Project(models.Model):
         return docupy.markdown_to_html(self.description, MediaFile.media_lookup())
 
 
+    def __str__(self):
+        return "{} Project ({})".format(self.category.title(), self.name)
+
+
 
 class Article(models.Model):
 
@@ -69,6 +81,10 @@ class Article(models.Model):
     date = models.DateField()
     summary = models.TextField()
     body = models.TextField()
+
+    def __str__(self):
+        return "Article ({})".format(self.title)
+
 
     @property
     def html(self):
@@ -81,6 +97,10 @@ class BlogPost(models.Model):
     date = models.DateField(primary_key=True)
     title = models.TextField()
     body = models.TextField()
+
+    def __str__(self):
+        return "BlogPost ({} - {})".format(self.date, self.title)
+
 
     @property
     def html(self):
@@ -113,3 +133,6 @@ class MediaFile(models.Model):
 
     name = models.TextField(primary_key=True)
     mediafile = models.FileField(upload_to=create_filename)
+
+    def __str__(self):
+        return "MediaFile ({})".format(self.name)
