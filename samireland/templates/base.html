@@ -24,7 +24,11 @@
 
 <body>
     <header>
+        {% if user.is_authenticated %}
         Sa<a href="/media/">m</a> Ire<a href="/admin/">l</a>and
+        {% else %}
+        <a href="/">Sam Ireland</a>
+        {% endif %}
         <div id="navicon">&#9776;</div>
     </header>
 
