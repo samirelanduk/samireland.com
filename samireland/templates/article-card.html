@@ -1,5 +1,5 @@
-<a class="card-link" href="/writing/{{ article.id }}/"><div class="card">
+<div class="card" onclick="clickCard('/writing/{{ article.id }}/');">
     <h3 class="card-title">{{ article.title }}</h3>
     <div class="card-date">{{ article.date|date:"j F, Y" }}</div>
-    <div class="card-summary">{{ article.summary }}</div>
-</div></a>
+    <p class="card-summary">{{ article.summary }}</p>
+</div>

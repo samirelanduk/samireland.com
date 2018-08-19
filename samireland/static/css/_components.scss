@@ -7,6 +7,13 @@
     font-size: 0.9em;
     text-align: center;
     background-color: lighten($green, 55);
+    cursor: pointer;
+
+    .card-link {
+        color: inherit;
+        display: block;
+        height: 100%;
+    }
 
     .card-title {
         margin-bottom: 1rem;
@@ -67,6 +74,7 @@ article {
 
 article.card {
     text-align: left;
+    cursor: inherit;
 
     figure, video, .youtube {
         display: block;

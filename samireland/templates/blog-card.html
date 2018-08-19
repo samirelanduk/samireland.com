@@ -1,5 +1,5 @@
-<a class="card-link" href="/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}"><div class="card">
+<div class="card" onclick="clickCard('/blog/{{ post.date.year }}/{{ post.date.month }}/{{ post.date.day }}/');">
     <div class="card-date">{{ post.date }}</div>
     <h2 class="card-title">{{ post.title }}</h2>
-    <div class="card-body">{{ post.html|safe|truncatewords_html:50}}</div>
-</div></a>
+    <div class="card-body">{{ post.html|safe|truncatewords_html:50 }}</div>
+</div>
