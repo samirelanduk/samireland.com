@@ -8,3 +8,4 @@ rcssmin==1.0.6 --install-option="--without-c-extensions"
 libsass==0.14.5
 django-compressor==2.2
 django-sass-processor==0.7
+django-track

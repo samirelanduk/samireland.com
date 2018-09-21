@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ssh samireland.com 'cd samireland.com/source;source ../env/bin/activate;\
-python manage.py dumpdata --exclude=contenttypes --exclude=auth.Permission\
+python manage.py dumpdata --exclude=contenttypes --exclude=track  --exclude=auth.Permission\
 > dump.json'
 
 scp samireland.com:~/samireland.com/source/dump.json ./dump.json
