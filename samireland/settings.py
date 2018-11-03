@@ -35,7 +35,7 @@ MIDDLEWARE = [
 STATIC_URL = "/static/" # URL root for static files
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, "../static"))
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
-MEDIA_URL = "uploads/"
+MEDIA_URL = "/uploads/"
 SASS_PROCESSOR_ROOT = os.path.abspath(os.path.join(BASE_DIR, "samireland", "static"))
 
 TEMPLATES = [{

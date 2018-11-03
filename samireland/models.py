@@ -126,8 +126,7 @@ class MediaFile(models.Model):
 
     def media_lookup():
         return {
-         media.name: "/" + media.mediafile.url
-          for media in MediaFile.objects.all()
+         media.name: media.mediafile.url for media in MediaFile.objects.all()
         }
 
 

@@ -385,7 +385,7 @@ class MediaFileTests(DjangoTest):
         image1 = MediaFile.objects.create(name="t1", mediafile=media_file1)
         image2 = MediaFile.objects.create(name="t2", mediafile=media_file1)
         self.assertEqual(MediaFile.media_lookup(), {
-         "t1": "/" + image1.mediafile.url, "t2": "/" + image2.mediafile.url
+         "t1": image1.mediafile.url, "t2": image2.mediafile.url
         })
 
 
