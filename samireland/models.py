@@ -15,7 +15,7 @@ class EditableText(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
+        return docupy.markdown_to_html(self.body.replace("\r", ""), MediaFile.media_lookup())
 
 
 
@@ -31,7 +31,7 @@ class Publication(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
+        return docupy.markdown_to_html(self.body.replace("\r", ""), MediaFile.media_lookup())
 
 
     @property
@@ -66,7 +66,7 @@ class Project(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.description, MediaFile.media_lookup())
+        return docupy.markdown_to_html(self.description.replace("\r", ""), MediaFile.media_lookup())
 
 
     def __str__(self):
@@ -88,7 +88,7 @@ class Article(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
+        return docupy.markdown_to_html(self.body.replace("\r", ""), MediaFile.media_lookup())
 
 
 
@@ -104,7 +104,7 @@ class BlogPost(models.Model):
 
     @property
     def html(self):
-        return docupy.markdown_to_html(self.body, MediaFile.media_lookup())
+        return docupy.markdown_to_html(self.body.replace("\r", ""), MediaFile.media_lookup())
 
 
     @property

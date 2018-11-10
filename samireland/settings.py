@@ -52,3 +52,4 @@ TRACK_TZ = "Europe/London"
 TRACK_PATH_EXCLUDE = [r"\.ico$", r"\.txt$", r"^/admin"]
 TRACK_HOST_EXCLUDE = ["samireland.uk", "www.samireland.uk"]
 GEOIP_PATH = "/usr/local/bin/geolite2"
+EXCLUDE_TAGS_FROM_MINIFYING = ["pre", "code"]
