@@ -20,3 +20,5 @@ python manage.py migrate
 python manage.py loaddata dump.json
 
 rm dump.json
+
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('sam', 'admin@example.com', 'password')" | python manage.py shell

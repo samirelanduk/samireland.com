@@ -45,3 +45,5 @@ TEMPLATES = [{
   ],
  },
 }]
+
+EXCLUDE_TAGS_FROM_MINIFYING = ["pre", "code", "textarea"]
