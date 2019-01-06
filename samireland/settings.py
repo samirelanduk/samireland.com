@@ -17,7 +17,6 @@ INSTALLED_APPS = [
  "django.contrib.messages",
  "django.contrib.admin",
  "sass_processor",
- "track",
  "samireland"
 ]
 
@@ -29,7 +28,6 @@ MIDDLEWARE = [
  "django.contrib.messages.middleware.MessageMiddleware",
  "htmlmin.middleware.HtmlMinifyMiddleware",
  "htmlmin.middleware.MarkRequestMiddleware",
- "track.middleware.inspect_response",
 ]
 
 STATIC_URL = "/static/" # URL root for static files
@@ -47,9 +45,3 @@ TEMPLATES = [{
   ],
  },
 }]
-
-TRACK_TZ = "Europe/London"
-TRACK_PATH_EXCLUDE = [r"\.ico$", r"\.txt$", r"^/admin"]
-TRACK_HOST_EXCLUDE = ["samireland.uk", "www.samireland.uk"]
-GEOIP_PATH = "/usr/local/bin/geolite2"
-EXCLUDE_TAGS_FROM_MINIFYING = ["pre", "code"]

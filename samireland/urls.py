@@ -4,7 +4,6 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 import samireland.views as views
-import track.views
 from django.conf import settings
 
 urlpatterns = [
@@ -18,7 +17,6 @@ urlpatterns = [
  path(r"about/", views.about),
  path(r"media/", views.media),
  path(r"admin/", admin.site.urls),
- path(r"analytics/", track.views.analytics),
  path(r"", views.home)
 ] + static(
  settings.MEDIA_URL,
