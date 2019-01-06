@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	$('#navicon').on('click', function() {
-		$("nav").slideToggle("fast")
+		$("nav").slideToggle("fast");
+        $("header").css("box-shadow", null);
 	});
 });
 

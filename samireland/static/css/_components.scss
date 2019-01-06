@@ -87,7 +87,9 @@ article.card {
     }
 
     .home-cell {
-        margin-bottom: 4rem;
+        margin-bottom: 7rem;
+        max-width: 500px;
+        @include margin-side(auto);
     }
 }
 
