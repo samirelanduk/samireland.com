@@ -1,7 +1,7 @@
 django==2.1
 testarsenal
 selenium==3.6
-docupy==0.3
+docupy==0.3.1
 gunicorn
 rjsmin==1.0.12 --install-option="--without-c-extensions"
 rcssmin==1.0.6 --install-option="--without-c-extensions"

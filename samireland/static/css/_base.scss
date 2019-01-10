@@ -7,9 +7,10 @@ html {
 
 body {
     font-family: $font;
-    background-color: #ffffff;
+    background-color: #fdfdfd;
     margin: 0px;
     color: $black;
+    font-size: 0.95em;
 }
 
 header {
@@ -41,6 +42,7 @@ nav {
   background-color: $light-green;
   position: relative;
   font-size: 1.7em;
+  box-shadow: 0px 2px 4px 0px #333333a0;
 
   ul {
     list-style-type: none;
@@ -113,7 +115,6 @@ footer {
     nav {
         display: block;
         text-align: center;
-        box-shadow: 0px 2px 4px 0px #333333a0;
 
         ul {
             li {
