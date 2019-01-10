@@ -19,7 +19,7 @@ header {
     padding-left: 5%;
     line-height: 5rem;
     color: #ffffff;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.23), 0 4px 8px 0 rgba(0,0,0,0.23);
+    box-shadow: 0px 2px 4px 0px #333333a0;
 
     a {
         color: inherit;
@@ -41,7 +41,6 @@ nav {
   background-color: $light-green;
   position: relative;
   font-size: 1.7em;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.23), 0 4px 8px 0 rgba(0,0,0,0.23);
 
   ul {
     list-style-type: none;
@@ -114,6 +113,7 @@ footer {
     nav {
         display: block;
         text-align: center;
+        box-shadow: 0px 2px 4px 0px #333333a0;
 
         ul {
             li {
@@ -128,6 +128,8 @@ footer {
             }
         }
     }
+
+
 
     main {
         padding: 2.5rem 4rem;
@@ -171,6 +173,7 @@ footer {
       width: $desktop-width;
       margin: 3rem auto;
       border-radius: $curvature;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     header {
