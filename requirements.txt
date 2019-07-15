@@ -1,11 +1,7 @@
-django==2.1.2
-testarsenal
-selenium==3.6
+django==2.2.3
 docupy==0.3.1
-gunicorn
-rjsmin==1.0.12 --install-option="--without-c-extensions"
-rcssmin==1.0.6 --install-option="--without-c-extensions"
-libsass
-django-compressor==2.2
-django-sass-processor==0.7
+rjsmin
+rcssmin
+django-compressor
+django-sass-processor
 django-htmlmin
