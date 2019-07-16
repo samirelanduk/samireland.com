@@ -8,5 +8,11 @@ $primary-7: hsl(168, 34%, 27%);
 $primary-8: hsl(168, 34%, 18%);
 $primary-9: hsl(168, 34%, 9%);
 
+$nav-height: 50px;
+
+$logo-font: 'Roboto slab';
+
 @import "reset";
+@import "core";
+@import "nav";
 @import "header";

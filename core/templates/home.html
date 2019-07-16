@@ -17,12 +17,29 @@
   </head>
 
   <body>
-    <nav>
-    <header>
-        <h1>Sam Ireland</h1>
-        <p>I write code good.</p>
-        <img src="/static/images/sam.jpg">
-        {% include "social-icons.html" %}
+    {% include "nav.html" %}
+    <header class="container connections">
+        <div class="header-top">
+          <h1>Sam Ireland</h1>
+          <p>Hello, I'm a developer and bioinformatics PhD student based in London.</p>
+        </div>
+
+        <div class="header-bottom">
+          <img src="/static/images/sam.jpg">
+          {% include "social-icons.html" %}
+        </div>
     </header>
+
+    <section id="about">about</section>
+
+    <section id="projects">projects</section>
+
+    <section id="research">research</section>
+
+    <section id="writing">writing</section>
+   
+
+
+    <script src="/static/js/main.js"></script>
   </body>
 </html>

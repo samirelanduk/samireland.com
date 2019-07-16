@@ -1,0 +1,158 @@
+nav {
+    height: $nav-height;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+        font-family: $logo-font;
+        color: #ffffff00;
+        font-size: 20px;
+        transition-duration: 1s;
+    }
+
+    button {
+        margin: 6px 0px;
+        background: transparent;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        cursor: pointer;
+        padding: 3px 8px;
+        font-size: 1.25rem;
+        height: $nav-height * 0.5;
+        line-height: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+
+        div {
+            content: "";
+            background: white;
+            height: 1px;
+            margin: 1.5px 0px;
+            width: 18px;
+        }
+    }
+
+    .navlinks {
+        height: 0;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: $nav-height;
+        overflow: hidden;
+        background: $primary-4;
+        transition-property: height;
+        transition-duration: 0.2s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+        a {
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            line-height: 2.5;
+            font-weight: bold;
+            margin-left: 26px;
+            width: 100%;
+        }
+    }
+}
+
+nav.visible {
+    background-color: transparentize($color: $primary-5, $amount: 0.1);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.23), 0 2px 10px 0 rgba(0,0,0,0.23);
+    
+
+    .logo {
+        transition-duration: 1s;
+        color: white;
+        background-color: #ffffff00;
+    }
+}
+
+/*nav {
+    background: $purple-fade;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1.5;
+    height: $nav-height;
+
+    .logo {
+        margin: 6px 15px;
+        color: white;
+        font-size: 2.25rem;
+        font-family: Rubik;
+        display: inline-block;
+        padding-top: .3125rem;
+        padding-bottom: .3125rem;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        line-height: inherit;
+        white-space: nowrap;
+        display: block;
+
+        img {
+            height: 36px;
+            vertical-align: middle;
+            width: auto;
+            box-sizing: border-box;
+            font-size: 2.25rem;
+        }
+    }
+
+    
+
+    .navlinks {
+        position: fixed;
+        width: 100%;
+        
+        overflow-y: hidden;
+        font-size: 16px;
+        background: $purple-fade;
+        
+        height: 0;
+        font-family: Poppins;
+        overflow-x: hidden;
+
+        
+
+        a:before {
+            width: 100%;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ffffff;
+            transition: 0.3s;
+        }
+
+        a:hover:before, a.active:before {
+            width: 100%;
+        }
+    }
+
+    
+}
+
+nav.distinct {
+    background: $black;
+
+    .navlinks {
+        background: $black;
+    }
+}*/
