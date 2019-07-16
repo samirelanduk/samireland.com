@@ -21,8 +21,11 @@ TEMPLATES = [{
 
 MIDDLEWARE = [
  "htmlmin.middleware.HtmlMinifyMiddleware",
+ "htmlmin.middleware.MarkRequestMiddleware"
 ]
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.abspath(f"{BASE_DIR}/../static")
 SASS_PROCESSOR_ROOT = os.path.abspath(os.path.join(BASE_DIR, "core", "static"))
+
+HTML_MINIFY = True

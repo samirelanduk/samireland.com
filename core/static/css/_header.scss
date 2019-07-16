@@ -3,4 +3,28 @@ header {
     height: 100vh;
     color: white;
     text-align: center;
+    padding-top: 100px;
+
+    h1 {
+        font-size: 36px;
+        font-family: 'Roboto Slab';
+    }
+
+    img {
+        display: block;
+        width: 100px;
+        margin: 0px auto;
+        border-radius: 50%;
+    }
+
+    .social-icons {
+
+        svg {
+            width: 20px;
+            margin: 0px 5px;
+            cursor: pointer;
+        }
+    }
+
+    
 }

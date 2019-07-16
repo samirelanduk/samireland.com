@@ -6,3 +6,4 @@ secrets.py
 *.log
 uploads/*
 *.css*
+.DS_Store

@@ -10,14 +10,19 @@
     <meta name="description" content="Sam Ireland personal website">
     <meta name="keywords" content="Personal website">
     <title>Sam Ireland</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab|Montserrat" rel="stylesheet" type="text/css"/>
     <link href="{% sass_src 'css/style.scss' %}" rel="stylesheet" type="text/css">
     
     <!--analytics-->
   </head>
 
   <body>
+    <nav>
     <header>
         <h1>Sam Ireland</h1>
+        <p>I write code good.</p>
+        <img src="/static/images/sam.jpg">
+        {% include "social-icons.html" %}
     </header>
   </body>
 </html>
