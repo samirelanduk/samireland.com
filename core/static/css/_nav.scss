@@ -61,12 +61,25 @@ nav {
             margin-left: 26px;
             width: 100%;
         }
+
+        a:after {
+            content: "";
+            height: 1px;
+            width: 200%;
+            background: transparentize($color: $primary-1, $amount: 0.8);
+            position: absolute;
+            bottom: 0;
+            margin-left: -50px;
+        }
+
+        a:last-child:after {
+            height: 0px;
+        }
     }
 }
 
 nav.visible {
     background-color: transparentize($color: $primary-5, $amount: 0.05);
-    background: linear-gradient(95deg, transparentize($color: $primary-5, $amount: 0.05) 40%, transparentize($color: $primary-4, $amount: 0.05) 100%);
 }
 
 nav.shadowed {
@@ -101,6 +114,10 @@ nav.shadowed {
             a {
                 margin-left: 10px;
                 width: auto;
+            }
+
+            a:after {
+                height: 0px;
             }
         }
     }
