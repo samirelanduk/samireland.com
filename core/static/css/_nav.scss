@@ -65,10 +65,13 @@ nav {
 }
 
 nav.visible {
-    background-color: transparentize($color: $primary-5, $amount: 0.1);
+    background-color: transparentize($color: $primary-5, $amount: 0.05);
+    background: linear-gradient(95deg, transparentize($color: $primary-5, $amount: 0.05) 40%, transparentize($color: $primary-4, $amount: 0.05) 100%);
+}
+
+nav.shadowed {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.23), 0 2px 10px 0 rgba(0,0,0,0.23);
     
-
     .logo {
         transition-duration: 1s;
         color: white;
@@ -76,83 +79,69 @@ nav.visible {
     }
 }
 
-/*nav {
-    background: $purple-fade;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 1030;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    line-height: 1.5;
-    height: $nav-height;
+@mixin nav--500() {
+    nav {
 
-    .logo {
-        margin: 6px 15px;
-        color: white;
-        font-size: 2.25rem;
-        font-family: Rubik;
-        display: inline-block;
-        padding-top: .3125rem;
-        padding-bottom: .3125rem;
-        margin-right: 1rem;
-        font-size: 1.25rem;
-        line-height: inherit;
-        white-space: nowrap;
-        display: block;
+        button {
+            display: none;
+        }
 
-        img {
-            height: 36px;
-            vertical-align: middle;
-            width: auto;
-            box-sizing: border-box;
-            font-size: 2.25rem;
+        .navlinks {
+            display: flex;
+            background: #ffffff00;
+            height: $nav-height;
+            width: fit-content;
+            top: 0;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            font-size: 16px;
+            position: relative;
+
+            a {
+                margin-left: 10px;
+                width: auto;
+            }
         }
     }
-
-    
-
-    .navlinks {
-        position: fixed;
-        width: 100%;
-        
-        overflow-y: hidden;
-        font-size: 16px;
-        background: $purple-fade;
-        
-        height: 0;
-        font-family: Poppins;
-        overflow-x: hidden;
-
-        
-
-        a:before {
-            width: 100%;
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #ffffff;
-            transition: 0.3s;
-        }
-
-        a:hover:before, a.active:before {
-            width: 100%;
-        }
-    }
-
-    
 }
 
-nav.distinct {
-    background: $black;
-
-    .navlinks {
-        background: $black;
+@mixin nav--600() {
+    nav {
+        .navlinks {
+            a {
+                margin-left: 20px;
+            }
+        }
     }
-}*/
+}
+
+@mixin nav--700() {
+    nav {
+        .navlinks {
+            a {
+                margin-left: 30px;
+            }
+        }
+    }
+}
+
+@mixin nav--800() {
+    nav {
+        .navlinks {
+            a {
+                margin-left: 40px;
+            }
+        }
+    }
+}
+
+@mixin nav--900() {
+    nav {
+        .navlinks {
+            a {
+                margin-left: 50px;
+            }
+        }
+    }
+}

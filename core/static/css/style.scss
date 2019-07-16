@@ -16,3 +16,47 @@ $logo-font: 'Roboto slab';
 @import "core";
 @import "nav";
 @import "header";
+
+@media (min-width: 400px) {
+    @include core--400();
+}
+
+@media (min-width: 500px) {
+    @include core--500();
+    @include nav--500();
+}
+
+@media (min-width: 600px) {
+    @include core--600();
+    @include nav--600();
+    @include header--600();
+}
+
+@media (min-width: 700px) {
+    @include core--700();
+    @include nav--700();
+}
+
+@media (min-width: 800px) {
+    @include core--800();
+    @include header--800();
+    @include nav--800();
+}
+
+@media (min-width: 900px) {
+    @include core--900();
+    @include nav--900();
+}
+
+@media (min-width: 1000px) {
+    @include core--1000();
+    @include header--1000();
+}
+
+@media (min-width: 1100px) {
+    @include core--1100();
+}
+
+@media (min-width: 1200px) {
+    @include core--1200();
+}

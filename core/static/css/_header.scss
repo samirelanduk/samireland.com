@@ -5,10 +5,7 @@ header {
     text-align: center;
     display: grid;
     grid-auto-rows: 1fr;
-    
-    svg {
-        fill: red;
-    }
+
     .header-top, .header-bottom {
         display: flex;
         flex-direction: column;
@@ -32,6 +29,8 @@ header {
     }
 
     .header-bottom {
+
+        justify-content: flex-start;
         img {
             display: block;
             width: 100px;
@@ -48,11 +47,81 @@ header {
                 cursor: pointer;
             }
         }
+    }   
+}
+
+@mixin header--600() {
+    header {
+        .header-top {
+            h1 {
+                font-size: 44px;
+            }
+            p {
+                font-size: 18px;
+            }
+        }
     }
+}
 
-    
+@mixin header--800() {
+    header {
+        grid-template-columns: 1fr 1fr;
 
-    
+        .header-top, .header-bottom {
+            flex-direction: column;
+            justify-content: center;
+        }
 
+        .header-top {
+
+            h1 {
+                font-size: 54px;
+            }
+
+            p {
+                margin: 0px;
+            }
+        }
+
+        .header-bottom {
+            img {
+                width: 150px;
+            }
+
+            .social-icons {
     
+                svg {
+                    width: 30px;
+                    margin: 0px 10px;
+                }
+            }
+        }
+    }
+}
+
+@mixin header--1000() {
+    header {
+        .header-top {
+            h1 {
+                font-size: 72px;
+            }
+            p {
+                font-size: 20px;
+            }
+        }
+
+        .header-bottom {
+            img {
+                width: 200px;
+            }
+
+            .social-icons {
+    
+                svg {
+                    width: 40px;
+                    margin: 0px 10px;
+                }
+            }
+        }
+    }
 }
