@@ -1,0 +1,35 @@
+footer {
+    padding: 75px 50px;
+    text-align: center;
+    background-color: $primary-8;
+    color: white;
+    font-size: 14px;
+    line-height: 4;
+
+    div {
+        background-color: #00000000;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: underline;
+    }
+}
+
+@mixin footer--600() {
+    footer {
+        font-size: 16px;
+    }
+}
+
+@mixin footer--900() {
+    footer {
+        font-size: 18px;
+    }
+}
+
+@mixin footer--1200() {
+    footer {
+        font-size: 22px;
+    }
+}
