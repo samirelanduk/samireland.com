@@ -48,9 +48,18 @@
       <a class="about-link" href="/about/">Read more</a>
     </section>
 
-    <section id="projects" class="container zigzag">
+    <section id="projects" class="container circuit">
       <h2>Projects</h2>
       <p>Here are some the things I've created in the past. You can see a full list of projects <a href="/projects/">here</a>.</p>
+      <div class="projects">
+        {% for project in projects %}
+        <a class="project" href="{{ project.url }}" target="_blank">
+          <div class="image"><img src="{{ project.image.url }}"></div>
+          <h3>{{ project.name }}</h3>
+          <p>{{ project.description }}</p>
+        </a>
+        {% endfor %}
+      </div>
     </section>
 
     <section id="research" class="container">research</section>

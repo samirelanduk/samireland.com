@@ -43,6 +43,7 @@ $logo-font: 'Roboto slab';
     @include core--600();
     @include nav--600();
     @include header--600();
+    @include projects--600();
 }
 
 @media (min-width: 700px) {
@@ -73,4 +74,5 @@ $logo-font: 'Roboto slab';
 
 @media (min-width: 1200px) {
     @include core--1200();
+    @include projects--1200();
 }
