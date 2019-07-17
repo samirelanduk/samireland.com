@@ -8,6 +8,17 @@ $primary-7: hsl(168, 34%, 27%);
 $primary-8: hsl(168, 34%, 18%);
 $primary-9: hsl(168, 34%, 9%);
 
+$gray-1: hsl(216, 33%, 97%);
+$gray-2: hsl(214, 15%, 91%);
+$gray-3: hsl(210, 16%, 82%);
+$gray-4: hsl(211, 13%, 65%);
+$gray-5: hsl(211, 10%, 53%);
+$gray-6: hsl(211, 12%, 43%);
+$gray-7: hsl(209, 14%, 37%);
+$gray-8: hsl(209, 18%, 30%);
+$gray-9: hsl(209, 20%, 25%);
+$gray-10: hsl(210, 24%, 16%);
+
 $nav-height: 50px;
 
 $logo-font: 'Roboto slab';
@@ -16,6 +27,7 @@ $logo-font: 'Roboto slab';
 @import "core";
 @import "nav";
 @import "header";
+@import "about";
 
 @media (min-width: 400px) {
     @include core--400();
@@ -41,6 +53,7 @@ $logo-font: 'Roboto slab';
     @include core--800();
     @include header--800();
     @include nav--800();
+    @include about--800();
 }
 
 @media (min-width: 900px) {

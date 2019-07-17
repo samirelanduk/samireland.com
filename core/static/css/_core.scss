@@ -1,3 +1,7 @@
+a {
+    color: #000099;
+}
+
 .container {
     padding-left: 15px;
     padding-right: 15px;
@@ -8,7 +12,7 @@ header, section {
 }
 
 section {
-    height: 100vh;
+    padding-bottom: $nav-height;
 }
 
 .parkay {

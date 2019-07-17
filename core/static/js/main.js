@@ -36,6 +36,8 @@ window.onload = function() {
         if (links[a].getAttribute("href")[0] === "#") {
             links.item(a).addEventListener("click", function(e) {
                 e.preventDefault();
+                let navlinks = document.getElementsByClassName("navlinks").item(0);
+                navlinks.removeAttribute("style");
                 document.getElementById(
                     e.target.getAttribute("href").slice(1)
                 ).scrollIntoView({behavior: "smooth"});
