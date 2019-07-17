@@ -37,13 +37,13 @@ $logo-font: 'Roboto slab';
 @media (min-width: 500px) {
     @include core--500();
     @include nav--500();
+    @include projects--500();
 }
 
 @media (min-width: 600px) {
     @include core--600();
     @include nav--600();
     @include header--600();
-    @include projects--600();
 }
 
 @media (min-width: 700px) {
@@ -56,6 +56,7 @@ $logo-font: 'Roboto slab';
     @include header--800();
     @include nav--800();
     @include about--800();
+    @include projects--800();
 }
 
 @media (min-width: 900px) {

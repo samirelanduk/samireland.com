@@ -12,7 +12,7 @@
     p {
         text-align: center;
         line-height: 2;
-        color: $gray-9;
+        color: $primary-9;
         background-color: #ffffff00;
         margin: 30px 0px;
     }
@@ -23,14 +23,16 @@
         background: #00000000;
 
         .project {
+            max-width: 300px;
+            margin: 0px auto;
             display: block;
             background: white;
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     
             .image {
-                margin-bottom: 40px;
+                margin-bottom: 20px;
                 height: 120px;
                 display: flex;
                 justify-content: center;
@@ -44,7 +46,6 @@
             h3 {
                 font-weight: bold;
                 font-size: 18px;
-                margin: 10px 0px;
                 color: $gray-9;
             }
             
@@ -52,29 +53,76 @@
                 color: $gray-6;
                 line-height: 1.8;
                 font-size: 12px;
+                margin-top: 10px;
             }
         }
 
     }
-
 }
 
-@mixin projects--600() {
+@mixin projects--500() {
     #projects {
-
         h2 {
             font-size: 32px;
         }
 
         p {
             font-size: 18px;
+        }
+
+        .projects {
+            .project {
+                max-width: 450px;
+                width: 450px;
+
+                .image {
+                    height: 180px;
+                    
+                    img {
+                        width: 150px;
+                    }
+                }
+
+                h3 {
+                    font-size: 24px;
+                }
+
+                p {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+@mixin projects--800() {
+    #projects {
+
+        h2 {
+            font-size: 36px;
+        }
+
+        p {
+            font-size: 20px;
             margin: 40px 0px;
         }
 
         .projects {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 350px 350px;
+            margin: 0px auto;
+            width: fit-content;
 
             .project {
+                max-width: 350px;
+                width: 350px;
+
+                .image {
+                    height: 150px;
+                    
+                    img {
+                        width: 120px;
+                    }
+                }
 
                 h3 {
                     font-size: 22px;
@@ -105,12 +153,15 @@
             grid-template-columns: 1fr 1fr 1fr 1fr;
 
             .project {
+                max-width: 250px;
+                width: 250px;
+
                 h3 {
                     font-size: 28px;
                 }
 
                 p {
-                    font-size: 18px;
+                    font-size: 16px;
                 }
             }
         }
