@@ -26,9 +26,7 @@ $logo-font: 'Roboto slab';
 @import "reset";
 @import "core";
 @import "nav";
-@import "header";
-@import "about";
-@import "projects";
+@import "home";
 
 @media (min-width: 400px) {
     @include core--400();
@@ -37,13 +35,13 @@ $logo-font: 'Roboto slab';
 @media (min-width: 500px) {
     @include core--500();
     @include nav--500();
-    @include projects--500();
+    @include home--500();
 }
 
 @media (min-width: 600px) {
     @include core--600();
     @include nav--600();
-    @include header--600();
+    @include home--600();
 }
 
 @media (min-width: 700px) {
@@ -53,10 +51,8 @@ $logo-font: 'Roboto slab';
 
 @media (min-width: 800px) {
     @include core--800();
-    @include header--800();
     @include nav--800();
-    @include about--800();
-    @include projects--800();
+    @include home--800();
 }
 
 @media (min-width: 900px) {
@@ -66,7 +62,7 @@ $logo-font: 'Roboto slab';
 
 @media (min-width: 1000px) {
     @include core--1000();
-    @include header--1000();
+    @include home--1000();
 }
 
 @media (min-width: 1100px) {
@@ -75,5 +71,5 @@ $logo-font: 'Roboto slab';
 
 @media (min-width: 1200px) {
     @include core--1200();
-    @include projects--1200();
+    @include home--1200();
 }

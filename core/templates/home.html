@@ -62,7 +62,19 @@
       </div>
     </section>
 
-    <section id="research" class="container">research</section>
+    <section id="research" class="container">
+      <h2>Research</h2>
+      <p>I'm midway through a PhD at UCL, and my research currently focuses on zinc binding sites in proteins - identifying them, predicting them, and analysing them.</p>
+      <p>Here are my most recent two publications:</p>
+      <div class="publications">
+        {% for pub in publications %}
+        <a class="publication" href="{{ pub.url }}" target="_blank">
+          <div class="image"><img src="{{ pub.image.url }}"></div>
+          <h3>{{ pub.title }}</h3>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
 
     <section id="writing" class="container">writing</section>
    
