@@ -28,6 +28,7 @@ $logo-font: 'Roboto slab';
 @import "nav";
 @import "header";
 @import "about";
+@import "projects";
 
 @media (min-width: 400px) {
     @include core--400();

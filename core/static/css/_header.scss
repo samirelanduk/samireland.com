@@ -1,7 +1,6 @@
 header {
     background-color: $primary-5;
     height: 100vh;
-    color: white;
     text-align: center;
     display: grid;
     grid-auto-rows: 1fr;
@@ -20,11 +19,13 @@ header {
             font-size: 40px;
             font-family: $logo-font;
             margin-bottom: 30px;
+            color: white;
         }
 
         p {
             margin-bottom: 50px;
             line-height: 2;
+            color: white;
         }
     }
 
