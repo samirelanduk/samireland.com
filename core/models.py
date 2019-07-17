@@ -46,3 +46,21 @@ class Publication(models.Model):
     body = models.TextField()
     image = models.FileField(upload_to=create_filename)
     pdf = models.FileField(upload_to=create_filename)
+
+
+
+class Article(models.Model):
+
+    class Meta:
+        db_table = "articles"
+        ordering = ["-date"]
+        
+    def __str__(self):
+        return self.title 
+
+    id = models.SlugField(primary_key=True)
+    title = models.CharField(max_length=512)
+    date = models.DateField()
+    summary = models.TextField()
+    body = models.TextField()
+    image = models.FileField(upload_to=create_filename)

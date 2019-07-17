@@ -76,7 +76,14 @@
       </div>
     </section>
 
-    <section id="writing" class="container">writing</section>
+    <section id="writing" class="container zigzag">
+      <h2>Recent Article</h2>
+      <a class="article" href="/articles/{{ article.id }}/">
+        <div class="image"><img src="{{ article.image.url }}"></div>
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary }}</p>
+      </a>
+    </section>
    
 
 

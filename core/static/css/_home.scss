@@ -166,7 +166,7 @@ section {
         .publication {
             margin: 0px auto;
             display: block;
-            background: $primary-3;
+            background: $primary-6;
             text-align: center;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     
@@ -184,9 +184,49 @@ section {
                 font-weight: bold;
                 font-size: 16px;
                 color: white;
-                background-color: $primary-3;
+                background-color: #00000000;
                 line-height: 1.5;
             }
+        }
+    }
+}
+
+#writing {
+    background-color: $gray-1;
+
+    h2 {
+        margin-bottom: 45px;
+    }
+
+    .article {
+        margin: 0px auto;
+        display: block;
+        text-align: center;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        max-width: 275px;
+        background-color: white;
+
+        .image {
+            background-color: white;
+            margin-bottom: 25px;
+
+            img {
+                width: 100%;
+                opacity: 0.6;
+                display: block;
+            }
+        }
+
+        h3 {
+           font-size: 14px;
+           font-weight: bold;
+        }
+
+        p {
+            line-height: 1.2;
+            padding: 0px 15px;
+            font-size: 12px;
+            padding-bottom: 20px;
         }
     }
 }
