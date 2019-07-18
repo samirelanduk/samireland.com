@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Project, Publication, Article
 
 def home(request, message=False):
@@ -8,3 +8,8 @@ def home(request, message=False):
     return render(request, "home.html", {
      "projects": four_projects, "publications": two_pubs, "article": article
     })
+
+
+def article(request, id):
+     article = get_object_or_404(Article, id=id)
+     return render(request, "article.html", {"article": article})

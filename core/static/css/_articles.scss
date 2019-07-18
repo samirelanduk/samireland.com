@@ -1,0 +1,102 @@
+article {
+
+    header {
+        display: block;
+        height: fit-content;
+        color: white;
+        padding: 25px;
+
+        .container {
+            background-color: #00000000;
+
+            h1 {
+                font-family: $logo-font;
+                text-align: center;
+                font-size: 20px;
+                background-color: #00000000;
+                margin: 30px 0px;
+            }
+        }
+
+        
+    }
+
+    main {
+        margin: 50px 0px;
+        
+        p {
+            color: $gray-8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+    }
+}
+
+@mixin article--400() {
+    article {
+        header {
+            padding: 50px 30px;
+        }
+    }
+}
+
+@mixin article--500() {
+    article {
+        header {
+            padding: 70px 50px;
+
+            .container {
+                h1 {
+                    font-size: 24px;
+                }
+            }
+            
+        }
+
+        main {
+            p {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@mixin article--700() {
+    article {
+        header {
+            padding: 100px 70px;
+            font-size: 20px;
+
+            .container {
+                h1 {
+                    font-size: 32px;
+                }
+            }
+            
+        }
+
+        main {
+            p {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+@mixin article--1000() {
+    article {
+        header {
+            padding: 150px 100px;
+            font-size: 24px;
+
+            .container {
+                h1 {
+                    font-size: 40px;
+                }
+            }
+            
+        }
+    }
+}

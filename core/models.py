@@ -1,3 +1,4 @@
+import docupy
 from django.db import models
 
 def create_filename(instance, filename):
@@ -8,6 +9,14 @@ def create_filename(instance, filename):
         name = instance.id
     kind = instance._meta.model.__name__.lower()
     return f"{kind}-{name.lower()}{extension}"
+
+
+def get_image_lookup():
+    return {
+     **{article.image.name.split("/")[-1].split(".")[0]: article.image.url for article in Article.objects.all()}
+    }
+
+
 
 
 class Project(models.Model):
@@ -64,3 +73,9 @@ class Article(models.Model):
     summary = models.TextField()
     body = models.TextField()
     image = models.FileField(upload_to=create_filename)
+
+    def body_html(self):
+        print(get_image_lookup())
+        return docupy.markdown_to_html(self.body.replace("\r", ""), get_image_lookup())
+
+

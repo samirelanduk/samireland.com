@@ -5,6 +5,7 @@ from django.contrib import admin
 from core.views import *
 
 urlpatterns = [
+ path("writing/<slug:id>/", article),
  path("admin/", admin.site.urls),
  path("", home)
 ] + static(

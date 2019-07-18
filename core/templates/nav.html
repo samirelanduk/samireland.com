@@ -1,5 +1,5 @@
 <nav class="container">
-    <a class="logo" href="#home">Sam Ireland</a>       
+    <a class="logo" href="{% if request.path == "/" %}#home{% else %}/{% endif %}">Sam Ireland</a>       
     <button onClick="toggleNav()">
         <div></div><div></div><div></div>
     </button>
