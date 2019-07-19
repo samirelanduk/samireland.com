@@ -18,6 +18,9 @@ ssh sam@$host "sed -i s/\"HOSTS = \[\]\"/\"HOSTS = \['$host'\]\"/g ~/$host/sourc
 # Install pip packages
 ssh sam@$host "~/$host/env/bin/pip install -r ~/$host/source/requirements.txt"
 
+# Migrate
+ssh sam@$host "cd ~/$host/source && ../env/bin/python manage.py migrate"
+
 # Move static files
 ssh sam@$host "cd ~/$host/source && ../env/bin/python manage.py compilescss"
 ssh sam@$host "cd ~/$host/source && ../env/bin/python manage.py collectstatic --noinput"
