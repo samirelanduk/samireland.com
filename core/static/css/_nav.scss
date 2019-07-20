@@ -66,11 +66,11 @@ nav {
         a:after {
             content: "";
             height: 1px;
-            width: 200%;
+            width: 1000%;
             background: transparentize($color: $primary-1, $amount: 0.8);
             position: absolute;
             bottom: 0;
-            margin-left: -50px;
+            margin-left: -500px;
         }
 
         a:last-child:after {

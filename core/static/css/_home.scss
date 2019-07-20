@@ -217,14 +217,10 @@ section {
 }
 
 @mixin home--600() {
-    header {
-        .header-top {
-            h1 {
-                font-size: 44px;
-            }
-            p {
-                font-size: 18px;
-            }
+
+    #about {
+        .about-grid {
+            margin-top: 20px;
         }
     }
 
@@ -244,33 +240,6 @@ section {
 }
 
 @mixin home--800() {
-    header {
-        grid-template-columns: 1fr 1fr;
-
-        .header-top, .header-bottom {
-            flex-direction: column;
-            justify-content: center;
-            padding-bottom: 100px;
-        }
-
-        .header-top {
-
-            h1 {
-                font-size: 54px;
-            }
-
-            p {
-                margin: 0px;
-            }
-        }
-
-        .header-bottom {
-            img {
-                width: 150px;
-            }
-        }
-    }
-
     section {
         h2 {
             font-size: 36px;
@@ -284,13 +253,18 @@ section {
 
     #about {
         .about-grid {
-            max-width: 1000px;
+            margin-top: 40px;
+            max-width: 1500px;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
 
             .about-box {
                 padding: 20px 10px;
                 border-bottom: none;
+
+                img {
+                    width: 120px;
+                }
 
                 p {
                     line-height: 1.8;
@@ -343,19 +317,20 @@ section {
 }
 
 @mixin home--1000() {
-    header {
-        .header-top {
-            h1 {
-                font-size: 72px;
-            }
-            p {
-                font-size: 20px;
-            }
-        }
 
-        .header-bottom {
-            img {
-                width: 200px;
+    #about {
+        .about-grid {
+            margin-top: 100px;
+
+            .about-box {
+
+                img {
+                    width: 150px;
+                }
+
+                p {
+                    font-size: 18px;
+                }
             }
         }
     }
