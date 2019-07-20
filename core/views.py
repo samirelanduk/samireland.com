@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from .models import Project, Publication, Article
+from .models import Project, Publication, Article, Period
 
 def home(request):
     four_projects = Project.objects.all()[:4]
@@ -11,7 +11,8 @@ def home(request):
 
 
 def about(request):
-    return render(request, "about.html")
+     periods = Period.objects.all()
+     return render(request, "about.html", {"periods": periods})
 
 
 def article(request, id):

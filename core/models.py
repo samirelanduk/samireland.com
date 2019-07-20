@@ -75,7 +75,24 @@ class Article(models.Model):
     image = models.FileField(upload_to=create_filename)
 
     def body_html(self):
-        print(get_image_lookup())
         return docupy.markdown_to_html(self.body.replace("\r", ""), get_image_lookup())
 
 
+
+class Period(models.Model):
+
+    class Meta:
+        db_table = "periods"
+        ordering = ["-number"]
+        
+    def __str__(self):
+        return self.name 
+
+    number = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=64)
+    time = models.CharField(max_length=64)
+    description = models.TextField()
+    image = models.FileField(null=True, blank=True, upload_to=create_filename)
+
+    def description_html(self):
+        return docupy.markdown_to_html(self.description.replace("\r", ""), get_image_lookup())

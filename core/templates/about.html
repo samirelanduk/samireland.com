@@ -8,11 +8,17 @@
 </header>
 
 <div class="about">
-    <p>I am a PhD student at UCL, in <a href="http://www.bioinf.org.uk/" target="_blank">Andrew Martin</a>'s group - currently working on research into metal binding in proteins, particularly zinc, with the ultimate aim of addressing health problems caused by pathological antibody aggregation in the presence of zinc.</p>
-    <p>Before that I did rotations in three labs throughout UCL and Birkbeck, before that I was a developer in <a href="http://golgi.ana.ed.ac.uk/Davieslab/" target="_blank">Prof. Jamie Davies</a>'s group in Edinburgh, and before <em>that</em> I did my undergraduate degree at Edinburgh University, in Biotechnology. While in Edinburgh I was involved in various synthetic biology projects, such as the university's <a href="http://2014.igem.org/Team:Edinburgh" target="_blank">2014 iGEM team</a>, and creating the <a href="http://synpharm.guidetopharmacology.org" target="_blank">synPHARM</a> database.</p>
-    <p>Programming is a big hobby of mine, and I always like to have several coding projects running at any one time. I've been programming in Python for eight years now, and am a big proponent of both it and practices like Test Driven Development.</p><p>I like to have a few non-tech side projects running too - I'm currently trying to learn the piano (with very varying degrees of success), and a few other odds and ends. I've lived in London for two years, lived in Edinburgh for five years, and am originally from Blackpool.</p>
-    <h2>This Website</h2>
-    <p>I started this website in 2014, because I thought it would help me learn how to build websites. It started as a static website that I would manually FTP files to, then moved to a PHP system in 2015, and then to its current Python/Django iteration in 2016 (source code <a href="https://github.com/samirelanduk/samireland.com/" target="_blank">here</a>). If you see any problems, feel free to <a href="https://github.com/samirelanduk/samireland.com/issues" target="_blank">let me know</a>!</p>
+    {% for period in periods %}
+    <div class="about-section">
+        <img src="{{ period.image.url }}">
+        <div class="about-text">
+            <h2>{{ period.name }}</h2>
+            <div class="date">{{ period.time }}</div>
+            {{ period.description_html|safe }}
+        </div>
+    </div>
+    {% endfor %}
+
 </div>
 
 
