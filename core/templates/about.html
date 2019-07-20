@@ -3,21 +3,23 @@
 {% block body %}
 {% include "nav.html" %}
 
-<header class="about connections">
+<header class="about connections container">
     <h1>About Me</h1>
 </header>
 
 <div class="about">
-    {% for period in periods %}
-    <div class="about-section">
-        <img src="{{ period.image.url }}">
-        <div class="about-text">
-            <h2>{{ period.name }}</h2>
-            <div class="date">{{ period.time }}</div>
-            {{ period.description_html|safe }}
+    <div class="container">
+        {% for period in periods %}
+        <div class="about-section">
+            <img src="{{ period.image.url }}">
+            <div class="about-text">
+                <h2>{{ period.name }}</h2>
+                <div class="date">{{ period.time }}</div>
+                {{ period.description_html|safe }}
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 
 </div>
 

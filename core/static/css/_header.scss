@@ -1,0 +1,128 @@
+header {
+    background-color: $primary-5;
+    text-align: center;
+    color: white;
+
+    h1 {
+        font-family: $logo-font;
+        padding: 30px 0px;
+        font-size: 30px;
+    }
+
+    .author {
+        padding: 20px 0px;
+    }
+
+    * {
+        background-color: #00000000;
+    }  
+}
+
+header.home {
+    height: 100vh;
+    display: grid;
+    grid-auto-rows: 1fr;
+
+    .header-top, .header-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #00000000;
+    }
+
+    .header-top {
+        justify-content: flex-end;
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin-bottom: 50px;
+            line-height: 2;
+            color: white;
+        }
+    }
+
+    .header-bottom {
+
+        justify-content: flex-start;
+        img {
+            display: block;
+            width: 100px;
+            margin: 0px auto;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+    }  
+}
+
+@mixin header--600() {
+    header {
+    
+        h1 {
+            padding: 40px 0px;
+            font-size: 36px;
+        }
+    
+        .author {
+            padding: 24px 0px;
+        } 
+    }
+
+    header.home {
+        .header-top {
+            h1 {
+                font-size: 44px;
+            }
+            p {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+@mixin header--800() {
+    header {
+    
+        h1 {
+            padding: 60px 0px;
+            font-size: 48px;
+        }
+    
+        .author {
+            padding: 28px 0px;
+            font-size: 20px;
+        } 
+    }
+    
+    header.home {
+        grid-template-columns: 1fr 1fr;
+
+        .header-top, .header-bottom {
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 100px;
+        }
+    }
+}
+
+@mixin header--1000() {
+    header.home {
+        .header-top {
+            h1 {
+                font-size: 72px;
+            }
+            p {
+                font-size: 20px;
+            }
+        }
+
+        .header-bottom {
+            img {
+                width: 200px;
+            }
+        }
+    }
+}

@@ -3,12 +3,11 @@
 {% block body %}
 {% include "nav.html" %}
 <article>
-    <header class="connections">
-        <div class="container">
-            <h1>{{ article.title }}</h1>
-            
-            <div class="author"><time>{{ article.date }}</time> &#183; Sam Ireland</div>
-        </div>
+    <header class="connections container">
+        <h1>{{ article.title }}</h1>
+        
+        <div class="author"><time>{{ article.date }}</time> &#183; Sam Ireland</div>
+
     </header>
 
     <main>

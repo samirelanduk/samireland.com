@@ -5,6 +5,7 @@ footer {
     color: white;
     font-size: 14px;
     line-height: 4;
+    font-family: Montserrat;
 
     div {
         background-color: #00000000;
@@ -30,6 +31,6 @@ footer {
 
 @mixin footer--1200() {
     footer {
-        font-size: 22px;
+        font-size: 20px;
     }
 }
