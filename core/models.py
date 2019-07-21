@@ -92,6 +92,8 @@ class Period(models.Model):
     name = models.CharField(max_length=64)
     time = models.CharField(max_length=64)
     description = models.TextField()
+    technologies = models.CharField(max_length=256, blank=True, null=True)
+    github = models.URLField(blank=True, null=True)
     image = models.FileField(null=True, blank=True, upload_to=create_filename)
 
     def description_html(self):
