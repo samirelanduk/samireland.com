@@ -32,7 +32,20 @@ class Project(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
     url = models.URLField(blank=True, null=True)
+    technologies = models.CharField(max_length=256, default="", blank=True)
+    github = models.URLField(blank=True, null=True)
     image = models.FileField(null=True, blank=True, upload_to=create_filename)
+
+    def intro(self):
+        return docupy.markdown_to_html(self.description.splitlines()[0])
+    
+
+    def body(self):
+        return docupy.markdown_to_html("\n".join(self.description.splitlines()[1:]))
+
+
+    def tech_list(self):
+        return [tech for tech in self.technologies.split(",") if tech.strip()]
 
 
 
@@ -92,8 +105,6 @@ class Period(models.Model):
     name = models.CharField(max_length=64)
     time = models.CharField(max_length=64)
     description = models.TextField()
-    technologies = models.CharField(max_length=256, blank=True, null=True)
-    github = models.URLField(blank=True, null=True)
     image = models.FileField(null=True, blank=True, upload_to=create_filename)
 
     def description_html(self):

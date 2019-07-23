@@ -15,6 +15,11 @@ def about(request):
      return render(request, "about.html", {"periods": periods})
 
 
+def projects(request):
+     projects = Project.objects.all()
+     return render(request, "projects.html", {"projects": projects})
+
+
 def article(request, id):
      article = get_object_or_404(Article, id=id)
      return render(request, "article.html", {"article": article})

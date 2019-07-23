@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "nav.html" %}
+
+<header class="connections container">
+    <h1>Projects</h1>
+</header>
+
+<div class="projects">
+    <div class="projects-grid">
+        {% for project in projects %}
+        <div class="project">
+            <div class="image"><img src="{{ project.image.url }}"></div>
+            <h3>{{ project.name }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% include "footer.html" %}
+{% endblock %}

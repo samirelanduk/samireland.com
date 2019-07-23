@@ -44,4 +44,22 @@ window.onload = function() {
             });
         }
     }
+
+    // Project cards
+    function closeCard(e) {
+        e.target.parentElement.remove();
+    }
+    let projects = document.getElementsByClassName("project");
+    for (var p = 0; p < projects.length; p++) {
+        projects.item(p).addEventListener("click", function(e) {
+            let element = e.target;
+            while (!element.classList.contains("project")) {
+                element = element.parentElement;
+            }
+            let clone = element.cloneNode(true);
+            clone.getElementsByClassName("close-button").item(0).onclick = closeCard;
+            clone.classList.add("expanded");
+            document.body.appendChild(clone);
+        });
+    }
 }

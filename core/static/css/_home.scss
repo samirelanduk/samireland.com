@@ -67,41 +67,6 @@ section {
         grid-gap: 20px;
         background: #00000000;
 
-        .project {
-            max-width: 300px;
-            margin: 0px auto;
-            display: block;
-            background: white;
-            text-align: center;
-            padding: 10px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    
-            .image {
-                margin-bottom: 20px;
-                height: 120px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                
-                img {
-                    width: 100px;
-                }
-            }
-    
-            h3 {
-                font-weight: bold;
-                font-size: 18px;
-                color: $gray-9;
-            }
-            
-            p {
-                color: $gray-6;
-                line-height: 1.8;
-                font-size: 12px;
-                margin-top: 10px;
-            }
-        }
-
     }
 }
 
@@ -189,31 +154,6 @@ section {
             font-size: 18px;
         }
     }
-
-    #projects {
-        .projects {
-            .project {
-                max-width: 450px;
-                width: 450px;
-
-                .image {
-                    height: 180px;
-                    
-                    img {
-                        width: 150px;
-                    }
-                }
-
-                h3 {
-                    font-size: 24px;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-            }
-        }
-    }
 }
 
 @mixin home--600() {
@@ -280,28 +220,6 @@ section {
             margin: 0px auto;
             width: fit-content;
             width: -moz-fit-content;
-
-            .project {
-                max-width: 350px;
-                width: 350px;
-
-                .image {
-                    height: 150px;
-                    
-                    img {
-                        width: 120px;
-                        opacity: 0.6;
-                    }
-                }
-
-                h3 {
-                    font-size: 22px;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-            }
         }
     }
 
@@ -351,19 +269,6 @@ section {
     #projects {
         .projects {
             grid-template-columns: 1fr 1fr 1fr 1fr;
-
-            .project {
-                max-width: 250px;
-                width: 250px;
-
-                h3 {
-                    font-size: 28px;
-                }
-
-                p {
-                    font-size: 16px;
-                }
-            }
         }
        
     }

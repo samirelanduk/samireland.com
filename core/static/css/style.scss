@@ -31,6 +31,7 @@ $logo-font: 'Roboto slab';
 @import "social";
 @import "footer";
 @import "about";
+@import "projects";
 @import "articles";
 
 @media (min-width: 400px) {
@@ -43,6 +44,7 @@ $logo-font: 'Roboto slab';
     @include nav--500();
     @include home--500();
     @include article--500();
+    @include projects--500();
 }
 
 @media (min-width: 600px) {
@@ -67,6 +69,7 @@ $logo-font: 'Roboto slab';
     @include home--800();
     @include social--800();
     @include about--800();
+    @include projects--800();
 }
 
 @media (min-width: 900px) {
@@ -80,6 +83,7 @@ $logo-font: 'Roboto slab';
     @include header--1000();
     @include home--1000();
     @include about--1000();
+    @include projects--1000;
 }
 
 @media (min-width: 1100px) {
@@ -91,4 +95,5 @@ $logo-font: 'Roboto slab';
     @include home--1200();
     @include social--1200();
     @include footer--1200();
+    @include projects--1200;
 }
