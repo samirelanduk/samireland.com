@@ -56,10 +56,48 @@ window.onload = function() {
             while (!element.classList.contains("project")) {
                 element = element.parentElement;
             }
-            let clone = element.cloneNode(true);
-            clone.getElementsByClassName("close-button").item(0).onclick = closeCard;
-            clone.classList.add("expanded");
-            document.body.appendChild(clone);
+            if (!element.classList.contains("inactive")) {
+                let clone = element.cloneNode(true);
+                clone.getElementsByClassName("close-button").item(0).onclick = closeCard;
+                clone.classList.add("expanded");
+                document.body.appendChild(clone);
+            }
+            
+        });
+    }
+
+    // Technology buttons
+    let buttons = document.getElementsByClassName("tech-button");
+    for (var b = 0; b < buttons.length; b++) {
+        buttons.item(b).addEventListener("click", function(e) {
+            var button = e.target;
+            if (button.classList.contains("inactive")) {
+                button.classList.remove("inactive");
+                button.classList.add("active");
+            } else {
+                button.classList.add("inactive");
+                button.classList.remove("active");
+            }
+            var actives = document.getElementsByClassName("active");
+            var technologies = [];
+            for (var a = 0; a < actives.length; a++) {
+                technologies.push(actives[a].innerHTML);
+            }
+            console.log("Techs to include:", technologies)
+            var projects = document.getElementsByClassName("project");
+            for (var p = 0; p < projects.length; p++) {
+                var projectTechnologies = projects[p].getAttribute("data-tech").split(",");
+                console.log("Checking project", p + 1)
+                console.log("Its technologies:", projectTechnologies)
+                //console.log(projectTechnologies.filter(value => technologies.includes(value)))
+                if (projectTechnologies.filter(value => technologies.includes(value)).length || technologies.length == 0) {
+                    console.log("Activate it")
+                    projects[p].classList.remove("inactive");
+                } else {
+                    console.log("Deactivate it")
+                    projects[p].classList.add("inactive");
+                }
+            }
         });
     }
 }

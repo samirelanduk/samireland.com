@@ -1,0 +1,18 @@
+<div class="project" data-tech="{{ project.technologies }}">
+    <img class="close-button" src="/static/images/close.svg"></img>
+    <div class="image"><img src="{{ project.image.url }}"></div>
+    <h3>{{ project.name }}</h3>
+    <div class="links">
+    <a href="{{ project.github }}" target="_blank"><img src="/static/images/github-project.svg"></a>
+    <a href="{{ project.url }}" target="_blank"><img src="/static/images/web-project.svg"></a>
+    </div>
+    <div class="technologies">
+    {% for tech in project.tech_list %}
+    <div class="technology">{{ tech }}</div>
+    {% endfor %}
+    </div>
+    {{ project.intro|safe }}
+    <div class="body">
+    {{ project.body|safe }}
+    </div>
+</div>

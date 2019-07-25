@@ -1,4 +1,5 @@
 import docupy
+from collections import Counter
 from django.db import models
 
 def create_filename(instance, filename):
@@ -35,6 +36,15 @@ class Project(models.Model):
     technologies = models.CharField(max_length=256, default="", blank=True)
     github = models.URLField(blank=True, null=True)
     image = models.FileField(null=True, blank=True, upload_to=create_filename)
+
+    @staticmethod
+    def all_tech():
+        tech = []
+        for project in Project.objects.all():
+            for pro_tech in project.tech_list():
+                tech.append(pro_tech)
+        return [tech[0] for tech in Counter(tech).most_common()]
+
 
     def intro(self):
         return docupy.markdown_to_html(self.description.splitlines()[0])

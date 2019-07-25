@@ -7,16 +7,25 @@
     <h1>Projects</h1>
 </header>
 
-<div class="projects">
-    <div class="projects-grid">
-        {% for project in projects %}
-        <div class="project">
-            <div class="image"><img src="{{ project.image.url }}"></div>
-            <h3>{{ project.name }}</h3>
-        </div>
+<section id="projects" class="container">
+    <div class="projects-info">
+        Here are the projects I have worked on in the past, or are currently working
+        on. You can filter them by the tehcnologies they each use if needed, or
+        click on them to get more details.
+    </div>
+
+    <div class="technologies">
+        {% for t in tech %}
+        <div class="technology tech-button inactive">{{ t }}</div>
         {% endfor %}
     </div>
-</div>
+
+    <div class="projects">
+        {% for project in projects %}
+            {% include "project.html" %}
+        {% endfor %}
+    </div>
+</section>
 
 
 {% include "footer.html" %}

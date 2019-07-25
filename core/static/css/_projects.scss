@@ -7,6 +7,9 @@
     padding: 10px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     cursor: pointer;
+    transition: 0.5s;
+    transition-property: opacity;
+
 
     .close-button {
         display: none;
@@ -80,18 +83,6 @@
 
     .technologies {
         display: block;
-        margin-bottom: 25px;
-
-        .technology {
-            display: inline-block;
-            margin: 3px 5px;
-            padding: 5px 10px;
-            background-color: $primary-5;
-            color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            line-height: 1.5;
-        }
     }
 
     p {
@@ -124,9 +115,55 @@
 	to {opacity:1.0}
 }
 
-.projects {
-    .projects-grid {
+.project.inactive {
+    opacity: 0.25;
+    cursor: inherit;
+}
+
+.technologies {
+    display: block;
+    margin-bottom: 25px;
+
+    .technology {
+        display: inline-block;
+        margin: 3px 5px;
+        padding: 5px 10px;
+        background-color: $primary-5;
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .technology.inactive {
+        opacity: 0.5;
+    }
+
+    .tech-button {
+        cursor: pointer;
+    }
+}
+
+#projects {
+    background-color: $gray-1;
+
+    .projects-info {
+        text-align: center;
+        color: $gray-8;
+        line-height: 1.8;
+        padding-bottom: 20px;
+    }
+
+    .technologies {
+        text-align: center;
+        padding: 20px 0px;
+    }
+    
+    .projects {
         display: grid;
+        grid-gap: 20px;
+        background: #00000000;
+
     }
 }
 
@@ -158,6 +195,17 @@
         h3, .links, .technologies, p {
             margin-left: 15px;
             margin-right: 15px;
+        }
+    }
+
+    #projects {
+        .projects-info {
+            padding-bottom: 20px !important;
+            font-size: 18px;
+        }
+    
+        .technologies {
+            padding: 30px 0px;
         }
     }
 }
@@ -204,6 +252,27 @@
 
         h3 {
             font-size: 32px;
+        }
+    }
+
+    #projects {
+        .projects-info {
+            padding-bottom: 40px;
+            line-height: 2;
+            max-width: 750px;
+            margin: 0px auto;
+        }
+    
+        .technologies {
+            padding: 40px 0px;
+            max-width: 750px;
+            margin: 0px auto;
+            line-height: 2;
+
+            .technology {
+                margin-top: 8px;
+                margin-bottom: 8px;
+            }
         }
     }
 }

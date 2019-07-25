@@ -16,8 +16,9 @@ def about(request):
 
 
 def projects(request):
+     tech = Project.all_tech()
      projects = Project.objects.all()
-     return render(request, "projects.html", {"projects": projects})
+     return render(request, "projects.html", {"tech": tech, "projects": projects})
 
 
 def article(request, id):
