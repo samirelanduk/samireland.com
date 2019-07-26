@@ -4,9 +4,9 @@ from .models import Project, Publication, Article, Period
 def home(request):
     four_projects = Project.objects.all()[:4]
     two_pubs = Publication.objects.all()[:2]
-    article = Article.objects.first()
+    articles = Article.objects.all()[:2]
     return render(request, "home.html", {
-     "projects": four_projects, "publications": two_pubs, "article": article
+     "projects": four_projects, "publications": two_pubs, "articles": articles
     })
 
 
@@ -19,6 +19,11 @@ def projects(request):
      tech = Project.all_tech()
      projects = Project.objects.all()
      return render(request, "projects.html", {"tech": tech, "projects": projects})
+
+
+def writing(request):
+     articles = Article.objects.all()
+     return render(request, "writing.html", {"articles": articles})
 
 
 def article(request, id):

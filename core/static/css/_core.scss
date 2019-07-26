@@ -7,6 +7,13 @@ a {
     color: #000099;
 }
 
+ol {
+    li {
+        list-style: decimal;
+        margin-left: 30px;
+    }
+}
+
 .container {
     padding-left: 15px;
     padding-right: 15px;

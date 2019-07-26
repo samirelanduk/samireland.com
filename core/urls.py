@@ -7,6 +7,7 @@ from core.views import *
 urlpatterns = [
  path("about/", about),
  path("projects/", projects),
+ path("writing/", writing),
  path("writing/<slug:id>/", article),
  path("admin/", admin.site.urls),
  path("", home)

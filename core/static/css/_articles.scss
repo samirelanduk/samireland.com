@@ -3,7 +3,7 @@ article {
         margin: 50px 0px;
         font-family: Montserrat;
         
-        p {
+        p, li {
             color: $gray-8;
             font-size: 14px;
             line-height: 1.6;
@@ -17,7 +17,7 @@ article {
     article {
 
         main {
-            p {
+            p, li {
                 font-size: 16px;
             }
         }
@@ -28,9 +28,13 @@ article {
     article {  
 
         main {
-
-            p {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            
+            p, li {
                 font-size: 18px;
+                line-height: 1.75;
             }
         }
     }

@@ -42,7 +42,17 @@
       <a class="button" href="/projects/">More Projects</a>
     </section>
 
-    <section id="research" class="container">
+    <section id="writing" class="container">
+      <h2>Recent Articles</h2>
+      <div class="articles">
+        {% for article in articles %}
+          {% include "article-card.html" %}
+        {% endfor %}
+      </div>
+      <a class="button" href="/writing/">More Articles</a>
+    </section>
+
+    <section id="research" class="container zigzag">
       <h2>Research</h2>
       <p>I'm midway through a PhD at UCL, and my research currently focuses on zinc binding sites in proteins - identifying them, predicting them, and analysing them.</p>
       <p>Here are my most recent two publications:</p>
@@ -54,15 +64,6 @@
         </a>
         {% endfor %}
       </div>
-    </section>
-
-    <section id="writing" class="container zigzag">
-      <h2>Recent Article</h2>
-      <a class="article" href="/writing/{{ article.id }}/">
-        <div class="image"><img src="{{ article.image.url }}"></div>
-        <h3>{{ article.title }}</h3>
-        <p>{{ article.summary }}</p>
-      </a>
     </section>
 
     {% include "footer.html" %}

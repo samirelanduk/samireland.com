@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "nav.html" %}
+
+<header class="connections container">
+    <h1>Writing</h1>
+</header>
+
+<section id="writing" class="container">
+    <div class="section-info">
+        Here are some articles I have written. There is no particular overall
+        theme, but many of them do happen to be on technical topics.
+    </div>
+
+    <div class="articles">
+        {% for article in articles %}
+            {% include "article-card.html" %}
+        {% endfor %}
+    </div>
+</section>
+
+
+{% include "footer.html" %}
+{% endblock %}

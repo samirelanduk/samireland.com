@@ -25,6 +25,13 @@ section {
         display: block;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
+
+    .section-info {
+        text-align: center;
+        color: $gray-8;
+        line-height: 1.8;
+        padding-bottom: 20px;
+    }
 }
 
 #about {
@@ -59,7 +66,83 @@ section {
     }
 }
 
+#writing {
+
+    h2 {
+        margin-bottom: 45px;
+    }
+
+    .section-info {
+        margin: 20px auto;
+    }
+
+    .articles {
+        display: grid;
+        grid-gap: 50px;
+
+        .article {
+            margin: 0px auto;
+            display: block;
+            text-align: center;
+            width: 250px;
+            background-color: white;
+            text-align: left;
+            opacity: 0.75;
+            transition: 0.5s;
+    
+            .image {
+                background-color: white;
+                height: 175px;
+                overflow-y: hidden;
+                margin-bottom: 20px;
+                display: flex;
+    
+                img {
+                    width: 100%;
+                    opacity: 0.6;
+                    display: block;
+                    margin: 0px auto;
+                    margin-top: auto;
+                    
+                }
+            }
+    
+            h3 {
+               font-size: 16px;
+               font-family: $logo-font;
+               line-height: 1.5;
+               font-weight: bold;
+               color: $gray-9;
+            }
+    
+            time {
+                color: $gray-6;
+                font-size: 14px;
+                margin-bottom: 10px;
+                display: block;
+            }
+    
+            p {
+                margin: 0px;
+                line-height: 1.2;
+                font-size: 12px;
+                padding-bottom: 20px;
+                text-align: left;
+                font-family: Montserrat;
+                line-height: 1.4;
+            }
+        }
+
+        .article:hover {
+            opacity: 1;
+        }
+    }
+
+}
+
 #research {
+    background-color: $gray-1;
+
     .publications {
         display: grid;
         grid-gap: 20px;
@@ -92,45 +175,7 @@ section {
     }
 }
 
-#writing {
-    background-color: $gray-1;
 
-    h2 {
-        margin-bottom: 45px;
-    }
-
-    .article {
-        margin: 0px auto;
-        display: block;
-        text-align: center;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        max-width: 275px;
-        background-color: white;
-
-        .image {
-            background-color: white;
-            margin-bottom: 25px;
-
-            img {
-                width: 100%;
-                opacity: 0.6;
-                display: block;
-            }
-        }
-
-        h3 {
-           font-size: 14px;
-           font-weight: bold;
-        }
-
-        p {
-            line-height: 1.2;
-            padding: 0px 15px;
-            font-size: 12px;
-            padding-bottom: 20px;
-        }
-    }
-}
 
 @mixin home--500() {
 
@@ -141,6 +186,39 @@ section {
 
         p {
             font-size: 18px;
+        }
+
+        .section-info {
+            padding-bottom: 20px !important;
+            font-size: 18px;
+        }
+    }
+
+    #writing {
+        .section-info {
+            margin: 30px auto;
+        }
+
+        .articles {
+            .article {
+                width: 400px;
+
+                .image {
+                    height: 260px;
+                }
+
+                h3 {
+                    font-size: 22px;
+                }
+
+                time {
+                    font-size: 18px;
+                }
+
+                p {
+                    font-size: 14px;
+                }
+            }
         }
     }
 }
@@ -178,6 +256,13 @@ section {
             font-size: 20px;
             margin: 40px 0px;
         }
+
+        .section-info {
+            padding-bottom: 40px;
+            line-height: 2;
+            max-width: 750px;
+            margin: 0px auto;
+        }
     }
 
     #about {
@@ -212,6 +297,29 @@ section {
         }
     }
 
+    #writing {
+
+        h2 {
+            margin-bottom: 80px;
+        }
+
+        .section-info {
+            margin: 40px auto;
+        }
+
+        .articles {
+            grid-template-columns: 1fr 1fr;
+
+            .article {
+                width: 300px;
+
+                .image {
+                    height: 210px;
+                }
+            }
+        }
+    }
+
     #research {
         .publications {
             grid-template-columns: 350px 350px;
@@ -237,6 +345,20 @@ section {
 
                 p {
                     font-size: 18px;
+                }
+            }
+        }
+    }
+
+    #writing {
+
+        .articles {
+
+            .article {
+                width: 400px;
+
+                .image {
+                    height: 280px;
                 }
             }
         }

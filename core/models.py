@@ -19,7 +19,6 @@ def get_image_lookup():
 
 
 
-
 class Project(models.Model):
 
     class Meta:
