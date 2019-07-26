@@ -84,7 +84,7 @@ section {
             margin: 0px auto;
             display: block;
             text-align: center;
-            width: 250px;
+            max-width: 250px;
             background-color: white;
             text-align: left;
             opacity: 0.75;
@@ -143,19 +143,27 @@ section {
 #research {
     background-color: $gray-1;
 
+    .section-info {
+        margin: 20px auto;
+    }
+
     .publications {
         display: grid;
-        grid-gap: 20px;
+        grid-gap: 50px;
 
-        .publication {
+        a.publication {
             margin: 0px auto;
             display: block;
-            background: $primary-6;
+            background: white;
+            max-width: 250px;
             text-align: center;
+            color: $gray-7;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     
             .image {
                 background-color: white;
+                border-bottom: 1px solid $gray-1;
+
                 img {
                     width: 100%;
                     opacity: 0.6;
@@ -163,13 +171,25 @@ section {
                 }
             }
 
+            h3, time, .publication-authors {
+                line-height: 1.5;
+                padding: 0px 5px;
+            }
+
             h3 {
-                padding: 25px 15px;
                 font-weight: bold;
                 font-size: 16px;
-                color: white;
-                background-color: #00000000;
-                line-height: 1.5;
+                font-family: $logo-font;
+                margin: 10px auto;
+            }
+
+            time, .publication-authors {
+                font-size: 14px;
+                margin: 5px auto;
+            }
+
+            .publication-authors {
+                font-style: italic;
             }
         }
     }
@@ -201,7 +221,7 @@ section {
 
         .articles {
             .article {
-                width: 400px;
+                max-width: 400px;
 
                 .image {
                     height: 260px;
@@ -221,6 +241,33 @@ section {
             }
         }
     }
+
+    #research {
+        .section-info {
+            margin: 30px auto;
+        }
+
+        .publications {
+            a.publication {
+                max-width: 400px;
+
+                h3, time, .publication-authors {
+                    line-height: 1.5;
+                    padding: 0px 10px;
+                }
+
+                h3 {
+                    font-size: 20px;
+                    margin: 15px auto;
+                }
+
+                time, .publication-authors {
+                    font-size: 16px;
+                    margin: 10px auto;
+                }
+            }
+        }
+    }
 }
 
 @mixin home--600() {
@@ -228,20 +275,6 @@ section {
     #about {
         .about-grid {
             margin-top: 20px;
-        }
-    }
-
-    #research {
-        .publications {
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 40px;
-
-            .publication {
-                .image {
-                    height: 220px;
-                    overflow: hidden;
-                }
-            }
         }
     }
 }
@@ -321,12 +354,35 @@ section {
     }
 
     #research {
+
+        .section-info {
+            margin: 40px auto;
+        }
+
         .publications {
-            grid-template-columns: 350px 350px;
-            grid-gap: 60px;
-            width: fit-content;
-            width: -moz-fit-content;
-            margin: 0px auto;
+            a.publication {
+                display: grid;
+                max-width: 700px;
+                grid-template-columns: 200px 500px;
+                align-items: center;
+                justify-content: center;
+
+                .image {
+                    height: 200px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .publication-body {
+                    padding: 0px 10px;
+
+                    h3, time, .publication-authors {
+                        text-align: left;
+                    }
+                }
+            }
         }
     }
 }
@@ -359,6 +415,35 @@ section {
 
                 .image {
                     height: 280px;
+                }
+            }
+        }
+    }
+
+    #research {
+        .publications {
+            a.publication {
+                max-width: 900px;
+                grid-template-columns: 300px 600px;
+
+                .image {
+                    height: 300px;
+                    overflow: hidden;
+                }
+
+                .publication-body {
+                    h3, time, .publication-authors {
+                        text-align: left;
+                    }
+
+                    h3 {
+                        font-size: 28px;
+                    }
+
+                    time, .publication-authors {
+                        font-size: 20px;
+                        margin: 15px auto;
+                    }
                 }
             }
         }

@@ -19,6 +19,27 @@ def get_image_lookup():
 
 
 
+
+class Period(models.Model):
+
+    class Meta:
+        db_table = "periods"
+        ordering = ["-number"]
+        
+    def __str__(self):
+        return self.name 
+
+    number = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=64)
+    time = models.CharField(max_length=64)
+    description = models.TextField()
+    image = models.FileField(null=True, blank=True, upload_to=create_filename)
+
+    def description_html(self):
+        return docupy.markdown_to_html(self.description.replace("\r", ""), get_image_lookup())
+
+
+
 class Project(models.Model):
 
     class Meta:
@@ -58,28 +79,6 @@ class Project(models.Model):
 
 
 
-class Publication(models.Model):
-
-    class Meta:
-        db_table = "publications"
-        ordering = ["-date"]
-        
-    def __str__(self):
-        return self.title 
-
-    id = models.SlugField(primary_key=True)
-    title = models.CharField(max_length=512)
-    date = models.DateField()
-    url = models.URLField()
-    authors =  models.CharField(max_length=512)
-    doi = models.CharField(max_length=128)
-    abstract = models.TextField()
-    body = models.TextField()
-    image = models.FileField(upload_to=create_filename)
-    pdf = models.FileField(upload_to=create_filename)
-
-
-
 class Article(models.Model):
 
     class Meta:
@@ -101,20 +100,25 @@ class Article(models.Model):
 
 
 
-class Period(models.Model):
+class Publication(models.Model):
 
     class Meta:
-        db_table = "periods"
-        ordering = ["-number"]
+        db_table = "publications"
+        ordering = ["-date"]
         
     def __str__(self):
-        return self.name 
+        return self.title 
 
-    number = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=64)
-    time = models.CharField(max_length=64)
-    description = models.TextField()
-    image = models.FileField(null=True, blank=True, upload_to=create_filename)
+    id = models.SlugField(primary_key=True)
+    title = models.CharField(max_length=512)
+    date = models.DateField()
+    url = models.URLField()
+    authors =  models.CharField(max_length=512)
+    body = models.TextField()
+    starred = models.BooleanField(default=False)
+    image = models.FileField(upload_to=create_filename)
+    pdf = models.FileField(upload_to=create_filename)
 
-    def description_html(self):
-        return docupy.markdown_to_html(self.description.replace("\r", ""), get_image_lookup())
+
+    def body_html(self):
+        return docupy.markdown_to_html(self.body.replace("\r", ""), get_image_lookup())

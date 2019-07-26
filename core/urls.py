@@ -9,6 +9,8 @@ urlpatterns = [
  path("projects/", projects),
  path("writing/", writing),
  path("writing/<slug:id>/", article),
+ path("research/", research),
+ path("research/<slug:id>/", publication),
  path("admin/", admin.site.urls),
  path("", home)
 ] + static(

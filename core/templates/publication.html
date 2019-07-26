@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "nav.html" %}
+<article>
+    <header class="connections container">
+        <h1>{{ publication.title }}</h1>
+        <time>{{ publication.date }}</time>
+        <div class="authors">{{ publication.authors }}</div>
+        <div class="links">
+            <a href="{{ publication.url }}" target="_blank"><img src="/static/images/web-project.svg"></a>
+            <a href="{{ publication.pdf.url }}" target="_blank"><img src="/static/images/pdf.svg"></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <p>{{ publication.body_html|safe }}</p>
+        </div>
+    </main>
+</article>
+{% include "footer.html" %}
+{% endblock %}

@@ -9,8 +9,33 @@ header {
         font-size: 30px;
     }
 
+    .author, .authors, time, .links {
+        margin: 20px 0px;
+    }
+
+    .authors {
+        font-style: italic;
+    }
+
+    time {
+        display: inline;
+        padding-bottom: 20px;
+    }
+
     .author {
-        padding: 20px 0px;
+        padding-bottom: 20px;
+    }
+
+    .links {
+        display: block;
+        text-align: center;
+        padding-bottom: 15px;
+
+        img {
+            width: 30px;
+            margin: 0px 5px;
+            opacity: 0.8;
+        }
     }
 
     * {
@@ -66,9 +91,10 @@ header.home {
             font-size: 36px;
         }
     
-        .author {
-            padding: 24px 0px;
-        } 
+        .author, .authors, time, .links {
+            font-size: 18px;
+            margin: 24px 0px;
+        }
     }
 
     header.home {

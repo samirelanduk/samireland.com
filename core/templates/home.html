@@ -55,15 +55,11 @@
     <section id="research" class="container zigzag">
       <h2>Research</h2>
       <p>I'm midway through a PhD at UCL, and my research currently focuses on zinc binding sites in proteins - identifying them, predicting them, and analysing them.</p>
-      <p>Here are my most recent two publications:</p>
+      <p>Here is a recent publication:</p>
       <div class="publications">
-        {% for pub in publications %}
-        <a class="publication" href="{{ pub.url }}" target="_blank">
-          <div class="image"><img src="{{ pub.image.url }}"></div>
-          <h3>{{ pub.title }}</h3>
-        </a>
-        {% endfor %}
+        {% include "publication-card.html" %}
       </div>
+      <a class="button" href="/research/">More Publications</a>
     </section>
 
     {% include "footer.html" %}

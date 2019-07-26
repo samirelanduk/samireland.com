@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "nav.html" %}
+
+<header class="connections container">
+    <h1>Research</h1>
+</header>
+
+<section id="research" class="container">
+    <div class="section-info">
+        Here are some published papers I have contributed to.
+    </div>
+
+    <div class="publications">
+        {% for publication in publications %}
+            {% include "publication-card.html" %}
+        {% endfor %}
+    </div>
+</section>
+
+
+{% include "footer.html" %}
+{% endblock %}
