@@ -14,9 +14,10 @@ def create_filename(instance, filename):
 
 def get_image_lookup():
     return {
-     **{article.image.name.split("/")[-1].split(".")[0]: article.image.url for article in Article.objects.all()}
+     **{media.name: media.mediafile.url for media in MediaFile.objects.all()},
+     **{article.image.name.split("/")[-1].split(".")[0]: article.image.url for article in Article.objects.all()},
+     **{pub.image.name.split("/")[-1].split(".")[0]: pub.image.url for pub in Publication.objects.all()}
     }
-
 
 
 
@@ -122,3 +123,13 @@ class Publication(models.Model):
 
     def body_html(self):
         return docupy.markdown_to_html(self.body.replace("\r", ""), get_image_lookup())
+
+
+
+class MediaFile(models.Model):
+
+    name = models.CharField(max_length=128, primary_key=True)
+    mediafile = models.FileField(upload_to=create_filename)
+
+    def __str__(self):
+        return "MediaFile ({})".format(self.name)
