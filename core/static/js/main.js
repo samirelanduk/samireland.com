@@ -31,19 +31,11 @@ window.addEventListener("scroll", function() {
 
 window.onload = function() {
     // Navlinks
-    let links = document.getElementsByTagName("a");
-    for (var a = 0; a < links.length; a++) {
-        if (links[a].getAttribute("href")[0] === "#") {
-            links.item(a).addEventListener("click", function(e) {
-                e.preventDefault();
-                let navlinks = document.getElementsByClassName("navlinks").item(0);
-                navlinks.removeAttribute("style");
-                document.getElementById(
-                    e.target.getAttribute("href").slice(1)
-                ).scrollIntoView({behavior: "smooth"});
-            });
-        }
-    }
+    var scroll = new SmoothScroll('a[href*="#"]', {updateURL: false});
+    document.addEventListener('scrollStart', function (event) {
+        let navlinks = document.getElementsByClassName("navlinks").item(0);
+        navlinks.removeAttribute("style");
+    }, false);
 
     // Project cards
     function closeCard(e) {
@@ -83,18 +75,14 @@ window.onload = function() {
             for (var a = 0; a < actives.length; a++) {
                 technologies.push(actives[a].innerHTML);
             }
-            console.log("Techs to include:", technologies)
             var projects = document.getElementsByClassName("project");
             for (var p = 0; p < projects.length; p++) {
                 var projectTechnologies = projects[p].getAttribute("data-tech").split(",");
-                console.log("Checking project", p + 1)
-                console.log("Its technologies:", projectTechnologies)
-                //console.log(projectTechnologies.filter(value => technologies.includes(value)))
-                if (projectTechnologies.filter(value => technologies.includes(value)).length || technologies.length == 0) {
-                    console.log("Activate it")
+                if (projectTechnologies.filter(
+                    value => technologies.includes(value)).length || technologies.length == 0
+                ) {
                     projects[p].classList.remove("inactive");
                 } else {
-                    console.log("Deactivate it")
                     projects[p].classList.add("inactive");
                 }
             }
