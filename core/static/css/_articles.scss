@@ -9,7 +9,21 @@ article {
             line-height: 1.6;
             margin-bottom: 20px;
         }
+
+        code {
+            font-size: 8px;
+        }
         
+    }
+}
+
+@mixin article--400() {
+    article {
+        main {
+            code {
+                font-size: 12px;
+            }
+        }
     }
 }
 
@@ -19,6 +33,10 @@ article {
         main {
             p, li {
                 font-size: 16px;
+            }
+
+            code {
+                font-size: 14px;
             }
         }
     }
@@ -31,7 +49,7 @@ article {
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
-            
+
             p, li {
                 font-size: 18px;
                 line-height: 1.75;
