@@ -95,6 +95,5 @@ $logo-font: 'Roboto slab';
     @include core--1200();
     @include home--1200();
     @include social--1200();
-    @include footer--1200();
     @include projects--1200;
 }
