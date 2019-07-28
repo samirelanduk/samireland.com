@@ -1,16 +1,7 @@
 import docupy
 from collections import Counter
 from django.db import models
-
-def create_filename(instance, filename):
-    extension = "." + filename.split(".")[-1] if "." in filename else ""
-    try:
-        name = instance.name
-    except:
-        name = instance.id
-    kind = instance._meta.model.__name__.lower()
-    return f"{kind}-{name.lower()}{extension}"
-
+from .managers import manage, create_filename
 
 def get_image_lookup():
     return {
@@ -133,3 +124,11 @@ class MediaFile(models.Model):
 
     def __str__(self):
         return "MediaFile ({})".format(self.name)
+
+
+
+delete_period, save_period = manage(Period, name="name", files=["image"])
+delete_project, save_project = manage(Project, name="name", files=["image"])
+delete_article, save_article = manage(Article, name="id", files=["image"])
+delete_pub, save_pub = manage(Period, name="id", files=["image", "pdf"])
+delete_media, save_media = manage(Period, name="name", files=["mediafile"])
