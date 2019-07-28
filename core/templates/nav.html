@@ -1,4 +1,4 @@
-<nav class="container">
+<nav class="container{% if request.path != "/" %} logo-visible{% endif %}">
     <a class="logo" href="{% if request.path == "/" %}#home{% else %}/{% endif %}">Sam Ireland</a>       
     <button onClick="toggleNav()">
         <div></div><div></div><div></div>

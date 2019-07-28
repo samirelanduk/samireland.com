@@ -24,8 +24,14 @@ window.addEventListener("scroll", function() {
     }
     if (position > (header.offsetHeight - nav.offsetHeight)) {
         nav.classList.add("shadowed");
+        if (window.location.pathname == "/") {
+            nav.classList.add("logo-visible");
+        }
     } else {
         nav.classList.remove("shadowed");
+        if (window.location.pathname == "/") {
+            nav.classList.remove("logo-visible");
+        }
     }
 });
 

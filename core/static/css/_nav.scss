@@ -83,14 +83,16 @@ nav.visible {
     background-color: transparentize($color: $primary-5, $amount: 0.05);
 }
 
-nav.shadowed {
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.23), 0 2px 10px 0 rgba(0,0,0,0.23);
-    
+nav.logo-visible {
     .logo {
         transition-duration: 1s;
         color: white;
         background-color: #ffffff00;
     }
+}
+
+nav.shadowed {
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.23), 0 2px 10px 0 rgba(0,0,0,0.23);
 }
 
 @mixin nav--500() {
