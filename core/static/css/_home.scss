@@ -87,7 +87,6 @@ section {
             max-width: 250px;
             background-color: white;
             text-align: left;
-            opacity: 0.75;
             transition: 0.5s;
     
             .image {
@@ -99,7 +98,7 @@ section {
     
                 img {
                     width: 100%;
-                    opacity: 0.6;
+                    opacity: 0.8;
                     display: block;
                     margin: 0px auto;
                     margin-top: auto;
@@ -166,7 +165,7 @@ section {
 
                 img {
                     width: 100%;
-                    opacity: 0.6;
+                    opacity: 0.8;
                     display: block;
                 }
             }
