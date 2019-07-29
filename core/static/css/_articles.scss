@@ -3,7 +3,7 @@ article {
         margin: 50px 0px;
         font-family: Montserrat;
         
-        p, li {
+        p, li, h2 {
             color: $gray-8;
             font-size: 14px;
             line-height: 1.6;
@@ -12,6 +12,12 @@ article {
 
         code {
             font-size: 8px;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: $gray-10;
         }
         
     }
@@ -38,6 +44,11 @@ article {
             code {
                 font-size: 14px;
             }
+
+            h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
         }
     }
 }
@@ -50,9 +61,13 @@ article {
             margin-left: auto;
             margin-right: auto;
 
-            p, li {
+            p, li, h2 {
                 font-size: 18px;
                 line-height: 1.75;
+            }
+
+            h2 {
+                font-size: 26px;
             }
         }
     }

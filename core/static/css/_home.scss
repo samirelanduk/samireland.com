@@ -189,6 +189,7 @@ section {
 
             .publication-authors {
                 font-style: italic;
+                font-size: 12px;
             }
         }
     }
@@ -263,6 +264,10 @@ section {
                 time, .publication-authors {
                     font-size: 16px;
                     margin: 10px auto;
+                }
+
+                .publication-authors {
+                    font-size: 14px;
                 }
             }
         }
@@ -442,6 +447,10 @@ section {
                     time, .publication-authors {
                         font-size: 20px;
                         margin: 15px auto;
+                    }
+
+                    .publication-authors {
+                        font-size: 16px;
                     }
                 }
             }

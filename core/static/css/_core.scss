@@ -1,6 +1,8 @@
 body {
     color: $gray-10;
     font-family: Ubuntu;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 a {
@@ -20,6 +22,11 @@ ol {
 
 pre {
     padding: 20px 20px !important;
+}
+
+h1, h2, h3 {
+    font-family: $logo-font;
+    font-weight: bold;
 }
 
 .container {
@@ -86,6 +93,14 @@ figure {
     .container {
         padding-left: calc((100% - 550px) / 2);
         padding-right: calc((100% - 550px) / 2);
+    }
+
+    figure {
+        width: 70%;
+    
+        figcaption {
+            font-size: 14px;
+        }
     }
 }
 
