@@ -1,4 +1,4 @@
-host="samireland.uk"
+host="samireland.com"
 
 # Empty the current source directory on the server
 ssh sam@$host "rm -r ~/$host/source/* >& /dev/null"
@@ -17,6 +17,9 @@ ssh sam@$host "sed -i s/\"HOSTS = \[\]\"/\"HOSTS = \['$host', 'www.$host'\]\"/g 
 
 # Install pip packages
 ssh sam@$host "~/$host/env/bin/pip install -r ~/$host/source/requirements.txt"
+
+# Switch database
+ssh sam@$host "sed -i s/\"DATABASES = local\"/\"DATABASES = live\"/g ~/$host/source/core/secrets.py"
 
 # Migrate
 ssh sam@$host "cd ~/$host/source && ../env/bin/python manage.py migrate"
