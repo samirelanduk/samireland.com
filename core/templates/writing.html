@@ -3,6 +3,13 @@
 {% block head %}
 <title>Sam Ireland Writing</title>
 <meta name="description" content="Sam Ireland's articles on various subjects.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@samirelanduk">
+<meta name="twitter:creator" content="@samirelanduk">
+<meta name="twitter:title" content="Sam Ireland">
+<meta name="twitter:description" content="My articles and other writing">
+<meta name="twitter:image" content="https://{{request.get_host}}/static/images/twitter-card.png">
+<meta property="og:image" content="https://{{request.get_host}}/static/images/twitter-card.png">
 {% endblock %}
 
 {% block body %}

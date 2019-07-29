@@ -2,6 +2,12 @@
 
 {% block head %}
 <title>{{ publication.title }} - Sam Ireland</title>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@samirelanduk">
+<meta name="twitter:creator" content="@samirelanduk">
+<meta name="twitter:title" content="{{ publication.title }}">
+<meta name="twitter:image" content="https://{{request.get_host}}{{publication.image.url}}">
+<meta property="og:image" content="https://{{request.get_host}}{{publication.image.url}}">
 {% endblock %}
 
 {% block body %}
