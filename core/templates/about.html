@@ -23,8 +23,8 @@
     <div class="container">
         {% for period in periods %}
         <div class="about-section">
-            <img src="{{ period.image.url }}">
-            <div class="about-text">
+            <img src="{{ period.image.url }}" data-aos="fade-right">
+            <div class="about-text" data-aos="fade-in">
                 <h2>{{ period.name }}</h2>
                 <div class="date">{{ period.time }}</div>
                 {{ period.description_html|safe }}

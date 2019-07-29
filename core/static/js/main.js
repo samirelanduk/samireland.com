@@ -1,3 +1,9 @@
+AOS.init({
+    once: true,
+    duration: 500,
+    offset: 75
+});
+
 function toggleNav() {
     let navlinks = document.getElementsByClassName("navlinks").item(0);
     if (navlinks.style.height) {
