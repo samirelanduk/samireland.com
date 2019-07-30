@@ -130,5 +130,5 @@ class MediaFile(models.Model):
 delete_period, save_period = manage(Period, name="name", files=["image"])
 delete_project, save_project = manage(Project, name="name", files=["image"])
 delete_article, save_article = manage(Article, name="id", files=["image"])
-delete_pub, save_pub = manage(Period, name="id", files=["image", "pdf"])
+delete_pub, save_pub = manage(Publication, name="id", files=["image", "pdf"])
 delete_media, save_media = manage(MediaFile, name="name", files=["mediafile"])
