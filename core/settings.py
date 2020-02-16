@@ -2,7 +2,7 @@ import os
 from .secrets import SECRET_KEY, BASE_DIR, DATABASES
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "192.168.0.12"]
 DEBUG = True
 
 ROOT_URLCONF = "core.urls"
@@ -14,6 +14,7 @@ INSTALLED_APPS = [
  "django.contrib.auth",
  "django.contrib.messages",
  "django.contrib.admin",
+ "django_user_agents",
  "sass_processor",
  "core",
 ]
@@ -35,6 +36,7 @@ MIDDLEWARE = [
  "django.contrib.sessions.middleware.SessionMiddleware",
  "django.contrib.auth.middleware.AuthenticationMiddleware",
  "django.contrib.messages.middleware.MessageMiddleware",
+ "django_user_agents.middleware.UserAgentMiddleware",
  "htmlmin.middleware.HtmlMinifyMiddleware",
  "htmlmin.middleware.MarkRequestMiddleware"
 ]

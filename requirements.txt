@@ -6,3 +6,4 @@ libsass
 django-compressor
 django-sass-processor
 django-htmlmin
+django_user_agents

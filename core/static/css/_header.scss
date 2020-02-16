@@ -104,6 +104,10 @@ header.e404 {
     }
 }
 
+header.ios {
+    height: calc(100vh - 100px);
+}
+
 @mixin header--600() {
     header {
     
