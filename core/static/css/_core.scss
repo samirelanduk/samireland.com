@@ -14,8 +14,14 @@ a {
     color: #000099;
 }
 
-p, .section-info {
+p, .section-info, ul, li {
     font-weight: 300;
+}
+
+p {
+    a {
+        font-weight: 300;
+    }
 }
 
 time {
