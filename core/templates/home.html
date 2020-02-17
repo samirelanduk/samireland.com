@@ -14,7 +14,7 @@
 
 {% block body %}
 {% include "nav.html" %}
-    <header id="home" class="home container connections">
+    <header id="home" class="home container connections{% if request.user_agent.os.family == 'iOS' %} ios{% endif %}">
         <div class="header-top">
           <h1>Sam Ireland</h1>
           <p>Hello, I'm a developer and bioinformatics PhD student based in London.</p>
