@@ -51,8 +51,13 @@ window.onload = function() {
 
     // Project cards
     function closeCard(e) {
-        e.target.parentElement.remove();
+        e.target.parentElement.classList.add("gone");
+        document.body.classList.remove("frozen");
+        setTimeout(function() {
+            e.target.parentElement.remove();
+        }, 500)
     }
+
     let projects = document.getElementsByClassName("project");
     for (var p = 0; p < projects.length; p++) {
         projects.item(p).addEventListener("click", function(e) {
@@ -65,8 +70,8 @@ window.onload = function() {
                 clone.getElementsByClassName("close-button").item(0).onclick = closeCard;
                 clone.classList.add("expanded");
                 document.body.appendChild(clone);
+                document.body.classList.add("frozen");
             }
-            
         });
     }
 

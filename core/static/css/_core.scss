@@ -5,11 +5,16 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+body.frozen {
+    height: 100%;
+    overflow: hidden;
+}
+
 a {
     color: #000099;
 }
 
-p {
+p, .section-info {
     font-weight: 300;
 }
 
