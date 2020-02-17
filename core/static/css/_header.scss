@@ -179,6 +179,12 @@ header.ios {
     }
 }
 
+@mixin header--800--portait() {
+    header.home {
+        max-height: 500px;
+    }
+}
+
 @mixin header--1000() {
     header.home {
         .header-top {
