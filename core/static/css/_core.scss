@@ -90,6 +90,23 @@ figure {
     }
 }
 
+img[data-aos="desktop-slide"] {
+    transition-property: transform, opacity;
+    opacity: 0 !important;
+
+    &.aos-animate {
+        opacity: 1 !important;
+    }
+
+    @media screen and (min-width: 800px) {
+        transform: translateX(-200px);
+
+        &.aos-animate {
+            transform: translateX(0);
+        }
+    }
+}
+
 @mixin core--400() {
     .container {
         padding-left: 25px;
