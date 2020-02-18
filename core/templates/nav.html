@@ -1,6 +1,6 @@
 <nav class="container{% if request.path != "/" %} logo-visible{% endif %}">
     <a class="logo" href="{% if request.path == "/" %}#home{% else %}/{% endif %}">Sam Ireland</a>       
-    <button onClick="toggleNav()">
+    <button id="nav-button">
         <div></div><div></div><div></div>
     </button>
     <div class="navlinks">

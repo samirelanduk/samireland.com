@@ -7,3 +7,5 @@ secrets.py
 uploads/*
 *.css*
 .DS_Store
+node_modules
+bundle.js
