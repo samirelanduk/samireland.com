@@ -73,6 +73,10 @@ $logo-font: 'Roboto slab';
     @include projects--800();
 }
 
+@media (orientation: portrait) and (min-width: 800px) {
+    @include header--800--portait();
+}
+
 @media (min-width: 900px) {
     @include core--900();
     @include nav--900();

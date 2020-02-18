@@ -15,14 +15,14 @@
 {% block body %}
 {% include "nav.html" %}
 <article>
-    <header class="container">
+    <header class="container connections">
         <h1>{{ article.title }}</h1>
-        <div class="author"><time>{{ article.date }}</time> &#183; Sam Ireland</div>
     </header>
 
     <main>
         <div class="container">
-            <p>{{ article.body_html|safe }}</p>
+            <time>{{ article.date }}</time>
+            {{ article.body_html|safe }}
         </div>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/themes/tomorrow-night.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rainbow/1.2.0/js/rainbow.min.js"></script>

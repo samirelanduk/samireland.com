@@ -5,8 +5,23 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+body.frozen {
+    height: 100%;
+    overflow: hidden;
+}
+
 a {
     color: #000099;
+}
+
+p, .section-info, ul, li {
+    font-weight: 300;
+}
+
+p {
+    a {
+        font-weight: 300;
+    }
 }
 
 time {
@@ -26,7 +41,7 @@ pre {
 
 h1, h2, h3 {
     font-family: $logo-font;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .container {
@@ -75,10 +90,27 @@ figure {
     }
 }
 
+img[data-aos="desktop-slide"] {
+    transition-property: transform, opacity;
+    opacity: 0 !important;
+
+    &.aos-animate {
+        opacity: 1 !important;
+    }
+
+    @media screen and (min-width: 800px) {
+        transform: translateX(-200px);
+
+        &.aos-animate {
+            transform: translateX(0);
+        }
+    }
+}
+
 @mixin core--400() {
     .container {
-        padding-left: calc((100% - 390px) / 2);
-        padding-right: calc((100% - 390px) / 2);
+        padding-left: 25px;
+        padding-right: 25px;
     }
 }
 

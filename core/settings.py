@@ -2,7 +2,7 @@ import os
 from .secrets import SECRET_KEY, BASE_DIR, DATABASES
 
 
-ALLOWED_HOSTS = ["localhost", "192.168.0.12"]
+ALLOWED_HOSTS = ["*"]
 DEBUG = True
 
 ROOT_URLCONF = "core.urls"
