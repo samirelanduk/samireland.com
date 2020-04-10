@@ -24,13 +24,13 @@ article {
         
         p, li, h2 {
             color: $gray-8;
-            font-size: 12px;
+            font-size: 14px;
             line-height: 1.6;
             margin-bottom: 14px;
         }
 
         code {
-            font-size: 8px;
+            font-size: 12px !important;
         }
 
         h2 {
@@ -46,7 +46,7 @@ article {
     article {
         main {
             code {
-                font-size: 12px;
+                font-size: 14px !important;
             }
         }
     }
@@ -70,11 +70,11 @@ article {
             }
 
             p, li {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             code {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             h2 {
@@ -89,7 +89,7 @@ article {
     article {  
 
         main {
-            max-width: 900px;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
 
@@ -98,7 +98,7 @@ article {
             }
 
             p, li, h2 {
-                font-size: 16px;
+                font-size: 18px;
                 line-height: 1.75;
             }
 

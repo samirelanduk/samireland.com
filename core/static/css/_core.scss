@@ -28,6 +28,11 @@ time {
     display: block;
 }
 
+del {
+    font-weight: inherit;
+    text-decoration: line-through;
+}
+
 ol {
     li {
         list-style: decimal;
@@ -37,6 +42,8 @@ ol {
 
 pre {
     padding: 20px 20px !important;
+    word-wrap: normal !important;
+    overflow-x: scroll;
 }
 
 h1, h2, h3 {
@@ -85,6 +92,7 @@ figure {
     figcaption {
         font-size: 12px;
         margin-top: 20px;
+        line-height: 1.7;
         text-align: center;
         font-style: italic;
     }
