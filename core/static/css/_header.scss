@@ -1,5 +1,5 @@
 header {
-    background-color: $primary-5;
+    background-color: transparentize($primary-5, 0.15);
     text-align: center;
     color: white;
 
@@ -56,6 +56,7 @@ header.home {
             max-width: 300px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 400;
         }
     }
 
@@ -64,7 +65,7 @@ header.home {
         justify-content: flex-start;
         img {
             display: block;
-            width: 100px;
+            width: 125px;
             margin: 0px auto;
             border-radius: 50%;
             margin-bottom: 20px;
@@ -95,7 +96,7 @@ header.ios {
     height: calc(100vh - 100px);
 }
 
-@mixin header--600() {
+@mixin header--500() {
     header {
     
         h1 {
@@ -132,7 +133,7 @@ header.ios {
     }
 }
 
-@mixin header--800() {
+@mixin header--700() {
     header {
     
         h1 {
@@ -153,11 +154,15 @@ header.ios {
             flex-direction: column;
             justify-content: center;
             padding-bottom: 100px;
+
+            h1 {
+                margin-bottom: 0;
+            }
         }
 
         .header-bottom {
             img {
-                width: 150px;
+                width: 175px;
             }
         }
     }
