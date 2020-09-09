@@ -162,6 +162,7 @@ section {
             text-align: center;
             color: $gray-7;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            padding: 8px 12px;
     
             .image {
                 background-color: white;
@@ -172,6 +173,10 @@ section {
                     opacity: 0.8;
                     display: block;
                 }
+            }
+
+            .publication-body {
+                width: 100%;
             }
 
             h3, time, .publication-authors {
@@ -194,6 +199,7 @@ section {
             .publication-authors {
                 font-style: italic;
                 font-size: 12px;
+                font-weight: 300;
             }
         }
     }
@@ -370,8 +376,9 @@ section {
         .publications {
             a.publication {
                 display: grid;
-                max-width: 700px;
-                grid-template-columns: 200px 500px;
+                width: 700px;
+                max-width: none;
+                grid-template-columns: 200px 1fr;
                 align-items: center;
                 justify-content: center;
 
@@ -381,6 +388,7 @@ section {
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    border-bottom: none;
                 }
 
                 .publication-body {
@@ -431,8 +439,8 @@ section {
     #research {
         .publications {
             a.publication {
-                max-width: 900px;
-                grid-template-columns: 300px 600px;
+                width: 900px;
+                grid-template-columns: 300px 1fr;
 
                 .image {
                     height: 300px;
