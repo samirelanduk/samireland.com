@@ -31,6 +31,7 @@ header {
 
 header.home {
     height: 100vh;
+    max-height: 800px;
     display: grid;
     grid-auto-rows: 1fr;
 
