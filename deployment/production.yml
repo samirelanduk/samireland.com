@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+    env_file:
+      - secrets.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  django:
+    image: samirelanduk/samireland_django
+    env_file:
+      - secrets.env
+    volumes:
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    expose:
+      - 80
+    depends_on:
+      - db
+  nginx:
+    image: samirelanduk/samireland_nginx
+    volumes:
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+    depends_on:
+      - django
+    expose:
+      - 80
+    environment:
+      - VIRTUAL_HOST=samireland.com,www.samireland.com
+      - LETSENCRYPT_HOST=samireland.com,www.samireland.com
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    user: postgres:postgres
+    volumes:
+      - /var/opt/pgbackups:/backups
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
+      - SCHEDULE=@daily
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+volumes:
+  static_volume:
+  media_volume:
+  postgres_data:
