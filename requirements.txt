@@ -1,9 +1,0 @@
-django==2.2.10
-docupy==0.3.2
-rjsmin
-rcssmin
-libsass
-django-compressor
-django-sass-processor
-django-htmlmin
-django_user_agents
