@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     "taggit",
     "corsheaders",
     "core",
-    "articles"
+    "articles",
+    "projects",
 ]
 
 MIDDLEWARE = [
