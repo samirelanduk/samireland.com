@@ -1,0 +1,4 @@
+Django==4.2.2
+django-environ==0.10.0
+wagtail
+django_cors_headers
