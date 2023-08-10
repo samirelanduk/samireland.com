@@ -1,12 +1,27 @@
 import Head from "next/head";
 
-export default function Home() {
+export default function Home({title, about}) {
   return (
     <main>
       <Head>
-        <title>Sam Ireland</title>
+        <title>{title}</title>
       </Head>
-      Home
+      <h1>Sam Ireland</h1>
+      <div>
+        {about}
+      </div>
     </main>
   )
+}
+
+export async function getStaticProps() {
+  const res = await fetch(process.env.API_URL)
+  const data = await res.json()
+
+  return {
+    props: {
+      title: data.title,
+      about: data.about,
+    }
+  }
 }

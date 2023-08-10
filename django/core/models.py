@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import JsonResponse
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
 
@@ -9,3 +10,9 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel("about"),
     ]
+
+    def serve(self, request, *args, **kwargs):
+        return JsonResponse({
+            "title": self.title,
+            "about": self.about,
+        })
