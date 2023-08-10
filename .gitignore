@@ -4,8 +4,8 @@ __pycache__
 secrets.py
 *env
 *.log
+.next
 uploads/*
-*.css*
 .DS_Store
 node_modules
 bundle.js
