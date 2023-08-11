@@ -1,7 +1,8 @@
 from django.db import models
-from wagtail.models import Page, Orderable
+from wagtail.models import Page, Orderable, ParentalKey
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
+from django.http import JsonResponse
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, InlinePanel
 
@@ -13,6 +14,12 @@ class ArticlesPage(Page):
         FieldPanel("text"),
         InlinePanel("articles", label="Articles"),
     ]
+
+    def serve(self, request, *args, **kwargs):
+        return JsonResponse({
+            "title": self.title,
+            "text": self.text,
+        })
 
 
 
@@ -32,7 +39,7 @@ class Article(Orderable):
     category = models.ForeignKey("ArticleCategory", null=True, blank=True, on_delete=models.SET_NULL)
     intro_text = models.TextField()
     body = RichTextField(blank=True)
-    page = models.ForeignKey(ArticlesPage, on_delete=models.CASCADE, related_name="articles")
+    page = ParentalKey(ArticlesPage, on_delete=models.CASCADE, related_name="articles")
 
     panels = [
         FieldPanel("date"),
