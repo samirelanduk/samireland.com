@@ -19,6 +19,13 @@ class ProjectsPage(Page):
         return JsonResponse({
             "title": self.title,
             "text": self.text,
+            "projects": [{
+                "name": project.name,
+                "description": project.description,
+                "code_url": project.code_url,
+                "about_url": project.about_url,
+                "image": project.image.file.url,
+            } for project in self.projects.all()]
         })
 
 
@@ -27,8 +34,8 @@ class Project(Orderable):
 
     name = models.CharField(max_length=100)
     description = models.TextField()
-    code_url = models.URLField()
-    about_url = models.URLField()
+    code_url = models.URLField(blank=True, null=True)
+    about_url = models.URLField(blank=True, null=True)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     page = ParentalKey(ProjectsPage, on_delete=models.CASCADE, related_name="projects")
 
