@@ -15,7 +15,7 @@ export default function Home({title, about}) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(process.env.API_URL)
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URL)
   const data = await res.json()
 
   return {

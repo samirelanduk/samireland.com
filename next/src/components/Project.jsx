@@ -19,7 +19,7 @@ const Project = props => {
           {project.about_url}
         </a>
       )}
-      <img src={`${process.env.MEDIA_URL}/${project.image}`} alt={project.name} />
+      <img src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${project.image}`} alt={project.name} />
     </div>
   );
 };

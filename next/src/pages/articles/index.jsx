@@ -13,7 +13,7 @@ export default function Articles({title, text}) {
 
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.API_URL}/articles`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles`)
   const data = await res.json()
 
   return {
