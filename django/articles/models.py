@@ -36,7 +36,7 @@ class ArticlePage(Page):
     date = models.DateField("Article date")
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     category = models.ForeignKey("ArticleCategory", null=True, blank=True, on_delete=models.SET_NULL)
-    intro_text = models.TextField()
+    intro = models.TextField()
     body = RichTextField(blank=True)
 
     panels = [
