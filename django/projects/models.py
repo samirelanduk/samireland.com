@@ -33,7 +33,7 @@ class ProjectsPage(Page):
 class Project(Orderable):
 
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = RichTextField()
     code_url = models.URLField(blank=True, null=True)
     about_url = models.URLField(blank=True, null=True)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
