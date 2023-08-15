@@ -12,7 +12,6 @@ class ArticlesPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("text"),
-        InlinePanel("articles", label="Articles"),
     ]
 
     def serve(self, request, *args, **kwargs):
@@ -32,14 +31,13 @@ class ArticleCategory(models.Model):
     
 
 
-class Article(Orderable):
+class ArticlePage(Page):
 
     date = models.DateField("Article date")
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     category = models.ForeignKey("ArticleCategory", null=True, blank=True, on_delete=models.SET_NULL)
     intro_text = models.TextField()
     body = RichTextField(blank=True)
-    page = ParentalKey(ArticlesPage, on_delete=models.CASCADE, related_name="articles")
 
     panels = [
         FieldPanel("date"),
