@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }) {
       <nav>
         <Link href="/">samireland.com</Link>
         <Link href="/projects/">Projects</Link>
-        <Link href="/articles/">Articles</Link>
+        <Link href="/writing/">Writing</Link>
       </nav>
       <Component {...pageProps} />
       <footer className="w-12">

@@ -10,3 +10,5 @@ uploads/*
 node_modules
 bundle.js
 media/*
+data
+build.py

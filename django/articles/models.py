@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, InlinePanel
 
-class ArticlesPage(Page):
+class WritingPage(Page):
 
     text = RichTextField(blank=True, max_length=1000)
 
