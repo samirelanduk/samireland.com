@@ -5,6 +5,14 @@ from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel
 
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.models import ClusterableModel
+from taggit.models import TaggedItemBase
+
+# import ClusterableModel
+
+
 class ProjectsPage(Page):
 
     text = RichTextField(blank=True, max_length=1000)
@@ -24,18 +32,20 @@ class ProjectsPage(Page):
                 "code_url": project.code_url,
                 "about_url": project.about_url,
                 "image": project.image.file.url,
+                "tags": [tag.name for tag in project.tags.all()],
             } for project in self.projects.all()]
         })
 
 
 
-class Project(Orderable):
+class Project(Orderable, ClusterableModel):
 
     name = models.CharField(max_length=100)
     description = RichTextField()
     code_url = models.URLField(blank=True, null=True)
     about_url = models.URLField(blank=True, null=True)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+    tags = ClusterTaggableManager(through="projects.ProjectTag", blank=True)
     page = ParentalKey(ProjectsPage, on_delete=models.CASCADE, related_name="projects")
 
     panels = [
@@ -44,4 +54,11 @@ class Project(Orderable):
         FieldPanel("code_url"),
         FieldPanel("about_url"),
         FieldPanel("image"),
+        FieldPanel("tags"),
     ]
+
+
+
+class ProjectTag(TaggedItemBase):
+    
+    content_object = ParentalKey(Project, on_delete=models.CASCADE, related_name="tagged_projects")
