@@ -3,7 +3,6 @@ from wagtail.models import Page, Orderable, ParentalKey
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
-from wagtail.snippets.models import register_snippet
 from wagtail.admin.panels import FieldPanel, InlinePanel
 
 class ProjectsPage(Page):
@@ -18,7 +17,7 @@ class ProjectsPage(Page):
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,
-            "text": self.text,
+            "text": str(RichText(self.text)),
             "projects": [{
                 "name": project.name,
                 "description": project.description,

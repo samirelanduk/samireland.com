@@ -7,6 +7,7 @@ export default function App({ Component, pageProps }) {
       <nav>
         <Link href="/">samireland.com</Link>
         <Link href="/projects/">Projects</Link>
+        <Link href="/about/">About</Link>
         <Link href="/writing/">Writing</Link>
       </nav>
       <Component {...pageProps} />

@@ -1,10 +1,9 @@
 from django.db import models
-from wagtail.models import Page, Orderable, ParentalKey
+from wagtail.models import Page
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
-from wagtail.snippets.models import register_snippet
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel
 
 class WritingPage(Page):
 
@@ -17,7 +16,7 @@ class WritingPage(Page):
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,
-            "text": self.text,
+            "text": str(RichText(self.text)),
         })
 
 

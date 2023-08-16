@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "core",
     "articles",
     "projects",
+    "about",
 ]
 
 MIDDLEWARE = [
