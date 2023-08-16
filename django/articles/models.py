@@ -17,6 +17,12 @@ class WritingPage(Page):
         return JsonResponse({
             "title": self.title,
             "text": str(RichText(self.text)),
+            "articles": [{
+                "title": article.title,
+                "date": article.date,
+                "intro": article.intro,
+                "image": article.image.file.url,
+            } for article in ArticlePage.objects.all().order_by("-date")]
         })
 
 
