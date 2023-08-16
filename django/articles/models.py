@@ -4,6 +4,10 @@ from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.models import ClusterableModel
+from taggit.models import TaggedItemBase
 
 class WritingPage(Page):
 
@@ -27,30 +31,28 @@ class WritingPage(Page):
 
 
 
-class ArticleCategory(models.Model):
-
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-    
-
 
 class ArticlePage(Page):
 
     date = models.DateField("Article date")
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    category = models.ForeignKey("ArticleCategory", null=True, blank=True, on_delete=models.SET_NULL)
     intro = models.TextField()
     body = RichTextField(blank=True)
+    tags = ClusterTaggableManager(through="articles.ArticleTag", blank=True)
 
-    panels = [
+    content_panels = Page.content_panels + [
         FieldPanel("date"),
         FieldPanel("image"),
-        FieldPanel("category"),
-        FieldPanel("intro_text"),
+        FieldPanel("intro"),
         FieldPanel("body"),
+        FieldPanel("tags"),
     ]
 
     def __str__(self):
         return self.title
+
+
+
+class ArticleTag(TaggedItemBase):
+    
+    content_object = ParentalKey(ArticlePage, on_delete=models.CASCADE, related_name="tagged_articles")

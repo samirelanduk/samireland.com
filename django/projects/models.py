@@ -4,14 +4,10 @@ from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel
-
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ClusterableModel
 from taggit.models import TaggedItemBase
-
-# import ClusterableModel
-
 
 class ProjectsPage(Page):
 
