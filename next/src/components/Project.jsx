@@ -22,7 +22,7 @@ const Project = props => {
       <img src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${project.image}`} alt={project.name} />
       <div>
         {project.tags.map(tag => (
-          <span key={tag.id}>{tag}</span>
+          <span key={tag}>{tag}</span>
         ))}
       </div>
     </div>
