@@ -102,6 +102,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 WAGTAIL_SITE_NAME = "samireland.com"
 
+WAGTAILIMAGES_EXTENSIONS = ["gif", "jpg", "jpeg", "png", "webp", "svg"]
+
 DATABASES = {
     "default": env.db("DB_URL")
 }
