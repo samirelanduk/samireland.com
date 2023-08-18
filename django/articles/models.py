@@ -24,6 +24,7 @@ class WritingPage(Page):
             "articles": [{
                 "title": article.title,
                 "date": article.date,
+                "slug": article.slug,
                 "intro": article.intro,
                 "image": article.image.file.url,
             } for article in ArticlePage.objects.all().order_by("-date")]
@@ -50,7 +51,14 @@ class ArticlePage(Page):
 
     def __str__(self):
         return self.title
+    
 
+    def serve(self, request, *args, **kwargs):
+        return JsonResponse({
+            "title": self.title,
+            "date": self.date,
+            "body": str(RichText(self.body))
+        })
 
 
 class ArticleTag(TaggedItemBase):
