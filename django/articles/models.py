@@ -6,8 +6,11 @@ from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from modelcluster.models import ClusterableModel
 from taggit.models import TaggedItemBase
+from wagtail.fields import StreamField
+from wagtail import blocks
+from wagtail.images.blocks import ImageChooserBlock
+
 
 class WritingPage(Page):
 
@@ -38,14 +41,25 @@ class ArticlePage(Page):
     date = models.DateField("Article date")
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     intro = models.TextField()
-    body = RichTextField(blank=True)
+    body = StreamField([
+        ("text", blocks.RichTextBlock(features=["bold", "link", "italic", "h2", "h3", "ol", "ul", "code", "strikethrough"])),
+        ("image", ImageChooserBlock()),
+        ("figure", blocks.StructBlock([
+            ("image", ImageChooserBlock()),
+            ("caption", blocks.RichTextBlock(features=["bold", "link", "italic"])),
+        ], icon="image")),
+        ("code", blocks.StructBlock([
+            ("language", blocks.CharBlock()),
+            ("code", blocks.TextBlock()),
+        ], icon="code")),
+    ], use_json_field=True)
     tags = ClusterTaggableManager(through="articles.ArticleTag", blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel("date"),
         FieldPanel("image"),
         FieldPanel("intro"),
-        FieldPanel("body"),
+        FieldPanel("body", ),
         FieldPanel("tags"),
     ]
 
@@ -57,7 +71,10 @@ class ArticlePage(Page):
         return JsonResponse({
             "title": self.title,
             "date": self.date,
-            "body": str(RichText(self.body))
+            "body": [{
+                "type": block.block_type,
+                "value": block.render(),
+            } for block in self.body]
         })
 
 
