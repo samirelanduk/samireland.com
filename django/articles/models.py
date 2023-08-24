@@ -43,7 +43,6 @@ class ArticlePage(Page):
     intro = models.TextField()
     body = StreamField([
         ("text", blocks.RichTextBlock(features=["bold", "link", "italic", "h2", "h3", "ol", "ul", "code", "strikethrough"])),
-        ("image", ImageChooserBlock()),
         ("figure", blocks.StructBlock([
             ("image", ImageChooserBlock()),
             ("caption", blocks.RichTextBlock(features=["bold", "link", "italic"])),
@@ -68,13 +67,33 @@ class ArticlePage(Page):
     
 
     def serve(self, request, *args, **kwargs):
+        blocks = []
+        for block in self.body:
+            if block.block_type == "text":
+                blocks.append({
+                    "type": block.block_type,
+                    "value": block.render()
+                })
+            elif block.block_type == "figure":
+                blocks.append({
+                    "type": block.block_type,
+                    "value": {
+                        "image": block.value["image"].file.url,
+                        "caption": str(block.value["caption"]),
+                    }
+                })
+            elif block.block_type == "code":
+                blocks.append({
+                    "type": block.block_type,
+                    "value": {
+                        "language": block.value["language"],
+                        "code": block.value["code"],
+                    }
+                })
         return JsonResponse({
             "title": self.title,
             "date": self.date,
-            "body": [{
-                "type": block.block_type,
-                "value": block.render(),
-            } for block in self.body]
+            "body": blocks
         })
 
 

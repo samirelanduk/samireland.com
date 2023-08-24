@@ -1,3 +1,4 @@
+import ArticleBody from "@/components/ArticleBody";
 import Head from "next/head";
 
 export default function Article({title, date, body}) {
@@ -7,9 +8,8 @@ export default function Article({title, date, body}) {
         <title>{title} - Sam Ireland</title>
       </Head>
       <h1>{title}</h1>
-
-      <div dangerouslySetInnerHTML={{__html: body }} />
-      
+      <time>{date}</time>
+      <ArticleBody blocks={body} />
     </main>
   )
 }
