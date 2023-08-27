@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import RegexValidator
 from wagtail.models import Page
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
@@ -34,8 +35,18 @@ class AboutPage(Page):
 class Event(Orderable):
 
     name = models.CharField(max_length=100)
-    start = models.CharField(max_length=7)
-    end = models.CharField(max_length=7, blank=True)
+    start = models.CharField(max_length=7, validators=[
+        RegexValidator(
+            regex="\d\d\d\d=\d\d",
+            message="Must be in the format YYYY=MM",
+        ),
+    ])
+    end = models.CharField(max_length=7, blank=True, validators=[
+        RegexValidator(
+            regex="\d\d\d\d=\d\d",
+            message="Must be in the format YYYY=MM",
+        ),
+    ])
     description = RichTextField(blank=True, max_length=1000)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     page = ParentalKey(AboutPage, on_delete=models.CASCADE, related_name="events")
