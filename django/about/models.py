@@ -5,7 +5,7 @@ from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel
-from wagtail.models import Orderable
+from wagtail.models import Orderable, ClusterableModel
 from modelcluster.fields import ParentalKey
 
 class AboutPage(Page):
@@ -32,8 +32,12 @@ class AboutPage(Page):
 
 
 
-class Event(Orderable):
+# Abstract base model
+class EventBase(models.Model):
 
+    class Meta:
+        abstract = True
+    
     name = models.CharField(max_length=100)
     start = models.CharField(max_length=7, validators=[
         RegexValidator(
@@ -49,7 +53,26 @@ class Event(Orderable):
     ])
     description = RichTextField(blank=True, max_length=1000)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+
+
+
+class Event(Orderable, ClusterableModel, EventBase):
+    
     page = ParentalKey(AboutPage, on_delete=models.CASCADE, related_name="events")
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("start"),
+        FieldPanel("end"),
+        FieldPanel("description"),
+        FieldPanel("image"),
+    ]
+
+
+
+class SubEvent(Orderable, EventBase):
+    
+    event = ParentalKey(Event, on_delete=models.CASCADE, related_name="subevents")
 
     panels = [
         FieldPanel("name"),
