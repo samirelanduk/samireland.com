@@ -26,7 +26,14 @@ class AboutPage(Page):
                 "start": event.start,
                 "end": event.end,
                 "description": str(RichText(event.description)),
-                "image": event.image.file.url if event.image else None
+                "image": event.image.file.url if event.image else None,
+                "subevents": [{
+                    "name": subevent.name,
+                    "start": subevent.start,
+                    "end": subevent.end,
+                    "description": str(RichText(subevent.description)),
+                    "image": subevent.image.file.url if subevent.image else None,
+                } for subevent in event.subevents.all()]
             } for event in self.events.all()]
         })
 
