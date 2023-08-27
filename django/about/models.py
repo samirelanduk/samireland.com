@@ -50,3 +50,11 @@ class Event(Orderable):
     description = RichTextField(blank=True, max_length=1000)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
     page = ParentalKey(AboutPage, on_delete=models.CASCADE, related_name="events")
+
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("start"),
+        FieldPanel("end"),
+        FieldPanel("description"),
+        FieldPanel("image"),
+    ]
