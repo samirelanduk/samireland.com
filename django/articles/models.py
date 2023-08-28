@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
+from wagtail.snippets.models import register_snippet
 from wagtail.fields import StreamField
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
@@ -30,6 +30,7 @@ class WritingPage(Page):
                 "slug": article.slug,
                 "intro": article.intro,
                 "image": article.image.file.url,
+                "tags": [{"name": tag.name, "color": tag.color} for tag in article.tags.all()],
             } for article in ArticlePage.objects.all().order_by("-date")]
         })
 
@@ -52,7 +53,7 @@ class ArticlePage(Page):
             ("code", blocks.TextBlock()),
         ], icon="code")),
     ], use_json_field=True)
-    tags = ClusterTaggableManager(through="articles.ArticleTag", blank=True)
+    tags = models.ManyToManyField("articles.ArticleTag", related_name="articles")
 
     content_panels = Page.content_panels + [
         FieldPanel("date"),
@@ -93,10 +94,17 @@ class ArticlePage(Page):
         return JsonResponse({
             "title": self.title,
             "date": self.date,
-            "body": blocks
+            "body": blocks,
+            "tags": [{"name": tag.name, "color": tag.color} for tag in self.tags.all()],
         })
 
 
-class ArticleTag(TaggedItemBase):
+
+@register_snippet
+class ArticleTag(models.Model):
     
-    content_object = ParentalKey(ArticlePage, on_delete=models.CASCADE, related_name="tagged_articles")
+    name = models.CharField(max_length=50, unique=True)
+    color = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name

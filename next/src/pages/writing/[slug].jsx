@@ -1,7 +1,7 @@
 import ArticleBody from "@/components/ArticleBody";
 import Head from "next/head";
 
-export default function Article({title, date, body}) {
+export default function Article({title, date, body, tags}) {
   return (
     <main>
       <Head>
@@ -10,6 +10,11 @@ export default function Article({title, date, body}) {
       <h1>{title}</h1>
       <time>{date}</time>
       <ArticleBody blocks={body} />
+      <div>
+        {tags.map(tag => (
+          <span key={tag.name}>{tag.name}</span>
+        ))}
+      </div>
     </main>
   )
 }
@@ -23,7 +28,8 @@ export async function getServerSideProps({ params }) {
     props: {
       title: data.title,
       date: data.date,
-      body: data.body
+      body: data.body,
+      tags: data.tags
     }
   }
 }

@@ -12,6 +12,11 @@ const ArticlePreview = props => {
       <h2>{article.title}</h2>
       <time>{article.date}</time>
       <div>{article.intro}</div>
+      <div>
+        {article.tags.map(tag => (
+          <span key={tag.name}>{tag.name}</span>
+        ))}
+      </div>
     </Link>
   );
 };

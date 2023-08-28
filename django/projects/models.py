@@ -7,7 +7,7 @@ from wagtail.admin.panels import FieldPanel, InlinePanel
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.models import ClusterableModel
-from taggit.models import TaggedItemBase
+from wagtail.snippets.models import register_snippet
 
 class ProjectsPage(Page):
 
@@ -28,7 +28,7 @@ class ProjectsPage(Page):
                 "code_url": project.code_url,
                 "about_url": project.about_url,
                 "image": project.image.file.url,
-                "tags": [tag.name for tag in project.tags.all()],
+                "tags": [{"name": tag.name, "color": tag.color} for tag in project.tags.all()],
             } for project in self.projects.all()]
         })
 
@@ -41,7 +41,7 @@ class Project(Orderable, ClusterableModel):
     code_url = models.URLField(blank=True, null=True)
     about_url = models.URLField(blank=True, null=True)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    tags = ClusterTaggableManager(through="projects.ProjectTag", blank=True)
+    tags = models.ManyToManyField("projects.ProjectTag", related_name="projects")
     page = ParentalKey(ProjectsPage, on_delete=models.CASCADE, related_name="projects")
 
     panels = [
@@ -55,6 +55,11 @@ class Project(Orderable, ClusterableModel):
 
 
 
-class ProjectTag(TaggedItemBase):
+@register_snippet
+class ProjectTag(models.Model):
     
-    content_object = ParentalKey(Project, on_delete=models.CASCADE, related_name="tagged_projects")
+    name = models.CharField(max_length=50, unique=True)
+    color = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name
