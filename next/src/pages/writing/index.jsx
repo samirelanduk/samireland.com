@@ -1,12 +1,14 @@
 import ArticlePreview from "@/components/ArticlePreview";
 import Head from "next/head";
 
-export default function Writing({title, text, articles}) {
+export default function Writing({title, text, articles, meta}) {
   return (
     <main>
       <Head>
-        <title>{title} - Sam Ireland</title>
+        <title>{`${meta.title} - Sam Ireland`}</title>
+        <meta name="description" content={meta.description} />
       </Head>
+      <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}} />
       <div>
         {articles.map(article => <ArticlePreview key={article.title} article={article} />)}
@@ -25,6 +27,7 @@ export async function getStaticProps() {
       title: data.title,
       text: data.text,
       articles: data.articles,
+      meta: data.meta
     }
   }
 }

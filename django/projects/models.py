@@ -29,7 +29,11 @@ class ProjectsPage(Page):
                 "about_url": project.about_url,
                 "image": project.image.file.url,
                 "tags": [{"name": tag.name, "color": tag.color} for tag in project.tags.all()],
-            } for project in self.projects.all()]
+            } for project in self.projects.all()],
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
         })
 
 

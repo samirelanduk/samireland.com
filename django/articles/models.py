@@ -31,7 +31,11 @@ class WritingPage(Page):
                 "intro": article.intro,
                 "image": article.image.file.url,
                 "tags": [{"name": tag.name, "color": tag.color} for tag in article.tags.all()],
-            } for article in ArticlePage.objects.all().order_by("-date")]
+            } for article in ArticlePage.objects.all().order_by("-date")],
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
         })
 
 
@@ -96,6 +100,10 @@ class ArticlePage(Page):
             "date": self.date,
             "body": blocks,
             "tags": [{"name": tag.name, "color": tag.color} for tag in self.tags.all()],
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
         })
 
 

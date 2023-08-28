@@ -1,12 +1,13 @@
 import Head from "next/head";
 
-export default function Home({title, about}) {
+export default function Home({title, about, meta}) {
   return (
     <main>
       <Head>
-        <title>{title}</title>
+        <title>{meta.title}</title>
+        <meta name="description" content={meta.description} />
       </Head>
-      <h1>Sam Ireland</h1>
+      <h1>{title}</h1>
       <div>
         {about}
       </div>
@@ -22,6 +23,7 @@ export async function getStaticProps() {
     props: {
       title: data.title,
       about: data.about,
+      meta: data.meta
     }
   }
 }

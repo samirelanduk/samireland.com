@@ -15,4 +15,8 @@ class HomePage(Page):
         return JsonResponse({
             "title": self.title,
             "about": self.about,
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
         })

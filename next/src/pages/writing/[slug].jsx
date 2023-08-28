@@ -1,11 +1,12 @@
 import ArticleBody from "@/components/ArticleBody";
 import Head from "next/head";
 
-export default function Article({title, date, body, tags}) {
+export default function Article({title, date, body, tags, meta}) {
   return (
     <main>
       <Head>
-        <title>{title} - Sam Ireland</title>
+        <title>{`${meta.title} - Sam Ireland`}</title>
+        <meta name="description" content={meta.description} />
       </Head>
       <h1>{title}</h1>
       <time>{date}</time>
@@ -29,7 +30,8 @@ export async function getServerSideProps({ params }) {
       title: data.title,
       date: data.date,
       body: data.body,
-      tags: data.tags
+      tags: data.tags,
+      meta: data.meta
     }
   }
 }

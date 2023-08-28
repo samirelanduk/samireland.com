@@ -3,7 +3,7 @@ import Tags from "@/components/Tags";
 import Head from "next/head";
 import { useState } from "react";
 
-export default function Projects({title, text, projects}) {
+export default function Projects({title, text, projects, meta}) {
 
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -14,8 +14,10 @@ export default function Projects({title, text, projects}) {
   return (
     <main>
       <Head>
-        <title>{title} - Sam Ireland</title>
+        <title>{`${meta.title} - Sam Ireland`}</title>
+        <meta name="description" content={meta.description} />
       </Head>
+      <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}} />
       <Tags projects={projects} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       <div>
@@ -36,6 +38,7 @@ export async function getStaticProps() {
       title: data.title,
       text: data.text,
       projects: data.projects,
+      meta: data.meta
     }
   }
 }

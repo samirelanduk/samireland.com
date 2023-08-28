@@ -33,8 +33,12 @@ class AboutPage(Page):
                     "end": subevent.end,
                     "description": str(RichText(subevent.description)),
                     "image": subevent.image.file.url if subevent.image else None,
-                } for subevent in event.subevents.all()]
-            } for event in self.events.all()]
+                } for subevent in event.subevents.all()],
+            } for event in self.events.all()],
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
         })
 
 
