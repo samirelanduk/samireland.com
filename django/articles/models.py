@@ -97,6 +97,7 @@ class ArticlePage(Page):
                 })
         return JsonResponse({
             "title": self.title,
+            "image": self.image.file.url if self.image else None,
             "date": self.date,
             "body": blocks,
             "tags": [{"name": tag.name, "color": tag.color} for tag in self.tags.all()],
