@@ -1,4 +1,5 @@
 import ArticleBody from "@/components/ArticleBody";
+import SocialShare from "@/components/SocialShare";
 import Head from "next/head";
 
 export default function Article({title, image, date, body, tags, meta}) {
@@ -24,6 +25,7 @@ export default function Article({title, image, date, body, tags, meta}) {
           <span key={tag.name}>{tag.name}</span>
         ))}
       </div>
+      <SocialShare title={title} />
     </main>
   )
 }
