@@ -18,6 +18,8 @@ class ProjectsPage(Page):
         InlinePanel("projects", label="Projects"),
     ]
 
+    preview_modes = []
+
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,

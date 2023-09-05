@@ -17,6 +17,8 @@ class AboutPage(Page):
         InlinePanel("events", label="Events")
     ]
 
+    preview_modes = []
+
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,
@@ -76,6 +78,7 @@ class Event(Orderable, ClusterableModel, EventBase):
         FieldPanel("end"),
         FieldPanel("description"),
         FieldPanel("image"),
+        InlinePanel("subevents", label="Subevents")
     ]
 
 
@@ -88,6 +91,6 @@ class SubEvent(Orderable, EventBase):
         FieldPanel("name"),
         FieldPanel("start"),
         FieldPanel("end"),
-        FieldPanel("description"),
         FieldPanel("image"),
+        FieldPanel("description"),
     ]

@@ -20,6 +20,8 @@ class WritingPage(Page):
         FieldPanel("text"),
     ]
 
+    preview_modes = []
+
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,
@@ -37,7 +39,6 @@ class WritingPage(Page):
                 "description": self.search_description
             }
         })
-
 
 
 
@@ -66,6 +67,8 @@ class ArticlePage(Page):
         FieldPanel("body", ),
         FieldPanel("tags"),
     ]
+
+    preview_modes = []
 
     def __str__(self):
         return self.title
