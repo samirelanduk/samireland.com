@@ -8,6 +8,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, "12345"),
+    REVALIDATE_TOKEN=(str, "12345"),
     STATIC_ROOT=(str, os.path.join(BASE_DIR, "static")),
     MEDIA_ROOT=(str, os.path.join(BASE_DIR, "media")),
     DB_URL=(str, "sqlite:///db.sqlite3"),
@@ -111,3 +112,5 @@ DATABASES = {
 WAGTAILADMIN_BASE_URL = env("WAGTAILADMIN_BASE_URL")
 
 FRONTEND_URL = env("FRONTEND_URL")
+
+REVALIDATE_TOKEN = env("REVALIDATE_TOKEN")

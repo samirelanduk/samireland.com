@@ -2,6 +2,7 @@ from django.db import models
 from django.http import JsonResponse
 from wagtail.models import Page
 from wagtail.admin.panels import FieldPanel
+from core.hooks import *
 
 class HomePage(Page):
 

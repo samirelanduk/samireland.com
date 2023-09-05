@@ -43,7 +43,6 @@ class AboutPage(Page):
 
 
 
-# Abstract base model
 class EventBase(models.Model):
 
     class Meta:
