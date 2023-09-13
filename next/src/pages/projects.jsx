@@ -2,6 +2,7 @@ import Project from "@/components/Project";
 import Tags from "@/components/Tags";
 import Head from "next/head";
 import { useState } from "react";
+import { fetchRemoteData } from "@/fetch";
 
 export default function Projects({title, text, projects, meta}) {
 
@@ -38,8 +39,9 @@ export default function Projects({title, text, projects, meta}) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`)
-  const data = await res.json()
+  const data = await fetchRemoteData("projects", {
+    title: "", text: "", projects: [], meta: {}
+  });
 
   return {
     props: {

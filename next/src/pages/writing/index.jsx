@@ -1,4 +1,5 @@
 import ArticlePreview from "@/components/ArticlePreview";
+import { fetchRemoteData } from "@/fetch";
 import Head from "next/head";
 
 export default function Writing({title, text, articles, meta}) {
@@ -27,8 +28,9 @@ export default function Writing({title, text, articles, meta}) {
 
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/writing`)
-  const data = await res.json()
+  const data = await fetchRemoteData("writing", {
+    title: "", text: "", articles: [], meta: {}
+  });
 
   return {
     props: {

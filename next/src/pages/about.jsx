@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Event from "../components/Event";
+import { fetchRemoteData } from "@/fetch";
 
 export default function About({title, text, events, meta}) {
   return (
@@ -27,8 +28,9 @@ export default function About({title, text, events, meta}) {
 
 
 export async function getStaticProps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/about`)
-  const data = await res.json()
+  const data = await fetchRemoteData("about", {
+    title: "", text: "", events: [], meta: {}
+  });
 
   return {
     props: {

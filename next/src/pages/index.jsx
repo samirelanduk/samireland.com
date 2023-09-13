@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { fetchRemoteData } from "@/fetch";
 
 export default function Home({title, about, meta}) {
   return (
@@ -24,8 +25,9 @@ export default function Home({title, about, meta}) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL)
-  const data = await res.json()
+  const data = await fetchRemoteData("", {
+    title: "", about: "", meta: {}
+  });
 
   return {
     props: {

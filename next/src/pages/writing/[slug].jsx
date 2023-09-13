@@ -1,6 +1,7 @@
 import ArticleBody from "@/components/ArticleBody";
 import SocialShare from "@/components/SocialShare";
 import Head from "next/head";
+import { fetchRemoteData } from "@/fetch";
 
 export default function Article({title, image, date, body, tags, meta}) {
   return (
@@ -31,9 +32,10 @@ export default function Article({title, image, date, body, tags, meta}) {
 }
 
 
-export async function getServerSideProps({ params }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/writing/${params.slug}`)
-  const data = await res.json()
+export async function getStaticProps({ params }) {
+  const data = await fetchRemoteData(`writing/${params.slug}`, {
+    title: "", text: "", articles: [], meta: {}
+  });
 
   return {
     props: {
@@ -45,4 +47,18 @@ export async function getServerSideProps({ params }) {
       meta: data.meta
     }
   }
+}
+
+export async function getStaticPaths() {
+  const data = await fetchRemoteData("writing/", {
+    articles: []
+  });
+
+  const staticPaths = {
+    paths: data.articles.map(article => ({
+      params: { slug: article.slug }
+    })),
+    fallback: false
+  }
+  return staticPaths;
 }
