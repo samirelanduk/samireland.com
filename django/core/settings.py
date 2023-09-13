@@ -105,6 +105,8 @@ WAGTAIL_SITE_NAME = "samireland.com"
 
 WAGTAILIMAGES_EXTENSIONS = ["gif", "jpg", "jpeg", "png", "webp", "svg"]
 
+WAGTAIL_APPEND_SLASH = False
+
 DATABASES = {
     "default": env.db("DB_URL")
 }
