@@ -1,0 +1,92 @@
+version: "3"
+services:
+  postgres:
+    hostname: postgres
+    container_name: sidc_postgres
+    image: postgres:13.4
+    environment:
+      - POSTGRES_USER=sidc
+      - POSTGRES_PASSWORD=sidc
+      - POSTGRES_DB=sidc
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgbackups:
+    hostname: backups
+    container_name: sidc_backups
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    user: postgres:postgres
+    volumes:
+      - postgres_backups:/backups
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=sidc
+      - POSTGRES_PASSWORD=sidc
+      - POSTGRES_USER=sidc
+      - SCHEDULE=@daily
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+  django:
+    hostname: django
+    container_name: sidc_django
+    image: samirelanduk/sidc_django
+    expose:
+      - 80
+    volumes:
+      - static:/home/app/static
+      - media:/home/app/media
+    depends_on:
+      - postgres
+    env_file:
+      - secrets.env
+    environment:
+      - DEBUG=yes
+      - DB_URL=postgresql://sidc:sidc@postgres:5432/sidc
+      - STATIC_ROOT=/home/app/static
+      - MEDIA_ROOT=/home/app/media
+      - FRONTEND_URL=$FRONTEND_URL
+    build:
+      context: django
+      args:
+        - STATIC_ROOT=/home/app/static
+    command: bash -c "python manage.py migrate && gunicorn --bind :80 core.wsgi:application --workers 16 --log-level debug"
+  next:
+    hostname: next
+    container_name: sidc_next
+    image: samirelanduk/sidc_next
+    expose:
+      - 80
+    env_file:
+      - secrets.env
+    environment:
+      - NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+      - NEXT_PUBLIC_MEDIA_URL=$MEDIA_URL
+    build:
+      context: next
+      network: host
+      args:
+        - NEXT_PUBLIC_MEDIA_URL=$MEDIA_URL
+        - NEXT_PUBLIC_API_URL=$BUILD_API_URL
+  nginx:
+    hostname: nginx
+    container_name: sidc_nginx
+    image: samirelanduk/sidc_nginx
+    build: .
+    environment:
+      - VIRTUAL_HOST=$HOSTNAME,www.$HOSTNAME
+      - LETSENCRYPT_HOST=$HOSTNAME,www.$HOSTNAME
+    depends_on:
+      - django
+      - next
+    volumes:
+      - media:/home/app/media
+      - static:/home/app/static
+volumes:
+  postgres_data:
+  postgres_backups:
+  static:
+  media:
