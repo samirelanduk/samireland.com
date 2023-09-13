@@ -14,6 +14,7 @@ env = environ.Env(
     DB_URL=(str, "sqlite:///db.sqlite3"),
     WAGTAILADMIN_BASE_URL=(str, "admin"),
     FRONTEND_URL=(str, "http://localhost"),
+    INTERNAL_FRONTEND_URL=(str, "http://sidc_next:3000"),
 )
 
 ALLOWED_HOSTS = ["*"]
@@ -114,5 +115,7 @@ DATABASES = {
 WAGTAILADMIN_BASE_URL = env("WAGTAILADMIN_BASE_URL")
 
 FRONTEND_URL = env("FRONTEND_URL")
+
+INTERNAL_FRONTEND_URL = env("INTERNAL_FRONTEND_URL")
 
 REVALIDATE_TOKEN = env("REVALIDATE_TOKEN")
