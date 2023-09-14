@@ -71,6 +71,7 @@ services:
       args:
         - NEXT_PUBLIC_MEDIA_URL=$MEDIA_URL
         - NEXT_PUBLIC_API_URL=$BUILD_API_URL
+        - NEXT_PUBLIC_ALLOW_FALLBACK=$NEXT_PUBLIC_ALLOW_FALLBACK
   nginx:
     hostname: nginx
     container_name: sidc_nginx
