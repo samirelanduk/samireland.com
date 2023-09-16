@@ -20,6 +20,10 @@ class WritingPage(Page):
 
     preview_modes = []
 
+    max_count = 1
+
+    subpage_types = ["articles.ArticlePage"]
+
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,
@@ -65,6 +69,8 @@ class ArticlePage(Page):
         FieldPanel("body", ),
         FieldPanel("tags"),
     ]
+
+    parent_page_type = ["articles.WritingPage"]
 
     preview_modes = []
 

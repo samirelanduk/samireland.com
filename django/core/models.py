@@ -12,6 +12,14 @@ class HomePage(Page):
         FieldPanel("about"),
     ]
 
+    max_count = 1
+
+    subpage_types = [
+        "articles.WritingPage",
+        "projects.ProjectsPage",
+        "about.AboutPage",
+    ]
+
     preview_modes = []
 
     def serve(self, request, *args, **kwargs):

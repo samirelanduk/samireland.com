@@ -17,6 +17,10 @@ class AboutPage(Page):
         InlinePanel("events", label="Events")
     ]
 
+    max_count = 1
+
+    subpage_types = []
+
     preview_modes = []
 
     def serve(self, request, *args, **kwargs):

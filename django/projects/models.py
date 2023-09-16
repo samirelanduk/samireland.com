@@ -18,6 +18,10 @@ class ProjectsPage(Page):
         InlinePanel("projects", label="Projects"),
     ]
 
+    max_count = 1
+
+    subpage_types = []
+
     preview_modes = []
 
     def serve(self, request, *args, **kwargs):
