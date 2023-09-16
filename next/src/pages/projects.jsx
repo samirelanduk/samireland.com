@@ -42,7 +42,7 @@ export async function getStaticProps() {
   const data = await fetchRemoteData("projects", {
     title: "", text: "", projects: [], meta: {}
   });
-
+  if (!data) return {notFound: true};
   return {
     props: {
       title: data.title,

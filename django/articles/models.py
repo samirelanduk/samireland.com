@@ -4,8 +4,6 @@ from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel
-from modelcluster.fields import ParentalKey
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.snippets.models import register_snippet
 from wagtail.fields import StreamField
 from wagtail import blocks
@@ -69,6 +67,8 @@ class ArticlePage(Page):
     ]
 
     preview_modes = []
+
+    also_revalidate = ["/writing"]
 
     def __str__(self):
         return self.title
