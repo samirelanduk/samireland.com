@@ -3,6 +3,7 @@ from wagtail.models import Page
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
+from django.conf import settings
 from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.fields import StreamField
@@ -24,6 +25,9 @@ class WritingPage(Page):
     max_count = 1
 
     subpage_types = ["articles.ArticlePage"]
+
+    def get_url(self, *args, **kwargs):
+        return f"{settings.FRONTEND_URL}/writing"
 
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
@@ -79,6 +83,10 @@ class ArticlePage(Page):
 
     def __str__(self):
         return self.title
+
+
+    def get_url(self, *args, **kwargs):
+        return f"{settings.FRONTEND_URL}/writing/{self.slug}"
     
 
     def serve(self, request, *args, **kwargs):

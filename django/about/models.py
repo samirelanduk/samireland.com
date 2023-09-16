@@ -4,6 +4,7 @@ from wagtail.models import Page
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
+from django.conf import settings
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.models import Orderable, ClusterableModel
 from modelcluster.fields import ParentalKey
@@ -22,6 +23,10 @@ class AboutPage(Page):
     subpage_types = []
 
     preview_modes = []
+
+    def get_url(self, *args, **kwargs):
+        return f"{settings.FRONTEND_URL}/about"
+    
 
     def serve(self, request, *args, **kwargs):
         return JsonResponse({

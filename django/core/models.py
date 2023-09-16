@@ -22,6 +22,10 @@ class HomePage(Page):
 
     preview_modes = []
 
+    def get_url(self, *args, **kwargs):
+        return settings.FRONTEND_URL
+    
+
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
             "title": self.title,

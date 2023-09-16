@@ -3,6 +3,7 @@ from wagtail.models import Page, Orderable, ParentalKey
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
 from django.http import JsonResponse
+from django.conf import settings
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from modelcluster.fields import ParentalKey
 from modelcluster.fields import ParentalManyToManyField
@@ -23,6 +24,9 @@ class ProjectsPage(Page):
     subpage_types = []
 
     preview_modes = []
+
+    def get_url(self, *args, **kwargs):
+        return f"{settings.FRONTEND_URL}/projects"
 
     def serve(self, request, *args, **kwargs):
         return JsonResponse({
