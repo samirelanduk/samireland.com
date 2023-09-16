@@ -33,7 +33,7 @@ services:
   django:
     hostname: django
     container_name: sidc_django
-    image: samirelanduk/sidc_django
+    image: samirelanduk/sidc_django:${TAG}
     expose:
       - 80
     volumes:
@@ -57,7 +57,7 @@ services:
   next:
     hostname: next
     container_name: sidc_next
-    image: samirelanduk/sidc_next
+    image: samirelanduk/sidc_next:${TAG}
     expose:
       - 80
     env_file:
@@ -75,7 +75,7 @@ services:
   nginx:
     hostname: nginx
     container_name: sidc_nginx
-    image: samirelanduk/sidc_nginx
+    image: samirelanduk/sidc_nginx:${TAG}
     build: .
     environment:
       - VIRTUAL_HOST=$HOSTNAME,www.$HOSTNAME

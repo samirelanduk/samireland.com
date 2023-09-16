@@ -6,6 +6,7 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
+export TAG=local
 export PORT=$1
 export NEXT_PUBLIC_ALLOW_FALLBACK="false"
 
