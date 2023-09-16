@@ -7,6 +7,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.fields import StreamField
 from wagtail import blocks
+from modelcluster.fields import ParentalManyToManyField
 from wagtail.images.blocks import ImageChooserBlock
 
 
@@ -60,7 +61,7 @@ class ArticlePage(Page):
             ("code", blocks.TextBlock()),
         ], icon="code")),
     ], use_json_field=True)
-    tags = models.ManyToManyField("articles.ArticleTag", related_name="articles")
+    tags = ParentalManyToManyField("articles.ArticleTag", related_name="articles")
 
     content_panels = Page.content_panels + [
         FieldPanel("date"),

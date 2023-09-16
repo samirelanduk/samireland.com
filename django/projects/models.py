@@ -5,7 +5,7 @@ from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel
 from modelcluster.fields import ParentalKey
-from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalManyToManyField
 from modelcluster.models import ClusterableModel
 from wagtail.snippets.models import register_snippet
 
@@ -51,7 +51,7 @@ class Project(Orderable, ClusterableModel):
     code_url = models.URLField(blank=True, null=True)
     about_url = models.URLField(blank=True, null=True)
     image = models.ForeignKey("wagtailimages.Image", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
-    tags = models.ManyToManyField("projects.ProjectTag", related_name="projects")
+    tags = ParentalManyToManyField("projects.ProjectTag", related_name="projects")
     page = ParentalKey(ProjectsPage, on_delete=models.CASCADE, related_name="projects")
 
     panels = [
