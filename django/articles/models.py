@@ -53,7 +53,7 @@ class ArticlePage(Page):
         ("text", blocks.RichTextBlock(features=["bold", "link", "italic", "h2", "h3", "ol", "ul", "code", "strikethrough"])),
         ("figure", blocks.StructBlock([
             ("image", ImageChooserBlock()),
-            ("caption", blocks.RichTextBlock(features=["bold", "link", "italic"])),
+            ("caption", blocks.RichTextBlock(features=["bold", "link", "italic"], required=False)),
         ], icon="image")),
         ("code", blocks.StructBlock([
             ("language", blocks.CharBlock()),
