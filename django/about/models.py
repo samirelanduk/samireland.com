@@ -62,13 +62,13 @@ class EventBase(models.Model):
     name = models.CharField(max_length=100)
     start = models.CharField(max_length=7, validators=[
         RegexValidator(
-            regex="\d\d\d\d=\d\d",
+            regex="\d\d\d\d-\d\d",
             message="Must be in the format YYYY=MM",
         ),
     ])
     end = models.CharField(max_length=7, blank=True, validators=[
         RegexValidator(
-            regex="\d\d\d\d=\d\d",
+            regex="\d\d\d\d-\d\d",
             message="Must be in the format YYYY=MM",
         ),
     ])
