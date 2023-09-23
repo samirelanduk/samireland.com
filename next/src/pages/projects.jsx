@@ -9,7 +9,7 @@ export default function Projects({title, text, projects, meta}) {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const filteredProjects = selectedTags.length ? projects.filter(project => {
-    return project.tags.some(tag => selectedTags.includes(tag));
+    return project.tags.some(tag => selectedTags.includes(tag.name));
   }) : projects;
 
   return (

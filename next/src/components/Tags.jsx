@@ -6,12 +6,14 @@ const Tags = props => {
   const { projects, selectedTags, setSelectedTags } = props;
 
   const tags = {};
+  const tagColors = {};
   for (let project of projects) {
     for (let tag of project.tags) {
-      if (tag in tags) {
-        tags[tag] += 1;
+      tagColors[tag.name] = tag.color;
+      if (tag.name in tags) {
+        tags[tag.name] += 1;
       } else {
-        tags[tag] = 0;
+        tags[tag.name] = 0;
       }
     }
   }
@@ -32,6 +34,7 @@ const Tags = props => {
         <span
           key={tag}
           onClick={() => handleTagClick(tag)}
+          style={{backgroundColor: tagColors[tag]}}
           className={`tag ${(selectedTags.includes(tag) || selectedTags.length === 0) ? "opacity-100" : "opacity-50"}`}
         >
           {tag}
