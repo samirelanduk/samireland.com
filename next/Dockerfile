@@ -1,5 +1,5 @@
 # Step 1: Build the Next.js application
-FROM node:current-alpine AS builder
+FROM --platform=amd64 node:current-alpine AS builder
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ RUN NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
     npm run build
 
 # Step 2: Serve Next.js app via a Node.js server
-FROM node:current-alpine
+FROM --platform=amd64 node:current-alpine
 
 WORKDIR /app
 
