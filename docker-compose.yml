@@ -44,7 +44,7 @@ services:
     env_file:
       - secrets.env
     environment:
-      - DEBUG=yes
+      - DEBUG=no
       - DB_URL=postgresql://sidc:sidc@postgres:5432/sidc
       - STATIC_ROOT=/home/app/static
       - MEDIA_ROOT=/home/app/media

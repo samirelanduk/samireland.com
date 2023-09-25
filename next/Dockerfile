@@ -1,5 +1,5 @@
 # Step 1: Build the Next.js application
-FROM --platform=amd64 node:current-alpine AS builder
+FROM node:current-alpine AS builder
 
 WORKDIR /app
 
