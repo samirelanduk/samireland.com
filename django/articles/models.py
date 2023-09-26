@@ -11,7 +11,6 @@ from wagtail import blocks
 from modelcluster.fields import ParentalManyToManyField
 from wagtail.images.blocks import ImageChooserBlock
 
-
 class WritingPage(Page):
 
     text = RichTextField(blank=True, max_length=1000)
@@ -40,7 +39,7 @@ class WritingPage(Page):
                 "intro": article.intro,
                 "image": article.image.file.url,
                 "tags": [{"name": tag.name, "color": tag.color} for tag in article.tags.all()],
-            } for article in ArticlePage.objects.all().order_by("-date")],
+            } for article in ArticlePage.objects.filter(live=True).order_by("-date")],
             "meta": {
                 "title": self.seo_title or self.title,
                 "description": self.search_description
