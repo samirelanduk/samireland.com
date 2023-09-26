@@ -21,6 +21,9 @@ export default function App({ Component, pageProps }) {
         <a href="https://www.linkedin.com/in/samirelanduk/">
           <img src="/images/linkedin.svg" alt="LinkedIn" />
         </a>
+        <a href="/rss" title="Subscribe to RSS feed">
+          RSS
+        </a>
       </footer>
     </div>
   )
