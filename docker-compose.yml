@@ -86,6 +86,22 @@ services:
     volumes:
       - media:/home/app/media
       - static:/home/app/static
+  docs:
+    hostname: docs
+    container_name: sidc_docs
+    image: samirelanduk/sidc_docs:${TAG}
+    build:
+      context: .
+      args:
+        - CONF_NAME=docs.conf
+    environment:
+      - VIRTUAL_HOST=$DOCS_HOSTNAME
+      - LETSENCRYPT_HOST=$DOCS_HOSTNAME
+    depends_on:
+      - django
+      - next
+    volumes:
+      - media:/home/app/media
 volumes:
   postgres_data:
   postgres_backups:

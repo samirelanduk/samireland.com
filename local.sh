@@ -10,6 +10,9 @@ export TAG=local
 export PORT=$1
 export NEXT_PUBLIC_ALLOW_FALLBACK="false"
 
+# Set docs port to be one more than PORT
+export DOCSPORT=$((PORT+1))
+
 # Variables for control
 RESTART=false
 

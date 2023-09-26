@@ -3,3 +3,6 @@ services:
   nginx:
     ports:
       - "${PORT}:80"
+  docs:
+    ports:
+      - "${DOCSPORT}:80"
