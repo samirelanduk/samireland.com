@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.8-bullseye
+FROM --platform=linux/amd64 python:3.8-slim-bullseye
 
 # Create location for app
 RUN mkdir -p /home/app && \
@@ -7,9 +7,9 @@ RUN mkdir -p /home/app && \
 WORKDIR /home/app
 
 # Install dependencies
-RUN pip install gunicorn psycopg2-binary
 COPY ./requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir gunicorn psycopg2-binary -r requirements.txt && \
+    rm -rf /root/.cache
 
 # Transfer required files
 COPY ./about ./about
