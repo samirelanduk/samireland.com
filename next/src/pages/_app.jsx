@@ -3,9 +3,9 @@ import "@/styles/globals.css"
 
 export default function App({ Component, pageProps }) {
   return (
-    <div className="bg-[#f4f8f3] h-screen flex">
+    <div className="h-screen flex">
       <Nav />
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow py-10">
         <div className="flex-grow">
           <Component {...pageProps} />
         </div>

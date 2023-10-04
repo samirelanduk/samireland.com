@@ -2,6 +2,7 @@ import ArticleBody from "@/components/ArticleBody";
 import SocialShare from "@/components/SocialShare";
 import Head from "next/head";
 import { fetchRemoteData } from "@/fetch";
+import { formatDate } from "@/utils";
 
 export default function Article({title, image, date, body, tags, meta}) {
   return (
@@ -18,8 +19,8 @@ export default function Article({title, image, date, body, tags, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1>{title}</h1>
-      <time>{date}</time>
+      <h1 className="text-7xl font-medium text-center font-serif max-w-5xl mx-auto">{title}</h1>
+      <time className="max-w-5xl mx-auto block">{formatDate(date)}</time>
       <ArticleBody blocks={body} />
       <div>
         {tags.map(tag => (
