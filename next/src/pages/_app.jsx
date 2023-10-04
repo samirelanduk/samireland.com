@@ -1,15 +1,10 @@
+import Nav from "@/components/Nav"
 import "@/styles/globals.css"
-import Link from "next/link"
 
 export default function App({ Component, pageProps }) {
   return (
-    <div className="bg-[#f0f5f0] h-screen flex">
-      <nav className="flex flex-col">
-        <Link href="/">samireland.com</Link>
-        <Link href="/projects/">Projects</Link>
-        <Link href="/about/">About</Link>
-        <Link href="/writing/">Writing</Link>
-      </nav>
+    <div className="bg-[#f4f8f3] h-screen flex">
+      <Nav />
       <div className="flex flex-col flex-grow">
         <div className="flex-grow">
           <Component {...pageProps} />
