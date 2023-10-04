@@ -6,7 +6,7 @@ const ArticleBody = props => {
   const { blocks } = props;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto prose">
       {blocks.map((block, index) => {
         if (block.type === "text") {
           return <div key={index} dangerouslySetInnerHTML={{__html: block.value}}></div>
