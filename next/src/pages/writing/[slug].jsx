@@ -5,6 +5,11 @@ import { fetchRemoteData } from "@/fetch";
 import { formatDate } from "@/utils";
 
 export default function Article({title, image, date, body, tags, meta}) {
+
+  const largeTitle = title.length > 75;
+
+  const fontSize = largeTitle ? "text-3xl leading-snug sm:text-4xl sm:leading-snug md:text-5xl md:leading-tight" : "text-4xl leading-snug sm:text-5xl sm:leading-snug md:text-7xl md:leading-tight";
+
   return (
     <main>
       <Head>
@@ -19,15 +24,17 @@ export default function Article({title, image, date, body, tags, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1 className="text-7xl font-medium text-center font-serif max-w-5xl mx-auto">{title}</h1>
-      <time className="max-w-5xl mx-auto block">{formatDate(date)}</time>
-      <ArticleBody blocks={body} />
-      <div>
-        {tags.map(tag => (
-          <span key={tag.name}>{tag.name}</span>
-        ))}
-      </div>
-      <SocialShare title={title} />
+      <article className="px-4 max-w-5xl mx-auto">
+        <h1 className={`${fontSize} text-center font-serif text-slate-700 mb-6`}>{title}</h1>
+        <time className="block text-center text-slate-500 mb-16 text-lg">{formatDate(date)}</time>
+        <ArticleBody blocks={body} />
+        <div>
+          {tags.map(tag => (
+            <span key={tag.name}>{tag.name}</span>
+          ))}
+        </div>
+        <SocialShare title={title} />
+      </article>
     </main>
   )
 }

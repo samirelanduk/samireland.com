@@ -6,7 +6,7 @@ const Nav = () => {
   const iconClass = "w-6 fill-red-500 fill-current hover:fill-current hover:fill-red-600 transition-colors";
 
   return (
-    <nav className="flex flex-col flex-shrink-0 gap-8 px-6 py-8">
+    <nav className="flex flex-col flex-shrink-0 gap-8 px-6 py-8 fixed left-0 top-0">
       <Link href="/">
         <img src="/images/home.svg" alt="Home" className={iconClass} />
       </Link>
