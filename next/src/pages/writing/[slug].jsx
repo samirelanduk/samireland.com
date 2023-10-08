@@ -3,6 +3,7 @@ import SocialShare from "@/components/SocialShare";
 import Head from "next/head";
 import { fetchRemoteData } from "@/fetch";
 import { formatDate } from "@/utils";
+import ArticleFooter from "@/components/ArticleFooter";
 
 export default function Article({title, image, date, body, tags, meta}) {
 
@@ -40,12 +41,7 @@ export default function Article({title, image, date, body, tags, meta}) {
           <span>{minutes} minute{minutes === 1 ? "" : "s"}</span>
         </div>
         <ArticleBody blocks={body} />
-        <div>
-          {tags.map(tag => (
-            <span key={tag.name}>{tag.name}</span>
-          ))}
-        </div>
-        <SocialShare title={title} />
+        <ArticleFooter tags={tags} title={title} />
       </article>
     </main>
   )
