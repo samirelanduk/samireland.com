@@ -10,6 +10,11 @@ export default function Article({title, image, date, body, tags, meta}) {
 
   const fontSize = largeTitle ? "text-3xl leading-snug sm:text-4xl sm:leading-snug md:text-5xl md:leading-tight" : "text-4xl leading-snug sm:text-5xl sm:leading-snug md:text-7xl md:leading-tight";
 
+  const text = body.filter(b => b.type === "text").map(b => b.value).join(" ");
+  const wpm = 225;
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wpm);
+
   return (
     <main>
       <Head>
@@ -25,8 +30,15 @@ export default function Article({title, image, date, body, tags, meta}) {
         <meta property="og:description" content={meta.description} />
       </Head>
       <article className="px-4 max-w-5xl mx-auto">
-        <h1 className={`${fontSize} text-center font-serif text-slate-700 mb-6`}>{title}</h1>
-        <time className="block text-center text-slate-500 mb-16 text-lg">{formatDate(date)}</time>
+        <h1 className={`${fontSize} text-center font-serif font-medium text-slate-700 mb-6`}>{title}</h1>
+
+        <div className="font-serif flex items-center text-slate-500 mb-16 justify-center sm:text-lg">
+          <time >
+            {formatDate(date)}
+          </time>
+          <span className="inline-block mx-2 w-1 h-1 bg-slate-500 rounded-full sm:mx-3" />
+          <span>{minutes} minute{minutes === 1 ? "" : "s"}</span>
+        </div>
         <ArticleBody blocks={body} />
         <div>
           {tags.map(tag => (

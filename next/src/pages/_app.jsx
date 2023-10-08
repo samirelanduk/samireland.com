@@ -6,7 +6,7 @@ const serif = Bitter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-serif",
-  weight: ["400", "700"]
+  weight: ["400", "500", "700"]
 })
 
 const sans = Nunito({
