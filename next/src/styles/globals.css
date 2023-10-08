@@ -6,6 +6,10 @@
   body {
     @apply antialiased bg-background-1 bg-no-repeat bg-gradient-to-br from-background-1 to-background-4 min-h-screen;
   }
+
+  code {
+    @apply font-mono bg-gray-200 px-1.5 py-1 rounded;
+  }
 }
 
 @layer utilities {

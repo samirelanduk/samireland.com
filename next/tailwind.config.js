@@ -7,6 +7,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            "code::before": {
+              content: '""'
+            },
+            "code::after": {
+              content: '""'
+            },
+            "code": {
+              "font-weight": "inherit",
+              "color": "inherit",
+            },
+          }
+        }
+      },
       fontFamily: {
         serif: ["var(--font-serif)", "serif"],
         sans: ["var(--font-sans)", "sans-serif"],
