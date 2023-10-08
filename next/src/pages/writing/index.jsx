@@ -17,7 +17,7 @@ export default function Writing({title, text, articles, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1 className="font-semibold text-3xl font-serif mb-2 sm:text-4xl sm:mb-4">{title}</h1>
+      <h1 className="font-semibold text-3xl font-serif mb-3 sm:text-4xl sm:mb-4">{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}}  className="text-base pb-8 mb-10 border-b max-w-4xl sm:text-lg sm:pb-10 sm:mb-12"/>
       <div className="flex flex-wrap gap-16 sm:gap-12 md:gap-14 xl:gap-20">
         {articles.map(article => <ArticlePreview key={article.title} article={article} />)}
