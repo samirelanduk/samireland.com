@@ -7,3 +7,9 @@
     @apply antialiased bg-background-1 bg-no-repeat bg-gradient-to-br from-background-1 to-background-4 min-h-screen;
   }
 }
+
+@layer utilities {
+  .subtle-link {
+    @apply hover:text-green-sidc transition-colors duration-300;
+  }
+}
