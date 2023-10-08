@@ -7,16 +7,10 @@ const ArticleFooter = props => {
   const { tags, title } = props;
 
   return (
-    <div className="flex flex-col items-center gap-y-6 sm:flex-row justify-between mt-8">
-      <div>
+    <div className="flex flex-col items-center gap-y-3 sm:flex-row justify-between mt-3 sm:mt-6 md:mt-9">
+      <div className="flex flex-wrap gap-3 font-semibold text-sm sm:text-base text-slate-900 md:text-lg">
         {tags.map(tag => (
-          <span
-            key={tag.name}
-            className="text-white rounded-full text-sm px-3 py-1"
-            style={{background: tag.color}
-          }>
-            {tag.name}
-          </span>
+          <div key={tag.name}>#{tag.name}</div>
         ))}
       </div>
       <SocialShare title={title} />
@@ -25,7 +19,8 @@ const ArticleFooter = props => {
 };
 
 ArticleFooter.propTypes = {
-  tags: PropTypes.array.isRequired
+  tags: PropTypes.array.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default ArticleFooter;
