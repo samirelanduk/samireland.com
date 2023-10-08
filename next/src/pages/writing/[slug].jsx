@@ -33,10 +33,8 @@ export default function Article({title, image, date, body, tags, meta}) {
       <article className="px-4 max-w-5xl mx-auto">
         <h1 className={`${fontSize} text-center font-serif font-semibold text-slate-800 mb-6`}>{title}</h1>
 
-        <div className="font-serif flex items-center text-slate-500 mb-16 justify-center sm:text-lg">
-          <time >
-            {formatDate(date)}
-          </time>
+        <div className="flex items-center text-slate-500 mb-16 justify-center sm:text-lg">
+          <time >{formatDate(date)}</time>
           <span className="inline-block mx-2 w-1 h-1 bg-slate-500 rounded-full sm:mx-3" />
           <span>{minutes} minute{minutes === 1 ? "" : "s"}</span>
         </div>

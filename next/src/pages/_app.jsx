@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div className={`flex font-sans ${serif.variable} ${sans.variable}`}>
       <Nav />
-      <div className="flex flex-col flex-grow py-8 px-4 sm:px-6 sm:py-12 md:px-10 md:py-16">
+      <div className="flex flex-col flex-grow px-4 pt-20 pb-8 sm:px-6 sm:pb-12 sm:pt-24 md:px-10 md:pb-16 md:pt-28">
         <div className="flex-grow">
           <Component {...pageProps} />
         </div>

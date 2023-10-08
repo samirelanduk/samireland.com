@@ -11,6 +11,13 @@ module.exports = {
         serif: ["var(--font-serif)", "serif"],
         sans: ["var(--font-sans)", "sans-serif"],
       },
+      colors: {
+        "background-1": "#f6f5e9",
+        "background-2": "#f7f6ef",
+        "background-3": "#f8f6f3",
+        "background-4": "#faf8fa",
+        "green-sidc": "#4c9a89",
+      }
     },
   },
   plugins: [

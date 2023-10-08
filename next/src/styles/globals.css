@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply antialiased bg-[#f6f5e9] bg-no-repeat bg-gradient-to-br from-[#f6f5e9] to-[#faf8fa] min-h-screen;
+    @apply antialiased bg-background-1 bg-no-repeat bg-gradient-to-br from-background-1 to-background-4 min-h-screen;
   }
 }
