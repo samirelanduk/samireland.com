@@ -19,7 +19,7 @@ export default function Writing({title, text, articles, meta}) {
       </Head>
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}} />
-      <div>
+      <div className="flex flex-wrap max-w-sm gap-16 mx-auto sm:max-w-3xl sm:gap-12 md:gap-14 xl:gap-20 xl:max-w-4xl 3xl:max-w-10xl">
         {articles.map(article => <ArticlePreview key={article.title} article={article} />)}
       </div>
     </main>

@@ -17,7 +17,18 @@ module.exports = {
         "background-3": "#f8f6f3",
         "background-4": "#faf8fa",
         "green-sidc": "#4c9a89",
-      }
+      },
+      height: {
+        "54": "13.5rem",
+      },
+      maxWidth: {
+        "8xl": "88rem",
+        "9xl": "96rem",
+        "10xl": "104rem",
+      },
+      screens: {
+        "3xl": "1720px",
+      },
     },
   },
   plugins: [
