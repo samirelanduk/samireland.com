@@ -11,7 +11,7 @@ const Figure = props => {
       {figure.caption && (
         <figcaption
           dangerouslySetInnerHTML={{__html: figure.caption}}
-          className="text-center text-slate-600 text-sm sm:text-base md:text-lg"
+          className="text-center text-slate-500 text-xs sm:text-sm md:text-base"
         />
       )}
     </figure>

@@ -30,7 +30,7 @@ export default function Article({title, image, date, body, tags, meta}) {
         <meta property="og:description" content={meta.description} />
       </Head>
       <article className="px-4 max-w-5xl mx-auto">
-        <h1 className={`${fontSize} text-center font-serif font-medium text-slate-700 mb-6`}>{title}</h1>
+        <h1 className={`${fontSize} text-center font-serif font-semibold text-slate-800 mb-6`}>{title}</h1>
 
         <div className="font-serif flex items-center text-slate-500 mb-16 justify-center sm:text-lg">
           <time >

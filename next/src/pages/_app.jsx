@@ -1,6 +1,6 @@
 import Nav from "@/components/Nav"
 import "@/styles/globals.css"
-import { Bitter, Lora, Merriweather, Montserrat, Noto_Serif, Nunito, Open_Sans, Playfair_Display, Poppins, Raleway } from "next/font/google";
+import { Bitter, Lora, Merriweather, Montserrat, Noto_Serif, Nunito, Open_Sans, Playfair_Display, Poppins, Raleway, Sen } from "next/font/google";
 
 const serif = Bitter({
   subsets: ["latin"],
@@ -9,7 +9,7 @@ const serif = Bitter({
   weight: ["400", "500", "700"]
 })
 
-const sans = Nunito({
+const sans = Sen({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
@@ -18,7 +18,7 @@ const sans = Nunito({
 
 export default function App({ Component, pageProps }) {
   return (
-    <div className={`h-screen flex font-sans ${serif.variable} ${sans.variable}`}>
+    <div className={`flex font-sans ${serif.variable} ${sans.variable}`}>
       <Nav />
       <div className="flex flex-col flex-grow py-8 px-4 sm:px-6 sm:py-12 md:px-10 md:py-16">
         <div className="flex-grow">
