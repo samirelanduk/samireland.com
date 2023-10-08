@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Figure from "./Figure";
+import CodeBlock from "./CodeBlock";
 
 const ArticleBody = props => {
 
@@ -13,7 +14,7 @@ const ArticleBody = props => {
           return <div key={index} dangerouslySetInnerHTML={{__html: block.value}}></div>
         }
         if (block.type === "code") {
-          return <pre key={index}>{block.value.code}</pre>
+          return <CodeBlock key={index} code={block.value.code} language={block.value.language} />
         }
         if (block.type === "figure") {
           return <Figure key={index} figure={block.value} />

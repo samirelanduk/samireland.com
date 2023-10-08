@@ -45,6 +45,9 @@ module.exports = {
       screens: {
         "3xl": "1720px",
       },
+      fontSize: {
+        "2xs": ".625rem",
+      },
     },
   },
   plugins: [
