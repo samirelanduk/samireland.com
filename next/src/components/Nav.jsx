@@ -24,6 +24,7 @@ const Nav = () => {
         if (!nav.classList.contains(toInvisible)) nav.classList.add(toInvisible);
       }
     }
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
