@@ -33,6 +33,7 @@ module.exports = {
         "background-3": "#f8f6f3",
         "background-4": "#faf8fa",
         "green-sidc": "#4c9a89",
+        "green-sidc-faint": "#a5c8be"
       },
       height: {
         "54": "13.5rem",

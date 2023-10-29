@@ -43,7 +43,7 @@ const Nav = () => {
   const linkClass = "subtle-link relative";
 
   return (
-    <nav ref={ref} className="flex fixed bg-gradient-to-r from-background-2/0 to-background-3/0 top-0 left-0 w-full transition duration-500 justify-between h-12 items-center px-4 sm:px-6 md:px-10 xl:px-14 xl:h-14 3xl:h-16 3xl:px-18">
+    <nav ref={ref} className="flex fixed z-50 bg-gradient-to-r from-background-2/0 to-background-3/0 top-0 left-0 w-full transition duration-500 justify-between h-12 items-center px-4 sm:px-6 md:px-10 xl:px-14 xl:h-14 3xl:h-16 3xl:px-18">
       <Link href="/" className="text-sm font-semibold text-slate-800 subtle-link sm:text-base md:text-lg xl:text-xl 3xl:text-2xl">
         Sam Ireland
       </Link>

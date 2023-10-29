@@ -4,7 +4,7 @@ import { fetchRemoteData } from "@/fetch";
 
 export default function About({title, text, events, meta}) {
   return (
-    <main>
+    <main className="mx-auto max-w-md px-2 sm:max-w-4xl xl:max-w-4xl">
       <Head>
         <title>{`${meta.title} - Sam Ireland`}</title>
         <meta name="description" content={meta.description} />
@@ -17,9 +17,10 @@ export default function About({title, text, events, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1>{title}</h1>
-      <div dangerouslySetInnerHTML={{__html: text}} />
-      <div>
+      <h1 className="title">{title}</h1>
+      <div dangerouslySetInnerHTML={{__html: text}} className="intro" />
+      <div className="flex flex-col gap-16 max-w-4xl mx-auto relative sm:gap-24">
+        <div className="hidden absolute w-2 h-full bg-green-sidc-faint z-0 left-10 ml-1 sm:block md:left-16" />
         {events.map((event, index) => <Event key={index} event={event} />)}
       </div>
     </main>

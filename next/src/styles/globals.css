@@ -16,4 +16,12 @@
   .subtle-link {
     @apply hover:text-green-sidc transition-colors duration-300;
   }
+
+  .title {
+    @apply font-semibold text-3xl font-serif mb-3 sm:text-4xl sm:mb-4;
+  }
+
+  .intro {
+    @apply text-base pb-8 mb-10 border-b max-w-4xl sm:text-lg sm:pb-10 sm:mb-12;
+  }
 }
