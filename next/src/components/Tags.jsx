@@ -29,16 +29,15 @@ const Tags = props => {
   }
 
   return (
-    <div>
+    <div className={`flex flex-wrap gap-3 font-semibold text-sm sm:text-base text-slate-900 md:text-lg ${props.className || ""}`}>
       {tagsList.map(tag => (
-        <span
+        <div
           key={tag}
           onClick={() => handleTagClick(tag)}
-          style={{backgroundColor: tagColors[tag]}}
-          className={`tag ${(selectedTags.includes(tag) || selectedTags.length === 0) ? "opacity-100" : "opacity-50"}`}
+          className={`cursor-pointer transition-opacity duration-200 ${(selectedTags.includes(tag) || selectedTags.length === 0) ? "opacity-100" : "opacity-50"}`}
         >
-          {tag}
-        </span>
+          #{tag}
+        </div>
       ))}
     </div>
   );

@@ -26,10 +26,10 @@ export default function Projects({title, text, projects, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1>{title}</h1>
-      <div dangerouslySetInnerHTML={{__html: text}} />
-      <Tags projects={projects} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-      <div>
+      <h1 className="title">{title}</h1>
+      <div dangerouslySetInnerHTML={{__html: text}} className="intro" />
+      <Tags projects={projects} selectedTags={selectedTags} setSelectedTags={setSelectedTags} className="mb-16" />
+      <div className="flex flex-wrap gap-12">
         {filteredProjects.map(project => (
           <Project key={project.name} project={project} />
         ))}
