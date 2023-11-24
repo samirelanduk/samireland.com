@@ -34,6 +34,7 @@ class ProjectsPage(Page):
             "text": str(RichText(self.text)),
             "projects": [{
                 "name": project.name,
+                "featured_overview": project.featured_overview,
                 "description": project.description,
                 "code_url": project.code_url,
                 "about_url": project.about_url,
@@ -51,6 +52,7 @@ class ProjectsPage(Page):
 class Project(Orderable, ClusterableModel):
 
     name = models.CharField(max_length=100)
+    featured_overview = RichTextField(blank=True, max_length=1000)
     description = RichTextField()
     code_url = models.URLField(blank=True, null=True)
     about_url = models.URLField(blank=True, null=True)
@@ -60,12 +62,24 @@ class Project(Orderable, ClusterableModel):
 
     panels = [
         FieldPanel("name"),
+        FieldPanel("featured_overview"),
         FieldPanel("description"),
         FieldPanel("code_url"),
         FieldPanel("about_url"),
         FieldPanel("image"),
         FieldPanel("tags"),
     ]
+
+    def __repr__(self):
+        return self.name
+
+
+    def __str__(self):
+        return self.name
+    
+    @property
+    def label(self):
+        return self.name
 
 
 
