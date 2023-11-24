@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }) {
         <link href="/images/favicon.svg" rel="icon" type="image/svg" />
       </Head>
       <Nav />
-      <div className="flex flex-col flex-grow px-2 pt-20 sm:px-6 sm:pt-24 md:px-10 md:pt-28 xl:px-14 xl:pt-32 3xl:pt-36 3xl:px-18">
+      <div className="flex flex-col flex-grow px-4 pt-20 sm:px-6 sm:pt-24 md:px-10 md:pt-28 xl:px-14 xl:pt-32 3xl:pt-36 3xl:px-18">
         <div className="flex-grow">
           <Component {...pageProps} />
         </div>

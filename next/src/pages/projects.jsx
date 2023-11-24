@@ -1,3 +1,4 @@
+import React from "react";
 import Project from "@/components/Project";
 import Tags from "@/components/Tags";
 import Head from "next/head";
@@ -11,6 +12,36 @@ export default function Projects({title, text, projects, meta}) {
   const filteredProjects = selectedTags.length ? projects.filter(project => {
     return project.tags.some(tag => selectedTags.includes(tag.name));
   }) : projects;
+
+  const makeProjectRows = (projects, columnCount) => {
+    const featuredProjects = projects.filter(project => project.featured_overview);
+    const otherProjects = projects.filter(project => !project.featured_overview);
+    const otherRows = otherProjects.reduce((acc, project, index) => {
+      if (index % columnCount === 0) acc.push([project]);
+      else acc[acc.length - 1].push(project);
+      return acc;
+    }, []);
+    const featureRowCount = featuredProjects.length >= otherRows.length ? 2 : 1;
+    const rows = [];
+    while (featuredProjects.length || otherRows.length) {
+      for (let i = 0; i < featureRowCount; i++) {
+        if (featuredProjects.length) {
+          rows.push([featuredProjects.shift()]);
+        }
+      }
+      if (otherRows.length) {
+        rows.push(otherRows.shift());
+      }
+    }
+    return rows;
+  }
+
+  const rowsOneColumn = makeProjectRows(filteredProjects, 1);
+  const rowsTwoColumns = makeProjectRows(filteredProjects, 2);
+  const rowsThreeColumns = makeProjectRows(filteredProjects, 3);
+  const rowsFourColumns = makeProjectRows(filteredProjects, 4);
+
+  const rowClass = "gap-x-6 md:gap-x-12";
 
   return (
     <main>
@@ -28,12 +59,43 @@ export default function Projects({title, text, projects, meta}) {
       </Head>
       <h1 className="title">{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}} className="intro" />
-      <Tags projects={projects} selectedTags={selectedTags} setSelectedTags={setSelectedTags} className="mb-16" />
-      <div className="flex flex-wrap gap-12">
-        {filteredProjects.map(project => (
-          <Project key={project.name} project={project} />
+      <Tags
+        projects={projects}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+        className="mb-10 -mt-2 sm:mb-16"
+      />
+
+      <div className="flex flex-col gap-y-12 sm:gap-y-16">
+        {rowsOneColumn.map((row, index) => (
+          <div key={index} className="grid grid-cols-1 sm:hidden">
+            {row.map(project => (
+              <Project key={project.name} project={project} />
+            ))}
+          </div>
         ))}
-      </div>
+        {rowsTwoColumns.map((row, index) => (
+          <div key={index} className={`${row[0].featured_overview ? "grid-cols-1" : "grid-cols-2"} ${rowClass} hidden sm:grid lg:hidden`}>
+            {row.map(project => (
+              <Project key={project.name} project={project} />
+            ))}
+          </div>
+        ))}
+        {rowsThreeColumns.map((row, index) => (
+          <div key={index} className={`${row[0].featured_overview ? "grid-cols-1" : "grid-cols-3"} ${rowClass} hidden lg:grid 2xl:hidden`}>
+            {row.map(project => (
+              <Project key={project.name} project={project} />
+            ))}
+          </div>
+        ))}
+        {rowsFourColumns.map((row, index) => (
+          <div key={index} className={`${row[0].featured_overview ? "grid-cols-1" : "grid-cols-4"} ${rowClass} hidden 2xl:grid`}>
+            {row.map(project => (
+              <Project key={project.name} project={project} />
+            ))}
+          </div>
+        ))}
+      </div> 
     </main>
   )
 }
