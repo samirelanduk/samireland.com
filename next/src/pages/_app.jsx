@@ -3,6 +3,7 @@ import Nav from "@/components/Nav"
 import "@/styles/globals.css"
 import { Bitter, Lora, Merriweather, Montserrat, Noto_Serif, Nunito, Open_Sans, Playfair_Display, Poppins, Raleway, Sen } from "next/font/google";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
 
 const serif = Bitter({
   subsets: ["latin"],
@@ -18,7 +19,11 @@ const sans = Sen({
   weight: ["400", "700"]
 })
 
+
 export default function App({ Component, pageProps }) {
+
+  const isHome = usePathname() === "/";
+
   return (
     <div className={`flex font-sans ${serif.variable} ${sans.variable}`}>
       <Head>
@@ -29,7 +34,7 @@ export default function App({ Component, pageProps }) {
         <div className="flex-grow">
           <Component {...pageProps} />
         </div>
-        <Footer />
+        <Footer isHome={isHome} />
       </div>
     </div>
   )

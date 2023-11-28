@@ -1,9 +1,14 @@
-const Footer = () => {
+const Footer = props => {
 
-  const iconClass = "w-7 h-full fill-slate-400 transition duration-500 hover:fill-green-sidc";
+  const { isHome } = props;
+
+  const iconClass = "w-7 h-full fill-slate-400 transition duration-500 hover:fill-green-sidc md:w-8 md:h-8 xl:w-9 xl:h-9";
+
+  const homeClass = "fixed bottom-0 left-0 pb-4 justify-end right-4 sm:right-6 sm:pb-6 md:right-10 md:pb-10 xl:right-14 xl:pb-14";
+  const otherClass = "w-full max-w-sm mx-auto border-t border-slate-300 flex-shrink justify-center pb-8 mt-6 sm:mt-9 sm:py-12 md:py-16 md:mt-12"
 
   return (
-    <footer className="flex flex-shrink justify-center max-w-sm mx-auto gap-3.5 border-t border-slate-300 w-full py-8 mt-6 sm:py-12 sm:mt-9 md:py-16 md:mt-12">
+    <footer className={`flex gap-3.5 md:gap-4 lg:gap-5 xl:gap-6 ${isHome ? homeClass : otherClass}`}>
       <a href="https://github.com/samirelanduk">
         <svg
           viewBox="0 0 176 176"
