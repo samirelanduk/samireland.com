@@ -20,7 +20,7 @@ const Event = props => {
       <div className="flex gap-3 flex-col sm:flex-row sm:gap-6">
         <img
           alt={event.name}
-          className={`object-contain rounded-lg flex-shrink-0 z-20  ${isSub ? "w-28 h-28 sm:w-16 sm:h-16 md:w-28 md:h-28" : "w-36 h-36 sm:w-24 sm:h-24 md:w-36 md:h-36"}`}
+          className={`object-contain rounded-lg flex-shrink-0 z-20 ${isSub ? "w-28 h-28 sm:w-16 sm:h-16 md:w-28 md:h-28" : "w-36 h-36 sm:w-24 sm:h-24 md:w-36 md:h-36"}`}
           src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${event.image}`}
         />
         <div className="">
