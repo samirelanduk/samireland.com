@@ -29,7 +29,7 @@ const Tags = props => {
   }
 
   return (
-    <div className={`flex flex-wrap gap-2 justify-center font-semibold text-sm sm:text-base sm:gap-3 text-slate-900 md:text-lg ${props.className || ""}`}>
+    <div className={`flex flex-wrap gap-2 bg-green-sidc-faint bg-opacity-50 py-3 px-4 w-fit mx-auto text-slate-900 rounded-3xl justify-center font-semibold sm:gap-x-4 sm:gap-y-2 sm:py-4 sm:px-6 md:text-lg xl:gap-x-5 3xl:gap-x-6 ${props.className || ""}`}>
       {tagsList.map(tag => (
         <div
           key={tag}
