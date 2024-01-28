@@ -11,14 +11,14 @@ const Project = props => {
   const linkClass = `fill-green-sidc-faint transition duration-500 hover:fill-green-sidc ${isFeatured ? "w-6 h-6 xl:w-7 xl:h-7" : "w-5 h-5"}`;
 
   return (
-    <div className={`flex flex-col justify-center items-center gap-2  ${isFeatured ? "gap-4 border rounded px-4 py-6 items-start relative border-green-sidc-faint sm:px-6 md:justify-start md:flex-row md:gap-4 lg:gap-8 lg:px-7 lg:py-8 xl:px-8 xl:py-10 xl:gap-10 md:items-start" : "sm:items-start"} ${props.className || ""}`}>
+    <div className={`flex flex-col justify-center items-center gap-2 px-4 max-w-sm mx-auto sm:max-w-none sm:mx-0 ${isFeatured ? "gap-4 border rounded py-6 items-start relative border-green-sidc-faint sm:px-6 md:justify-start md:flex-row md:gap-4 lg:gap-8 lg:py-8 lg:px-7 xl:py-10 xl:gap-10 md:items-start xl:px-8" : "sm:items-start"} ${props.className || ""}`}>
       {isFeatured && (
         <div className="absolute text-xs bg-green-sidc font-bold text-white -top-2.5 left-6 px-1.5 py-0.5 rounded lg:left-7 xl:left-8">FEATURED</div> 
       )}
 
       <img
         src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${project.image}`}
-        className={`object-contain max-w-full rounded-lg ${isFeatured ? "w-65 h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72" : "w-44 h-44 md:w-40 md:h-40"}`}
+        className={`object-contain max-w-full rounded-lg ${isFeatured ? "w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72" : "w-40 h-40"}`}
         alt={project.name}
       />
 
@@ -52,7 +52,7 @@ const Project = props => {
           className="prose-sm w-full text-center mb-4 mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 xl:prose xl:max-w-none"
         />
 
-        <div className={`flex flex-wrap gap-2 justify-center font-semibold sm:justify-start text-slate-900  ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base"}`}>
+        <div className={`flex flex-wrap gap-x-2 gap-y-0.5 justify-center font-semibold sm:justify-start text-slate-600  ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base"}`}>
           {project.tags.map(tag => (
             <div key={tag.name}>#{tag.name}</div>
           ))}
