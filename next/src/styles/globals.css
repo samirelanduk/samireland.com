@@ -18,10 +18,10 @@
   }
 
   .title {
-    @apply font-semibold text-3xl font-serif mb-3 sm:text-4xl sm:mb-4;
+    @apply font-semibold text-3xl font-serif mb-3 sm:text-4xl sm:mb-4 xl:text-5xl xl:mb-5 3xl:text-6xl 3xl:mb-6;
   }
 
   .intro {
-    @apply text-base pb-8 mb-10 border-b max-w-4xl sm:text-lg sm:pb-10 sm:mb-12;
+    @apply text-base pb-5 mb-10 border-b max-w-7xl sm:text-lg sm:pb-7 sm:mb-12 xl:text-xl xl:mb-16 xl:leading-relaxed 3xl:text-2xl 3xl:leading-relaxed 3xl:mb-20;
   }
 }
