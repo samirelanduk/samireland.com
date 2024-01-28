@@ -21,7 +21,7 @@ const SocialShare = props => {
 
   return (
     <div className="flex items-center gap-1 text-slate-600">
-      <div>Share:</div>
+      <div className="mr-0.5">Share:</div>
       <TwitterShareButton url={url} title={title}>
         <TwitterIcon size={24} round={true} />
       </TwitterShareButton>
