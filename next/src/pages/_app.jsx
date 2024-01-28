@@ -1,7 +1,8 @@
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav"
 import "@/styles/globals.css"
-import { Bitter, Lora, Merriweather, Montserrat, Noto_Serif, Nunito, Open_Sans, Playfair_Display, Poppins, Raleway, Sen } from "next/font/google";
+import { Bitter, Lora, Abel, Merriweather, Montserrat, Noto_Serif, Noto_Sans, Nunito, Dosis, Open_Sans, Playfair_Display, Poppins, Raleway, Sen, Albert_Sans, Arsenal  } from "next/font/google";
+
 import Head from "next/head";
 import { usePathname } from "next/navigation";
 import Div100vh from "react-div-100vh";
@@ -13,7 +14,8 @@ const serif = Bitter({
   weight: ["400", "500", "700"]
 })
 
-const sans = Sen({
+// Nunito, Open_Sans, Poppins, Raleway, Noto_Sans, Albert_Sans
+const sans = Nunito({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",

@@ -44,7 +44,7 @@ export default function Projects({title, text, projects, meta}) {
   const rowClass = "gap-x-6 md:gap-x-12";
 
   return (
-    <main>
+    <main className="max-w-[100rem] mx-auto">
       <Head>
         <title>{`${meta.title} - Sam Ireland`}</title>
         <meta name="description" content={meta.description} />
@@ -63,7 +63,7 @@ export default function Projects({title, text, projects, meta}) {
         projects={projects}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
-        className="mb-10 -mt-2 sm:mb-16"
+        className="mb-8 sm:mb-14"
       />
 
       <div className="flex flex-col gap-y-12 sm:gap-y-16">
