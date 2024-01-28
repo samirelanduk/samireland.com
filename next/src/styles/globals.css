@@ -22,6 +22,6 @@
   }
 
   .intro {
-    @apply text-base pb-5 mb-10 border-b max-w-7xl sm:text-lg sm:pb-7 sm:mb-12 xl:text-xl xl:mb-16 xl:leading-relaxed 3xl:text-2xl 3xl:leading-relaxed 3xl:mb-20;
+    @apply text-base pb-5 mb-10 border-b border-slate-300 max-w-7xl sm:text-lg sm:pb-7 sm:mb-12 xl:text-xl xl:mb-16 xl:leading-relaxed 3xl:text-2xl 3xl:leading-relaxed 3xl:mb-20;
   }
 }

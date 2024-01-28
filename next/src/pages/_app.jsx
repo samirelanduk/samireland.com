@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }) {
       </Head>
       <div className="flex flex-col">
         {!isHome && <Nav />}
-        <div className={`flex-grow h-full flex flex-col ${isHome ? "" : "px-4 pt-20 sm:px-6 sm:pt-24 md:px-10 md:pt-28 xl:px-14 xl:pt-32 3xl:pt-36 3xl:px-18 "}`}>
+        <div className={`flex-grow h-full flex flex-col ${isHome ? "" : "px-6 pt-20 sm:px-10 sm:pt-24 md:px-12 md:pt-28 lg:px-20 xl:pt-32 3xl:pt-36"}`}>
           <Component {...pageProps} />
         </div>
         <Footer isHome={isHome} />

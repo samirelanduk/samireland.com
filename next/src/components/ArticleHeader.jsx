@@ -9,9 +9,9 @@ const ArticleHeader = props => {
   const largeTitle = title.length > 75;
 
   const fontSize = largeTitle ? (
-    "text-2xl leading-snug sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-tight"
+    "text-xl leading-snug xs:text-2xl xs:leading-snug sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-tight"
   ) : (
-    "text-3xl leading-snug sm:text-5xl sm:leading-snug md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight"
+    "text-2xl leading-snug xs:text-3xl xs:leading-snug sm:text-5xl sm:leading-snug md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight"
   );
 
   const text = body.filter(b => b.type === "text").map(b => b.value).join(" ");
