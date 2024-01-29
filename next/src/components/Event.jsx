@@ -35,7 +35,7 @@ const Event = props => {
       {event.subevents && event.subevents.length > 0 && (
         <div className="ml-12 flex flex-col gap-16 pt-16 relative sm:ml-28 md:ml-40">
           <div className="absolute w-2 h-full bg-green-sidc-faint z-0 top-0 -left-12 ml-3 sm:hidden md:left-16" />
-          {event.subevents.map(subevent => <Event key={subevent.id} event={subevent} isSub={true} />)}
+          {event.subevents.map(subevent => <Event key={subevent.name} event={subevent} isSub={true} />)}
         </div>
       )}
     </div>

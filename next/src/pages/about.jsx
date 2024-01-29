@@ -2,15 +2,14 @@ import Head from "next/head";
 import Event from "../components/Event";
 import { fetchRemoteData } from "@/fetch";
 import { useState } from "react";
+import Toggle from "@/components/Toggle";
 
 export default function About({title, text, events, meta}) {
 
-  const [oldestFirst, setOldestFirst] = useState(false);
-  const sortedEvents = oldestFirst ? [...events].reverse() : events;
-
-  const toggleClass = "px-3 py-1";
-  const selectedToggleClass = `${toggleClass} bg-green-sidc text-white`;
-  const unselectedToggleClass = `${toggleClass} cursor-pointer hover:bg-green-sidc-faint`;
+  const [latestFirst, setLatestFirst] = useState(true);
+  const sortedEvents = latestFirst ? events : events.map(e => ({
+    ...e, subevents: [...e.subevents].reverse()
+  })).reverse();
 
   return (
     <main className="mx-auto max-w-md px-2 sm:max-w-4xl xl:max-w-4xl">
@@ -29,10 +28,13 @@ export default function About({title, text, events, meta}) {
       <h1 className="title">{title}</h1>
       <div dangerouslySetInnerHTML={{__html: text}} className="intro" />
 
-      <div className="flex mb-4 rounded-md border-green-sidc border w-fit overflow-hidden">
-        <div className={oldestFirst ? selectedToggleClass : unselectedToggleClass} onClick={() => setOldestFirst(true)}>Oldest First</div>
-        <div className={oldestFirst ? unselectedToggleClass : selectedToggleClass} onClick={() => setOldestFirst(false)}>Latest First</div>
-      </div>
+      <Toggle
+        value={latestFirst} 
+        setValue={setLatestFirst}
+        trueLabel="Latest First"
+        falseLabel="Oldest First"
+        className="mb-8 ml-auto w-fit -mt-4 xl:-mt-8 xl:mb-12"
+      />
 
       <div className="flex flex-col gap-16 max-w-4xl mx-auto relative sm:gap-24">
         <div className="hidden absolute w-2 h-full bg-green-sidc-faint z-0 left-10 ml-1 sm:block md:left-16" />
