@@ -41,7 +41,7 @@ export default function Projects({title, text, projects, meta}) {
   const rowsThreeColumns = makeProjectRows(filteredProjects, 3);
   const rowsFourColumns = makeProjectRows(filteredProjects, 4);
 
-  const rowClass = "gap-x-6 md:gap-x-12";
+  const rowClass = "gap-x-6 md:gap-x-12 lg:gap-x-4 xl:gap-x-10";
 
   return (
     <main className="max-w-[100rem] mx-auto">
@@ -66,7 +66,7 @@ export default function Projects({title, text, projects, meta}) {
         className="mb-8 sm:mb-14"
       />
 
-      <div className="flex flex-col gap-y-12 sm:gap-y-16">
+      <div className="flex flex-col gap-y-16 xs:gap-y-20">
         {rowsOneColumn.map((row, index) => (
           <div key={index} className="grid grid-cols-1 sm:hidden">
             {row.map(project => (

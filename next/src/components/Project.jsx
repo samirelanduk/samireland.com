@@ -24,7 +24,7 @@ const Project = props => {
 
       <div className="flex-grow max-w-5xl">
 
-        <h2 className={`font-serif flex flex-wrap justify-center whitespace-nowrap items-center gap-3 font-semibold mb-2 text-center ${isFeatured ? "text-3xl md:justify-start xl:text-4xl" : "text-2xl sm:justify-start"}`}>
+        <h2 className={`font-serif flex flex-wrap justify-center items-center gap-3 font-semibold mb-2 text-center whitespace-break-spaces xs:whitespace-nowrap ${isFeatured ? "text-3xl md:justify-start xl:text-4xl" : "text-2xl sm:justify-start"}`}>
           {project.name}
           <div className={`flex justify-center sm:justify-start ${isFeatured ? "gap-2.5" : "gap-2"}`}>
             {project.code_url && (
@@ -43,16 +43,16 @@ const Project = props => {
         {isFeatured && (
           <div
             dangerouslySetInnerHTML={{__html: project.featured_overview}}
-            className="prose text-center mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 lg:prose-lg lg:max-w-none xl:prose-xl xl:max-w-none"
+            className="prose mx-auto prose-p:my-1.5 sm:text-left xs:text-center sm:mx-0 lg:prose-lg lg:max-w-none xl:prose-xl xl:max-w-none"
           /> 
         )}
 
         <div
           dangerouslySetInnerHTML={{__html: project.description}}
-          className="prose-sm w-full text-center mb-4 mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 xl:prose xl:max-w-none"
+          className="prose-sm w-full xs:text-center mb-3 mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 xl:prose xl:max-w-none"
         />
 
-        <div className={`flex flex-wrap gap-x-2 gap-y-0.5 justify-center font-semibold sm:justify-start text-slate-600  ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-xs sm:text-sm md:text-base"}`}>
+        <div className={`flex flex-wrap gap-x-2 gap-y-1 justify-center font-semibold sm:justify-start text-slate-600  ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-sm xs:text-sm md:text-base"}`}>
           {project.tags.map(tag => (
             <div key={tag.name}>#{tag.name}</div>
           ))}
