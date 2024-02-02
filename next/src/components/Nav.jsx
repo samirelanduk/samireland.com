@@ -64,13 +64,13 @@ const Nav = () => {
         className={`bg-green-sidc pt-20 gap-y-6 fixed w-full transition-[left] duration-100 ${menuOpen ? "left-0" : "left-full"} right-0 top-0 flex flex-col text-white text-3xl items-center h-full gap-3 xs:static xs:pt-0 xs:w-fit xs:flex-row xs:bg-inherit xs:font-semibold xs:text-slate-600 xl:text-slate-600 xs:text-base xs:gap-3.5 sm:gap-6 lg:gap-7 xl:gap-8 3xl:gap-10 3xl:text-lg`}
         onClick={() => setMenuOpen(false)}
       >
-        <Link href="/projects/" className={linkClass}>
-          Projects
-          {isProjects && <div className={lineClass} />}
-        </Link>
         <Link href="/about/" className={linkClass}>
           About
           {isAbout && <div className={lineClass} />}
+        </Link>
+        <Link href="/projects/" className={linkClass}>
+          Projects
+          {isProjects && <div className={lineClass} />}
         </Link>
         <Link href="/writing/" className={linkClass}>
           Writing

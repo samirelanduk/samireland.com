@@ -38,6 +38,9 @@ module.exports = {
       height: {
         "54": "13.5rem",
       },
+      width: {
+        "108": "27rem",
+      },
       maxWidth: {
         "8xl": "88rem",
         "9xl": "96rem",
@@ -49,6 +52,9 @@ module.exports = {
       },
       fontSize: {
         "2xs": ".625rem",
+      },
+      borderWidth: {
+        "12": "12px",
       },
     },
   },
