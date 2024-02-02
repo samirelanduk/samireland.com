@@ -18,11 +18,11 @@ export default function Home({title, about, meta}) {
         <meta property="og:description" content={meta.description} />
       </Head>
       <div className="md:flex md:justify-between md:gap-16 md:items-start">
-        <div>
-          <h1 className="font-serif text-slate-700 text-4xl w-fit border-b-4 border-l-4 border-green-sidc font-semibold mb-8 py-px pl-1 xs:text-5xl xs:py-1 xs:pl-2 xs:border-b-8 xs:border-l-8 xs:mb-9 sm:text-6xl sm:py-1.5 sm:pl-2.5 sm:mb-12 md:text-7xl md:py-2 md:pl-3 md:mb-16 lg:text-8xl lg:border-l-12 lg:border-b-12 lg:py-3 lg:pl-4">
+        <div className="fixed">
+          <h1 className="font-serif text-slate-700 text-4xl w-fit border-b-4 border-l-4 border-green-sidc font-semibold mb-8 py-px pl-1 xs:text-5xl xs:py-1 xs:pl-2 xs:border-b-8 xs:border-l-8 xs:mb-9 sm:text-6xl sm:py-1.5 sm:pl-2.5 sm:mb-12 md:text-7xl md:py-2 md:pl-3 md:mb-12 lg:text-8xl lg:border-l-12 lg:border-b-12 lg:py-3 lg:pl-4">
             {title}
           </h1>
-          <div className="w-fit mb-8 text-base text-slate-700 leading-relaxed xs:text-lg xs:leading-relaxed sm:text-xl sm:leading-relaxed md:text-2xl md:leading-relaxed">
+          <div className="w-fit mb-8 text-base max-w-2xl text-slate-700 leading-relaxed xs:text-lg xs:leading-relaxed sm:text-xl sm:leading-relaxed md:text-2xl md:leading-relaxed xl:max-w-5xl">
             {about}
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function Home({title, about, meta}) {
           className="fixed bottom-0 left-0 opacity-40 grayscale w-0 xs:w-64 sm:w-96 md:w-108" 
         />
 
-        <div className="w-fit flex-shrink-0 flex flex-col ml-auto text-right fixed right-4 bottom-24 text-slate-600 justify-center text-base gap-6 xs:right-6 sm:text-lg md:text-xl md:gap-8 md:right-10 md:bottom-28 lg:static lg:text-2xl lg:gap-10 xl:test-3xl xl:gap-12">
+        <div className="w-fit flex-shrink-0 flex flex-col ml-auto text-right fixed right-4 bottom-24 text-slate-600 justify-center text-base gap-6 xs:right-6 sm:text-lg md:text-xl md:gap-8 md:right-10 md:bottom-28 lg:bottom-none lg:top-10 lg:justify-start lg:text-2xl lg:gap-10 xl:test-3xl xl:gap-12 xl:top-14">
           <Link href="/about/" className="subtle-link">
             ABOUT ME
           </Link>
