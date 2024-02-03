@@ -18,7 +18,7 @@ export default function Home({title, about, meta}) {
         <meta property="og:description" content={meta.description} />
       </Head>
       <div className="md:flex md:justify-between md:gap-16 md:items-start">
-        <div className="fixed">
+        <div className="fixed pr-4 xs:pr-6 md:pr-10 xl:pr-14">
           <h1 className="font-serif text-slate-700 text-4xl w-fit border-b-4 border-l-4 border-green-sidc font-semibold mb-8 py-px pl-1 xs:text-5xl xs:py-1 xs:pl-2 xs:border-b-8 xs:border-l-8 xs:mb-9 sm:text-6xl sm:py-1.5 sm:pl-2.5 sm:mb-12 md:text-7xl md:py-2 md:pl-3 md:mb-12 lg:text-8xl lg:border-l-12 lg:border-b-12 lg:py-3 lg:pl-4">
             {title}
           </h1>
