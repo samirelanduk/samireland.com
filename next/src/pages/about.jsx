@@ -36,7 +36,7 @@ export default function About({title, text, events, meta}) {
         className="mb-8 ml-auto w-fit -mt-4 xl:-mt-8 xl:mb-12"
       />
 
-      <div className="flex flex-col gap-16 max-w-5xl mx-auto relative sm:gap-24">
+      <div className="flex flex-col gap-16 mx-auto relative sm:gap-24">
         <div className="hidden absolute w-2 h-full bg-green-sidc-faint z-0 left-10 ml-1 sm:block md:left-16" />
         {sortedEvents.map((event, index) => <Event key={index} event={event} />)}
       </div>
