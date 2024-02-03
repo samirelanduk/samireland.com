@@ -52,7 +52,7 @@ const Nav = () => {
 
   return (
     <nav ref={ref} className="flex fixed z-50 bg-gradient-to-r from-background-2 border- to-background-3 top-0 left-0 w-full transition duration-500 justify-between h-12 items-center px-6 sm:px-10 md:px-12 lg:px-20 xl:h-14 3xl:h-16 3xl:px-20">
-      <Link href="/" className="text-base font-semibold text-slate-800 subtle-link xs:text-lg md:text-xl xl:text-2xl 3xl:text-3xl">
+      <Link href="/" className="text-base font-serif font-semibold text-slate-800 subtle-link xs:text-lg md:text-xl xl:text-2xl 3xl:text-3xl">
         Sam Ireland
       </Link>
       <div className="flex relative z-50 flex-col gap-1 items-end group cursor-pointer xs:hidden" onClick={() => setMenuOpen(!menuOpen)}>
