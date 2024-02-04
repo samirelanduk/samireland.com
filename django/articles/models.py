@@ -37,7 +37,7 @@ class WritingPage(Page):
                 "date": article.date,
                 "slug": article.slug,
                 "intro": article.intro,
-                "image": article.image.file.url,
+                "image": article.image.file.url if article.image else None,
                 "tags": [{"name": tag.name, "color": tag.color} for tag in article.tags.all()],
             } for article in ArticlePage.objects.filter(live=True).order_by("-date")],
             "meta": {
