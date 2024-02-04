@@ -1,11 +1,10 @@
+import { useEffect } from "react";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav"
 import "@/styles/globals.css"
-import { Bitter, Lora, Abel, Merriweather, Montserrat, Noto_Serif, Noto_Sans, Nunito, Dosis, Open_Sans, Playfair_Display, Poppins, Raleway, Sen, Albert_Sans, Arsenal  } from "next/font/google";
-
+import { Bitter } from "next/font/google";
 import Head from "next/head";
 import { usePathname } from "next/navigation";
-import Div100vh from "react-div-100vh";
 
 const serif = Bitter({
   subsets: ["latin"],
@@ -14,7 +13,6 @@ const serif = Bitter({
   weight: ["400", "500", "700"]
 })
 
-// Nunito, Open_Sans, Poppins, Raleway, Noto_Sans, Albert_Sans
 const sans = Nunito({
   subsets: ["latin"],
   display: "swap",
@@ -26,6 +24,18 @@ const sans = Nunito({
 export default function App({ Component, pageProps }) {
 
   const isHome = usePathname() === "/";
+
+  useEffect(() => {
+    const hostnames = ["samireland.com", "www.samireland.com"];
+    const currentDomain = window.location.hostname;
+    if (hostnames.includes(currentDomain)) {
+      const script = document.createElement("script");
+      script.defer = true;
+      script.dataset.domain = "samireland.com";
+      script.src = "https://plausible.io/js/script.js";
+      document.body.appendChild(script);
+    }
+  }, []);
 
   return (
     <div className={`font-sans ${serif.variable} ${sans.variable}`}>
