@@ -49,7 +49,7 @@ const Project = props => {
 
         <div
           dangerouslySetInnerHTML={{__html: project.description}}
-          className="prose-sm w-full xs:text-center mb-3 mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 xl:prose xl:max-w-none"
+          className="prose-sm w-full prose-a:underline xs:text-center mb-3 mx-auto prose-p:my-1.5 sm:text-left sm:mx-0 xl:prose xl:max-w-none"
         />
 
         <div className={`flex flex-wrap gap-x-2 gap-y-1 justify-center font-semibold sm:justify-start text-slate-600  ${isFeatured ? "text-sm sm:text-base md:text-lg" : "text-sm xs:text-sm md:text-base"}`}>
