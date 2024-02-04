@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav"
 import "@/styles/globals.css"
-import { Bitter } from "next/font/google";
+import { Bitter, Nunito } from "next/font/google";
 import Head from "next/head";
 import { usePathname } from "next/navigation";
 
