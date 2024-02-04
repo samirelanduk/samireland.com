@@ -2,7 +2,7 @@
 
 # Check minimum number of arguments
 if [ "$#" -lt 1 ]; then
-    echo "Usage: ./local.sh DOMAIN [--allowfallback] [--proxy=CONTAINER_NAME]"
+    echo "Usage: ./deploy.sh DOMAIN [--allowfallback] [--proxy=CONTAINER_NAME]"
     exit 1
 fi
 
