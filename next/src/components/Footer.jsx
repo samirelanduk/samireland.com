@@ -4,7 +4,7 @@ const Footer = props => {
 
   const iconClass = "w-7 h-full fill-slate-400 transition duration-500 hover:fill-green-sidc md:w-8 md:h-8 xl:w-9 xl:h-9";
 
-  const homeClass = "fixed left-0 right-0 bottom-0 mx-auto pb-4 pr-4 xs:pr-6 sm:pb-6 md:pr-10 md:pb-10 xl:pr-14 xl:pb-14";
+  const homeClass = "fade-in fixed left-0 right-0 bottom-0 mx-auto pb-4 pr-4 xs:pr-6 sm:pb-6 md:pr-10 md:pb-10 xl:pr-14 xl:pb-14";
   const otherClass = "w-full max-w-sm mx-auto border-t border-slate-300 flex-shrink py-8 mt-8 sm:mt-12 sm:py-12 md:py-16 md:mt-16"
 
   return (
