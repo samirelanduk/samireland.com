@@ -63,6 +63,21 @@ class ArticlePage(Page):
             ("language", blocks.CharBlock()),
             ("code", blocks.TextBlock()),
         ], icon="code")),
+        ("section", blocks.StructBlock([
+            ("title", blocks.CharBlock()),
+            ("subtitle", blocks.CharBlock(required=False)),
+            ("body", blocks.StreamBlock([
+                ("text", blocks.RichTextBlock(features=["bold", "link", "italic", "h2", "h3", "ol", "ul", "code", "strikethrough"])),
+                ("figure", blocks.StructBlock([
+                    ("image", ImageChooserBlock()),
+                    ("caption", blocks.RichTextBlock(features=["bold", "link", "italic"], required=False)),
+                ], icon="image")),
+                ("code", blocks.StructBlock([
+                    ("language", blocks.CharBlock()),
+                    ("code", blocks.TextBlock()),
+                ], icon="code")),
+            ])),
+        ], icon="doc-full")),
     ], use_json_field=True)
     tags = ParentalManyToManyField("articles.ArticleTag", related_name="articles")
 
@@ -110,6 +125,18 @@ class ArticlePage(Page):
                     "value": {
                         "language": block.value["language"],
                         "code": block.value["code"],
+                    }
+                })
+            elif block.block_type == "section":
+                blocks.append({
+                    "type": block.block_type,
+                    "value": {
+                        "title": block.value["title"],
+                        "subtitle": block.value["subtitle"],
+                        "body": [{
+                            "type": subblock.block_type,
+                            "value": subblock.render()
+                        } for subblock in block.value["body"]]
                     }
                 })
         return JsonResponse({

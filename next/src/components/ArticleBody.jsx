@@ -19,6 +19,25 @@ const ArticleBody = props => {
         if (block.type === "figure") {
           return <Figure key={index} figure={block.value} />
         }
+        if (block.type === "section") {
+          return (
+            <section key={index} className="my-12 sm:my-16 md:my-20">
+              <h2 className="text-2xl font-bold">{block.value.title}</h2>
+              {block.value.subtitle && <p className="italic -mt-6 lg:-mt-7">{block.value.subtitle}</p>}
+              {block.value.body.map((sectionBlock, sectionIndex) => {
+                if (sectionBlock.type === "text") {
+                  return <div key={sectionIndex} dangerouslySetInnerHTML={{__html: sectionBlock.value}}></div>
+                }
+                if (sectionBlock.type === "code") {
+                  return <CodeBlock key={sectionIndex} code={sectionBlock.value.code} language={sectionBlock.value.language} />
+                }
+                if (sectionBlock.type === "figure") {
+                  return <Figure key={sectionIndex} figure={sectionBlock.value} />
+                }
+              })}
+            </section>
+          )
+        }
       })}
     </div>
   );
