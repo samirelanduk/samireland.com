@@ -14,7 +14,13 @@ const ArticleHeader = props => {
     "text-2xl leading-snug xs:text-3xl xs:leading-snug sm:text-5xl sm:leading-snug md:text-6xl md:leading-tight lg:text-7xl lg:leading-tight"
   );
 
-  const text = body.filter(b => b.type === "text").map(b => b.value).join(" ");
+  const text = body.map(({ type, value }) => {
+    if (type === "text") return value
+    if (type === "section") {
+      return value.body.map(b => b.type === "text" ? b.value : "").join(" ")
+    }
+    return "";
+  }).join(" ");
   const wpm = 225;
   const words = text.trim().split(/\s+/).length;
   const minutes = Math.ceil(words / wpm);
