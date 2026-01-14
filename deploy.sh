@@ -40,6 +40,7 @@ export FRONTEND_URL=https://$HOSTNAME
 export MEDIA_URL=https://$HOSTNAME
 export BUILD_API_URL=https://$HOSTNAME/api
 export NEXT_PUBLIC_API_URL=https://$HOSTNAME/api
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
 docker compose -f docker-compose.yml -p sidc build next --progress=plain --no-cache && \
     docker compose -f docker-compose.yml -p sidc build && \
