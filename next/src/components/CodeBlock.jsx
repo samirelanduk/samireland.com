@@ -8,10 +8,9 @@ const CodeBlock = props => {
   const { code, language } = props;
 
   return (
-    <div className="w-96 min-w-fit mx-auto overflow-hidden text-2xs sm:text-sm md:text-base">
+    <div className="max-w-full overflow-x-auto text-2xs sm:text-sm md:text-base">
       <SyntaxHighlighter
         language={language}
-        wrapLongLines
         style={vscDarkPlus}
         customStyle={{paddingLeft: "2rem", paddingRight: "2rem", fontSize: "inherit"}}
         codeTagProps={{style: {fontSize: "inherit"}}}
