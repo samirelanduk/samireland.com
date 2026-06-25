@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "articles",
     "projects",
     "about",
+    "reading",
 ]
 
 MIDDLEWARE = [

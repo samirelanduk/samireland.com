@@ -44,6 +44,7 @@ const Nav = () => {
   const isWriting = path.startsWith("/writing");
   const isProjects = path === "/projects";
   const isAbout = path === "/about";
+  const isReading = path.startsWith("/reading");
 
   const lineClass = "absolute -bottom-0.5 left-0 w-full h-0.5 bg-green-sidc/70 xs:h-1 xs:-bottom-1";
   const linkClass = "xs:subtle-link relative";
@@ -75,6 +76,10 @@ const Nav = () => {
         <Link href="/writing/" className={linkClass}>
           Writing
           {isWriting && <div className={lineClass} />}
+        </Link>
+        <Link href="/reading/" className={linkClass}>
+          Reading
+          {isReading && <div className={lineClass} />}
         </Link>
       </div>
     </nav>

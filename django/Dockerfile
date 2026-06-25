@@ -16,6 +16,7 @@ COPY ./about ./about
 COPY ./articles ./articles
 COPY ./core ./core
 COPY ./projects ./projects
+COPY ./reading ./reading
 COPY ./manage.py ./manage.py
 
 # Collect static files

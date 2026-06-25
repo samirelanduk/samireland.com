@@ -44,6 +44,9 @@ export default function Home({title, about, meta}) {
           <Link href="/writing/" className="subtle-link">
             WRITING
           </Link>
+          <Link href="/reading/" className="subtle-link">
+            READING
+          </Link>
         </div>
       </div>
     </main>

@@ -18,6 +18,7 @@ class HomePage(Page):
         "articles.WritingPage",
         "projects.ProjectsPage",
         "about.AboutPage",
+        "reading.ReadingPage",
     ]
 
     preview_modes = []
