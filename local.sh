@@ -43,7 +43,7 @@ export BACKEND_URL=http://localhost:$PORT/api
 export FRONTEND_URL=http://localhost:$PORT
 
 export MEDIA_URL=http://localhost:$PORT
-export BUILD_API_URL=http://host.docker.internal:9012/api
+export BUILD_API_URL=http://host.docker.internal:$PORT/api
 export NEXT_PUBLIC_API_URL=http://sidc_django
 export HOSTNAME=localhost
 

@@ -1,4 +1,4 @@
-Django==4.2.2
-django-environ==0.10.0
-wagtail==5.1
-django_cors_headers
+Django==6.0.6
+django-environ==0.14.0
+wagtail==7.4.2
+django-cors-headers==4.9.0

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.8-slim-bullseye
+FROM --platform=linux/amd64 python:3.12-slim-bullseye
 
 # Create location for app
 RUN mkdir -p /home/app && \

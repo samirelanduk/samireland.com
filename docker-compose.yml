@@ -3,7 +3,7 @@ services:
   postgres:
     hostname: postgres
     container_name: sidc_postgres
-    image: postgres:13.4
+    image: postgres:14
     environment:
       - POSTGRES_USER=sidc
       - POSTGRES_PASSWORD=sidc
