@@ -1,3 +1,4 @@
+from django.db import models
 from wagtail.models import Page
 from wagtail.rich_text import RichText
 from wagtail.fields import RichTextField
@@ -17,7 +18,7 @@ class ReadingPage(Page):
 
     max_count = 1
 
-    subpage_types = []
+    subpage_types = ["reading.QueuePage"]
 
     def get_url(self, *args, **kwargs):
         return f"{settings.FRONTEND_URL}/reading"
@@ -26,6 +27,46 @@ class ReadingPage(Page):
         return JsonResponse({
             "title": self.title,
             "text": str(RichText(self.text)),
+            "queue": [{
+                "title": queue.title,
+                "description": queue.description,
+                "slug": queue.slug,
+            } for queue in QueuePage.objects.filter(live=True)],
+            "meta": {
+                "title": self.seo_title or self.title,
+                "description": self.search_description
+            }
+        })
+
+
+
+class QueuePage(Page):
+
+    description = models.TextField()
+
+    content_panels = Page.content_panels + [
+        FieldPanel("description"),
+    ]
+
+    parent_page_type = ["reading.ReadingPage"]
+
+    preview_modes = []
+
+    also_revalidate = ["/reading"]
+
+
+    def __str__(self):
+        return self.title
+
+
+    def get_url(self, *args, **kwargs):
+        return f"{settings.FRONTEND_URL}/reading/{self.slug}"
+    
+
+    def serve(self, request, *args, **kwargs):
+        return JsonResponse({
+            "title": self.title,
+            "description": self.description,
             "meta": {
                 "title": self.seo_title or self.title,
                 "description": self.search_description
