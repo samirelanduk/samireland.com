@@ -10,6 +10,19 @@ from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 
+@register_snippet
+class BookCategory(models.Model):
+
+    name = models.CharField(max_length=100)
+    number = models.IntegerField()
+
+    class Meta:
+        ordering = ["number", "name"]
+
+    def __str__(self):
+        return self.name
+
+
 class ReadingPage(Page):
 
     text = RichTextField(blank=True, max_length=1000)
@@ -93,6 +106,7 @@ class BookPage(Page):
     started = models.DateField()
     finished = models.DateField(null=True, blank=True)
     notes = RichTextField(max_length=10000, features=["bold", "link", "italic", "h2", "h3", "ol", "ul", "code", "strikethrough", "blockquote"], null=True, blank=True)
+    category = models.ForeignKey(BookCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
 
     content_panels = Page.content_panels + [
         FieldPanel("subtitle"),
