@@ -128,7 +128,6 @@ class BookPage(Page):
     def also_revalidate(self):
         parent = self.get_parent()
         paths = ["/reading", f"/reading/{parent.slug}", f"/reading/{parent.slug}/{self.slug}"]
-        # Neighbours link back to this book, so their pages go stale too
         for neighbour in (self.previous_book(), self.next_book()):
             if neighbour:
                 paths.append(f"/reading/{parent.slug}/{neighbour.slug}")
@@ -136,6 +135,14 @@ class BookPage(Page):
 
     def __str__(self):
         return self.title
+
+    def previous_book(self):
+        siblings = BookPage.objects.child_of(self.get_parent()).live()
+        return siblings.filter(started__lt=self.started).order_by("-started").first()
+
+    def next_book(self):
+        siblings = BookPage.objects.child_of(self.get_parent()).live()
+        return siblings.filter(started__gt=self.started).order_by("started").first()
 
     def get_url(self, *args, **kwargs):
         parent = self.get_parent()
@@ -159,10 +166,22 @@ class BookPage(Page):
                 "number": self.category.number,
             } if self.category else None,
         }
+    
+    def to_link_json(self):
+        return {
+            "title": self.title,
+            "author": self.author,
+            "slug": self.slug,
+            "image": self.image.file.url if self.image else None,
+        }
 
     def serve(self, request, *args, **kwargs):
+        previous_book = self.previous_book()
+        next_book = self.next_book()
         return JsonResponse({
             **self.to_json(),
+            "previous_book": previous_book.to_link_json() if previous_book else None,
+            "next_book": next_book.to_link_json() if next_book else None,
             "meta": {
                 "title": self.seo_title or self.title,
                 "description": self.search_description
