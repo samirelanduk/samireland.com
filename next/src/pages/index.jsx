@@ -3,6 +3,9 @@ import { fetchRemoteData } from "@/fetch";
 import Link from "next/link";
 
 export default function Home({title, about, meta}) {
+
+  const linkClass = "border-r-4 border-green-sidc-faint pr-3 tracking-widest transition-all duration-300 hover:text-green-sidc hover:border-green-sidc hover:pr-5 lg:border-r-8 lg:pr-4 lg:hover:pr-6";
+
   return (
     <main className="flex flex-grow w-full max-w-[100rem] mx-auto flex-col p-4 xs:p-6 md:p-10 xl:p-14">
       <Head>
@@ -35,16 +38,16 @@ export default function Home({title, about, meta}) {
         />
 
         <div className="from-right w-fit flex-shrink-0 flex flex-col ml-auto text-right fixed right-4 bottom-24 text-slate-600 justify-center text-base gap-6 xs:right-6 sm:text-lg md:static md:text-xl md:gap-8 lg:justify-start lg:text-2xl lg:gap-10 xl:text-3xl xl:gap-12">
-          <Link href="/about/" className="subtle-link">
+          <Link href="/about/" className={linkClass}>
             ABOUT ME
           </Link>
-          <Link href="/projects/" className="subtle-link">
+          <Link href="/projects/" className={linkClass}>
             PROJECTS
           </Link>
-          <Link href="/writing/" className="subtle-link">
+          <Link href="/writing/" className={linkClass}>
             WRITING
           </Link>
-          <Link href="/reading/" className="subtle-link">
+          <Link href="/reading/" className={linkClass}>
             READING
           </Link>
         </div>
