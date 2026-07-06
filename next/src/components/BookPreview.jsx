@@ -34,32 +34,6 @@ const BookPreview = props => {
       </div>
     </Link>
   )
-
-  /* return (
-    <Link href={`/reading/${queueSlug}/${book.slug}`} className="flex items-start gap-4 group w-full">
-      {book.image && (
-        <img
-          alt={book.title}
-          className="w-24 flex-shrink-0 rounded object-cover shadow-md shadow-slate-900/10 ring-1 ring-slate-900/10"
-          src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${book.image}`}
-        />
-      )}
-      <div>
-        <h2 className="font-serif font-semibold text-slate-800 text-lg mb-1 transition duration-500 group-hover:text-green-sidc">{book.title}</h2>
-        {book.subtitle && (
-          <p className="text-slate-600 text-sm mb-1">{book.subtitle}</p>
-        )}
-        <p className="text-slate-500 text-sm mb-1.5">{book.author}, {book.year}</p>
-        <p className="text-slate-700 text-sm mb-2">
-          {formatDate(book.started)}
-          {book.finished && ` – ${formatDate(book.finished)}`}
-        </p>
-        {book.rating != null && (
-          <p className="font-semibold text-sm text-slate-900">{book.rating}/10</p>
-        )}
-      </div>
-    </Link>
-  ); */
 };
 
 export default BookPreview;

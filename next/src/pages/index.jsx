@@ -26,9 +26,9 @@ export default function Home({title, about, meta}) {
           <h1 className="from-left font-serif text-slate-700 text-4xl w-fit border-b-4 border-l-4 border-green-sidc font-semibold mb-8 py-px pl-1 xs:text-5xl xs:py-1 xs:pl-2 xs:border-b-8 xs:border-l-8 xs:mb-9 sm:text-6xl sm:py-1.5 sm:pl-2.5 sm:mb-12 md:text-7xl md:py-2 md:pl-3 md:mb-12 lg:text-8xl lg:border-l-12 lg:border-b-12 lg:py-3 lg:pl-4">
             {title}
           </h1>
-          <div className="from-left w-fit mb-8 text-base max-w-2xl text-slate-700 leading-relaxed xs:text-lg xs:leading-relaxed sm:text-xl sm:leading-relaxed md:text-2xl md:leading-relaxed xl:max-w-5xl">
+          <p className="from-left w-fit mb-8 text-base max-w-2xl text-slate-700 leading-relaxed xs:text-lg xs:leading-relaxed sm:text-xl sm:leading-relaxed md:text-2xl md:leading-relaxed xl:max-w-5xl">
             {about}
-          </div>
+          </p>
         </div>
 
         <img

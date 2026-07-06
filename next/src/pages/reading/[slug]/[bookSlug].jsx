@@ -82,7 +82,7 @@ export default function Book(props) {
               <BookCategory category={category} large={true} />
             </div>
 
-            <p className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-slate-700 mb-5 sm:justify-start ${metaText}`}>
+            <time className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-slate-700 mb-5 sm:justify-start ${metaText}`}>
               <span>{formatDate(started)}</span>
               {finished && (
                 <>
@@ -90,7 +90,7 @@ export default function Book(props) {
                   <span>{formatDate(finished)}</span>
                 </>
               )}
-            </p>
+            </time>
 
             {rating != null && (
               <div className="flex items-center gap-3">

@@ -17,7 +17,7 @@ const ArticlePreview = props => {
       <div className="">
         <h2 className="font-serif font-semibold text-slate-800 text-lg mb-1 transition duration-500 group-hover:text-green-sidc md:text-xl xl:text-2xl 3xl:text-xl">{article.title}</h2>
         <time className="text-slate-500 text-sm mb-1.5 block md:text-base xl:text-lg 3xl:text-base">{formatDate(article.date)}</time>
-        <div className="text-slate-700 text-sm mb-2 md:text-base xl:text-lg 3xl:text-base">{article.intro}</div>
+        <p className="text-slate-700 text-sm mb-2 md:text-base xl:text-lg 3xl:text-base">{article.intro}</p>
         <div className="flex flex-wrap gap-3 font-semibold text-xs md:text-sm text-slate-900 lg:text-base xl:text-lg 3xl:text-base">
           {article.tags.map(tag => (
             <div key={tag.name}>#{tag.name}</div>

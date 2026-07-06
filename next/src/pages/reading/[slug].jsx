@@ -36,18 +36,18 @@ export default function Queue(props) {
           >
             <img src={`${process.env.NEXT_PUBLIC_MEDIA_URL}/${book.image}`} alt={book.title} className="w-20 h-auto flex-shrink-0 rounded object-cover shadow-md shadow-slate-900/10 ring-1 ring-slate-900/10 transition-transform duration-300 group-hover:scale-105 xs:w-24" />
             <div>
-              <h3 className="font-serif font-semibold text-slate-800 whitespace-normal text-xl leading-snug truncate transition-colors duration-300 group-hover:text-green-sidc xs:text-2xl">{book.title}</h3>
+              <h2 className="font-serif font-semibold text-slate-800 whitespace-normal text-xl leading-snug truncate transition-colors duration-300 group-hover:text-green-sidc xs:text-2xl">{book.title}</h2>
               <div className="flex flex-wrap items-center justify-start w-fit gap-x-2 gap-y-1 xs:flex-nowrap">
                 <div className="text-slate-500 text-sm leading-snug w-full whitespace-normal xs:text-base">{book.author}</div>
                 <BookCategory category={book.category} />
               </div>
               <BookRating rating={book.rating} large={true} className="my-2 xs:mt-2.5 xs:mb-3" />
               {!book.finished && <div className="text-green-sidc text-sm mt-0.r5 font-semibold mb-1 xs:text-base">reading</div>}
-              <div className="text-slate-400 whitespace-nowrap text-xs xs:text-sm">
+              <time className="text-slate-400 whitespace-nowrap text-xs xs:text-sm">
                 {formatDate(book.started, true)}
                 {book.finished && ` – ${formatDate(book.finished, true)}`}
                 
-              </div>
+              </time>
             </div>
           </Link>
         ))}
