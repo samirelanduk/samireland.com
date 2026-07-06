@@ -1,10 +1,30 @@
-import ArticlePreview from "@/components/ArticlePreview";
 import { fetchRemoteData } from "@/fetch";
 import Head from "next/head";
+import { useState, useEffect } from "react";
+import CurrentlyReading from "@/components/CurrentlyReading";
+import ReadingTimeline from "@/components/ReadingTimeline";
 
-export default function Reading({title, text, meta}) {
+export default function Reading({title, text, meta, queues}) {
+
+  const [timelineHeight, setTimelineHeight] = useState(250);
+
+  useEffect(() => {
+    const smallHeight = 225;
+    const largeHeight = 250;
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setTimelineHeight(smallHeight);
+      } else {
+        setTimelineHeight(largeHeight);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <main className="mx-auto max-w-sm sm:max-w-3xl xl:max-w-4xl 3xl:max-w-10xl">
+    <main className="">
       <Head>
         <title>{`${meta.title} - Sam Ireland`}</title>
         <meta name="description" content={meta.description} />
@@ -17,8 +37,26 @@ export default function Reading({title, text, meta}) {
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
       </Head>
-      <h1 className="title">{title}</h1>
-      <div dangerouslySetInnerHTML={{__html: text}} className="intro" />
+
+
+      <div className="flex flex-col justify-between gap-x-8 border-b border-slate-300 pb-5 mb-10 sm:pb-7 sm:mb-12 xl:mb-16 3xl:mb-20 xl:flex-row xl:items-start xl:gap-10 2xl:gap-16">
+        <div className="">
+          <h1 className="title">{title}</h1>
+          <div dangerouslySetInnerHTML={{__html: text}} className="intro border-none mb-0 pb-0 max-w-none" />
+        </div>
+        <CurrentlyReading queues={queues} className="-mt-4 border-t border-slate-300 pt-6 xl:border-none xl:pt-0" />
+      </div>
+
+
+      <div style={{ height: timelineHeight * queues.length + 20 }}>
+        <div
+          className="absolute left-0 right-0 overflow-x-auto pr-6 sm:pr-10 md:pr-12 lg:pr-20 3xl:pr-36 [direction:rtl]"
+        >
+          <div className="w-max [direction:ltr]">
+            <ReadingTimeline queues={queues} vertical={false} timelineHeight={timelineHeight} pixelsPerDay={18} />
+          </div>
+        </div>
+      </div>
     </main>
   )
 }
@@ -26,13 +64,14 @@ export default function Reading({title, text, meta}) {
 
 export async function getStaticProps() {
   const data = await fetchRemoteData("reading", {
-    title: "", text: "", meta: {}
+    title: "", text: "", queues: [], meta: {}
   });
   if (!data) return {notFound: true};
   return {
     props: {
       title: data.title,
       text: data.text,
+      queues: data.queues,
       meta: data.meta
     }
   }
