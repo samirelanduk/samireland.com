@@ -26,9 +26,11 @@ const CurrentlyReading = props => {
             key={`${queue.slug}-${book.slug}`}
             className="flex flex-col gap-2"
           >
-            <Link href={`/reading/${queue.slug}`} className={queueLinkClass}>
-              {queue.title}
-            </Link>
+            <h2>
+              <Link href={`/reading/${queue.slug}`} className={queueLinkClass}>
+                {queue.title}
+              </Link>
+            </h2>
             <BookPreview
               book={book}
               queue={queue}

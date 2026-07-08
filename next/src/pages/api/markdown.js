@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const document = parse(page.html);
   const header = getHeader(document);
-  const body = getBody(document);
+  const body = getBody(document, req.query.path === "/");
 
 
 
@@ -44,13 +44,14 @@ const getHeader = document => {
   return lines.join("\n");
 }
 
-const getBody = document => {
+const getBody = (document, isRoot) => {
   const lines = [
     getH1(document),
     getIntro(document) || getP(document),
     getTime(document),
     getArticle(document),
     getH2Blocks(document),
+    isRoot ? getHomeLinks(document) : "",
   ]
   return lines.filter(Boolean).join("\n\n");
 }
@@ -95,6 +96,7 @@ const getH2Blocks = document => {
   }, []);
   if (blocks.length === 0) return "";
   const seenTitles = new Set();
+  const blocksAreLinks = blocks.every(block => block.querySelector("a") || block.tagName === "A");
   return blocks.map(block => {
     const h2 = block.querySelector("h2");
     if (seenTitles.has(h2.text)) return "";
@@ -104,10 +106,22 @@ const getH2Blocks = document => {
     const dateLine = date ? NodeHtmlMarkdown.translate(date) : "";
     const paragraphs = block.querySelectorAll("p");
     const paragraphLines = paragraphs.map(paragraph => NodeHtmlMarkdown.translate(paragraph.toString()));
+    let link = "";
+    if (blocksAreLinks) {
+      let a = block.querySelector("a")?.getAttribute("href");
+      if (!a) a = block.getAttribute("href");
+      link = a ? `[Link to content](${a})` : "";
+    }
     return [
       h2Line,
       dateLine,
       paragraphLines.join("\n\n"),
+      link,
     ].filter(Boolean).join("\n\n");
   }).join("\n\n");
+}
+
+const getHomeLinks = document => {
+  const links = document.querySelectorAll("a").filter(link => link.textContent.trim());
+  return links.map(link => `[${link.text}](${link.getAttribute("href")})`).join("\n\n");
 }
