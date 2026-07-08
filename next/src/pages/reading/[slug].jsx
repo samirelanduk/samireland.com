@@ -74,7 +74,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const data = await fetchRemoteData("reading", { queue: [] });
+  const data = await fetchRemoteData("reading", { queues: [] });
   return {
     paths: data.queues.map(queue => ({ params: { slug: queue.slug } })),
     fallback: "blocking",

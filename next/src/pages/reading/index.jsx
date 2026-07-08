@@ -50,10 +50,10 @@ export default function Reading({title, text, meta, queues}) {
 
       <div style={{ height: timelineHeight * queues.length + 20 }}>
         <div
-          className="absolute left-0 right-0 overflow-x-auto pr-6 sm:pr-10 md:pr-12 lg:pr-20 3xl:pr-36 [direction:rtl]"
+          className="absolute left-0 right-0 overflow-x-auto px-6 sm:px-10 md:px-12 lg:px-20 3xl:px-36 [direction:rtl]"
         >
-          <div className="w-max [direction:ltr]">
-            <ReadingTimeline queues={queues} vertical={false} timelineHeight={timelineHeight} pixelsPerDay={18} />
+          <div className="w-max pl-8 ml-8 [direction:ltr]">
+            <ReadingTimeline queues={queues} vertical={false} timelineHeight={timelineHeight} pixelsPerDay={20} />
           </div>
         </div>
       </div>

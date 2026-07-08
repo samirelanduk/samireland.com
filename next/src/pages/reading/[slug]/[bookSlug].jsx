@@ -196,7 +196,7 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const data = await fetchRemoteData("reading", { queue: [] });
+  const data = await fetchRemoteData("reading", { queues: [] });
   const paths = data.queues.flatMap(queue =>
     queue.books.map(book => ({
       params: { slug: queue.slug, bookSlug: book.slug },
