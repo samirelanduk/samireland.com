@@ -1,5 +1,7 @@
 
+from datetime import datetime
 from django.contrib.syndication.views import Feed
+from django.utils import timezone
 from articles.models import ArticlePage
 
 class ArticlesFeed(Feed):
@@ -22,3 +24,7 @@ class ArticlesFeed(Feed):
 
     def item_link(self, item):
         return f"/writing/{item.slug}"
+
+
+    def item_pubdate(self, item):
+        return timezone.make_aware(datetime.combine(item.date, datetime.min.time()))
