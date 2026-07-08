@@ -43,7 +43,7 @@ class ProjectsPage(Page):
             } for project in self.projects.all()],
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.text
             }
         })
 

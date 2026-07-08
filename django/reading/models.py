@@ -5,9 +5,6 @@ from wagtail.fields import RichTextField
 from django.http import JsonResponse
 from django.conf import settings
 from wagtail.admin.panels import FieldPanel
-from wagtail.fields import StreamField
-from wagtail import blocks
-from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.models import register_snippet
 
 @register_snippet
@@ -52,7 +49,7 @@ class ReadingPage(Page):
             } for queue in QueuePage.objects.filter(live=True)],
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.text
             }
         })
 
@@ -90,7 +87,7 @@ class QueuePage(Page):
             "books": [book.to_json() for book in BookPage.objects.child_of(self).live().order_by("started")],
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.description
             }
         })
 
@@ -184,6 +181,6 @@ class BookPage(Page):
             "next_book": next_book.to_link_json() if next_book else None,
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.author
             }
         })

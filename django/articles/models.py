@@ -42,7 +42,7 @@ class WritingPage(Page):
             } for article in ArticlePage.objects.filter(live=True).order_by("-date")],
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.text
             }
         })
 
@@ -147,7 +147,7 @@ class ArticlePage(Page):
             "tags": [{"name": tag.name, "color": tag.color} for tag in self.tags.all()],
             "meta": {
                 "title": self.seo_title or self.title,
-                "description": self.search_description
+                "description": self.search_description or self.intro
             }
         })
 
