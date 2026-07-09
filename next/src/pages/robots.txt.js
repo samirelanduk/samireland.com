@@ -3,6 +3,7 @@ export async function getServerSideProps({ req, res }) {
   const origin = `${req.headers["x-forwarded-proto"] || "http"}://${host}`;
   const text = [
     "User-agent: *",
+    "Content-Signal: ai-train=no, search=yes, ai-input=no",
     "Allow: /",
     "Disallow: /admin",
     "Disallow: /api",
