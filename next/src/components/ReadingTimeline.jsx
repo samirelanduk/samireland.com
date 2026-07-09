@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import BookPreview from "@/components/BookPreview";
 import { bookCategoryColor } from "@/utils";
@@ -117,9 +117,6 @@ const ReadingTimeline = props => {
   const [measuredWidths, setMeasuredWidths] = useState(null);
   const previewRefs = useRef([]);
 
-  useEffect(() => {
-    setMeasuredWidths(null);
-  }, [queues, vertical]);
 
   const timelineOrigin = Math.min(
     ...queues.flatMap(queue => queue.books.map(book => midnightUtc(book.started))),
@@ -176,18 +173,21 @@ const ReadingTimeline = props => {
   useLayoutEffect(() => {
     if (vertical) return;
 
-    const widths = books.map((book) => {
-      const el = previewRefs.current[book.index];
-      return el ? el.getBoundingClientRect().width : LINK_WIDTH;
-    });
+    const measure = () => {
+      const widths = previewRefs.current.map(el => el ? el.getBoundingClientRect().width : LINK_WIDTH);
+      setMeasuredWidths(previous => {
+        const changed = widths.some((width, i) => Math.abs(width - (previous?.[i] ?? LINK_WIDTH)) > 1);
+        return changed ? widths : previous;
+      });
+    };
 
-    const layoutWidths = books.map((book) => measuredWidths?.[book.index] ?? LINK_WIDTH);
-    const needsUpdate = widths.some((width, i) => Math.abs(width - layoutWidths[i]) > 1);
-
-    if (needsUpdate) {
-      setMeasuredWidths(widths);
+    measure();
+    const observer = new ResizeObserver(measure);
+    for (const el of previewRefs.current) {
+      if (el) observer.observe(el);
     }
-  }, [vertical, books, measuredWidths]);
+    return () => observer.disconnect();
+  }, [vertical, queues]);
 
   // Line classes
   const labelClass = "text-xs uppercase tracking-wide text-slate-400 font-semibold absolute";
@@ -300,7 +300,7 @@ const ReadingTimeline = props => {
           )}
           <div
             ref={el => { previewRefs.current[book.index] = el; }}
-            className="absolute z-10"
+            className="absolute z-10 w-max"
             style={{
               [vertical ? "top" : "right"]: book.linkStart,
               [vertical ? "left" : "top"]: book.offset + (vertical ? LINK_MARGIN + BLOCK_WIDTH : 0),
