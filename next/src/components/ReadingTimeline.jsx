@@ -78,10 +78,22 @@ const computeBooks = (queues, { vertical, pixelsPerDay, now, timelineOrigin, tim
         index: bookIndex++,
       };
     });
-    const linkStarts = relaxedLinkStarts(entries.map(entry => ({
+    const sizes = entries.map(entry => entry.dimension + (vertical ? 4 : 12));
+    const linkStarts = relaxedLinkStarts(entries.map((entry, e) => ({
       ideal: entry.start,
-      size: entry.dimension + (vertical ? 4 : 12),
+      size: sizes[e],
     })));
+    let packed = 0;
+    const floors = sizes.map(size => {
+      const floor = packed;
+      packed += size;
+      return floor;
+    });
+    for (let i = entries.length - 1; i >= 0; i--) {
+      let limit = timelineSpan - entries[i].dimension;
+      if (i < entries.length - 1) limit = Math.min(limit, linkStarts[i + 1] - sizes[i]);
+      linkStarts[i] = Math.max(Math.min(linkStarts[i], limit), floors[i]);
+    }
     entries.forEach((entry, e) => {
       books.push({
         start: entry.start,
