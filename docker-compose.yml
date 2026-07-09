@@ -1,4 +1,21 @@
 version: "3"
+
+x-api-base: &api-base
+  image: samirelanduk/sidc_django:${TAG:-latest}
+  restart: always
+  env_file:
+    - secrets.env
+  environment: &api-environment
+    - DB_URL=postgresql://sidc:sidc@postgres:5432/sidc
+    - STATIC_ROOT=/home/app/static
+    - MEDIA_ROOT=/home/app/media
+    - FRONTEND_URL=$FRONTEND_URL
+  volumes:
+    - static:/home/app/static
+  depends_on:
+    postgres:
+      condition: service_healthy
+
 services:
   postgres:
     hostname: postgres
@@ -8,18 +25,19 @@ services:
       - POSTGRES_USER=sidc
       - POSTGRES_PASSWORD=sidc
       - POSTGRES_DB=sidc
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sidc"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
   pgbackups:
     hostname: backups
     container_name: sidc_backups
-    image: prodrigestivill/postgres-backup-local
+    image: prodrigestivill/postgres-backup-local:14
     restart: always
-    user: postgres:postgres
-    volumes:
-      - postgres_backups:/backups
-    depends_on:
-      - postgres
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_DB=sidc
@@ -30,34 +48,45 @@ services:
       - BACKUP_KEEP_WEEKS=4
       - BACKUP_KEEP_MONTHS=6
       - HEALTHCHECK_PORT=8080
+    volumes:
+      - ./backups:/backups
+  
+  upgrade:
+    <<: *api-base
+    restart: "no"
+    hostname: upgrade
+    container_name: sidc_upgrade
+    command: python manage.py migrate
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  collectstatic:
+    <<: *api-base
+    restart: "no"
+    hostname: collectstatic
+    container_name: sidc_collectstatic
+    command: python manage.py collectstatic --noinput
+    deploy:
+      restart_policy:
+        condition: on-failure
+
   django:
+    <<: *api-base
     hostname: django
     container_name: sidc_django
-    image: samirelanduk/sidc_django:${TAG}
     expose:
       - 80
-    volumes:
-      - static:/home/app/static
-      - media:/home/app/media
-    depends_on:
-      - postgres
-    env_file:
-      - secrets.env
-    environment:
-      - DEBUG=no
-      - DB_URL=postgresql://sidc:sidc@postgres:5432/sidc
-      - STATIC_ROOT=/home/app/static
-      - MEDIA_ROOT=/home/app/media
-      - FRONTEND_URL=$FRONTEND_URL
     build:
       context: django
       args:
         - STATIC_ROOT=/home/app/static
-    command: bash -c "python manage.py migrate && gunicorn --bind :80 core.wsgi:application --workers 16 --log-level debug"
+    command: ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:80", "--workers", "3", "--reload", "--log-level", "debug"]
+  
   next:
     hostname: next
     container_name: sidc_next
-    image: samirelanduk/sidc_next:${TAG}
+    image: samirelanduk/sidc_next:${TAG:-latest}
     expose:
       - 80
     env_file:
@@ -72,10 +101,11 @@ services:
         - NEXT_PUBLIC_MEDIA_URL=$MEDIA_URL
         - NEXT_PUBLIC_API_URL=$BUILD_API_URL
         - NEXT_PUBLIC_ALLOW_FALLBACK=$NEXT_PUBLIC_ALLOW_FALLBACK
+  
   nginx:
     hostname: nginx
     container_name: sidc_nginx
-    image: samirelanduk/sidc_nginx:${TAG}
+    image: samirelanduk/sidc_nginx
     build: .
     environment:
       - VIRTUAL_HOST=$HOSTNAME,www.$HOSTNAME
@@ -84,12 +114,12 @@ services:
       - django
       - next
     volumes:
-      - media:/home/app/media
       - static:/home/app/static
+  
   docs:
     hostname: docs
     container_name: sidc_docs
-    image: samirelanduk/sidc_docs:${TAG}
+    image: samirelanduk/sidc_docs
     build:
       context: .
       args:
@@ -100,10 +130,7 @@ services:
     depends_on:
       - django
       - next
-    volumes:
-      - media:/home/app/media
+  
 volumes:
   postgres_data:
-  postgres_backups:
   static:
-  media:

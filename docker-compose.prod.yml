@@ -1,0 +1,25 @@
+version: "3"
+x-api-base: &api-base
+  environment: &api-environment
+    - DEBUG=no
+  volumes:
+    - media:/home/app/media
+services:
+  pgbackups:
+    volumes:
+      - postgres_backups:/backups
+  upgrade:
+    <<: *api-base
+  django:
+    <<: *api-base
+  nginx:
+    volumes:
+      - media:/home/app/media
+    ports:
+      - "${PORT:-9000}:80"
+  docs:
+    volumes:
+      - media:/home/app/media
+volumes:
+  postgres_backups:
+  media:
