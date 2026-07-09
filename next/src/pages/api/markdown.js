@@ -87,6 +87,7 @@ const getArticle = document => {
 }
 
 const getH2Blocks = document => {
+  if (document.querySelector("article")) return "";
   const seen = new Set();
   const blocks = document.querySelectorAll("h2").reduce((blocks, h2) => {
     let block = h2;
