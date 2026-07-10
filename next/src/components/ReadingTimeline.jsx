@@ -117,7 +117,7 @@ const ReadingTimeline = props => {
 
   const DATE_WIDTH = 30;
   const DATE_HEIGHT = 20;
-  const TIMELINE_WIDTH = 700;
+  const TIMELINE_WIDTH = 532;
   const TIMELINE_HEIGHT = timelineHeight;
   const TIMELINE_PADDING = vertical ? 25 : 10;
   const BLOCK_WIDTH = 60;

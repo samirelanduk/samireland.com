@@ -2,14 +2,18 @@ import BookPreview from "@/components/BookPreview";
 import BookCategory from "@/components/BookCategory";
 import BookRating from "@/components/BookRating";
 import ReadingTimeline from "@/components/ReadingTimeline";
+import Toggle from "@/components/Toggle";
 import { fetchRemoteData } from "@/fetch";
 import { formatDate } from "@/utils";
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Queue(props) {
 
   const { title, description, books, meta, slug, now } = props;
+
+  const [timelineView, setTimelineView] = useState(true);
 
   return (
     <main className="mx-auto max-w-sm sm:max-w-3xl xl:max-w-4xl 3xl:max-w-10xl">
@@ -27,7 +31,14 @@ export default function Queue(props) {
       </Head>
       <h1 className="title">{title}</h1>
       <p className="intro">{description}</p>
-      <div className="flex flex-col gap-12 sm:hidden">
+      <Toggle
+        value={timelineView}
+        setValue={setTimelineView}
+        trueLabel="Timeline"
+        falseLabel="List"
+        className="hidden mb-8 ml-auto w-fit -mt-4 sm:flex"
+      />
+      <div className={`flex flex-col gap-12 ${timelineView ? "sm:hidden" : "sm:max-w-3xl"}`}>
         {[...books].reverse().map(book => (
           <Link
             href={`/reading/${slug}/${book.slug}`}
@@ -52,7 +63,7 @@ export default function Queue(props) {
           </Link>
         ))}
       </div>
-      <ReadingTimeline className="hidden sm:block" queues={[{slug: slug, books: books}]} />
+      {timelineView && <ReadingTimeline className="hidden sm:block" queues={[{slug: slug, books: books}]} />}
     </main>
   );
 }
