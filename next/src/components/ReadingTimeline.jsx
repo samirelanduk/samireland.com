@@ -113,7 +113,7 @@ const computeBooks = (queues, { vertical, pixelsPerDay, now, timelineOrigin, tim
 
 const ReadingTimeline = props => {
 
-  const { queues, vertical=true, pixelsPerDay=10, timelineHeight=100, className="" } = props;
+  const { queues, now: initialNow, vertical=true, pixelsPerDay=10, timelineHeight=100, className="" } = props;
 
   const DATE_WIDTH = 30;
   const DATE_HEIGHT = 20;
@@ -125,10 +125,16 @@ const ReadingTimeline = props => {
   const LINK_WIDTH = 275;
   const LINK_MARGIN = 15;
 
-  const now = noonUtc(new Date());
+  const [clientNow, setClientNow] = useState(null);
   const [measuredWidths, setMeasuredWidths] = useState(null);
   const previewRefs = useRef([]);
 
+
+  useLayoutEffect(() => {
+    setClientNow(noonUtc(new Date()));
+  }, []);
+
+  const now = clientNow ?? noonUtc(initialNow ?? new Date());
 
   const timelineOrigin = Math.min(
     ...queues.flatMap(queue => queue.books.map(book => midnightUtc(book.started))),
