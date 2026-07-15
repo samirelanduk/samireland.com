@@ -2,12 +2,32 @@ import React from "react";
 import Project from "@/components/Project";
 import Tags from "@/components/Tags";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { fetchRemoteData } from "@/fetch";
 
 export default function Projects({title, text, projects, meta}) {
 
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const scrollToProject = () => {
+      const slug = window.location.hash.slice(1);
+      if (!slug) return;
+      const copies = document.querySelectorAll(`[data-project="${CSS.escape(slug)}"]`);
+      for (const copy of copies) {
+        if (copy.offsetParent !== null) {
+          copy.scrollIntoView({behavior: "smooth", block: "start"});
+          break;
+        }
+      }
+    };
+    scrollToProject();
+    router.events.on("hashChangeComplete", scrollToProject);
+    return () => router.events.off("hashChangeComplete", scrollToProject);
+  }, [router.events]);
 
   const filteredProjects = selectedTags.length ? projects.filter(project => {
     return project.tags.some(tag => selectedTags.includes(tag.name));

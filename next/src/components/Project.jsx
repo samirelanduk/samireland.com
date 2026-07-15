@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import GithubIcon from "@/images/github.svg?react"
 import WebIcon from "@/images/web.svg?react"
+import { slugify } from "@/utils";
 
 const Project = props => {
 
@@ -11,7 +12,7 @@ const Project = props => {
   const linkClass = `fill-green-sidc-faint transition duration-500 hover:fill-green-sidc ${isFeatured ? "w-6 h-6 xl:w-7 xl:h-7" : "w-5 h-5"}`;
 
   return (
-    <div className={`flex flex-col justify-center items-center gap-2 px-4 max-w-sm mx-auto sm:max-w-none sm:mx-0 ${isFeatured ? "gap-4 border rounded py-6 items-start relative border-green-sidc-faint sm:px-6 md:justify-start md:flex-row md:gap-4 lg:gap-8 lg:py-8 lg:px-7 xl:py-10 xl:gap-10 md:items-start xl:px-8" : "sm:items-start"} ${props.className || ""}`}>
+    <div data-project={slugify(project.name)} className={`flex flex-col justify-center items-center gap-2 px-4 max-w-sm mx-auto scroll-mt-20 sm:max-w-none sm:mx-0 xl:scroll-mt-24 ${isFeatured ? "gap-4 border rounded py-6 items-start relative border-green-sidc-faint sm:px-6 md:justify-start md:flex-row md:gap-4 lg:gap-8 lg:py-8 lg:px-7 xl:py-10 xl:gap-10 md:items-start xl:px-8" : "sm:items-start"} ${props.className || ""}`}>
       {isFeatured && (
         <div className="absolute text-xs bg-green-sidc font-bold text-white -top-2.5 left-6 px-1.5 py-0.5 rounded lg:left-7 xl:left-8">FEATURED</div> 
       )}
