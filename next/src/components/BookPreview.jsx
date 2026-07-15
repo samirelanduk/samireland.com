@@ -19,7 +19,7 @@ const BookPreview = props => {
         <h3 className={`font-serif font-semibold text-slate-800 leading-snug truncate transition-colors duration-300 group-hover:text-green-sidc ${compress ? "text-base" : "text-xl"}`}>
           {book.title}
         </h3>
-        <div className={`mb-1 flex ${compress ? "text-xs flex-col items-end gap-1.5" : "text-sm items-center gap-2"} ${reversed ? (compress ? "items-end" : "flex-row-reverse") : "flex-row"}`}>
+        <div className={`mb-1 flex ${compress ? "text-xs flex-col gap-1.5" : "text-sm items-center gap-2"} ${reversed ? (compress ? "items-end" : "flex-row-reverse") : "flex-row"}`}>
           <div className={`flex  items-center text-slate-500 ${compress ? "gap-x-1.5" : "gap-x-2"}`}>
             <div className="whitespace-nowrap">{book.author}</div>
             <BookCategory category={book.category} />
