@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { slugify } from "@/utils";
 
 const Event = props => {
 
@@ -13,7 +14,7 @@ const Event = props => {
   }
 
   return (
-    <div className="z-10 relative">
+    <div data-event={slugify(event.name)} className="z-10 relative scroll-mt-20 xl:scroll-mt-24">
       {isSub && (
         <div className={`border-green-sidc-faint rounded-bl-3xl absolute border-l-8 border-b-8 w-20 h-16 -top-1 -left-12 ml-3 sm:-left-20 sm:-top-7 md:-left-24 md:ml-1 md:-top-1 md:w-32`} />
       )}

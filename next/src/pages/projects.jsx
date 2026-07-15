@@ -25,8 +25,12 @@ export default function Projects({title, text, projects, meta}) {
       }
     };
     scrollToProject();
+    router.events.on("routeChangeComplete", scrollToProject);
     router.events.on("hashChangeComplete", scrollToProject);
-    return () => router.events.off("hashChangeComplete", scrollToProject);
+    return () => {
+      router.events.off("routeChangeComplete", scrollToProject);
+      router.events.off("hashChangeComplete", scrollToProject);
+    };
   }, [router.events]);
 
   const filteredProjects = selectedTags.length ? projects.filter(project => {

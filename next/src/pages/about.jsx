@@ -1,12 +1,31 @@
 import Head from "next/head";
 import Event from "../components/Event";
 import { fetchRemoteData } from "@/fetch";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Toggle from "@/components/Toggle";
 
 export default function About({title, text, events, meta}) {
 
   const [latestFirst, setLatestFirst] = useState(true);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const scrollToEvent = () => {
+      const slug = window.location.hash.slice(1);
+      if (!slug) return;
+      const event = document.querySelector(`[data-event="${CSS.escape(slug)}"]`);
+      if (event) event.scrollIntoView({behavior: "smooth", block: "start"});
+    };
+    scrollToEvent();
+    router.events.on("routeChangeComplete", scrollToEvent);
+    router.events.on("hashChangeComplete", scrollToEvent);
+    return () => {
+      router.events.off("routeChangeComplete", scrollToEvent);
+      router.events.off("hashChangeComplete", scrollToEvent);
+    };
+  }, [router.events]);
   const sortedEvents = latestFirst ? events : events.map(e => ({
     ...e, subevents: [...e.subevents].reverse()
   })).reverse();
