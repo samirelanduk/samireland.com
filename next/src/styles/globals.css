@@ -40,6 +40,10 @@
   .from-right {
     animation: fromright 1s;
   }
+
+  .palette-in {
+    animation: palettein 0.15s ease-out;
+  }
 }
 
 @keyframes fadein {
@@ -60,4 +64,9 @@
 @keyframes fromright {
   from { opacity: 0; transform: translateX(30%); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes palettein {
+  from { opacity: 0; transform: translateY(0.5rem) scale(0.98); }
+  to   { opacity: 1; transform: none; }
 }

@@ -24,6 +24,11 @@ export const formatDate = (timestamp, compress=false) => {
 }
 
 
+export const slugify = text => {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+
 export const bookCategoryColor = category => {
   const textColor = {
     1: "text-blue-700",

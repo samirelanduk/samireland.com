@@ -1,3 +1,4 @@
+import html
 import re
 
 from django.http import JsonResponse
@@ -16,8 +17,9 @@ def frontend_slug(text):
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
-def clean_text(html):
-    return re.sub(r"\s+", " ", strip_tags(str(RichText(html)) if html else "")).strip()
+def clean_text(rich_text):
+    text = strip_tags(str(RichText(rich_text)) if rich_text else "")
+    return re.sub(r"\s+", " ", html.unescape(text)).strip()
 
 
 def event_years(event):
@@ -76,7 +78,7 @@ def search_index(request):
             entries.append({
                 "type": "event",
                 "title": event.name,
-                "url": f"/{about_page.slug}/",
+                "url": f"/{about_page.slug}/#{frontend_slug(event.name)}",
                 "image": event.image.file.url if event.image else None,
                 "subtitle": description[:200],
                 "meta": event_years(event),

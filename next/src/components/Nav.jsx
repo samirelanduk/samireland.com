@@ -1,7 +1,10 @@
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react";
+import SearchButton from "@/components/SearchButton";
 
-const Nav = () => {
+const Nav = props => {
+
+  const { onSearch } = props;
 
   const ref = useRef();
 
@@ -11,6 +14,11 @@ const Nav = () => {
   useEffect(() => {
     setPath(window.location.pathname);
   });
+
+  const handleSearchClick = () => {
+    setMenuOpen(false);
+    if (onSearch) onSearch();
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,31 +64,37 @@ const Nav = () => {
       <Link href="/" className="text-base font-serif font-semibold text-slate-800 subtle-link xs:text-lg md:text-xl xl:text-2xl 3xl:text-3xl">
         Sam Ireland
       </Link>
-      <div className="flex relative z-50 flex-col gap-1 items-end group cursor-pointer xs:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-        <div className={`${menuClass} ${menuOpen ? "bg-white w-7" : "bg-green-sidc w-5 group-hover:w-6" } `} />
-        <div className={`${menuClass} ${menuOpen ? "bg-white w-5" : "bg-green-sidc w-6 group-hover:w-7" } `} />
-        <div className={`${menuClass} ${menuOpen ? "bg-white w-6" : "bg-green-sidc w-7 group-hover:w-5" } `} />
-      </div>
-      <div
-        className={`bg-green-sidc pt-20 gap-y-6 fixed w-full transition-[left] duration-100 ${menuOpen ? "left-0" : "left-full"} right-0 top-0 flex flex-col text-white text-3xl items-center h-full gap-3 xs:static xs:pt-0 xs:w-fit xs:flex-row xs:bg-inherit xs:font-semibold xs:text-slate-600 xl:text-slate-600 xs:text-sm xs:gap-2 sm:text-base sm:gap-6 lg:gap-7 xl:gap-8 3xl:gap-10 3xl:text-lg`}
-        onClick={() => setMenuOpen(false)}
-      >
-        <Link href="/about/" className={linkClass}>
-          About
-          {isAbout && <div className={lineClass} />}
-        </Link>
-        <Link href="/projects/" className={linkClass}>
-          Projects
-          {isProjects && <div className={lineClass} />}
-        </Link>
-        <Link href="/writing/" className={linkClass}>
-          Writing
-          {isWriting && <div className={lineClass} />}
-        </Link>
-        <Link href="/reading/" className={linkClass}>
-          Reading
-          {isReading && <div className={lineClass} />}
-        </Link>
+      <div className="flex items-center gap-4 sm:gap-6 lg:gap-7 xl:gap-8 3xl:gap-10">
+        <div
+          className={`bg-green-sidc pt-20 gap-y-6 fixed w-full transition-[left] duration-100 ${menuOpen ? "left-0" : "left-full"} right-0 top-0 flex flex-col text-white text-3xl items-center h-full gap-3 xs:static xs:pt-0 xs:w-fit xs:flex-row xs:bg-inherit xs:font-semibold xs:text-slate-600 xl:text-slate-600 xs:text-sm xs:gap-2 sm:text-base sm:gap-6 lg:gap-7 xl:gap-8 3xl:gap-10 3xl:text-lg`}
+          onClick={() => setMenuOpen(false)}
+        >
+          <Link href="/about/" className={linkClass}>
+            About
+            {isAbout && <div className={lineClass} />}
+          </Link>
+          <Link href="/projects/" className={linkClass}>
+            Projects
+            {isProjects && <div className={lineClass} />}
+          </Link>
+          <Link href="/writing/" className={linkClass}>
+            Writing
+            {isWriting && <div className={lineClass} />}
+          </Link>
+          <Link href="/reading/" className={linkClass}>
+            Reading
+            {isReading && <div className={lineClass} />}
+          </Link>
+          <button onClick={handleSearchClick} className="xs:hidden">
+            Search
+          </button>
+        </div>
+        <SearchButton onClick={handleSearchClick} className="hidden xs:flex" />
+        <div className="flex relative z-50 flex-col gap-1 items-end group cursor-pointer xs:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+          <div className={`${menuClass} ${menuOpen ? "bg-white w-7" : "bg-green-sidc w-5 group-hover:w-6" } `} />
+          <div className={`${menuClass} ${menuOpen ? "bg-white w-5" : "bg-green-sidc w-6 group-hover:w-7" } `} />
+          <div className={`${menuClass} ${menuOpen ? "bg-white w-6" : "bg-green-sidc w-7 group-hover:w-5" } `} />
+        </div>
       </div>
     </nav>
   )

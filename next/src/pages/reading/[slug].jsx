@@ -63,7 +63,7 @@ export default function Queue(props) {
           </Link>
         ))}
       </div>
-      {timelineView && <ReadingTimeline className="hidden sm:block" queues={[{slug: slug, books: books}]} />}
+      {timelineView && <ReadingTimeline className="hidden sm:block" queues={[{slug: slug, books: books}]} now={now} />}
     </main>
   );
 }

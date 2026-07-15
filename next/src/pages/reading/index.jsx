@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import CurrentlyReading from "@/components/CurrentlyReading";
 import ReadingTimeline from "@/components/ReadingTimeline";
 
-export default function Reading({title, text, meta, queues}) {
+export default function Reading({title, text, meta, queues, now}) {
 
   const [timelineHeight, setTimelineHeight] = useState(250);
 
@@ -53,7 +53,7 @@ export default function Reading({title, text, meta, queues}) {
           className="absolute left-0 right-0 overflow-x-auto px-6 sm:px-10 md:px-12 lg:px-20 3xl:px-36 [direction:rtl]"
         >
           <div className="w-max pl-8 ml-8 [direction:ltr]">
-            <ReadingTimeline queues={queues} vertical={false} timelineHeight={timelineHeight} pixelsPerDay={20} />
+            <ReadingTimeline queues={queues} vertical={false} timelineHeight={timelineHeight} pixelsPerDay={20} now={now} />
           </div>
         </div>
       </div>
@@ -72,7 +72,8 @@ export async function getStaticProps() {
       title: data.title,
       text: data.text,
       queues: data.queues,
-      meta: data.meta
+      meta: data.meta,
+      now: new Date().toISOString(),
     }
   }
 }
