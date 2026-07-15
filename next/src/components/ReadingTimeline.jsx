@@ -73,7 +73,7 @@ const computeBooks = (queues, { vertical, pixelsPerDay, now, timelineOrigin, tim
       return {
         book: book,
         start: timelineSpan - endFromBottom,
-        size: endFromBottom - startFromBottom - 1,
+        size: Math.max(endFromBottom - startFromBottom - 1, pixelsPerDay / 2),
         dimension: dimension,
         index: bookIndex++,
       };
