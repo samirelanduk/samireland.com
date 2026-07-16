@@ -74,6 +74,7 @@ export async function getStaticProps() {
       queues: data.queues,
       meta: data.meta,
       now: new Date().toISOString(),
-    }
+    },
+    revalidate: 3600,
   }
 }

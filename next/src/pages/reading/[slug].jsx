@@ -80,7 +80,8 @@ export async function getStaticProps({ params }) {
       meta: data.meta,
       slug: params.slug,
       now: new Date().toISOString(),
-    }
+    },
+    revalidate: 3600,
   };
 }
 
